@@ -107,7 +107,9 @@ function serializeBlock (block: TelegramInputRichBlock): string {
       }
 
       // a leading "N. " re-parses as an ordered list; '.' is not backslash-escapable, use the entity
-      return serializeMarkdownText(block.text).replace(/^(\d+)\.(?=\s)/, '$1&#46;')
+      return serializeMarkdownText(block.text)
+        .replace(/^(\d+)\.(?=\s)/, '$1&#46;')
+        .replace(/^\n|\n(?=\n)|\n$/g, '&#10;')
     }
     case 'heading': return `${'#'.repeat(block.size)} ${singleLine(block.text)}`
     case 'pre': return `\`\`\`${block.language ?? ''}\n${plainText(block.text)}\n\`\`\``

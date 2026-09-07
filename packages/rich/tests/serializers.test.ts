@@ -254,6 +254,16 @@ describe('serializeBlocks', () => {
     expect(parseHtml(serializeBlocks(pre, 'html'))).toEqual(pre)
   })
 
+  it('keeps a markdown paragraph whole when its text holds blank lines', () => {
+    const blocks: TelegramInputRichBlock[] = [{ type: 'paragraph', text: 'a\n\nb' }]
+    const styled: TelegramInputRichBlock[] = [{ type: 'paragraph', text: { type: 'bold', text: 'a\n\nb' } }]
+
+    expect(serializeBlocks(blocks, 'markdown')).toBe('a&#10;\nb')
+    expect(parseMarkdown(serializeBlocks(blocks, 'markdown'))).toEqual(blocks)
+    expect(parseMarkdown(serializeBlocks(styled, 'markdown'))).toEqual(styled)
+    expect(serializeBlocks([{ type: 'paragraph', text: 'a\nb' }], 'markdown')).toBe('a\nb')
+  })
+
   it('separates credited-blockquote inner blocks with blank lines in markdown', () => {
     const blocks: TelegramInputRichBlock[] = [{
       type: 'blockquote',
