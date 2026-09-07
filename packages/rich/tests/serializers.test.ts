@@ -294,6 +294,23 @@ describe('serializeBlocks', () => {
     expect(() => serializeBlocks([{ type: 'pre', text: '```\n</code>' }], 'markdown')).toThrow(RichError)
   })
 
+  it('emits anchor and footnote names that markdown cannot carry through the tag form', () => {
+    const footnote: TelegramInputRichBlock[] = [
+      { type: 'paragraph', text: { type: 'reference', text: 'def', name: 'a b' } }
+    ]
+    const link: TelegramInputRichBlock[] = [
+      { type: 'paragraph', text: { type: 'anchor_link', text: 'go', anchor_name: 'a b' } }
+    ]
+
+    expect(serializeBlocks(footnote, 'markdown')).toBe('<tg-reference name="a b">def</tg-reference>')
+    expect(parseMarkdown(serializeBlocks(footnote, 'markdown'))).toEqual(footnote)
+    expect(serializeBlocks(link, 'markdown')).toBe('<a href="#a b">go</a>')
+    expect(parseMarkdown(serializeBlocks(link, 'markdown'))).toEqual(link)
+    expect(serializeBlocks([{ type: 'anchor', name: 'a|b' }], 'markdown')).toBe('<a name="a&#124;b"></a>')
+    expect(serializeBlocks([{ type: 'paragraph', text: { type: 'reference', text: 'd', name: 'fn1' } }], 'markdown'))
+      .toBe('[^fn1]: d')
+  })
+
   it('separates credited-blockquote inner blocks with blank lines in markdown', () => {
     const blocks: TelegramInputRichBlock[] = [{
       type: 'blockquote',

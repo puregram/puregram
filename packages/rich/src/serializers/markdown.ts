@@ -13,6 +13,7 @@ import { escapeHtml, escapeMarkdown, escapeMarkdownAttr, escapeMarkdownUrl } fro
 import { buttonAttrs, footnoteReference, mediaPayload, plainText } from './shared'
 
 const ALIGN_MD: Record<'left' | 'center' | 'right', string> = { left: ':--', center: ':-:', right: '--:' }
+const SIMPLE_NAME_RE = /^[\w-]+$/
 
 /** render rich text as markdown-dialect source */
 export function serializeMarkdownText (text: TelegramRichText): string {
@@ -47,12 +48,20 @@ export function serializeMarkdownText (text: TelegramRichText): string {
     case 'mathematical_expression': return /[$\n]|^\s|\s$/.test(text.expression)
       ? `<tg-math>${text.expression}</tg-math>`
       : `$${text.expression}$`
-    case 'anchor': return `<a name="${escapeHtml(text.name)}"></a>`
-    case 'anchor_link': return `[${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(`#${text.anchor_name}`)})`
-    case 'reference': return `<tg-reference name="${escapeHtml(text.name)}">${serializeMarkdownText(text.text)}</tg-reference>`
-    case 'reference_link': return text.text === text.reference_name
-      ? `[^${text.reference_name}]`
-      : `[${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(`#${text.reference_name}`)})`
+    case 'anchor': return `<a name="${escapeMarkdownAttr(text.name)}"></a>`
+    case 'anchor_link': return SIMPLE_NAME_RE.test(text.anchor_name)
+      ? `[${serializeMarkdownText(text.text)}](#${text.anchor_name})`
+      : `<a href="#${escapeMarkdownAttr(text.anchor_name)}">${serializeMarkdownText(text.text)}</a>`
+    case 'reference': return `<tg-reference name="${escapeMarkdownAttr(text.name)}">${serializeMarkdownText(text.text)}</tg-reference>`
+    case 'reference_link': {
+      if (!SIMPLE_NAME_RE.test(text.reference_name)) {
+        return `<a href="#${escapeMarkdownAttr(text.reference_name)}">${serializeMarkdownText(text.text)}</a>`
+      }
+
+      return text.text === text.reference_name
+        ? `[^${text.reference_name}]`
+        : `[${serializeMarkdownText(text.text)}](#${text.reference_name})`
+    }
     case 'button': return `<tg-button${buttonAttrs(text.button, escapeMarkdownAttr)}>${serializeMarkdownText(text.button.text)}</tg-button>`
     // telegram auto-detects these from the plain characters
     case 'mention':
@@ -105,7 +114,9 @@ function serializeBlock (block: TelegramInputRichBlock): string {
       const ref = footnoteReference(block.text)
 
       if (ref !== null) {
-        return `[^${ref.name}]: ${singleLine(ref.text)}`
+        return SIMPLE_NAME_RE.test(ref.name)
+          ? `[^${ref.name}]: ${singleLine(ref.text)}`
+          : serializeMarkdownText(ref)
       }
 
       // a leading "N. " re-parses as an ordered list; '.' is not backslash-escapable, use the entity
@@ -135,7 +146,7 @@ function serializeBlock (block: TelegramInputRichBlock): string {
     case 'mathematical_expression': return block.expression.includes('$')
       ? `<tg-math-block>${block.expression}</tg-math-block>`
       : `$$${block.expression}$$`
-    case 'anchor': return `<a name="${escapeHtml(block.name)}"></a>`
+    case 'anchor': return `<a name="${escapeMarkdownAttr(block.name)}"></a>`
     case 'list':
       // multi-block items join with a bare newline — markdown has no indented-continuation emitter
       return block.items
