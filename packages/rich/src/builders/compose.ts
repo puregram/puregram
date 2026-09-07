@@ -13,7 +13,19 @@ export function join (items: RichContent[], separator: RichContent = '') {
   const block = items.some(item => isRichNode(item) && item.level === 'block')
 
   if (block) {
-    return makeNode('block', () => emitBlocks(items))
+    return makeNode('block', () => {
+      const spaced: RichContent[] = []
+
+      for (let i = 0; i < items.length; i++) {
+        if (i > 0) {
+          spaced.push(separator)
+        }
+
+        spaced.push(items[i])
+      }
+
+      return emitBlocks(spaced)
+    })
   }
 
   return makeNode('inline', () => {

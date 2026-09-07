@@ -92,6 +92,14 @@ describe('join', () => {
       { type: 'heading', text: 'B', size: 1 }
     ])
   })
+
+  it('keeps the separator when the result goes block-level', () => {
+    expect(join([heading(1, 'a'), heading(1, 'b')], ' / ').emit()).toEqual([
+      { type: 'heading', text: 'a', size: 1 },
+      { type: 'paragraph', text: ' / ' },
+      { type: 'heading', text: 'b', size: 1 }
+    ])
+  })
 })
 
 describe('rich`…` — the compose template tag', () => {
