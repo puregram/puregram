@@ -13,6 +13,14 @@ import type { RichMediaKind } from '../media'
 
 import { buttonAttrs, footnoteReference, mediaPayload, plainText } from './shared'
 
+function rawMath (expression: string) {
+  if (/<\/tg-math/i.test(expression)) {
+    throw new RichError('cannot serialize a math expression containing </tg-math to html — send blocks natively')
+  }
+
+  return expression
+}
+
 /** render rich text as html-dialect source */
 export function serializeHtmlText (text: TelegramRichText): string {
   if (typeof text === 'string') {
@@ -37,7 +45,7 @@ export function serializeHtmlText (text: TelegramRichText): string {
     case 'text_mention': return `<a href="tg://user?id=${text.user.id}">${serializeHtmlText(text.text)}</a>`
     case 'custom_emoji': return `<tg-emoji emoji-id="${escapeHtml(text.custom_emoji_id)}">${escapeHtml(text.alternative_text)}</tg-emoji>`
     case 'date_time': return `<tg-time unix="${text.unix_time}"${text.date_time_format ? ` format="${escapeHtml(text.date_time_format)}"` : ''}>${serializeHtmlText(text.text)}</tg-time>`
-    case 'mathematical_expression': return `<tg-math>${text.expression}</tg-math>`
+    case 'mathematical_expression': return `<tg-math>${rawMath(text.expression)}</tg-math>`
     case 'anchor': return `<a name="${escapeHtml(text.name)}"></a>`
     case 'anchor_link': return `<a href="#${escapeHtml(text.anchor_name)}">${serializeHtmlText(text.text)}</a>`
     case 'reference': return `<tg-reference name="${escapeHtml(text.name)}">${serializeHtmlText(text.text)}</tg-reference>`
@@ -114,7 +122,7 @@ function serializeBlock (block: TelegramInputRichBlock): string {
     }
     case 'footer': return `<footer>${serializeHtmlText(block.text)}</footer>`
     case 'divider': return '<hr/>'
-    case 'mathematical_expression': return `<tg-math-block>${block.expression}</tg-math-block>`
+    case 'mathematical_expression': return `<tg-math-block>${rawMath(block.expression)}</tg-math-block>`
     case 'anchor': return `<a name="${escapeHtml(block.name)}"></a>`
     case 'list': {
       const body = block.items.map(item => listItem(item)).join('')

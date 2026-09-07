@@ -264,6 +264,28 @@ describe('serializeBlocks', () => {
     expect(serializeBlocks([{ type: 'paragraph', text: 'a\nb' }], 'markdown')).toBe('a\nb')
   })
 
+  it('emits math through the tag form when the dollar delimiters cannot carry it', () => {
+    const inline: TelegramInputRichBlock[] = [
+      { type: 'paragraph', text: { type: 'mathematical_expression', expression: 'a $ b' } }
+    ]
+    const block: TelegramInputRichBlock[] = [{ type: 'mathematical_expression', expression: 'a $$ b' }]
+
+    expect(serializeBlocks(inline, 'markdown')).toBe('<tg-math>a $ b</tg-math>')
+    expect(parseMarkdown(serializeBlocks(inline, 'markdown'))).toEqual(inline)
+    expect(serializeBlocks(block, 'markdown')).toBe('<tg-math-block>a $$ b</tg-math-block>')
+    expect(parseMarkdown(serializeBlocks(block, 'markdown'))).toEqual(block)
+    expect(serializeBlocks([{ type: 'paragraph', text: { type: 'mathematical_expression', expression: 'x^2' } }], 'markdown')).toBe('$x^2$')
+  })
+
+  it('refuses to serialize a math expression that closes its own html tag', () => {
+    const blocks: TelegramInputRichBlock[] = [
+      { type: 'paragraph', text: { type: 'mathematical_expression', expression: 'a </tg-math> b' } }
+    ]
+
+    expect(() => serializeBlocks(blocks, 'html')).toThrow(RichError)
+    expect(() => serializeBlocks([{ type: 'mathematical_expression', expression: '</tg-math-block>' }], 'html')).toThrow(RichError)
+  })
+
   it('separates credited-blockquote inner blocks with blank lines in markdown', () => {
     const blocks: TelegramInputRichBlock[] = [{
       type: 'blockquote',

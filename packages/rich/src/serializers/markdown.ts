@@ -44,7 +44,9 @@ export function serializeMarkdownText (text: TelegramRichText): string {
     case 'text_mention': return `[${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(`tg://user?id=${text.user.id}`)})`
     case 'custom_emoji': return `![${escapeMarkdown(text.alternative_text)}](${escapeMarkdownUrl(`tg://emoji?id=${text.custom_emoji_id}`)})`
     case 'date_time': return `![${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(`tg://time?unix=${text.unix_time}${text.date_time_format ? `&format=${encodeURIComponent(text.date_time_format)}` : ''}`)})`
-    case 'mathematical_expression': return `$${text.expression}$`
+    case 'mathematical_expression': return /[$\n]|^\s|\s$/.test(text.expression)
+      ? `<tg-math>${text.expression}</tg-math>`
+      : `$${text.expression}$`
     case 'anchor': return `<a name="${escapeHtml(text.name)}"></a>`
     case 'anchor_link': return `[${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(`#${text.anchor_name}`)})`
     case 'reference': return `<tg-reference name="${escapeHtml(text.name)}">${serializeMarkdownText(text.text)}</tg-reference>`
@@ -115,7 +117,9 @@ function serializeBlock (block: TelegramInputRichBlock): string {
     case 'pre': return `\`\`\`${block.language ?? ''}\n${plainText(block.text)}\n\`\`\``
     case 'footer': return `<footer>${serializeMarkdownText(block.text)}</footer>`
     case 'divider': return '---'
-    case 'mathematical_expression': return `$$${block.expression}$$`
+    case 'mathematical_expression': return block.expression.includes('$')
+      ? `<tg-math-block>${block.expression}</tg-math-block>`
+      : `$$${block.expression}$$`
     case 'anchor': return `<a name="${escapeHtml(block.name)}"></a>`
     case 'list':
       // multi-block items join with a bare newline — markdown has no indented-continuation emitter
