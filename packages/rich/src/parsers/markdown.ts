@@ -304,7 +304,7 @@ class MarkdownParser {
           continue
         }
 
-        const body: string[] = []
+        const body: string[] = mathOpen[1]!.trim() === '' ? [] : [mathOpen[1]!]
         let j = i + 1
 
         while (j < lines.length && !/\$\$\s*$/.test(lineAt(j))) {

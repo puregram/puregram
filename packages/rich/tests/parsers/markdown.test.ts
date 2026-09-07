@@ -36,6 +36,13 @@ describe('parseMarkdown — blocks', () => {
     expect(parseMarkdown('$$\nE = mc^2\n$$')).toEqual([{ type: 'mathematical_expression', expression: 'E = mc^2' }])
   })
 
+  it('keeps content that shares the opening line of a math fence', () => {
+    expect(parseMarkdown('$$a\nb$$')).toEqual([{ type: 'mathematical_expression', expression: 'a\nb' }])
+    expect(parseMarkdown(rich([rich.mathBlock('a\nb')]).toMarkdown())).toEqual([
+      { type: 'mathematical_expression', expression: 'a\nb' }
+    ])
+  })
+
   it('parses dividers', () => {
     expect(parseMarkdown('---')).toEqual([{ type: 'divider' }])
   })
