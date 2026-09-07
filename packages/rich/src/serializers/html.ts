@@ -8,7 +8,7 @@ import type {
 
 import { DEFAULT_MAP_HEIGHT, DEFAULT_MAP_WIDTH, TABLE_CELL_VALIGN } from '../constants'
 import { RichError } from '../error'
-import { escapeHtml } from '../escape'
+import { escapeHtml, escapeHtmlText } from '../escape'
 import type { RichMediaKind } from '../media'
 
 import { buttonAttrs, footnoteReference, mediaPayload, plainText } from './shared'
@@ -16,7 +16,7 @@ import { buttonAttrs, footnoteReference, mediaPayload, plainText } from './share
 /** render rich text as html-dialect source */
 export function serializeHtmlText (text: TelegramRichText): string {
   if (typeof text === 'string') {
-    return escapeHtml(text)
+    return escapeHtmlText(text)
   }
 
   if (Array.isArray(text)) {

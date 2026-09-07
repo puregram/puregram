@@ -2,6 +2,7 @@ import type { TelegramInputRichBlock, TelegramRichText } from '@puregram/api'
 import { describe, expect, it } from 'vitest'
 
 import { RichError } from '../src/error'
+import { parseHtml } from '../src/parsers/html'
 import { parseMarkdown } from '../src/parsers/markdown'
 import { serializeBlocks } from '../src/serializers'
 
@@ -241,6 +242,16 @@ describe('serializeBlocks', () => {
       '[^n]: c&#10;d',
       '![](https://x.example/p.jpg "e&#10;f")'
     ].join('\n\n'))
+  })
+
+  it('entity-encodes whitespace in html text but keeps pre bodies raw', () => {
+    const inline: TelegramInputRichBlock[] = [{ type: 'paragraph', text: ['a', '\n', 'b\tc'] }]
+    const pre: TelegramInputRichBlock[] = [{ type: 'pre', text: 'line1\nline2' }]
+
+    expect(serializeBlocks(inline, 'html')).toBe('<p>a&#10;b&#9;c</p>')
+    expect(parseHtml(serializeBlocks(inline, 'html'))).toEqual([{ type: 'paragraph', text: 'a\nb\tc' }])
+    expect(serializeBlocks(pre, 'html')).toBe('<pre><code>line1\nline2</code></pre>')
+    expect(parseHtml(serializeBlocks(pre, 'html'))).toEqual(pre)
   })
 
   it('separates credited-blockquote inner blocks with blank lines in markdown', () => {
