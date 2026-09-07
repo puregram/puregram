@@ -30,7 +30,13 @@ export function serializeMarkdownText (text: TelegramRichText): string {
     case 'underline': return `<u>${serializeMarkdownText(text.text)}</u>`
     case 'strikethrough': return `~~${serializeMarkdownText(text.text)}~~`
     case 'spoiler': return `||${serializeMarkdownText(text.text)}||`
-    case 'code': return `\`${serializeMarkdownText(text.text)}\``
+    case 'code': {
+      const body = plainText(text.text)
+
+      return body.includes('`')
+        ? `<code>${escapeHtml(body).replace(/`/g, '&#96;')}</code>`
+        : `\`${body}\``
+    }
     case 'marked': return `==${serializeMarkdownText(text.text)}==`
     case 'subscript': return `<sub>${serializeMarkdownText(text.text)}</sub>`
     case 'superscript': return `<sup>${serializeMarkdownText(text.text)}</sup>`

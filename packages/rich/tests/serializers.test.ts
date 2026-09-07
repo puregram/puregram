@@ -2,6 +2,7 @@ import type { TelegramInputRichBlock, TelegramRichText } from '@puregram/api'
 import { describe, expect, it } from 'vitest'
 
 import { RichError } from '../src/error'
+import { parseMarkdown } from '../src/parsers/markdown'
 import { serializeBlocks } from '../src/serializers'
 
 const doc: TelegramInputRichBlock[] = [
@@ -283,6 +284,16 @@ describe('serializeBlocks', () => {
 
     expect(serializeBlocks(blocks, 'html')).toBe('<table compact><tr><td>x</td></tr></table>')
     expect(serializeBlocks(blocks, 'markdown')).toBe('| x |\n| :-- |')
+  })
+
+  it('keeps markdown code spans literal and falls back to the tag for a backtick', () => {
+    const literal: TelegramInputRichBlock[] = [{ type: 'paragraph', text: { type: 'code', text: 'x[0] && y & z' } }]
+    const ticked: TelegramInputRichBlock[] = [{ type: 'paragraph', text: { type: 'code', text: 'a`b' } }]
+
+    expect(serializeBlocks(literal, 'markdown')).toBe('`x[0] && y & z`')
+    expect(parseMarkdown(serializeBlocks(literal, 'markdown'))).toEqual(literal)
+    expect(serializeBlocks(ticked, 'markdown')).toBe('<code>a&#96;b</code>')
+    expect(parseMarkdown(serializeBlocks(ticked, 'markdown'))).toEqual(ticked)
   })
 
   it('throws RichError on unknown nodes', () => {
