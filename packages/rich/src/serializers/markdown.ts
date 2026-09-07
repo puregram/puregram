@@ -114,7 +114,22 @@ function serializeBlock (block: TelegramInputRichBlock): string {
         .replace(/^\n|\n(?=\n)|\n$/g, '&#10;')
     }
     case 'heading': return `${'#'.repeat(block.size)} ${singleLine(block.text)}`
-    case 'pre': return `\`\`\`${block.language ?? ''}\n${plainText(block.text)}\n\`\`\``
+    case 'pre': {
+      const body = plainText(block.text)
+      const language = block.language ?? ''
+
+      if (!body.includes('```') && !/[`\n]/.test(language)) {
+        return `\`\`\`${language}\n${body}\n\`\`\``
+      }
+
+      if (/<\/(?:code|pre)/i.test(body)) {
+        throw new RichError('cannot serialize a fenced body that closes its own tag to markdown — send blocks natively')
+      }
+
+      const cls = language === '' ? '' : ` class="language-${escapeMarkdownAttr(language)}"`
+
+      return `<pre><code${cls}>${body}</code></pre>`
+    }
     case 'footer': return `<footer>${serializeMarkdownText(block.text)}</footer>`
     case 'divider': return '---'
     case 'mathematical_expression': return block.expression.includes('$')

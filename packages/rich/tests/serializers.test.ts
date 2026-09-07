@@ -286,6 +286,14 @@ describe('serializeBlocks', () => {
     expect(() => serializeBlocks([{ type: 'mathematical_expression', expression: '</tg-math-block>' }], 'html')).toThrow(RichError)
   })
 
+  it('falls back to the pre tag when a code body holds a fence', () => {
+    const blocks: TelegramInputRichBlock[] = [{ type: 'pre', text: 'a\n```\nb', language: 'ts' }]
+
+    expect(serializeBlocks(blocks, 'markdown')).toBe('<pre><code class="language-ts">a\n```\nb</code></pre>')
+    expect(parseMarkdown(serializeBlocks(blocks, 'markdown'))).toEqual(blocks)
+    expect(() => serializeBlocks([{ type: 'pre', text: '```\n</code>' }], 'markdown')).toThrow(RichError)
+  })
+
   it('separates credited-blockquote inner blocks with blank lines in markdown', () => {
     const blocks: TelegramInputRichBlock[] = [{
       type: 'blockquote',
