@@ -61,4 +61,17 @@ describe('parser performance regressions', () => {
     expect(elapsed).toBeLessThan(BUDGET_MS)
     expect(value).toEqual([{ type: 'paragraph', text: `a${' '.repeat(count)}b` }])
   })
+
+  it('parses bracket runs leniently in linear time', () => {
+    const image = '!['.repeat(STRESS_LENGTH / 2)
+    const link = '['.repeat(STRESS_LENGTH)
+
+    const images = timed(() => parseMarkdown(image, { lenient: true }))
+    const links = timed(() => parseMarkdown(link, { lenient: true }))
+
+    expect(images.elapsed).toBeLessThan(BUDGET_MS)
+    expect(links.elapsed).toBeLessThan(BUDGET_MS)
+    expect(images.value).toEqual([{ type: 'paragraph', text: image }])
+    expect(links.value).toEqual([{ type: 'paragraph', text: link }])
+  })
 })

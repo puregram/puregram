@@ -14,7 +14,7 @@ interface ParseOptions {
 // markdown specials that a backslash escapes into literal text
 const ESCAPABLE = new Set(['\\', '`', '*', '_', '~', '|', '[', ']', '(', ')', '>', '=', '#', '!', '+', '-', '$', '<'])
 
-const ENTITY_RE = /^&(?:#(\d+)|#x([0-9a-fA-F]+)|([a-zA-Z]+));/
+const ENTITY_RE = /&(?:#(\d+)|#x([0-9a-fA-F]+)|([a-zA-Z]+));/y
 
 const HEADING_RE = /^(#{1,6})\s+(.*)$/
 const FENCE_RE = /^```([^`]*)$/
@@ -26,7 +26,9 @@ const TABLE_SEPARATOR_RE = /^\|(?:\s*:?-+:?\s*\|)+\s*$/
 const FOOTNOTE_DEF_RE = /^\[\^([^\]\s]+)\]:\s+(.*)$/
 const MEDIA_LINE_RE = /^!\[([^\]]*)\]\(((?:[^)\\\s]|\\.)+)(?:\s+"((?:[^"\\]|\\.)*)")?\)\s*$/
 const BLOCK_MATH_OPEN_RE = /^\$\$\s*(.*)$/
-const LINK_LABEL_RE = /^\[((?:[^\]\\]|\\.)*)\]\(/
+const LINK_LABEL_RE = /\[((?:[^\]\\]|\\.)*)\]\(/y
+const FOOTNOTE_REF_RE = /\[\^([^\]\s]+)\]/y
+const INLINE_IMAGE_RE = /!\[((?:[^\]\\]|\\.)*)\]\(((?:[^)\\\s]|\\.)+)(?:\s+"(?:[^"\\]|\\.)*")?\)/y
 
 // block-level html tags interrupt a paragraph; inline tags (<u>, <tg-emoji>, …) keep flowing in it
 const BLOCK_TAG_RE = /^<(?:details|footer|aside|blockquote|table|figure|img|video|audio|ul|ol|pre|p|h[1-6]|hr|tg-map|tg-collage|tg-slideshow|tg-thinking|tg-math-block|tg-document|tg-button-row)\b/i
@@ -576,6 +578,7 @@ class MarkdownParser {
     const parts: TelegramRichText[] = []
     let literal = ''
     let pos = 0
+    let closeBracket = text.indexOf(']')
 
     const flush = () => {
       if (literal !== '') {
@@ -592,6 +595,10 @@ class MarkdownParser {
     while (pos < text.length) {
       const ch = text[pos]!
 
+      if (closeBracket !== -1 && closeBracket < pos) {
+        closeBracket = text.indexOf(']', pos)
+      }
+
       if (ch === '\\' && pos + 1 < text.length && ESCAPABLE.has(text[pos + 1]!)) {
         literal += text[pos + 1]!
         pos += 2
@@ -599,7 +606,9 @@ class MarkdownParser {
       }
 
       if (ch === '&') {
-        const entity = ENTITY_RE.exec(text.slice(pos))
+        ENTITY_RE.lastIndex = pos
+
+        const entity = ENTITY_RE.exec(text)
 
         if (entity !== null) {
           if (entity[3] !== undefined) {
@@ -691,9 +700,10 @@ class MarkdownParser {
         continue
       }
 
-      if (text.startsWith('![', pos)) {
-        const rest = text.slice(pos)
-        const image = /^!\[((?:[^\]\\]|\\.)*)\]\(((?:[^)\\\s]|\\.)+)(?:\s+"(?:[^"\\]|\\.)*")?\)/.exec(rest)
+      if (closeBracket !== -1 && text.startsWith('![', pos)) {
+        INLINE_IMAGE_RE.lastIndex = pos
+
+        const image = INLINE_IMAGE_RE.exec(text)
 
         if (image !== null) {
           const url = unescape(image[2]!)
@@ -738,8 +748,10 @@ class MarkdownParser {
         }
       }
 
-      if (text.startsWith('[^', pos)) {
-        const ref = /^\[\^([^\]\s]+)\]/.exec(text.slice(pos))
+      if (closeBracket !== -1 && text.startsWith('[^', pos)) {
+        FOOTNOTE_REF_RE.lastIndex = pos
+
+        const ref = FOOTNOTE_REF_RE.exec(text)
 
         if (ref !== null) {
           push({ type: 'reference_link', text: ref[1]!, reference_name: ref[1]! })
@@ -749,7 +761,7 @@ class MarkdownParser {
       }
 
       if (ch === '[') {
-        const link = this.parseLink(text, pos, base)
+        const link = closeBracket === -1 ? null : this.parseLink(text, pos, base)
 
         if (link !== null) {
           push(link.value)
@@ -766,7 +778,7 @@ class MarkdownParser {
         continue
       }
 
-      if (ch === '<' && /^<[a-zA-Z]/.test(text.slice(pos))) {
+      if (ch === '<' && /[a-zA-Z]/.test(text[pos + 1] ?? '')) {
         const fragment = parseHtmlFragment(text, pos, this.htmlOpts, this.host)
 
         if (fragment !== null) {
@@ -817,7 +829,9 @@ class MarkdownParser {
   }
 
   private parseLink (text: string, pos: number, base: number) {
-    const match = LINK_LABEL_RE.exec(text.slice(pos))
+    LINK_LABEL_RE.lastIndex = pos
+
+    const match = LINK_LABEL_RE.exec(text)
 
     if (match === null) {
       return null
