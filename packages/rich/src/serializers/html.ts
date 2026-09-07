@@ -79,7 +79,7 @@ function containedBlock (block: TelegramInputRichBlock) {
 }
 
 function listItem (item: TelegramInputRichBlockListItem) {
-  const prefix = item.has_checkbox ? (item.is_checked ? '☑ ' : '☐ ') : ''
+  const prefix = item.has_checkbox ? `<input type="checkbox"${item.is_checked ? ' checked' : ''}>` : ''
 
   return `<li>${prefix}${item.blocks.map(b => containedBlock(b)).join('')}</li>`
 }

@@ -279,6 +279,27 @@ function listItemType (raw: string | undefined) {
   return raw === 'a' || raw === 'A' || raw === 'i' || raw === 'I' || raw === '1' ? raw : null
 }
 
+const CHECKBOX_INPUT_RE = /^\s*<input\b([^>]*)>/i
+
+function checkboxItem (content: string) {
+  const match = CHECKBOX_INPUT_RE.exec(content)
+
+  if (match === null) {
+    return { content, flags: {} }
+  }
+
+  const attrs = parseAttrs(match[1] ?? '')
+
+  if (attrs.type !== 'checkbox') {
+    return { content, flags: {} }
+  }
+
+  return {
+    content: content.slice(match[0].length),
+    flags: { has_checkbox: true as const, ...('checked' in attrs ? { is_checked: true as const } : {}) }
+  }
+}
+
 // bounds the token cache when one opts object is reused across many parses
 const MAX_TAG_INDEX_SOURCES = 64
 
@@ -1505,7 +1526,11 @@ const buildFragment: (
       let items: TelegramInputRichBlockListItem[]
 
       if (name === 'ul') {
-        items = children.map(li => ({ blocks: host.blocks(source.slice(li.contentStart, li.contentEnd)) }))
+        items = children.map((li) => {
+          const item = checkboxItem(source.slice(li.contentStart, li.contentEnd))
+
+          return { blocks: host.blocks(item.content), ...item.flags }
+        })
       } else {
         const attrs = parseAttrs(scan.attrSrc)
         const step = 'reversed' in attrs ? -1 : 1
@@ -1516,11 +1541,13 @@ const buildFragment: (
         items = children.map((li) => {
           const liAttrs = parseAttrs(li.attrSrc)
           const value = intAttr(liAttrs.value) ?? counter
+          const item = checkboxItem(source.slice(li.contentStart, li.contentEnd))
 
           counter = value + step
 
           return {
-            blocks: host.blocks(source.slice(li.contentStart, li.contentEnd)),
+            blocks: host.blocks(item.content),
+            ...item.flags,
             value,
             type: listItemType(liAttrs.type) ?? defaultType
           }

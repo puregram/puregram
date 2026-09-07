@@ -102,7 +102,7 @@ const HTML = [
   '<h1>Title</h1>',
   '<p>plain <b>loud <i>soft</i></b> <tg-spoiler>hidden</tg-spoiler> <mark>hot</mark> <code>x</code><u>low</u><s>gone</s></p>',
   '<p><a href="tg://user?id=1">steve</a> <tg-emoji emoji-id="5368324170671202286">👍</tg-emoji> <tg-time unix="1700000000" format="d.m.Y">today</tg-time> <tg-math>x^2</tg-math></p>',
-  '<ul><li>☐ todo</li><li>☑ done</li></ul>',
+  '<ul><li><input type="checkbox">todo</li><li><input type="checkbox" checked>done</li></ul>',
   '<ol start="3"><li>third</li><li>fourth</li></ol>',
   '<table bordered><tr><th>A</th><th align="center">B</th><th align="right">C</th></tr><tr><td>a</td><td align="center">b</td><td align="right">c</td></tr></table>',
   '<blockquote>wisdom<cite>sage</cite></blockquote>',
@@ -328,6 +328,20 @@ describe('serializeBlocks', () => {
     ]
 
     expect(serializeBlocks(blocks, 'markdown')).toBe('a\n\nb')
+  })
+
+  it('round-trips checkbox list items through the html input element', () => {
+    const blocks: TelegramInputRichBlock[] = [{
+      type: 'list',
+      items: [
+        { blocks: [{ type: 'paragraph', text: 'todo' }], has_checkbox: true },
+        { blocks: [{ type: 'paragraph', text: 'done' }], has_checkbox: true, is_checked: true }
+      ]
+    }]
+
+    expect(serializeBlocks(blocks, 'html'))
+      .toBe('<ul><li><input type="checkbox">todo</li><li><input type="checkbox" checked>done</li></ul>')
+    expect(parseHtml(serializeBlocks(blocks, 'html'))).toEqual(blocks)
   })
 
   it('separates credited-blockquote inner blocks with blank lines in markdown', () => {
