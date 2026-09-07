@@ -2,7 +2,7 @@ import type { TelegramInputRichBlock, TelegramInputRichMessageMedia } from '@pur
 
 import * as builders from './builders'
 import { MAX_RICH_PARSE_LENGTH } from './constants'
-import { type RichContent, emitBlocks } from './emit'
+import { type RichContent, emitBlocks, emitText } from './emit'
 import { RichError } from './error'
 import { type Dialect, isRichNode } from './node'
 import { parseHtml } from './parsers/html'
@@ -103,13 +103,20 @@ function isBlockValue (value: RichContent): boolean {
 function composeTemplate (strings: TemplateStringsArray, values: readonly RichContent[]) {
   // \0 seams keep interpolated values out of the dedent (only the literal skeleton dedents)
   const literals = dedent(strings.join('\u0000')).split('\u0000')
-  const content: RichContent[] = []
+  const blocks: TelegramInputRichBlock[] = []
   let run: RichContent[] = []
 
   const flush = () => {
-    if (run.length > 0) {
-      content.push(builders.paragraph(run))
-      run = []
+    if (run.length === 0) {
+      return
+    }
+
+    const text = emitText(run)
+
+    run = []
+
+    if (text !== '') {
+      blocks.push({ type: 'paragraph', text })
     }
   }
 
@@ -131,7 +138,7 @@ function composeTemplate (strings: TemplateStringsArray, values: readonly RichCo
 
       if (isBlockValue(value)) {
         flush()
-        content.push(value)
+        blocks.push(...emitBlocks(value))
       } else {
         run.push(value)
       }
@@ -140,7 +147,7 @@ function composeTemplate (strings: TemplateStringsArray, values: readonly RichCo
 
   flush()
 
-  return new Rich('blocks', emitBlocks(content))
+  return new Rich('blocks', blocks)
 }
 
 /** compose builders / content into a native-blocks rich message */

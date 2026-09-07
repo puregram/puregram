@@ -323,6 +323,32 @@ const x = ${'1'}
   it('exposes a lenient variant', () => {
     expect(rich.md.lenient('**oops').blocks).toEqual([{ type: 'paragraph', text: '**oops' }])
   })
+
+  it('drops a paragraph whose only value is falsy instead of leaking the sentinel', () => {
+    expect(rich.md`${false}`.blocks).toEqual([])
+    expect(rich.md`${undefined} trailing`.blocks).toEqual([{ type: 'paragraph', text: ' trailing' }])
+  })
+
+  it('blanks a falsy value inside a heading or a table cell', () => {
+    expect(rich.md`# ${false}`.blocks).toEqual([{ type: 'heading', text: '', size: 1 }])
+    expect(rich.md`
+      | a | b |
+      | - | - |
+      | ${false} | x |
+    `.blocks).toEqual([{
+      type: 'table',
+      cells: [
+        [
+          { text: 'a', is_header: true, align: 'left', valign: 'middle' },
+          { text: 'b', is_header: true, align: 'left', valign: 'middle' }
+        ],
+        [
+          { text: '', align: 'left', valign: 'middle' },
+          { text: 'x', align: 'left', valign: 'middle' }
+        ]
+      ]
+    }])
+  })
 })
 
 describe('rich.raw', () => {

@@ -18,6 +18,7 @@ describe('emitText', () => {
     expect(emitText(null)).toBe('')
     expect(emitText(undefined)).toBe('')
     expect(emitText(false)).toBe('')
+    expect(emitText([null, false])).toBe('')
     expect(emitText(['a', ['b', 1]])).toEqual(['a', ['b', '1']])
   })
 
@@ -133,5 +134,10 @@ describe('rich`…` — the compose template tag', () => {
     expect(rich`${fragment}`.blocks).toEqual([
       { type: 'paragraph', text: ['fragment ', { type: 'bold', text: 'text' }] }
     ])
+  })
+
+  it('drops a run that emits nothing', () => {
+    expect(rich`${false}`.blocks).toEqual([])
+    expect(rich`kept ${null}`.blocks).toEqual([{ type: 'paragraph', text: 'kept ' }])
   })
 })

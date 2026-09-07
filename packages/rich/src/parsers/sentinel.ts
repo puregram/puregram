@@ -56,10 +56,13 @@ export function expandText (text: TelegramRichText, slots: readonly RichContent[
   if (typeof text === 'string') {
     const parts: TelegramRichText[] = []
     let last = 0
+    let matched = false
 
     SENTINEL_RE.lastIndex = 0
 
     for (let match = SENTINEL_RE.exec(text); match !== null; match = SENTINEL_RE.exec(text)) {
+      matched = true
+
       if (match.index > last) {
         parts.push(text.slice(last, match.index))
       }
@@ -79,12 +82,16 @@ export function expandText (text: TelegramRichText, slots: readonly RichContent[
       last = match.index + match[0].length
     }
 
-    if (parts.length === 0) {
+    if (!matched) {
       return text
     }
 
     if (last < text.length) {
       parts.push(text.slice(last))
+    }
+
+    if (parts.length === 0) {
+      return ''
     }
 
     return parts.length === 1 ? parts[0]! : parts
@@ -225,7 +232,9 @@ function expandParagraph (text: string, slots: readonly RichContent[]) {
   }
 
   if (cuts.length === 0) {
-    return [{ type: 'paragraph' as const, text: expandText(text, slots) }]
+    const expanded = expandText(text, slots)
+
+    return expanded === '' ? [] : [{ type: 'paragraph' as const, text: expanded }]
   }
 
   const blocks: TelegramInputRichBlock[] = []

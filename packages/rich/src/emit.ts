@@ -24,6 +24,10 @@ export function emitText (value: RichContent): TelegramRichText {
   if (Array.isArray(value)) {
     const parts = value.map(v => emitText(v)).filter(v => v !== '')
 
+    if (parts.length === 0) {
+      return ''
+    }
+
     // a one-element RichText array is wire noise — collapse to the element
     return parts.length === 1 ? parts[0]! : parts
   }
