@@ -146,11 +146,11 @@ content args (`x`, `text`) accept `RichContent` — strings, numbers, nested inl
 | `rich.footer(content)` | footer block |
 | `rich.pullQuote(content, cite?)` | pull quote, optional credit |
 | `rich.thinking(content)` | "thinking…" placeholder — **draft-only**, legal in `sendRichMessageDraft` and never in a persisted message |
-| `rich.media(src, { type?, caption?, credit?, spoiler? })` | media block; `type` picks the kind, otherwise inferred from the url extension — document-ish extensions (`pdf`, `zip`, `docx`, `csv`, …) infer `document`, anything unrecognized falls back to `photo` |
+| `rich.media(src, { type?, caption?, credit?, spoiler? })` | media block; `type` picks the kind, otherwise inferred from the extension of the url **path** (query and fragment are ignored) — document-ish extensions (`pdf`, `zip`, `docx`, `csv`, …) infer `document`, anything unrecognized falls back to `photo` |
 | `rich.photo(src, opts?)` / `rich.video(src, opts?)` / `rich.audio(src, opts?)` / `rich.animation(src, opts?)` | `media` with the kind fixed |
 | `rich.voiceNote(src, opts?)` | voice note (no spoiler) |
 | `rich.document(src, opts?)` | general file (no spoiler) |
-| `rich.map(lat, long, { zoom?, width?, height?, caption?, credit? })` | static map; defaults `zoom: 15`, `900×450` |
+| `rich.map(lat, long, { zoom?, width?, height?, caption?, credit? })` | static map; defaults `zoom: 15`, `900×450`. `zoom` is 0–24, the sides must sum to at most 10000 and differ by at most 20× — outside that throws `RichError` |
 | `rich.collage(items, { caption?, credit? })` / `rich.slideshow(items, { caption?, credit? })` | groups of media blocks |
 | `rich.table(rows, { header?, align?, bordered?, striped?, compact?, caption? })` | rows of inline cells; the first row is the header unless `header: false`; `align` is per-column; `compact` gives the cells smaller indents |
 | `rich.footnote(id, definition)` | the text behind a `footnoteRef(id)` marker |
@@ -189,7 +189,7 @@ rich([
 | `copyText` | copy the string to the clipboard |
 | `disabled: true` | rendered but inert |
 
-`style` sits alongside the action and picks the accent: `'danger' | 'success' | 'primary' | 'link'`.
+`style` sits alongside the action and picks the accent: `'danger' | 'success' | 'primary' | 'link'`. telegram allows `'link'` on callback buttons only, and a label may hold nothing but plain text, `rich.customEmoji(…)` and `rich.time(…)` — anything else throws `RichError`.
 
 `rich.buttonRow(buttons, { align? })` is a **block** holding 1–8 buttons, aligned `'left' | 'center' | 'right'`. an empty row, more than 8 buttons, or a node that isn't a `rich.button(…)` throws `RichError`.
 
@@ -223,7 +223,7 @@ a `<tg-button>` names its action through `type` plus one value attribute: `url=`
 
 ### `rich.join(items, separator?)`
 
-joins an array of content with a separator (default `''`). any block item makes the result a block list:
+joins an array of content with a separator (default `''`). any block item makes the result a block list, and an inline separator between two blocks becomes its own paragraph:
 
 ```ts
 rich.md`tags: ${rich.join(tags.map(t => rich.code(t)), ', ')}`

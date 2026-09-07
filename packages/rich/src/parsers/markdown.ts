@@ -40,6 +40,7 @@ function isMediaLine (line: string) {
   return media !== null && !media[2]!.startsWith('tg://')
 }
 
+// telegram follows balanced parens inside a destination (…/Foo_(bar)); whitespace kills the link
 function findUrlClose (text: string, start: number) {
   let depth = 0
   let i = start

@@ -13,6 +13,7 @@ import type { RichMediaKind } from '../media'
 
 import { buttonAttrs, footnoteReference, mediaPayload, plainText } from './shared'
 
+// telegram never decodes entities inside <tg-math>, so a closing tag in the expression can only be refused
 function rawMath (expression: string) {
   if (/<\/tg-math/i.test(expression)) {
     throw new RichError('cannot serialize a math expression containing </tg-math to html — send blocks natively')

@@ -75,6 +75,7 @@ const SUPPORTED_TAGS = lookupTable<true>(Object.fromEntries([
   'table', 'details', 'tg-math-block', 'tg-thinking', 'tg-button-row'
 ].map(name => [name, true])))
 
+// `img` is deliberately absent: a tg://emoji src resolves inline, so its level needs the payload
 const BLOCK_ONLY_TAGS = lookupTable<true>(Object.fromEntries([
   ...Object.keys(HEADING_SIZES),
   'p', 'pre', 'footer', 'hr', 'ul', 'ol', 'blockquote', 'aside',

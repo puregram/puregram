@@ -5,6 +5,7 @@ export const DEFAULT_MAP_ZOOM = 15
 export const DEFAULT_MAP_WIDTH = 900
 export const DEFAULT_MAP_HEIGHT = 450
 
+/** telegram's map bounds — zoom 0-24, width + height at most 10000, side ratio at most 20 */
 export const MAX_MAP_ZOOM = 24
 export const MAX_MAP_SIZE = 10000
 export const MAX_MAP_RATIO = 20
