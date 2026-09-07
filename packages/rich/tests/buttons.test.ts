@@ -107,6 +107,8 @@ describe('buttonRow', () => {
     expect(() => buttonRow(nine).emit()).toThrow(RichError)
     expect(() => buttonRow([bold('a')]).emit()).toThrow(RichError)
     expect(() => buttonRow([paragraph('a')]).emit()).toThrow(RichError)
+    expect(() => buttonRow([null as never]).emit()).toThrow(RichError)
+    expect(() => buttonRow([undefined as never]).emit()).toThrow(RichError)
   })
 })
 

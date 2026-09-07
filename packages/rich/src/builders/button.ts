@@ -3,7 +3,7 @@ import type { TelegramRichMessageButton } from '@puregram/api'
 import { MAX_BUTTON_ROW_BUTTONS } from '../constants'
 import { type RichContent, emitText } from '../emit'
 import { RichError } from '../error'
-import { type RichNode, makeNode } from '../node'
+import { type RichNode, isRichNode, makeNode } from '../node'
 
 import type { Align } from './block'
 
@@ -109,7 +109,7 @@ function makeButton (label: RichContent, options: ButtonOptions) {
 }
 
 function rowButton (node: RichNode) {
-  const emitted = node.level === 'inline' ? node.emit() : undefined
+  const emitted = isRichNode(node) && node.level === 'inline' ? node.emit() : undefined
 
   if (typeof emitted !== 'object' || emitted === null || Array.isArray(emitted) || emitted.type !== 'button') {
     throw new RichError('buttonRow takes button(...) nodes only')
