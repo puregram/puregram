@@ -153,7 +153,7 @@ const DELIMITERS = [
 
 /** parses the rich-markdown dialect into native blocks */
 export function parseMarkdown (source: string, opts: ParseOptions = {}) {
-  return new MarkdownParser(source, opts).parseDocument()
+  return new MarkdownParser(source.replace(/\r\n?/g, '\n'), opts).parseDocument()
 }
 
 class MarkdownParser {

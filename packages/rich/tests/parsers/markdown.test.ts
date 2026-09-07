@@ -462,4 +462,18 @@ describe('hardening regressions', () => {
     expect(() => parseMarkdown(deep)).toThrow(RichParseError)
     expect(() => parseMarkdown(deep, { lenient: true })).not.toThrow()
   })
+
+  it('parses crlf sources like lf sources', () => {
+    expect(parseMarkdown('# h\r\nbody')).toEqual(parseMarkdown('# h\nbody'))
+    expect(parseMarkdown('- a\r\n- b')).toEqual(parseMarkdown('- a\n- b'))
+    expect(parseMarkdown('[^1]: note\r\n')).toEqual(parseMarkdown('[^1]: note\n'))
+    expect(parseMarkdown('- [x] done\r\n')).toEqual([{
+      type: 'list',
+      items: [{ blocks: [{ type: 'paragraph', text: 'done' }], has_checkbox: true, is_checked: true }]
+    }])
+    expect(parseMarkdown('# h\r\nbody')).toEqual([
+      { type: 'heading', text: 'h', size: 1 },
+      { type: 'paragraph', text: 'body' }
+    ])
+  })
 })
