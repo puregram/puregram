@@ -311,6 +311,25 @@ describe('serializeBlocks', () => {
       .toBe('[^fn1]: d')
   })
 
+  it('omits map attributes the block does not carry', () => {
+    const bare: TelegramInputRichBlock[] = [{ type: 'map', location: { latitude: 1, longitude: 2 } }]
+
+    expect(serializeBlocks(bare, 'markdown')).toBe('<tg-map lat="1" long="2"/>')
+    expect(serializeBlocks(bare, 'html')).toBe('<tg-map lat="1" long="2"/>')
+    expect(serializeBlocks([{ type: 'map', location: { latitude: 1, longitude: 2 }, zoom: 5 }], 'html'))
+      .toBe('<tg-map lat="1" long="2" zoom="5"/>')
+  })
+
+  it('drops a table with no cells instead of emitting bare pipes', () => {
+    const blocks: TelegramInputRichBlock[] = [
+      { type: 'paragraph', text: 'a' },
+      { type: 'table', cells: [] },
+      { type: 'paragraph', text: 'b' }
+    ]
+
+    expect(serializeBlocks(blocks, 'markdown')).toBe('a\n\nb')
+  })
+
   it('separates credited-blockquote inner blocks with blank lines in markdown', () => {
     const blocks: TelegramInputRichBlock[] = [{
       type: 'blockquote',

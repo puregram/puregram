@@ -173,10 +173,13 @@ function serializeBlock (block: TelegramInputRichBlock): string {
       return `<details${open}><summary>${serializeHtmlText(block.summary)}</summary>${serializeHtmlBlocks(block.blocks)}</details>`
     }
     case 'map': {
-      const size = block.width === DEFAULT_MAP_WIDTH && block.height === DEFAULT_MAP_HEIGHT
+      const zoom = block.zoom === undefined ? '' : ` zoom="${block.zoom}"`
+      const width = block.width ?? DEFAULT_MAP_WIDTH
+      const height = block.height ?? DEFAULT_MAP_HEIGHT
+      const size = width === DEFAULT_MAP_WIDTH && height === DEFAULT_MAP_HEIGHT
         ? ''
-        : ` width="${block.width}" height="${block.height}"`
-      const element = `<tg-map lat="${block.location.latitude}" long="${block.location.longitude}" zoom="${block.zoom}"${size}/>`
+        : ` width="${width}" height="${height}"`
+      const element = `<tg-map lat="${block.location.latitude}" long="${block.location.longitude}"${zoom}${size}/>`
 
       return block.caption === undefined
         ? element

@@ -184,6 +184,10 @@ function serializeBlock (block: TelegramInputRichBlock): string {
       return `<tg-${block.type}>\n\n${items}\n\n${cap}</tg-${block.type}>`
     }
     case 'table': {
+      if (block.cells.length === 0) {
+        return ''
+      }
+
       // gfm: the first row is always the header row; table captions have no markdown slot
       const head = block.cells[0] ?? []
       const separator = `| ${head.map(c => ALIGN_MD[c.align]).join(' | ')} |`
@@ -197,10 +201,13 @@ function serializeBlock (block: TelegramInputRichBlock): string {
       return `<details${open}><summary>${serializeMarkdownText(block.summary)}</summary>\n\n${serializeMarkdownBlocks(block.blocks)}\n\n</details>`
     }
     case 'map': {
-      const size = block.width === DEFAULT_MAP_WIDTH && block.height === DEFAULT_MAP_HEIGHT
+      const zoom = block.zoom === undefined ? '' : ` zoom="${block.zoom}"`
+      const width = block.width ?? DEFAULT_MAP_WIDTH
+      const height = block.height ?? DEFAULT_MAP_HEIGHT
+      const size = width === DEFAULT_MAP_WIDTH && height === DEFAULT_MAP_HEIGHT
         ? ''
-        : ` width="${block.width}" height="${block.height}"`
-      const element = `<tg-map lat="${block.location.latitude}" long="${block.location.longitude}" zoom="${block.zoom}"${size}/>`
+        : ` width="${width}" height="${height}"`
+      const element = `<tg-map lat="${block.location.latitude}" long="${block.location.longitude}"${zoom}${size}/>`
 
       return block.caption === undefined
         ? element
@@ -236,5 +243,5 @@ function serializeBlock (block: TelegramInputRichBlock): string {
 
 /** render native blocks as markdown-dialect source — blocks separate with blank lines */
 export function serializeMarkdownBlocks (blocks: readonly TelegramInputRichBlock[]) {
-  return blocks.map(block => serializeBlock(block)).join('\n\n')
+  return blocks.map(block => serializeBlock(block)).filter(source => source !== '').join('\n\n')
 }
