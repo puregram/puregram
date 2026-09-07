@@ -5,7 +5,7 @@ import { RichParseError } from '../error'
 import { inferMediaKind } from '../media'
 
 import { NAMED_ENTITIES } from './entities'
-import { type HostParsers, parseHtmlFragment } from './html'
+import { type HostParsers, blockOnlyTagAt, parseHtmlFragment } from './html'
 
 interface ParseOptions {
   lenient?: boolean
@@ -780,6 +780,16 @@ class MarkdownParser {
       }
 
       if (ch === '<' && /[a-zA-Z]/.test(text[pos + 1] ?? '')) {
+        if (blockOnlyTagAt(text, pos) !== null) {
+          if (!this.lenient) {
+            this.fail('block tag inside inline content', base + pos)
+          }
+
+          literal += ch
+          pos += 1
+          continue
+        }
+
         const fragment = parseHtmlFragment(text, pos, this.htmlOpts, this.host)
 
         if (fragment !== null) {

@@ -74,4 +74,18 @@ describe('parser performance regressions', () => {
     expect(images.value).toEqual([{ type: 'paragraph', text: image }])
     expect(links.value).toEqual([{ type: 'paragraph', text: link }])
   })
+
+  it('degrades deeply nested block tags in inline context without rebuilding subtrees', () => {
+    const depth = 40
+    const inner = `${'<p>'.repeat(depth)}x${'</p>'.repeat(depth)}`
+    const source = `<b>${inner}</b>`
+
+    const html = timed(() => parseHtml(source, { lenient: true }))
+    const markdown = timed(() => parseMarkdown(source, { lenient: true }))
+
+    expect(html.elapsed).toBeLessThan(BUDGET_MS)
+    expect(markdown.elapsed).toBeLessThan(BUDGET_MS)
+    expect(html.value).toEqual([{ type: 'paragraph', text: { type: 'bold', text: inner } }])
+    expect(markdown.value).toEqual(html.value)
+  })
 })

@@ -75,6 +75,13 @@ const SUPPORTED_TAGS = lookupTable<true>(Object.fromEntries([
   'table', 'details', 'tg-math-block', 'tg-thinking', 'tg-button-row'
 ].map(name => [name, true])))
 
+const BLOCK_ONLY_TAGS = lookupTable<true>(Object.fromEntries([
+  ...Object.keys(HEADING_SIZES),
+  'p', 'pre', 'footer', 'hr', 'ul', 'ol', 'blockquote', 'aside',
+  'video', 'audio', 'tg-document', 'figure', 'tg-map', 'tg-collage', 'tg-slideshow',
+  'table', 'details', 'tg-math-block', 'tg-thinking', 'tg-button-row'
+].map(name => [name, true])))
+
 // elements that never take a closing tag; a redundant immediate close is still consumed
 const VOID_TAGS = lookupTable<true>({ br: true, hr: true, img: true, 'tg-map': true })
 
@@ -713,6 +720,12 @@ interface BlockSink {
   push: (block: TelegramInputRichBlock) => void
 }
 
+export function blockOnlyTagAt (source: string, pos: number) {
+  const scan = scanTag(source, pos)
+
+  return scan.kind === 'tag' && !scan.close && BLOCK_ONLY_TAGS[scan.name] === true ? scan.name : null
+}
+
 // handles one '<' during a walk; returns the index to continue scanning from
 function consumeTag (
   source: string,
@@ -722,6 +735,20 @@ function consumeTag (
   sink: InlineSink,
   blockSink: BlockSink | null
 ) {
+  if (blockSink === null) {
+    const blockTag = blockOnlyTagAt(source, pos)
+
+    if (blockTag !== null) {
+      if (opts.lenient !== true) {
+        throw new RichParseError(`block tag <${blockTag}> in inline context`, pos, source)
+      }
+
+      sink.raw('<')
+
+      return pos + 1
+    }
+  }
+
   const fragment = parseHtmlFragment(source, pos, opts, host)
 
   if (fragment !== null) {
