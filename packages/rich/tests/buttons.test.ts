@@ -2,7 +2,7 @@ import type { TelegramInputRichBlock } from '@puregram/api'
 import { describe, expect, it } from 'vitest'
 
 import { button, buttonRow } from '../src/builders/button'
-import { bold, paragraph } from '../src/builders'
+import { bold, code, customEmoji, paragraph } from '../src/builders'
 import { RichError } from '../src/error'
 import { parseHtml } from '../src/parsers/html'
 import { serializeBlocks } from '../src/serializers'
@@ -15,11 +15,20 @@ describe('button', () => {
     })
   })
 
-  it('keeps the label formatted', () => {
-    expect(button(bold('open'), { callbackData: 'go' }).emit()).toEqual({
+  it('takes only the label nodes telegram allows', () => {
+    expect(button(customEmoji('5100', '👍'), { callbackData: 'go' }).emit()).toEqual({
       type: 'button',
-      button: { text: { type: 'bold', text: 'open' }, callback_data: 'go' }
+      button: { text: { type: 'custom_emoji', custom_emoji_id: '5100', alternative_text: '👍' }, callback_data: 'go' }
     })
+    expect(() => button(bold('open'), { callbackData: 'go' }).emit()).toThrow(RichError)
+    expect(() => button(['a ', code('b')], { callbackData: 'go' }).emit()).toThrow(RichError)
+  })
+
+  it('allows the link style only on a callback button', () => {
+    expect(button('x', { callbackData: 'y', style: 'link' }).emit()).toMatchObject({
+      button: { style: 'link', callback_data: 'y' }
+    })
+    expect(() => button('x', { url: 'https://t.me', style: 'link' }).emit()).toThrow(RichError)
   })
 
   it('carries the style before the action', () => {

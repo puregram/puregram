@@ -1,4 +1,4 @@
-import type { TelegramRichMessageButton } from '@puregram/api'
+import type { TelegramRichMessageButton, TelegramRichText } from '@puregram/api'
 
 import { MAX_BUTTON_ROW_BUTTONS } from '../constants'
 import { type RichContent, emitText } from '../emit'
@@ -94,6 +94,22 @@ function actionsOf (options: ButtonOptions) {
   return actions.filter(action => action !== undefined)
 }
 
+function buttonText (text: TelegramRichText): TelegramRichText {
+  if (typeof text === 'string') {
+    return text
+  }
+
+  if (Array.isArray(text)) {
+    return text.map(part => buttonText(part))
+  }
+
+  if (text.type !== 'custom_emoji' && text.type !== 'date_time') {
+    throw new RichError(`a button label takes only plain text, customEmoji and time nodes, got ${text.type}`)
+  }
+
+  return text
+}
+
 function makeButton (label: RichContent, options: ButtonOptions) {
   const [action, extra] = actionsOf(options)
 
@@ -101,8 +117,12 @@ function makeButton (label: RichContent, options: ButtonOptions) {
     throw new RichError(`a button takes exactly one action of ${ACTION_NAMES}`)
   }
 
+  if (options.style === 'link' && action.callback_data === undefined) {
+    throw new RichError('the link button style is only allowed on a callbackData button')
+  }
+
   return {
-    text: emitText(label),
+    text: buttonText(emitText(label)),
     ...(options.style === undefined ? {} : { style: options.style }),
     ...action
   }
