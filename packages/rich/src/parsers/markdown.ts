@@ -625,8 +625,9 @@ class MarkdownParser {
             }
           } else {
             const code = entity[1] !== undefined ? Number(entity[1]) : Number.parseInt(entity[2]!, 16)
+            const control = code < 0x20 && code !== 0x09 && code !== 0x0a
 
-            if (code > 0x10ffff || (code >= 0xd800 && code <= 0xdfff)) {
+            if (control || code > 0x10ffff || (code >= 0xd800 && code <= 0xdfff)) {
               if (!this.lenient) {
                 this.fail(`malformed numeric entity ${entity[0]}`, base + pos)
               }

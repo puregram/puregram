@@ -494,4 +494,13 @@ describe('hardening regressions', () => {
       text: ['see ', { type: 'url', text: 'a', url: 'https://x.test/f(b)' }, ' end']
     }])
   })
+
+  it('rejects numeric entities that decode to c0 controls', () => {
+    expect(() => parseMarkdown('x &#1;0&#1; y')).toThrow('malformed numeric entity &#1;')
+    expect(parseMarkdown('x &#1;0&#1; y', { lenient: true })).toEqual([
+      { type: 'paragraph', text: 'x &#1;0&#1; y' }
+    ])
+    expect(() => rich.md`a${'VALUE'}b &#1;0&#1;`).toThrow(RichParseError)
+    expect(parseMarkdown('a&#10;b&#9;c')).toEqual([{ type: 'paragraph', text: 'a\nb\tc' }])
+  })
 })

@@ -187,8 +187,9 @@ function decodeEntityAt (
   if (body.startsWith('#')) {
     const hex = body[1] === 'x' || body[1] === 'X'
     const code = parseInt(body.slice(hex ? 2 : 1), hex ? 16 : 10)
+    const control = code < 0x20 && code !== 0x09 && code !== 0x0a
 
-    if (code > 0x10ffff || (code >= 0xd800 && code <= 0xdfff)) {
+    if (control || code > 0x10ffff || (code >= 0xd800 && code <= 0xdfff)) {
       return abort(opts, `malformed numeric entity &${body};`, errPos, errSource)
     }
 

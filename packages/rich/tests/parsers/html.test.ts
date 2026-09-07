@@ -379,6 +379,15 @@ describe('entities', () => {
     expect(paragraphText('&copy;', { lenient: true })).toBe('&copy;')
   })
 
+  it('rejects numeric entities that decode to c0 controls', () => {
+    const error = caught(() => parseHtml('<p>x &#1;0&#1; y</p>'))
+
+    expect(error).toBeInstanceOf(RichParseError)
+    expect(error.message).toContain('malformed numeric entity &#1;')
+    expect(paragraphText('<p>x &#1;0&#1; y</p>', { lenient: true })).toBe('x &#1;0&#1; y')
+    expect(paragraphText('<p>a&#10;b&#9;c</p>')).toBe('a\nb\tc')
+  })
+
   it('keeps a bare ampersand literal in both modes', () => {
     expect(paragraphText('a & b')).toBe('a & b')
   })
