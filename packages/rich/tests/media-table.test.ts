@@ -5,6 +5,7 @@ import {
 } from '../src/builders/block'
 import { bold } from '../src/builders/inline'
 import { DEFAULT_MAP_HEIGHT, DEFAULT_MAP_WIDTH, DEFAULT_MAP_ZOOM, TABLE_CELL_VALIGN } from '../src/constants'
+import { RichError } from '../src/error'
 
 describe('media blocks', () => {
   it('emits a per-kind media block', () => {
@@ -112,6 +113,17 @@ describe('map', () => {
       height: 50,
       caption: { text: 'c' }
     })
+  })
+
+  it('rejects a zoom or size telegram cannot render', () => {
+    expect(() => map(1, 2, { zoom: 99 }).emit()).toThrow(RichError)
+    expect(() => map(1, 2, { zoom: -1 }).emit()).toThrow(RichError)
+    expect(() => map(1, 2, { zoom: 1.5 }).emit()).toThrow(RichError)
+    expect(() => map(1, 2, { width: 20000, height: 20000 }).emit()).toThrow(RichError)
+    expect(() => map(1, 2, { width: 9000, height: 9000 }).emit()).toThrow(RichError)
+    expect(() => map(1, 2, { width: 1000, height: 1 }).emit()).toThrow(RichError)
+    expect(() => map(1, 2, { width: 0, height: 10 }).emit()).toThrow(RichError)
+    expect(map(1, 2, { width: 400, height: 400 }).emit()).toMatchObject({ width: 400, height: 400 })
   })
 })
 

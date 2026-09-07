@@ -5,6 +5,10 @@ export const DEFAULT_MAP_ZOOM = 15
 export const DEFAULT_MAP_WIDTH = 900
 export const DEFAULT_MAP_HEIGHT = 450
 
+export const MAX_MAP_ZOOM = 24
+export const MAX_MAP_SIZE = 10000
+export const MAX_MAP_RATIO = 20
+
 /** vertical alignment applied to every emitted table cell — the field is required by the bot api */
 export const TABLE_CELL_VALIGN = 'middle' as const
 

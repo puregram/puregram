@@ -1,6 +1,9 @@
 import type { TelegramInputRichBlock } from '@puregram/api'
 
-import { DEFAULT_MAP_HEIGHT, DEFAULT_MAP_WIDTH, DEFAULT_MAP_ZOOM, TABLE_CELL_VALIGN } from '../constants'
+import {
+  DEFAULT_MAP_HEIGHT, DEFAULT_MAP_WIDTH, DEFAULT_MAP_ZOOM,
+  MAX_MAP_RATIO, MAX_MAP_SIZE, MAX_MAP_ZOOM, TABLE_CELL_VALIGN
+} from '../constants'
 import { type RichContent, emitBlocks, emitText } from '../emit'
 import { RichError } from '../error'
 import { type RichMediaKind, type RichMediaSource, inferMediaKind } from '../media'
@@ -213,14 +216,27 @@ export interface MapOptions {
 
 /** location map */
 export function map (latitude: number, longitude: number, options: MapOptions = {}) {
-  return makeNode('block', () => ({
-    type: 'map',
-    location: { latitude, longitude },
-    zoom: options.zoom ?? DEFAULT_MAP_ZOOM,
-    width: options.width ?? DEFAULT_MAP_WIDTH,
-    height: options.height ?? DEFAULT_MAP_HEIGHT,
-    ...blockCaption(options)
-  }))
+  return makeNode('block', () => {
+    const zoom = options.zoom ?? DEFAULT_MAP_ZOOM
+    const width = options.width ?? DEFAULT_MAP_WIDTH
+    const height = options.height ?? DEFAULT_MAP_HEIGHT
+
+    if (!Number.isInteger(zoom) || zoom < 0 || zoom > MAX_MAP_ZOOM) {
+      throw new RichError(`a map zoom must be an integer between 0 and ${MAX_MAP_ZOOM}, got ${zoom}`)
+    }
+
+    if (width <= 0 || height <= 0 || width + height > MAX_MAP_SIZE) {
+      throw new RichError(`a map width and height must be positive and sum to at most ${MAX_MAP_SIZE}`)
+    }
+
+    const ratio = width > height ? width / height : height / width
+
+    if (ratio > MAX_MAP_RATIO) {
+      throw new RichError(`a map side ratio must be at most ${MAX_MAP_RATIO}, got ${ratio}`)
+    }
+
+    return { type: 'map', location: { latitude, longitude }, zoom, width, height, ...blockCaption(options) }
+  })
 }
 
 function mediaGroup (type: 'collage' | 'slideshow', items: readonly RichNode[], options: { caption?: RichContent, credit?: RichContent }) {
