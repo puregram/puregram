@@ -24,7 +24,8 @@ const DOCUMENT_EXTENSIONS = [
 
 /** media kind by url extension — a block must pick its type before telegram sees the file */
 export function inferMediaKind (url: string) {
-  const ext = (/\.([a-z0-9]+)(?:[?#]|$)/i.exec(url)?.[1] ?? '').toLowerCase()
+  const path = url.replace(/[?#].*$/, '').replace(/^[a-z][a-z0-9+.-]*:\/\/[^/]*/i, '')
+  const ext = (/\.([a-z0-9]+)$/i.exec(path)?.[1] ?? '').toLowerCase()
 
   if (VIDEO_EXTENSIONS.includes(ext)) {
     return 'video'

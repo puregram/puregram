@@ -43,6 +43,14 @@ describe('media blocks', () => {
     expect(media('https://x/file').emit()).toMatchObject({ type: 'photo' })
   })
 
+  it('media() ignores extensions outside the url path', () => {
+    expect(media('https://x/photo?src=report.pdf').emit()).toMatchObject({ type: 'photo' })
+    expect(media('https://x/img?w=1&name=a.mp3').emit()).toMatchObject({ type: 'photo' })
+    expect(media('http://example.zip').emit()).toMatchObject({ type: 'photo' })
+    expect(media('https://x/a.jpeg?x=y#z.mp4').emit()).toMatchObject({ type: 'photo' })
+    expect(media('https://x/clip.mp4?token=b.pdf').emit()).toMatchObject({ type: 'video' })
+  })
+
   it('media() defaults an envelope source to photo', () => {
     expect(media({ type: 'path', value: '/x.bin' }).emit()).toMatchObject({ type: 'photo' })
   })
