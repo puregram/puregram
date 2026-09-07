@@ -26,6 +26,7 @@ const TABLE_SEPARATOR_RE = /^\|(?:\s*:?-+:?\s*\|)+\s*$/
 const FOOTNOTE_DEF_RE = /^\[\^([^\]\s]+)\]:\s+(.*)$/
 const MEDIA_LINE_RE = /^!\[([^\]]*)\]\(((?:[^)\\\s]|\\.)+)(?:\s+"((?:[^"\\]|\\.)*)")?\)\s*$/
 const BLOCK_MATH_OPEN_RE = /^\$\$\s*(.*)$/
+const LINK_LABEL_RE = /^\[((?:[^\]\\]|\\.)*)\]\(/
 
 // block-level html tags interrupt a paragraph; inline tags (<u>, <tg-emoji>, …) keep flowing in it
 const BLOCK_TAG_RE = /^<(?:details|footer|aside|blockquote|table|figure|img|video|audio|ul|ol|pre|p|h[1-6]|hr|tg-map|tg-collage|tg-slideshow|tg-thinking|tg-math-block|tg-document|tg-button-row)\b/i
@@ -35,6 +36,38 @@ function isMediaLine (line: string) {
   const media = MEDIA_LINE_RE.exec(line)
 
   return media !== null && !media[2]!.startsWith('tg://')
+}
+
+function findUrlClose (text: string, start: number) {
+  let depth = 0
+  let i = start
+
+  while (i < text.length) {
+    const ch = text[i]!
+
+    if (ch === '\\' && i + 1 < text.length) {
+      i += 2
+      continue
+    }
+
+    if (/\s/.test(ch)) {
+      return -1
+    }
+
+    if (ch === '(') {
+      depth += 1
+    } else if (ch === ')') {
+      if (depth === 0) {
+        return i > start ? i : -1
+      }
+
+      depth -= 1
+    }
+
+    i += 1
+  }
+
+  return -1
 }
 
 // one place decides what interrupts a paragraph — keep in sync with the block dispatcher's branches
@@ -784,19 +817,25 @@ class MarkdownParser {
   }
 
   private parseLink (text: string, pos: number, base: number) {
-    // label may contain escaped brackets; url ends at an unescaped `)`
-    const match = /^\[((?:[^\]\\]|\\.)*)\]\(((?:[^)\\\s]|\\.)+)\)/.exec(text.slice(pos))
+    const match = LINK_LABEL_RE.exec(text.slice(pos))
 
     if (match === null) {
       return null
     }
 
+    const start = pos + match[0].length
+    const close = findUrlClose(text, start)
+
+    if (close === -1) {
+      return null
+    }
+
     const label = this.parseInline(match[1]!, base + pos + 1)
-    const url = unescape(match[2]!)
+    const url = unescape(text.slice(start, close))
     const value: TelegramRichText = url.startsWith('#')
       ? { type: 'anchor_link', text: label, anchor_name: url.slice(1) }
       : { type: 'url', text: label, url }
 
-    return { value, end: pos + match[0].length }
+    return { value, end: close + 1 }
   }
 }

@@ -483,4 +483,15 @@ describe('hardening regressions', () => {
       { type: 'paragraph', text: 'body' }
     ])
   })
+
+  it('keeps balanced parens inside a link destination', () => {
+    expect(parseMarkdown('[a](https://x.test/Foo_(bar))')).toEqual([{
+      type: 'paragraph',
+      text: { type: 'url', text: 'a', url: 'https://x.test/Foo_(bar)' }
+    }])
+    expect(parseMarkdown('see [a](https://x.test/f(b)) end')).toEqual([{
+      type: 'paragraph',
+      text: ['see ', { type: 'url', text: 'a', url: 'https://x.test/f(b)' }, ' end']
+    }])
+  })
 })
