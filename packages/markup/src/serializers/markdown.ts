@@ -16,6 +16,12 @@ function escapeMdCode (text: string) {
   return text.replace(MD_CODE_ESCAPE_RE, ch => `\\${ch}`)
 }
 
+const MD_TARGET_ESCAPE_RE = /[)\\]/g
+
+function escapeMdTarget (text: string) {
+  return text.replace(MD_TARGET_ESCAPE_RE, ch => `\\${ch}`)
+}
+
 function wrap (entity: Entity) {
   switch (entity.type) {
     case 'bold': return { open: '*', close: '*' }
@@ -23,15 +29,15 @@ function wrap (entity: Entity) {
     case 'underline': return { open: '__', close: '__' }
     case 'strikethrough': return { open: '~', close: '~' }
     case 'spoiler': return { open: '||', close: '||' }
-    case 'text_link': return { open: '[', close: `](${entity.url ?? ''})` }
+    case 'text_link': return { open: '[', close: `](${escapeMdTarget(entity.url ?? '')})` }
     case 'text_mention': return { open: '[', close: `](tg://user?id=${entity.user?.id ?? 0})` }
-    case 'custom_emoji': return { open: '![', close: `](tg://emoji?id=${entity.custom_emoji_id ?? ''})` }
+    case 'custom_emoji': return { open: '![', close: `](tg://emoji?id=${escapeMdTarget(entity.custom_emoji_id ?? '')})` }
     case 'date_time': {
       const unix = entity.unix_time ?? 0
       const fmt = entity.date_time_format
 
       if (fmt !== undefined && fmt !== '') {
-        return { open: '![', close: `](tg://time?unix=${unix}&format=${fmt})` }
+        return { open: '![', close: `](tg://time?unix=${unix}&format=${escapeMdTarget(fmt)})` }
       }
 
       return { open: '![', close: `](tg://time?unix=${unix})` }

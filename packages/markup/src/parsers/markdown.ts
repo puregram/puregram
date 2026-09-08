@@ -163,13 +163,25 @@ function parseLink (s: State, bang: boolean) {
 
   s.pos += 2
 
-  const close = s.src.indexOf(')', s.pos)
+  let close = s.pos
+  let target = ''
 
-  if (close === -1) {
+  while (close < s.src.length && s.src.charAt(close) !== ')') {
+    if (s.src.charAt(close) === '\\' && close + 1 < s.src.length) {
+      target += s.src.charAt(close + 1)
+      close += 2
+      continue
+    }
+
+    target += s.src.charAt(close)
+    close += 1
+  }
+
+  if (close >= s.src.length) {
     fail(s, 'malformed link — missing )', openPos)
   }
 
-  const url = s.src.slice(s.pos, close)
+  const url = target
   const length = s.text.length - start
 
   s.pos = close + 1

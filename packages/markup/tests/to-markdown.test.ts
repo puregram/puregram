@@ -32,6 +32,14 @@ describe('toMarkdown', () => {
     expect(toMarkdown(f)).toBe('[Alice](tg://user?id=42)')
   })
 
+  it('escapes ) and backslash inside a link target so the url survives', () => {
+    const url = 'https://x.com/Cat_(dis)'
+    const f = new Formatted('site', [{ type: 'text_link', offset: 0, length: 4, url }])
+
+    expect(toMarkdown(f)).toBe('[site](https://x.com/Cat_(dis\\))')
+    expect(md(toMarkdown(f)).entities).toEqual([{ type: 'text_link', offset: 0, length: 4, url }])
+  })
+
   it('emits `code` and ```pre``` fenced blocks', () => {
     expect(toMarkdown(new Formatted('x', [{ type: 'code', offset: 0, length: 1 }]))).toBe('`x`')
 
