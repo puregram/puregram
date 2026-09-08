@@ -508,6 +508,8 @@ await message.send(f)
 
 useful for porting code that already produces a `{ text, entities[] }` shape from somewhere else
 
+the constructor copies the array and drops zero-length entities, so later mutations of your array can't corrupt the value and telegram never sees an entity it silently discards
+
 ---
 
 ## errors
@@ -525,6 +527,17 @@ try {
   }
 }
 ```
+
+strict parsing also refuses input telegram itself would mangle or that would corrupt an interpolation:
+
+| input | why |
+| --- | --- |
+| `&#x110000;`, `&#xD800;`, `&#1;` | outside the unicode scalar range, or a control character |
+| `U+0001` anywhere in the source | reserved as the interpolation delimiter — a literal one could forge a slot |
+| nesting past 32 levels, in markdown or custom tags | recursion bound; the lenient variants degrade instead of overflowing the stack |
+| a custom-tag handler returning anything but a `Formatted` / `{ text, entities? }` | otherwise the message carries the string `"undefined"` |
+
+`time('x', new Date('nope'))` throws `RangeError` for the same reason — `unix_time` must be a finite number or telegram answers 400
 
 ---
 
