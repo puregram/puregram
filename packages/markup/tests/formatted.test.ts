@@ -10,6 +10,24 @@ describe('Formatted', () => {
     expect(f.entities).toEqual([{ type: 'bold', offset: 0, length: 2 }])
   })
 
+  it('owns its entities — mutating the caller array cannot corrupt it', () => {
+    const entities = [{ type: 'bold' as const, offset: 0, length: 2 }]
+    const f = new Formatted('hi', entities)
+
+    entities.push({ type: 'bold', offset: 99, length: 50 })
+    entities[0]!.offset = 42
+
+    expect(f.entities).toEqual([{ type: 'bold', offset: 0, length: 2 }])
+  })
+
+  it('drops zero-length entities, which designate nothing on the wire', () => {
+    expect(new Formatted('', [{ type: 'bold', offset: 0, length: 0 }]).entities).toEqual([])
+    expect(new Formatted('ab', [
+      { type: 'bold', offset: 0, length: 0 },
+      { type: 'italic', offset: 0, length: 2 }
+    ]).entities).toEqual([{ type: 'italic', offset: 0, length: 2 }])
+  })
+
   it('toString returns the plain text', () => {
     const f = new Formatted('hello', [])
 

@@ -120,10 +120,21 @@ export interface FormattedPayload {
 
 /** entity-based formatted text — pair of plain text + a list of bot-api message entities */
 export class Formatted {
-  constructor (
-    readonly text: string,
-    readonly entities: readonly Entity[] = []
-  ) {}
+  readonly text: string
+  readonly entities: readonly Entity[]
+
+  constructor (text: string, entities: readonly Entity[] = []) {
+    const owned: Entity[] = []
+
+    for (const entity of entities) {
+      if (entity.length > 0) {
+        owned.push(entity.user === undefined ? { ...entity } : { ...entity, user: { ...entity.user } })
+      }
+    }
+
+    this.text = text
+    this.entities = owned
+  }
 
   /** wraps a raw `{text, entities}` shape or returns the same `Formatted` instance unchanged */
   static from (source: Formatted | { text: string, entities?: readonly Entity[] }) {
