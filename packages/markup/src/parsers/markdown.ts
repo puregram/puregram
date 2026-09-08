@@ -296,7 +296,8 @@ function emitQuote (s: State, innerLines: readonly string[], type: 'blockquote' 
 }
 
 /** parses our MarkdownV2-flavored dialect into a Formatted */
-export function parseMarkdown (src: string) {
+export function parseMarkdown (source: string) {
+  const src = source.replace(/\r\n?/g, '\n')
   const s: State = { src, pos: 0, text: '', entities: [] }
   const lines = src.split('\n')
   let i = 0
@@ -403,7 +404,7 @@ export function parseMarkdown (src: string) {
       continue
     }
 
-    if (i > 0 && s.text.length > 0 && !s.text.endsWith('\n')) {
+    if (i > 0) {
       s.text += '\n'
     }
 

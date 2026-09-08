@@ -66,6 +66,24 @@ describe('md() function form', () => {
     expect(f.entities).toEqual([{ type: 'blockquote', offset: 3, length: 5 }])
   })
 
+  it('keeps blank lines and normalizes crlf', () => {
+    expect(md('a\n\nb').text).toBe('a\n\nb')
+    expect(md('a\n\n\nb').text).toBe('a\n\n\nb')
+    expect(md('a\r\nb').text).toBe('a\nb')
+    expect(md('*a*\n\n*b*').entities).toEqual([
+      { type: 'bold', offset: 0, length: 1 },
+      { type: 'bold', offset: 3, length: 1 }
+    ])
+  })
+
+  it('parses a long document in linear time', () => {
+    const source = Array.from({ length: 32000 }, (_, i) => `line ${i}`).join('\n')
+    const startedAt = performance.now()
+
+    expect(md(source).text.split('\n')).toHaveLength(32000)
+    expect(performance.now() - startedAt).toBeLessThan(1000)
+  })
+
   it('parses > line as blockquote (consecutive lines merge)', () => {
     const f = md('> a\n> b')
 
