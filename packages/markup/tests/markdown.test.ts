@@ -90,6 +90,18 @@ describe('md() function form', () => {
     expect(md('hey\\! set \\{a\\} a\\-b a\\+b a\\=b').text).toBe('hey! set {a} a-b a+b a=b')
   })
 
+  it('only treats a plain numeric tg://user id as a mention', () => {
+    expect(md('[a](tg://user?id=42)').entities).toEqual([
+      { type: 'text_mention', offset: 0, length: 1, user: { id: 42, first_name: 'a', is_bot: false } }
+    ])
+
+    for (const id of ['42abc', '1e3', '0x10', '42.9', '0', '9007199254740993']) {
+      expect(md(`[a](tg://user?id=${id})`).entities).toEqual([
+        { type: 'text_link', offset: 0, length: 1, url: `tg://user?id=${id}` }
+      ])
+    }
+  })
+
   it('parses > line as blockquote (consecutive lines merge)', () => {
     const f = md('> a\n> b')
 

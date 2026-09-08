@@ -211,11 +211,12 @@ function parseLink (s: State, bang: boolean) {
       fail(s, '! prefix is only valid for tg://time and tg://emoji urls', openPos)
     }
 
-    const id = parseInt(url.slice('tg://user?id='.length), 10)
+    const raw = url.slice('tg://user?id='.length)
+    const id = /^\d{1,19}$/.test(raw) ? Number(raw) : Number.NaN
 
-    // sentinel-laden interpolation makes parseInt return NaN — emit text_link
+    // sentinel-laden interpolation makes the id unreadable — emit text_link
     // and let post-expansion reclassify any tg://user?id=N url into text_mention
-    if (!Number.isNaN(id)) {
+    if (Number.isSafeInteger(id) && id > 0) {
       s.entities.push({
         type: 'text_mention',
         offset: start,
