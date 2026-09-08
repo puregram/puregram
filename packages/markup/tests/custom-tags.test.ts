@@ -800,3 +800,21 @@ describe('custom-tag end-to-end scenarios', () => {
     expect(out.entities).toEqual([{ type: 'bold', offset: 9, length: 3 }])
   })
 })
+
+describe('custom tag guards', () => {
+  it('rejects a handler result that is not a Formatted', () => {
+    const bad = html.with({ bad: () => 'plain' as never })
+
+    expect(() => bad('<bad>x</bad>')).toThrow(MarkupParseError)
+    expect(() => html.with({ nil: () => undefined as never })('<nil>x</nil>')).toThrow(MarkupParseError)
+    expect(bad.lenient('<bad>x</bad>').text).toBe('<bad>x</bad>')
+  })
+
+  it('bounds source nesting instead of overflowing the stack', () => {
+    const deep = html.with({ up: (c: Formatted) => c })
+    const source = `${'<up>'.repeat(2000)}x${'</up>'.repeat(2000)}`
+
+    expect(() => deep(source)).toThrow(MarkupParseError)
+    expect(deep.lenient(source).text).toBe(source)
+  })
+})

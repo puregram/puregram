@@ -334,6 +334,14 @@ export function preprocessCustomTags (
       ? ''
       : source.slice(span.contentStart, span.closeStart)
 
+    if (ancestors.length >= MAX_DEPTH) {
+      throw new MarkupParseError(
+        `custom-tag nesting exceeds the supported depth (${MAX_DEPTH}) in <${span.tag}>`,
+        span.openStart,
+        source
+      )
+    }
+
     const innerRewritten = preprocessCustomTags(innerSrc, registry, slots, [...ancestors, span.tag])
     const innerParsed = parseHtml(innerRewritten)
     const innerResolved = expandSentinels(innerParsed, slots)
@@ -363,6 +371,15 @@ export function preprocessCustomTags (
     }
 
     const result = invokeHandler(handler, innerResolved, info)
+
+    if (result === null || typeof result !== 'object' || !('text' in result) || typeof result.text !== 'string') {
+      throw new MarkupParseError(
+        `custom-tag <${span.tag}> handler must return a Formatted or { text, entities? }`,
+        span.openStart,
+        source
+      )
+    }
+
     const slotIdx = slots.length
 
     slots.push({ kind: 'formatted', value: Formatted.from(result) })
