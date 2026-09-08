@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion, local-rules/no-redundant-return-type */
+import { MarkupParseError } from '../error'
 import { type Entity, Formatted } from '../formatted'
 import { interpolate, type Piece } from '../interpolate'
 
@@ -10,6 +11,16 @@ export const SENTINEL_PREFIX = SENTINEL_DELIM
 export const SENTINEL_SUFFIX = SENTINEL_DELIM
 
 const SENTINEL_RE = new RegExp(`${SENTINEL_DELIM}(\\d+)${SENTINEL_DELIM}`, 'g')
+
+export function guardSentinelSource (source: string) {
+  const at = source.indexOf(SENTINEL_DELIM)
+
+  if (at !== -1) {
+    throw new MarkupParseError('source contains U+0001, reserved for interpolation', at, source)
+  }
+
+  return source
+}
 
 export function isTemplateStringsArray (value: unknown): value is TemplateStringsArray {
   return Array.isArray(value) && Array.isArray((value as unknown as { raw?: unknown }).raw)
@@ -266,11 +277,11 @@ export function composeWithSentinels (
   transformLiteral: (s: string) => string = s => s
 ) {
   const slots = rest.map(pieceFromInterp)
-  let source = transformLiteral(strings[0] ?? '')
+  let source = transformLiteral(guardSentinelSource(strings[0] ?? ''))
 
   for (let i = 1; i < strings.length; i++) {
     source += `${SENTINEL_PREFIX}${i - 1}${SENTINEL_SUFFIX}`
-    source += transformLiteral(strings[i] ?? '')
+    source += transformLiteral(guardSentinelSource(strings[i] ?? ''))
   }
 
   return { source, slots }

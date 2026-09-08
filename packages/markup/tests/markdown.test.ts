@@ -215,3 +215,9 @@ describe('md`` tagged-template form', () => {
     expect(f.entities).toEqual([{ type: 'italic', offset: 2, length: 1 }])
   })
 })
+
+it('refuses a source that forges an interpolation slot', () => {
+  expect(() => md('\u00010\u0001')).toThrow(MarkupParseError)
+  expect(() => md`x\u00010\u0001y ${'v'}`).toThrow(MarkupParseError)
+  expect(md.lenient('\u00010\u0001').text).toBe('\u00010\u0001')
+})

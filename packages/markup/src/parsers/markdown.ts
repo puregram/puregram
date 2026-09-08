@@ -2,7 +2,7 @@
 import { MarkupParseError } from '../error'
 import { type Entity, Formatted } from '../formatted'
 
-import { composeWithSentinels, expandSentinels, isTemplateStringsArray } from './sentinel'
+import { composeWithSentinels, expandSentinels, guardSentinelSource, isTemplateStringsArray } from './sentinel'
 
 const ESCAPABLE: Readonly<Record<string, true>> = {
   '\\': true,
@@ -548,7 +548,7 @@ function mdImpl (first: string | TemplateStringsArray, rest: readonly unknown[])
     return mdTagged(first, rest)
   }
 
-  return parseMarkdown(first)
+  return parseMarkdown(guardSentinelSource(first))
 }
 
 const mdCallable = ((first: string | TemplateStringsArray, ...rest: readonly unknown[]) => {
@@ -557,7 +557,7 @@ const mdCallable = ((first: string | TemplateStringsArray, ...rest: readonly unk
 
 mdCallable.lenient = (source: string) => {
   try {
-    return parseMarkdown(source)
+    return parseMarkdown(guardSentinelSource(source))
   } catch (err) {
     if (err instanceof MarkupParseError || err instanceof RangeError) {
       return new Formatted(source, [])

@@ -4,7 +4,7 @@ import type { Piece } from '../interpolate'
 
 import { parseAttrs, parseHtml } from './html'
 import { canonicalTag, BUILT_IN_TAG_NAMES } from './html-tags'
-import { SENTINEL_PREFIX, SENTINEL_SUFFIX, expandSentinels, resolveSentinelString } from './sentinel'
+import { SENTINEL_PREFIX, SENTINEL_SUFFIX, expandSentinels, guardSentinelSource, resolveSentinelString } from './sentinel'
 
 /** maximum number of nested handler invocations before we throw to break a cycle */
 export const MAX_DEPTH = 32
@@ -398,6 +398,8 @@ export function preprocessCustomTags (
  * zero overhead. otherwise: preprocess, parse, expand all sentinels
  */
 export function parseHtmlInternal (source: string, registry: ReadonlyMap<string, TagHandler>) {
+  guardSentinelSource(source)
+
   if (registry.size === 0) {
     return parseHtml(source)
   }

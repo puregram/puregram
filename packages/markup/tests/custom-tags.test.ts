@@ -818,3 +818,13 @@ describe('custom tag guards', () => {
     expect(deep.lenient(source).text).toBe(source)
   })
 })
+
+describe('reserved interpolation delimiter', () => {
+  it('refuses a source that forges an interpolation slot', () => {
+    const withTag = html.with({ t: (c: Formatted) => c })
+
+    expect(() => withTag('\u00010\u0001<t>x</t>')).toThrow(MarkupParseError)
+    expect(withTag.lenient('\u00010\u0001<t>x</t>').text).toBe('\u00010\u0001<t>x</t>')
+    expect(() => html`x\u00010\u0001y ${'v'}`).toThrow(MarkupParseError)
+  })
+})
