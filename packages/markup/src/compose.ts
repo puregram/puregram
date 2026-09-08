@@ -20,7 +20,7 @@ function pieceFromInterp (value: Interp): Piece {
     return { kind: 'text', value }
   }
 
-  if (typeof value === 'number') {
+  if (typeof value !== 'object') {
     return { kind: 'text', value: String(value) }
   }
 

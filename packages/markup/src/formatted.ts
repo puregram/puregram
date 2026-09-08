@@ -142,6 +142,10 @@ export class Formatted {
       return source
     }
 
+    if (typeof source !== 'object' || source === null || typeof source.text !== 'string') {
+      throw new TypeError('Formatted.from expects a Formatted or a { text, entities? } object')
+    }
+
     return new Formatted(source.text, source.entities ?? [])
   }
 

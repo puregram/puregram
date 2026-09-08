@@ -69,4 +69,11 @@ describe('formatDedent', () => {
     expect(formatDedent`hello ${bold('world')} welcome`.text).toBe('hello world welcome')
     expect(formatDedent`x  ${'y'}  z`.text).toBe('x  y  z')
   })
+
+  it('stringifies primitives and rejects objects it cannot format', () => {
+    expect(format`flag: ${true as never}`.text).toBe('flag: true')
+    expect(format`n: ${42}`.text).toBe('n: 42')
+    expect(() => format`items: ${['a', 'b'] as never}`).toThrow(TypeError)
+    expect(() => format`d: ${new Date(0) as never}`).toThrow(TypeError)
+  })
 })
