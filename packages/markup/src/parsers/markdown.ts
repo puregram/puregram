@@ -276,6 +276,25 @@ function readQuery (query: string, key: string) {
   return undefined
 }
 
+function emitQuote (s: State, innerLines: readonly string[], type: 'blockquote' | 'expandable_blockquote') {
+  if (s.text.length > 0 && !s.text.endsWith('\n')) {
+    s.text += '\n'
+  }
+
+  const start = s.text.length
+  const innerState: State = { src: innerLines.join('\n'), pos: 0, text: '', entities: [] }
+
+  parseBlockContent(innerState)
+
+  s.text += innerState.text
+
+  for (const e of innerState.entities) {
+    s.entities.push({ ...e, offset: e.offset + start })
+  }
+
+  s.entities.push({ type, offset: start, length: s.text.length - start })
+}
+
 /** parses our MarkdownV2-flavored dialect into a Formatted */
 export function parseMarkdown (src: string) {
   const s: State = { src, pos: 0, text: '', entities: [] }
@@ -340,12 +359,6 @@ export function parseMarkdown (src: string) {
     }
 
     if (line.startsWith('>>')) {
-      const start = s.text.length
-
-      if (s.text.length > 0 && !s.text.endsWith('\n')) {
-        s.text += '\n'
-      }
-
       const innerLines: string[] = []
 
       while (i < lines.length && (lines[i] as string).startsWith('>>')) {
@@ -353,30 +366,11 @@ export function parseMarkdown (src: string) {
         i += 1
       }
 
-      const inner = innerLines.join('\n')
-      const innerState: State = { src: inner, pos: 0, text: '', entities: [] }
-
-      parseBlockContent(innerState)
-
-      const offsetShift = s.text.length
-
-      s.text += innerState.text
-
-      for (const e of innerState.entities) {
-        s.entities.push({ ...e, offset: e.offset + offsetShift })
-      }
-
-      s.entities.push({ type: 'expandable_blockquote', offset: start, length: s.text.length - start })
+      emitQuote(s, innerLines, 'expandable_blockquote')
       continue
     }
 
     if (line.startsWith('>')) {
-      const start = s.text.length
-
-      if (s.text.length > 0 && !s.text.endsWith('\n')) {
-        s.text += '\n'
-      }
-
       const innerLines: string[] = []
 
       while (i < lines.length && (lines[i] as string).startsWith('>') && !(lines[i] as string).startsWith('>>')) {
@@ -384,20 +378,7 @@ export function parseMarkdown (src: string) {
         i += 1
       }
 
-      const inner = innerLines.join('\n')
-      const innerState: State = { src: inner, pos: 0, text: '', entities: [] }
-
-      parseBlockContent(innerState)
-
-      const offsetShift = s.text.length
-
-      s.text += innerState.text
-
-      for (const e of innerState.entities) {
-        s.entities.push({ ...e, offset: e.offset + offsetShift })
-      }
-
-      s.entities.push({ type: 'blockquote', offset: start, length: s.text.length - start })
+      emitQuote(s, innerLines, 'blockquote')
       continue
     }
 

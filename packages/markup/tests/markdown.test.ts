@@ -59,6 +59,13 @@ describe('md() function form', () => {
     expect(f.entities[0].language).toBeUndefined()
   })
 
+  it('starts a blockquote entity at the quote body, not at the preceding newline', () => {
+    const f = md('hi\n> quote')
+
+    expect(f.text).toBe('hi\nquote')
+    expect(f.entities).toEqual([{ type: 'blockquote', offset: 3, length: 5 }])
+  })
+
   it('parses > line as blockquote (consecutive lines merge)', () => {
     const f = md('> a\n> b')
 
