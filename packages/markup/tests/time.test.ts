@@ -80,6 +80,13 @@ describe('time builder — curried form', () => {
     // @ts-expect-error -- runtime check, first arg must be string|number|Date
     expect(() => time({ weekday: true })).toThrow(TypeError)
   })
+
+  it('rejects a timestamp telegram cannot read', () => {
+    expect(() => time('soon', new Date('not a date'))).toThrow(RangeError)
+    expect(() => time('soon', Number.NaN)).toThrow(RangeError)
+    expect(() => time('soon', Number.POSITIVE_INFINITY)).toThrow(RangeError)
+    expect(time('soon', 1700000000.7).entities[0].unix_time).toBe(1700000000)
+  })
 })
 
 describe('composeTimeFormat', () => {

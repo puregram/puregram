@@ -46,7 +46,13 @@ export function composeTimeFormat (opts: TimeFormat) {
 }
 
 function unixOf (when: number | Date) {
-  return when instanceof Date ? Math.floor(when.getTime() / 1000) : when
+  const seconds = when instanceof Date ? when.getTime() / 1000 : when
+
+  if (!Number.isFinite(seconds)) {
+    throw new RangeError('time: `when` must be a finite unix timestamp (seconds) or a valid Date')
+  }
+
+  return Math.floor(seconds)
 }
 
 function buildTimeEntity (when: number | Date, format: TimeFormat | undefined, length: number) {
