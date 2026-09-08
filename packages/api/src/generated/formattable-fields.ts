@@ -45,6 +45,11 @@ export const FORMATTABLE_FIELDS = {
             path: ["result", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
         }
     ],
     "answerInlineQuery": [
@@ -87,6 +92,11 @@ export const FORMATTABLE_FIELDS = {
             path: ["results", "*", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["results", "*", "input_message_content", "rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
         }
     ],
     "answerWebAppQuery": [
@@ -127,6 +137,11 @@ export const FORMATTABLE_FIELDS = {
         },
         {
             path: ["result", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "rich_message", "media", "*", "media", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
         }
@@ -192,6 +207,11 @@ export const FORMATTABLE_FIELDS = {
             path: ["rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
         }
     ],
     "editMessageCaption": [
@@ -255,6 +275,11 @@ export const FORMATTABLE_FIELDS = {
             path: ["rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
         }
     ],
     "editStory": [
@@ -316,6 +341,11 @@ export const FORMATTABLE_FIELDS = {
         },
         {
             path: ["result", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "rich_message", "media", "*", "media", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
         }
@@ -428,6 +458,11 @@ export const FORMATTABLE_FIELDS = {
         }
     ],
     "sendMediaGroup": [
+        {
+            path: ["media", "*", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
         {
             path: ["reply_parameters", "quote"],
             textKey: "quote",
@@ -551,6 +586,11 @@ export const FORMATTABLE_FIELDS = {
             entitiesKey: "caption_entities"
         },
         {
+            path: ["rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
             path: ["reply_parameters", "quote"],
             textKey: "quote",
             entitiesKey: "quote_entities"
@@ -584,6 +624,11 @@ export const FORMATTABLE_FIELDS = {
         },
         {
             path: ["rich_message", "blocks", "*", "voice_note", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["rich_message", "media", "*", "media", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
         }

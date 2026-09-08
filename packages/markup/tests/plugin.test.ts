@@ -105,4 +105,36 @@ describe('@puregram/markup — plugin e2e', () => {
     expect(captured!.text).toBe('raw')
     expect(captured!.entities).toEqual([{ type: 'italic', offset: 0, length: 3 }])
   })
+
+  it('rewrites album captions for sendMediaGroup', async () => {
+    const { tg, mock } = await makeTg(t => t.extend(markup()))
+
+    activeMock = mock
+
+    let captured: Record<string, unknown> | undefined
+
+    tg.useHook('onRequestIntercept', (ctx, next) => {
+      captured = ctx.params
+
+      return next()
+    })
+
+    await tg.start()
+
+    mock.expect('sendMediaGroup', () => ({ ok: true, result: [sentMessage] }))
+
+    await tg.api.sendMediaGroup({
+      chat_id: 1,
+      media: [
+        { type: 'photo', media: 'file_1', caption: format`album ${bold('caption')}` },
+        { type: 'photo', media: 'file_2', caption: 'plain' }
+      ]
+    })
+
+    const media = captured!.media as Record<string, unknown>[]
+
+    expect(media[0]!.caption).toBe('album caption')
+    expect(media[0]!.caption_entities).toEqual([{ type: 'bold', offset: 6, length: 7 }])
+    expect(media[1]!.caption).toBe('plain')
+  })
 })
