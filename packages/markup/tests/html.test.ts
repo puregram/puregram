@@ -190,6 +190,20 @@ describe('html() function form', () => {
     expect(html.lenient('<b>'.repeat(3000))).toBeInstanceOf(Formatted)
   })
 
+  it('reads quoted attribute values and decodes their entities', () => {
+    expect(html('<a href="https://x.com/?a=>b">l</a>').entities).toEqual([
+      { type: 'text_link', offset: 0, length: 1, url: 'https://x.com/?a=>b' }
+    ])
+    expect(html('<a href="https://x.com/?a=1&amp;b=2">l</a>').entities).toEqual([
+      { type: 'text_link', offset: 0, length: 1, url: 'https://x.com/?a=1&b=2' }
+    ])
+    expect(html('<a href="https://x.com/?a=>b">l</a>').text).toBe('l')
+  })
+
+  it('rejects an empty href, which telegram refuses', () => {
+    expect(() => html('<a href="">x</a>')).toThrow(MarkupParseError)
+  })
+
   it('returns a Formatted', () => {
     expect(html('plain')).toBeInstanceOf(Formatted)
   })

@@ -127,10 +127,53 @@ export function parseAttrs (attrSrc: string) {
     const name = (m[1] ?? '').toLowerCase()
     const value = m[2] ?? m[3] ?? m[4] ?? ''
 
-    attrs[name] = value
+    attrs[name] = decodeAttrEntities(value)
   }
 
   return attrs
+}
+
+const ATTR_ENTITY_RE = /&(#[xX][0-9a-fA-F]+|#\d+|[a-zA-Z]+);/g
+
+function decodeAttrEntities (value: string) {
+  if (!value.includes('&')) {
+    return value
+  }
+
+  return value.replace(ATTR_ENTITY_RE, (whole, raw: string) => {
+    try {
+      return decodeEntity(raw, 0, value)
+    } catch {
+      return whole
+    }
+  })
+}
+
+function findTagEnd (source: string, from: number) {
+  let i = from + 1
+
+  while (i < source.length) {
+    const ch = source.charAt(i)
+
+    if (ch === '"' || ch === "'") {
+      const close = source.indexOf(ch, i + 1)
+
+      if (close === -1) {
+        return -1
+      }
+
+      i = close + 1
+      continue
+    }
+
+    if (ch === '>') {
+      return i
+    }
+
+    i += 1
+  }
+
+  return -1
 }
 
 function buildEntity (tag: OpenTag, length: number, source: string) {
@@ -146,8 +189,8 @@ function buildEntity (tag: OpenTag, length: number, source: string) {
   if (canonical === 'a') {
     const url = tag.attrs.href
 
-    if (url === undefined) {
-      throw new MarkupParseError('<a> requires an href attribute', tag.sourceOffset, source)
+    if (url === undefined || url === '') {
+      throw new MarkupParseError('<a> requires a non-empty href attribute', tag.sourceOffset, source)
     }
 
     entity.url = url
@@ -320,7 +363,7 @@ export function parseHtml (source: string) {
         continue
       }
 
-      const end = source.indexOf('>', i)
+      const end = findTagEnd(source, i)
 
       if (end === -1) {
         throw new MarkupParseError('unclosed <…>', i, source)
