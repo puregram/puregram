@@ -204,6 +204,28 @@ describe('html() function form', () => {
     expect(() => html('<a href="">x</a>')).toThrow(MarkupParseError)
   })
 
+  it('maps a tg://user href to text_mention', () => {
+    expect(html('<a href="tg://user?id=42">Al</a>').entities).toEqual([
+      { type: 'text_mention', offset: 0, length: 2, user: { id: 42, is_bot: false, first_name: 'Al' } }
+    ])
+    expect(html('<a href="tg://user?id=abc">x</a>').entities).toEqual([
+      { type: 'text_link', offset: 0, length: 1, url: 'tg://user?id=abc' }
+    ])
+  })
+
+  it('keeps the whole language class value', () => {
+    expect(html('<pre><code class="language-c sharp">x</code></pre>').entities).toEqual([
+      { type: 'pre', offset: 0, length: 1, language: 'c sharp' }
+    ])
+  })
+
+  it('keeps a code entity that does not span the whole pre', () => {
+    expect(html('<pre>a<code>b</code>c</pre>').entities).toEqual([
+      { type: 'pre', offset: 0, length: 3 },
+      { type: 'code', offset: 1, length: 1 }
+    ])
+  })
+
   it('returns a Formatted', () => {
     expect(html('plain')).toBeInstanceOf(Formatted)
   })

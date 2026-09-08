@@ -176,7 +176,7 @@ function findTagEnd (source: string, from: number) {
   return -1
 }
 
-function buildEntity (tag: OpenTag, length: number, source: string) {
+function buildEntity (tag: OpenTag, length: number, source: string, label: string) {
   const canonical = tag.canonical
   const type = TAG_TO_ENTITY[canonical]
 
@@ -193,7 +193,14 @@ function buildEntity (tag: OpenTag, length: number, source: string) {
       throw new MarkupParseError('<a> requires a non-empty href attribute', tag.sourceOffset, source)
     }
 
-    entity.url = url
+    const mention = /^tg:\/\/user\?id=(\d{1,19})$/.exec(url)
+
+    if (mention !== null) {
+      entity.type = 'text_mention'
+      entity.user = { id: Number(mention[1]), is_bot: false, first_name: label }
+    } else {
+      entity.url = url
+    }
   }
 
   if (canonical === 'tg-emoji') {
@@ -333,18 +340,20 @@ export function parseHtml (source: string) {
         const top = stack[stack.length - 1]
 
         if (open.canonical === 'code' && top !== undefined && top.canonical === 'pre') {
-          const lang = (open.attrs.class ?? '').match(/language-([\w-]+)/)?.[1]
-
-          if (lang !== undefined) {
-            top.attrs.language = lang
-          }
-
           if (open.canonical !== canonical) {
             throw new MarkupParseError(`mismatched closing tag </${rawName}> (expected </${open.canonical}>)`, i, source)
           }
 
-          i = end + 1
-          continue
+          const cls = open.attrs.class ?? ''
+
+          if (cls.startsWith('language-')) {
+            top.attrs.language = cls.slice('language-'.length)
+          }
+
+          if (open.startOffset === top.startOffset) {
+            i = end + 1
+            continue
+          }
         }
 
         const matchAllowed = open.canonical === canonical ||
@@ -355,7 +364,7 @@ export function parseHtml (source: string) {
         }
 
         const length = text.length - open.startOffset
-        const entity = buildEntity(open, length, source)
+        const entity = buildEntity(open, length, source, text.slice(open.startOffset, open.startOffset + length))
 
         entities.push(entity)
 
