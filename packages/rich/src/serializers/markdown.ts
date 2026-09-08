@@ -8,7 +8,7 @@ import type {
 
 import { DEFAULT_MAP_HEIGHT, DEFAULT_MAP_WIDTH } from '../constants'
 import { RichError } from '../error'
-import { escapeHtml, escapeMarkdown, escapeMarkdownAttr, escapeMarkdownUrl } from '../escape'
+import { escapeHtml, escapeMarkdownAttr, escapeMarkdownText, escapeMarkdownUrl } from '../escape'
 
 import { buttonAttrs, footnoteReference, mediaPayload, plainText } from './shared'
 
@@ -18,7 +18,7 @@ const SIMPLE_NAME_RE = /^[\w-]+$/
 /** render rich text as markdown-dialect source */
 export function serializeMarkdownText (text: TelegramRichText): string {
   if (typeof text === 'string') {
-    return escapeMarkdown(text)
+    return escapeMarkdownText(text)
   }
 
   if (Array.isArray(text)) {
@@ -43,7 +43,7 @@ export function serializeMarkdownText (text: TelegramRichText): string {
     case 'superscript': return `<sup>${serializeMarkdownText(text.text)}</sup>`
     case 'url': return `[${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(text.url)})`
     case 'text_mention': return `[${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(`tg://user?id=${text.user.id}`)})`
-    case 'custom_emoji': return `![${escapeMarkdown(text.alternative_text)}](${escapeMarkdownUrl(`tg://emoji?id=${text.custom_emoji_id}`)})`
+    case 'custom_emoji': return `![${escapeMarkdownText(text.alternative_text)}](${escapeMarkdownUrl(`tg://emoji?id=${text.custom_emoji_id}`)})`
     case 'date_time': return `![${serializeMarkdownText(text.text)}](${escapeMarkdownUrl(`tg://time?unix=${text.unix_time}${text.date_time_format ? `&format=${encodeURIComponent(text.date_time_format)}` : ''}`)})`
     case 'mathematical_expression': return /[$\n]|^\s|\s$/.test(text.expression)
       ? `<tg-math>${text.expression}</tg-math>`
@@ -77,11 +77,6 @@ export function serializeMarkdownText (text: TelegramRichText): string {
   }
 }
 
-// a literal newline would escape a single-line construct; the numeric entity decodes back on parse
-function singleLine (text: TelegramRichText) {
-  return serializeMarkdownText(text).replace(/\n/g, '&#10;')
-}
-
 function captionInner (caption: TelegramRichBlockCaption) {
   const credit = caption.credit === undefined ? '' : `<cite>${serializeMarkdownText(caption.credit)}</cite>`
 
@@ -98,13 +93,13 @@ function itemMarker (item: TelegramInputRichBlockListItem) {
 }
 
 function tableRow (cells: TelegramRichBlockTableCell[]) {
-  return `| ${cells.map(c => (c.text === undefined ? '' : singleLine(c.text))).join(' | ')} |`
+  return `| ${cells.map(c => (c.text === undefined ? '' : serializeMarkdownText(c.text))).join(' | ')} |`
 }
 
 // a lone paragraph inside a list item renders as bare inline text kept on the marker line
 function itemBlock (block: TelegramInputRichBlock) {
   return block.type === 'paragraph' && footnoteReference(block.text) === null
-    ? singleLine(block.text)
+    ? serializeMarkdownText(block.text)
     : serializeBlock(block)
 }
 
@@ -115,16 +110,13 @@ function serializeBlock (block: TelegramInputRichBlock): string {
 
       if (ref !== null) {
         return SIMPLE_NAME_RE.test(ref.name)
-          ? `[^${ref.name}]: ${singleLine(ref.text)}`
+          ? `[^${ref.name}]: ${serializeMarkdownText(ref.text)}`
           : serializeMarkdownText(ref)
       }
 
-      // a leading "N. " re-parses as an ordered list; '.' is not backslash-escapable, use the entity
-      return serializeMarkdownText(block.text)
-        .replace(/^(\d+)\.(?=\s)/, '$1&#46;')
-        .replace(/^\n|\n(?=\n)|\n$/g, '&#10;')
+      return serializeMarkdownText(block.text).replace(/^(\d+)\.(?=\s)/, '$1&#46;')
     }
-    case 'heading': return `${'#'.repeat(block.size)} ${singleLine(block.text)}`
+    case 'heading': return `${'#'.repeat(block.size)} ${serializeMarkdownText(block.text)}`
     case 'pre': {
       const body = plainText(block.text)
       const language = block.language ?? ''
@@ -223,7 +215,7 @@ function serializeBlock (block: TelegramInputRichBlock): string {
       const { url } = mediaPayload(block)
       const title = block.caption === undefined
         ? ''
-        : ` "${singleLine(block.caption.text).replace(/"/g, '&#34;')}"`
+        : ` "${serializeMarkdownText(block.caption.text).replace(/"/g, '&#34;')}"`
 
       return `![](${escapeMarkdownUrl(url)}${title})`
     }

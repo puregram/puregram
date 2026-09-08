@@ -795,7 +795,14 @@ class MarkdownParser {
 
         if (fragment !== null) {
           if (fragment.level === 'inline') {
-            push(fragment.value as TelegramRichText)
+            const value = fragment.value as TelegramRichText
+
+            if (typeof value === 'string') {
+              literal += value
+            } else {
+              push(value)
+            }
+
             pos = fragment.end
             continue
           }

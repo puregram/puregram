@@ -20,14 +20,12 @@ export function escapeHtml (text: string) {
   return text.replace(/[&<>"]/g, ch => HTML_SPECIALS[ch] as string)
 }
 
-const HTML_WHITESPACE: Record<string, string> = {
-  '\n': '&#10;',
-  '\r': '&#13;',
-  '\t': '&#9;'
+export function escapeHtmlText (text: string) {
+  return escapeHtml(text).replace(/\n/g, '<br/>')
 }
 
-export function escapeHtmlText (text: string) {
-  return escapeHtml(text).replace(/[\n\r\t]/g, ch => HTML_WHITESPACE[ch] as string)
+export function escapeMarkdownText (text: string) {
+  return escapeMarkdown(text).replace(/\n/g, '<br/>')
 }
 
 // a url inside markdown `[text](url)` is terminated by `)` or whitespace — escape the parens and
@@ -40,5 +38,5 @@ export function escapeMarkdownUrl (url: string) {
 // inside markdown, an emitted tag lives in line-oriented block syntax: a raw pipe would split a
 // table cell and a blank line would end the construct, cutting the tag in half
 export function escapeMarkdownAttr (text: string) {
-  return escapeHtmlText(text).replace(/\|/g, '&#124;')
+  return escapeHtml(text).replace(/\|/g, '&#124;').replace(/\n/g, '&#10;')
 }

@@ -228,7 +228,7 @@ describe('serializeBlocks', () => {
     expect(serializeBlocks(blocks, 'html')).toBe('<p>1. not a list</p>')
   })
 
-  it('entity-encodes literal newlines inside single-line markdown constructs', () => {
+  it('emits text newlines as <br/>, the only break telegram keeps in either dialect', () => {
     const blocks: TelegramInputRichBlock[] = [
       { type: 'heading', text: 'a\nb', size: 2 },
       { type: 'table', cells: [[{ text: 'x\ny', align: 'left', valign: 'middle' }]] },
@@ -237,19 +237,19 @@ describe('serializeBlocks', () => {
     ]
 
     expect(serializeBlocks(blocks, 'markdown')).toBe([
-      '## a&#10;b',
-      '| x&#10;y |\n| :-- |',
-      '[^n]: c&#10;d',
-      '![](https://x.example/p.jpg "e&#10;f")'
+      '## a<br/>b',
+      '| x<br/>y |\n| :-- |',
+      '[^n]: c<br/>d',
+      '![](https://x.example/p.jpg "e<br/>f")'
     ].join('\n\n'))
   })
 
-  it('entity-encodes whitespace in html text but keeps pre bodies raw', () => {
-    const inline: TelegramInputRichBlock[] = [{ type: 'paragraph', text: ['a', '\n', 'b\tc'] }]
+  it('keeps html text breaks and pre bodies raw', () => {
+    const inline: TelegramInputRichBlock[] = [{ type: 'paragraph', text: ['a', '\n', 'b'] }]
     const pre: TelegramInputRichBlock[] = [{ type: 'pre', text: 'line1\nline2' }]
 
-    expect(serializeBlocks(inline, 'html')).toBe('<p>a&#10;b&#9;c</p>')
-    expect(parseHtml(serializeBlocks(inline, 'html'))).toEqual([{ type: 'paragraph', text: 'a\nb\tc' }])
+    expect(serializeBlocks(inline, 'html')).toBe('<p>a<br/>b</p>')
+    expect(parseHtml(serializeBlocks(inline, 'html'))).toEqual([{ type: 'paragraph', text: 'a\nb' }])
     expect(serializeBlocks(pre, 'html')).toBe('<pre><code>line1\nline2</code></pre>')
     expect(parseHtml(serializeBlocks(pre, 'html'))).toEqual(pre)
   })
@@ -258,10 +258,9 @@ describe('serializeBlocks', () => {
     const blocks: TelegramInputRichBlock[] = [{ type: 'paragraph', text: 'a\n\nb' }]
     const styled: TelegramInputRichBlock[] = [{ type: 'paragraph', text: { type: 'bold', text: 'a\n\nb' } }]
 
-    expect(serializeBlocks(blocks, 'markdown')).toBe('a&#10;\nb')
+    expect(serializeBlocks(blocks, 'markdown')).toBe('a<br/><br/>b')
     expect(parseMarkdown(serializeBlocks(blocks, 'markdown'))).toEqual(blocks)
     expect(parseMarkdown(serializeBlocks(styled, 'markdown'))).toEqual(styled)
-    expect(serializeBlocks([{ type: 'paragraph', text: 'a\nb' }], 'markdown')).toBe('a\nb')
   })
 
   it('emits math through the tag form when the dollar delimiters cannot carry it', () => {
