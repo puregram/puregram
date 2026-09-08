@@ -14,65 +14,93 @@ interface RawFormattable {
   entities?: readonly Entity[]
 }
 
-function isFormattableShape (value: unknown) {
-  return typeof value === 'object' &&
-    value !== null &&
-    'text' in value &&
-    typeof (value as { text: unknown }).text === 'string'
+function asFormattable (value: unknown) {
+  if (value instanceof Formatted) {
+    return value
+  }
+
+  if (typeof value !== 'object' || value === null) {
+    return null
+  }
+
+  const candidate = value as Partial<RawFormattable>
+
+  if (typeof candidate.text !== 'string') {
+    return null
+  }
+
+  if (candidate.entities !== undefined && !Array.isArray(candidate.entities)) {
+    return null
+  }
+
+  for (const key of Object.keys(candidate)) {
+    if (key !== 'text' && key !== 'entities') {
+      return null
+    }
+  }
+
+  return Formatted.from(candidate as RawFormattable)
 }
 
 function applyAtLeaf (parent: Record<string, unknown>, slot: FormattableSlot) {
-  const value = parent[slot.textKey]
+  const formatted = asFormattable(parent[slot.textKey])
 
-  if (value instanceof Formatted) {
-    parent[slot.textKey] = value.text
-    parent[slot.entitiesKey] = [...value.entities]
-
-    return
+  if (formatted === null) {
+    return parent
   }
 
-  if (typeof value === 'string') {
-    return
-  }
+  const keepCallerEntities = formatted.entities.length === 0 && parent[slot.entitiesKey] !== undefined
 
-  if (isFormattableShape(value)) {
-    const f = Formatted.from(value as RawFormattable)
-
-    parent[slot.textKey] = f.text
-    parent[slot.entitiesKey] = [...f.entities]
+  return {
+    ...parent,
+    [slot.textKey]: formatted.text,
+    ...(keepCallerEntities ? {} : { [slot.entitiesKey]: [...formatted.entities] })
   }
 }
 
-function walkPath (root: unknown, path: readonly string[], slot: FormattableSlot): void {
-  if (path.length === 1) {
-    if (typeof root === 'object' && root !== null) {
-      applyAtLeaf(root as Record<string, unknown>, slot)
-    }
-
-    return
+function walkPath (node: unknown, path: readonly string[], slot: FormattableSlot): unknown {
+  if (typeof node !== 'object' || node === null) {
+    return node
   }
 
   const head = path[0] as string
+
+  if (path.length === 1) {
+    return applyAtLeaf(node as Record<string, unknown>, slot)
+  }
+
   const tail = path.slice(1)
 
   if (head === '*') {
-    if (Array.isArray(root)) {
-      for (const item of root) {
-        walkPath(item, tail, slot)
+    if (!Array.isArray(node)) {
+      return walkPath(node, tail, slot)
+    }
+
+    const items = node as unknown[]
+    let out: unknown[] | undefined
+
+    for (let i = 0; i < items.length; i++) {
+      const next = walkPath(items[i], tail, slot)
+
+      if (next !== items[i]) {
+        out ??= items.slice()
+        out[i] = next
       }
     }
 
-    return
+    return out ?? items
   }
 
-  if (typeof root === 'object' && root !== null) {
-    walkPath((root as Record<string, unknown>)[head], tail, slot)
-  }
+  const record = node as Record<string, unknown>
+  const next = walkPath(record[head], tail, slot)
+
+  return next === record[head] ? record : { ...record, [head]: next }
 }
 
 /**
- * mutates `params` in place, replacing every `Formatted` (or `{ text, entities }` shape) at
- * a known formattable slot with its plain text + sibling entities array.
+ * returns `params` with every `Formatted` (or `{ text, entities }` shape) at a known formattable
+ * slot replaced by its plain text + sibling entities array. objects on an unchanged path keep
+ * their identity, so the caller's own params tree is never rewritten.
  * descriptor comes from `@puregram/api`'s codegenned `FORMATTABLE_FIELDS`
  */
 export function unwrapFormatted (
@@ -81,16 +109,20 @@ export function unwrapFormatted (
   fields: FormattableFields
 ) {
   if (params === undefined) {
-    return
+    return params
   }
 
   const slots = fields[method]
 
   if (slots === undefined) {
-    return
+    return params
   }
 
+  let out = params
+
   for (const slot of slots) {
-    walkPath(params, slot.path, slot)
+    out = walkPath(out, slot.path, slot) as Record<string, unknown>
   }
+
+  return out
 }

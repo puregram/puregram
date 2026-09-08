@@ -161,6 +161,8 @@ async function runOnce (
   try {
     await deps.hooks.run('onBeforeRequest', ctx)
 
+    params = ctx.params ?? {}
+
     if ('media' in params) {
       const { body, headers } = await buildMediaGroupMultipart(params, deps.options.useLocal, richFiles)
 
@@ -185,12 +187,13 @@ async function runOnce (
 
     return await deps.hooks.runApiCall(ctx, async () => {
       const response = await deps.httpClient.request({ url, init: ctx.init ?? {} })
-      const json = await response.json() as ApiResponseUnion
+      let json = await response.json() as ApiResponseUnion
 
       ctx.response = { status: response.status }
       ctx.json = json
 
       await deps.hooks.run('onResponseIntercept', ctx)
+      json = ctx.json as ApiResponseUnion
 
       if (json.ok) {
         debug('<- %s ok=true', method)

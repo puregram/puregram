@@ -9,10 +9,8 @@ export function markup () {
   return createPlugin({
     name: 'markup',
     install: (tg: TelegramCore) => {
-      tg.useHook('onBeforeRequest', (raw, next) => {
-        const ctx = raw
-
-        unwrapFormatted(ctx.method, ctx.params, FIELDS)
+      tg.useHook('onBeforeRequest', (ctx, next) => {
+        ctx.params = unwrapFormatted(ctx.method, ctx.params, FIELDS)
 
         return next()
       })
