@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
+import { MarkupParseError } from '../src/error'
 import { html, htmlb } from '../src/parsers/html'
 import { md, markdown } from '../src/parsers/markdown'
 
@@ -82,5 +83,18 @@ describe('htmlb.lenient', () => {
 
     expect(f.text).toBe(broken)
     expect(f.entities).toEqual([])
+  })
+})
+
+describe('MarkupParseError', () => {
+  it('exposes the source position under both names', () => {
+    try {
+      md('ok text here **a')
+      expect.unreachable()
+    } catch (error) {
+      expect(error).toBeInstanceOf(MarkupParseError)
+      expect((error as MarkupParseError).position).toBe((error as MarkupParseError).offset)
+      expect((error as MarkupParseError).position).toBeGreaterThan(0)
+    }
   })
 })

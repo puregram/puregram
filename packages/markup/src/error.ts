@@ -9,4 +9,8 @@ export class MarkupParseError extends Error {
     super(`${message} at offset ${offset}`, options)
     this.name = 'MarkupParseError'
   }
+
+  get position () {
+    return this.offset
+  }
 }
