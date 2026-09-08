@@ -48,6 +48,13 @@ describe('toMarkdown', () => {
     expect(toMarkdown(p)).toBe('```js\nconsole.log(1)\n```')
   })
 
+  it('escapes backticks and backslashes inside a pre body', () => {
+    const f = new Formatted('a`b\\c', [{ type: 'pre', offset: 0, length: 5 }])
+
+    expect(toMarkdown(f)).toBe('```\na\\`b\\\\c\n```')
+    expect(md(toMarkdown(f))).toEqual(f)
+  })
+
   it('emits a blockquote with leading > on each line', () => {
     const f = new Formatted('a\nb', [{ type: 'blockquote', offset: 0, length: 3 }])
 

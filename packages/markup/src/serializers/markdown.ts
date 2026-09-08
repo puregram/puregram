@@ -85,7 +85,7 @@ function renderRange (text: string, start: number, end: number, nodes: TagNode[]
       const lang = entity.language !== undefined && entity.language !== '' ? entity.language : ''
 
       out += `\`\`\`${lang}\n`
-      out += slice.replace(/```/g, '\\`\\`\\`')
+      out += escapeMdCode(slice)
       out += '\n```'
       cursor = node.end
       continue

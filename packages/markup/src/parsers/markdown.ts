@@ -319,7 +319,7 @@ export function parseMarkdown (src: string) {
 
       i += 1
 
-      const preText = buf.join('\n')
+      const preText = buf.join('\n').replace(/\\([`\\])/g, '$1')
 
       if (s.text.length > 0 && !s.text.endsWith('\n')) {
         s.text += '\n'
