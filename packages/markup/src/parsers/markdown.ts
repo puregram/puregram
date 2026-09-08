@@ -358,6 +358,27 @@ export function parseMarkdown (src: string) {
       continue
     }
 
+    if (line.startsWith('**>')) {
+      const innerLines: string[] = [(lines[i] as string).slice(3)]
+
+      i += 1
+
+      while (i < lines.length && (lines[i] as string).startsWith('>')) {
+        innerLines.push((lines[i] as string).slice(1))
+        i += 1
+      }
+
+      const last = innerLines.length - 1
+      const tail = innerLines[last] as string
+
+      if (tail.endsWith('||')) {
+        innerLines[last] = tail.slice(0, -2)
+      }
+
+      emitQuote(s, innerLines, 'expandable_blockquote')
+      continue
+    }
+
     if (line.startsWith('>>')) {
       const innerLines: string[] = []
 

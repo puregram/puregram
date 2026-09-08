@@ -55,16 +55,18 @@ describe('toMarkdown', () => {
     expect(md(toMarkdown(f))).toEqual(f)
   })
 
-  it('emits a blockquote with leading > on each line', () => {
+  it('emits a blockquote with a bare > on each line', () => {
     const f = new Formatted('a\nb', [{ type: 'blockquote', offset: 0, length: 3 }])
 
-    expect(toMarkdown(f)).toBe('> a\n> b')
+    expect(toMarkdown(f)).toBe('>a\n>b')
+    expect(md(toMarkdown(f))).toEqual(f)
   })
 
-  it('emits an expandable blockquote with >>', () => {
+  it('emits an expandable blockquote in telegram\'s **> … || form', () => {
     const f = new Formatted('a\nb', [{ type: 'expandable_blockquote', offset: 0, length: 3 }])
 
-    expect(toMarkdown(f)).toBe('>> a\n>> b')
+    expect(toMarkdown(f)).toBe('**>a\n>b||')
+    expect(md(toMarkdown(f))).toEqual(f)
   })
 
   it('emits ![X](tg://emoji?id=…) for custom_emoji', () => {

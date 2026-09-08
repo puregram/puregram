@@ -50,12 +50,16 @@ function isRaw (entity: Entity) {
   return entity.type === 'code' || entity.type === 'pre'
 }
 
-function renderQuoteBody (body: string, marker: string) {
+function renderQuoteBody (body: string, expandable: boolean) {
   const trailingNl = body.endsWith('\n')
   const trimmed = trailingNl ? body.slice(0, -1) : body
-  const prefixed = trimmed.split('\n').map(line => `${marker} ${line}`).join('\n')
+  const prefixed = trimmed
+    .split('\n')
+    .map((line, index) => `${expandable && index === 0 ? '**>' : '>'}${line}`)
+    .join('\n')
+  const closed = expandable ? `${prefixed}||` : prefixed
 
-  return trailingNl ? `${prefixed}\n` : prefixed
+  return trailingNl ? `${closed}\n` : closed
 }
 
 function renderRange (text: string, start: number, end: number, nodes: TagNode[], rawMode: boolean) {
@@ -95,9 +99,8 @@ function renderRange (text: string, start: number, end: number, nodes: TagNode[]
       const inner = node.children.length === 0
         ? escapeMd(text.slice(node.start, node.end))
         : renderRange(text, node.start, node.end, node.children, rawMode)
-      const marker = entity.type === 'expandable_blockquote' ? '>>' : '>'
 
-      out += renderQuoteBody(inner, marker)
+      out += renderQuoteBody(inner, entity.type === 'expandable_blockquote')
       cursor = node.end
       continue
     }
