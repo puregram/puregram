@@ -102,6 +102,19 @@ describe('md() function form', () => {
     }
   })
 
+  it('parses an inline triple backtick run as one pre span', () => {
+    const f = md('a ```x``` b')
+
+    expect(f.text).toBe('a x b')
+    expect(f.entities).toEqual([{ type: 'pre', offset: 2, length: 1 }])
+  })
+
+  it('bounds nesting instead of blowing the stack', () => {
+    expect(() => md('['.repeat(2700))).toThrow(MarkupParseError)
+    expect(md.lenient('['.repeat(2700))).toEqual(new Formatted('['.repeat(2700), []))
+    expect(md.lenient('*_'.repeat(1810)).entities).toEqual([])
+  })
+
   it('parses > line as blockquote (consecutive lines merge)', () => {
     const f = md('> a\n> b')
 

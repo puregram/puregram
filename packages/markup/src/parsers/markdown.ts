@@ -31,6 +31,7 @@ interface State {
   pos: number
   text: string
   entities: Entity[]
+  depth: number
 }
 
 function fail (s: State, msg: string, at = s.pos) {
@@ -72,7 +73,23 @@ function matchDelim (s: State) {
   return null
 }
 
+const MAX_NESTING_DEPTH = 128
+
 function parseInline (s: State, stopAt: string | null) {
+  if (s.depth > MAX_NESTING_DEPTH) {
+    fail(s, 'nesting exceeds the supported depth')
+  }
+
+  s.depth += 1
+
+  try {
+    scanInline(s, stopAt)
+  } finally {
+    s.depth -= 1
+  }
+}
+
+function scanInline (s: State, stopAt: string | null) {
   while (s.pos < s.src.length) {
     if (stopAt !== null && startsWith(s, stopAt)) {
       return
@@ -144,10 +161,11 @@ function parseFramed (s: State, delim: Delim) {
 function parseInlineCode (s: State) {
   const openPos = s.pos
   const start = s.text.length
+  const fence = s.src.startsWith('```', s.pos) ? '```' : '`'
 
-  s.pos += 1
+  s.pos += fence.length
 
-  while (s.pos < s.src.length && peek(s) !== '`') {
+  while (s.pos < s.src.length && !s.src.startsWith(fence, s.pos)) {
     if (peek(s) === '\\' && peek(s, 1) !== '') {
       const next = peek(s, 1)
 
@@ -162,12 +180,17 @@ function parseInlineCode (s: State) {
     s.pos += 1
   }
 
-  if (peek(s) !== '`') {
-    fail(s, 'unmatched `', openPos)
+  if (!s.src.startsWith(fence, s.pos)) {
+    fail(s, `unmatched ${fence}`, openPos)
   }
 
-  s.pos += 1
-  s.entities.push({ type: 'code', offset: start, length: s.text.length - start })
+  s.pos += fence.length
+
+  const length = s.text.length - start
+
+  if (length > 0) {
+    s.entities.push({ type: fence === '```' ? 'pre' : 'code', offset: start, length })
+  }
 }
 
 function parseLink (s: State, bang: boolean) {
@@ -303,7 +326,7 @@ function emitQuote (s: State, innerLines: readonly string[], type: 'blockquote' 
   }
 
   const start = s.text.length
-  const innerState: State = { src: innerLines.join('\n'), pos: 0, text: '', entities: [] }
+  const innerState: State = { src: innerLines.join('\n'), pos: 0, text: '', entities: [], depth: 0 }
 
   parseBlockContent(innerState)
 
@@ -319,7 +342,7 @@ function emitQuote (s: State, innerLines: readonly string[], type: 'blockquote' 
 /** parses our MarkdownV2-flavored dialect into a Formatted */
 export function parseMarkdown (source: string) {
   const src = source.replace(/\r\n?/g, '\n')
-  const s: State = { src, pos: 0, text: '', entities: [] }
+  const s: State = { src, pos: 0, text: '', entities: [], depth: 0 }
   const lines = src.split('\n')
   let i = 0
 
@@ -429,7 +452,7 @@ export function parseMarkdown (source: string) {
       s.text += '\n'
     }
 
-    const lineState: State = { src: line, pos: 0, text: s.text, entities: s.entities }
+    const lineState: State = { src: line, pos: 0, text: s.text, entities: s.entities, depth: 0 }
 
     parseInline(lineState, null)
 
@@ -536,7 +559,7 @@ mdCallable.lenient = (source: string) => {
   try {
     return parseMarkdown(source)
   } catch (err) {
-    if (err instanceof MarkupParseError) {
+    if (err instanceof MarkupParseError || err instanceof RangeError) {
       return new Formatted(source, [])
     }
 
