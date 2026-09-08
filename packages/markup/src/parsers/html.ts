@@ -86,25 +86,23 @@ const ENTITY_REFS: Readonly<Record<string, string>> = {
   nbsp: ' '
 }
 
+function fromCodePoint (code: number, raw: string, sourceOffset: number, source: string) {
+  const control = code < 0x20 && code !== 0x09 && code !== 0x0a
+
+  if (!Number.isInteger(code) || code < 0 || code > 0x10ffff || (code >= 0xd800 && code <= 0xdfff) || control) {
+    throw new MarkupParseError(`malformed numeric entity &${raw};`, sourceOffset, source)
+  }
+
+  return String.fromCodePoint(code)
+}
+
 function decodeEntity (raw: string, sourceOffset: number, source: string) {
   if (raw.startsWith('#x') || raw.startsWith('#X')) {
-    const code = parseInt(raw.slice(2), 16)
-
-    if (Number.isNaN(code)) {
-      throw new MarkupParseError(`malformed numeric entity &${raw};`, sourceOffset, source)
-    }
-
-    return String.fromCodePoint(code)
+    return fromCodePoint(parseInt(raw.slice(2), 16), raw, sourceOffset, source)
   }
 
   if (raw.startsWith('#')) {
-    const code = parseInt(raw.slice(1), 10)
-
-    if (Number.isNaN(code)) {
-      throw new MarkupParseError(`malformed numeric entity &${raw};`, sourceOffset, source)
-    }
-
-    return String.fromCodePoint(code)
+    return fromCodePoint(parseInt(raw.slice(1), 10), raw, sourceOffset, source)
   }
 
   const value = ENTITY_REFS[raw]
@@ -511,7 +509,7 @@ function makeHtmlCallable (
 
       return parseHtmlInternal(source, registry)
     } catch (err) {
-      if (err instanceof MarkupParseError) {
+      if (err instanceof MarkupParseError || err instanceof RangeError) {
         return new Formatted(source, [])
       }
 

@@ -176,6 +176,20 @@ describe('html() function form', () => {
     expect(html('<b> </b>x').entities).toEqual([])
   })
 
+  it('rejects numeric references outside the scalar range', () => {
+    expect(() => html('x&#x110000;y')).toThrow(MarkupParseError)
+    expect(() => html('x&#-1;y')).toThrow(MarkupParseError)
+    expect(() => html('x&#xD800;y')).toThrow(MarkupParseError)
+    expect(() => html('x&#1;y')).toThrow(MarkupParseError)
+    expect(html('x&#9;y').text).toBe('x y')
+    expect(html('&#128512;').text).toBe('😀')
+  })
+
+  it('never throws from the lenient variant', () => {
+    expect(html.lenient('x&#x110000;y')).toEqual(new Formatted('x&#x110000;y', []))
+    expect(html.lenient('<b>'.repeat(3000))).toBeInstanceOf(Formatted)
+  })
+
   it('returns a Formatted', () => {
     expect(html('plain')).toBeInstanceOf(Formatted)
   })
