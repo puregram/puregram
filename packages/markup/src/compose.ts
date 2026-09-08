@@ -98,7 +98,11 @@ function applyDedentAll (s: string, isFirst: boolean, isLast: boolean) {
     out = out.slice(1)
   }
 
-  out = out.replace(/\n[ \t]+/g, '\n').replace(/^[ \t]+/, '')
+  out = out.replace(/\n[ \t]+/g, '\n')
+
+  if (isFirst) {
+    out = out.replace(/^[ \t]+/, '')
+  }
 
   if (isLast) {
     out = out.replace(/\n[ \t]*$/, '')

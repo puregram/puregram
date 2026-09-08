@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
+import { bold } from '../src/builders/modifier'
 import { format, formatDedent } from '../src/compose'
 import { Formatted } from '../src/formatted'
 
@@ -62,5 +63,10 @@ describe('formatDedent', () => {
     `
 
     expect(f.text).toBe('Welcome!\nnot a staircase\nthird')
+  })
+
+  it('keeps spacing that follows an interpolation', () => {
+    expect(formatDedent`hello ${bold('world')} welcome`.text).toBe('hello world welcome')
+    expect(formatDedent`x  ${'y'}  z`.text).toBe('x  y  z')
   })
 })
