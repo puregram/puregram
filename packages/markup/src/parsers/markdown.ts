@@ -4,7 +4,27 @@ import { type Entity, Formatted } from '../formatted'
 
 import { composeWithSentinels, expandSentinels, isTemplateStringsArray } from './sentinel'
 
-const ESCAPABLE = new Set(['\\', '`', '*', '_', '~', '|', '[', ']', '(', ')', '>'])
+const ESCAPABLE: Readonly<Record<string, true>> = {
+  '\\': true,
+  '`': true,
+  '*': true,
+  _: true,
+  '~': true,
+  '|': true,
+  '[': true,
+  ']': true,
+  '(': true,
+  ')': true,
+  '>': true,
+  '#': true,
+  '+': true,
+  '-': true,
+  '=': true,
+  '{': true,
+  '}': true,
+  '.': true,
+  '!': true
+}
 
 interface State {
   src: string
@@ -67,7 +87,7 @@ function parseInline (s: State, stopAt: string | null) {
     if (ch === '\\') {
       const next = peek(s, 1)
 
-      if (next !== '' && ESCAPABLE.has(next)) {
+      if (next !== '' && ESCAPABLE[next] === true) {
         s.text += next
         s.pos += 2
         continue

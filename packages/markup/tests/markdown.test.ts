@@ -84,6 +84,12 @@ describe('md() function form', () => {
     expect(performance.now() - startedAt).toBeLessThan(1000)
   })
 
+  it('honors every markdownv2 escape', () => {
+    expect(md('a\\#b').text).toBe('a#b')
+    expect(md('version 1\\.2\\.3 released').text).toBe('version 1.2.3 released')
+    expect(md('hey\\! set \\{a\\} a\\-b a\\+b a\\=b').text).toBe('hey! set {a} a-b a+b a=b')
+  })
+
   it('parses > line as blockquote (consecutive lines merge)', () => {
     const f = md('> a\n> b')
 
