@@ -38,7 +38,7 @@ const DELIMITERS: readonly Delim[] = [
   { open: '~~', type: 'strikethrough' },
   { open: '||', type: 'spoiler' },
   { open: '_', type: 'italic' },
-  { open: '*', type: 'italic' },
+  { open: '*', type: 'bold' },
   { open: '~', type: 'strikethrough' }
 ]
 

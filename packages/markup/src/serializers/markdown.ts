@@ -18,10 +18,10 @@ function escapeMdCode (text: string) {
 
 function wrap (entity: Entity) {
   switch (entity.type) {
-    case 'bold': return { open: '**', close: '**' }
+    case 'bold': return { open: '*', close: '*' }
     case 'italic': return { open: '_', close: '_' }
     case 'underline': return { open: '__', close: '__' }
-    case 'strikethrough': return { open: '~~', close: '~~' }
+    case 'strikethrough': return { open: '~', close: '~' }
     case 'spoiler': return { open: '||', close: '||' }
     case 'text_link': return { open: '[', close: `](${entity.url ?? ''})` }
     case 'text_mention': return { open: '[', close: `](tg://user?id=${entity.user?.id ?? 0})` }

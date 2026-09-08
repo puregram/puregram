@@ -410,7 +410,7 @@ parses markdown v2 (telegram's flavor). same call/tagged-template duality:
 import { md } from '@puregram/markup'
 
 await message.send(md`
-  **bold** _italic_ __underline__ ~~strike~~ ||spoiler||
+  *bold* _italic_ __underline__ ~strike~ ||spoiler||
   [link](https://x.com), [tg user mention](tg://user?id=${message.from?.id ?? 0})
   \`code\`, then a fenced block:
   \`\`\`js
@@ -426,6 +426,8 @@ await message.send(md`
 ![`md` result](assets/md.png)
 
 `markdown` is just an alias of `md` for spell-it-out preference. interpolated values are auto-escaped, so user input in `tg://user?id=${userId}` and similar can't break the syntax
+
+delimiters follow telegram's MarkdownV2 exactly — `*bold*`, `_italic_`, `__underline__`, `~strike~`, `||spoiler||`. the doubled `**bold**` / `~~strike~~` spellings are also accepted as a convenience, but note telegram itself renders those as plain text, so never hand them to `parse_mode: 'MarkdownV2'`
 
 ---
 

@@ -5,25 +5,25 @@ import { Formatted } from '../src/formatted'
 import { md, markdown } from '../src/parsers/markdown'
 
 describe('md() function form', () => {
-  it('parses **bold**', () => {
-    const f = md('**hi**')
+  it('parses *bold* and **bold**', () => {
+    const f = md('*hi*')
 
     expect(f.text).toBe('hi')
     expect(f.entities).toEqual([{ type: 'bold', offset: 0, length: 2 }])
+    expect(md('**hi**').entities[0].type).toBe('bold')
   })
 
-  it('parses _italic_ and *italic*', () => {
+  it('parses _italic_', () => {
     expect(md('_hi_').entities[0].type).toBe('italic')
-    expect(md('*hi*').entities[0].type).toBe('italic')
   })
 
   it('parses __underline__', () => {
     expect(md('__hi__').entities[0].type).toBe('underline')
   })
 
-  it('parses ~~strike~~ and ~strike~', () => {
-    expect(md('~~x~~').entities[0].type).toBe('strikethrough')
+  it('parses ~strike~ and ~~strike~~', () => {
     expect(md('~x~').entities[0].type).toBe('strikethrough')
+    expect(md('~~x~~').entities[0].type).toBe('strikethrough')
   })
 
   it('parses ||spoiler||', () => {

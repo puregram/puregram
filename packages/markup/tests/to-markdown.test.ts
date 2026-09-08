@@ -10,14 +10,11 @@ describe('toMarkdown', () => {
     expect(toMarkdown(new Formatted('1.0', []))).toBe('1\\.0')
   })
 
-  it('emits ** for bold', () => {
-    expect(toMarkdown(new Formatted('hi', [{ type: 'bold', offset: 0, length: 2 }]))).toBe('**hi**')
-  })
-
-  it('emits _ for italic, __ for underline, ~~ for strike, || for spoiler', () => {
+  it('emits the markdownv2 delimiters telegram parses', () => {
+    expect(toMarkdown(new Formatted('hi', [{ type: 'bold', offset: 0, length: 2 }]))).toBe('*hi*')
     expect(toMarkdown(new Formatted('x', [{ type: 'italic', offset: 0, length: 1 }]))).toBe('_x_')
     expect(toMarkdown(new Formatted('x', [{ type: 'underline', offset: 0, length: 1 }]))).toBe('__x__')
-    expect(toMarkdown(new Formatted('x', [{ type: 'strikethrough', offset: 0, length: 1 }]))).toBe('~~x~~')
+    expect(toMarkdown(new Formatted('x', [{ type: 'strikethrough', offset: 0, length: 1 }]))).toBe('~x~')
     expect(toMarkdown(new Formatted('x', [{ type: 'spoiler', offset: 0, length: 1 }]))).toBe('||x||')
   })
 
@@ -61,10 +58,11 @@ describe('toMarkdown', () => {
     expect(toMarkdown(f)).toBe('![X](tg://emoji?id=5448)')
   })
 
-  it('round-trips md`**hi**` → toMarkdown()', () => {
-    const f = md('**hi**')
+  it('round-trips md`*hi*` → toMarkdown()', () => {
+    const f = md('*hi*')
 
-    expect(toMarkdown(f)).toBe('**hi**')
+    expect(toMarkdown(f)).toBe('*hi*')
+    expect(md(toMarkdown(f)).entities).toEqual(f.entities)
   })
 
   it('round-trips nested bold-inside-italic (re-parsing matches)', () => {
@@ -100,6 +98,6 @@ describe('toMarkdown', () => {
   it('formatted.toMarkdown() is a method shortcut', () => {
     const f = new Formatted('hi', [{ type: 'bold', offset: 0, length: 2 }])
 
-    expect(f.toMarkdown()).toBe('**hi**')
+    expect(f.toMarkdown()).toBe('*hi*')
   })
 })
