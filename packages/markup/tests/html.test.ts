@@ -162,6 +162,20 @@ describe('html() function form', () => {
     expect(html('  hello  ').text).toBe('hello')
   })
 
+  it('keeps entity ranges inside the text when whitespace is dropped', () => {
+    expect(html('<b>bold </b>')).toEqual(new Formatted('bold', [{ type: 'bold', offset: 0, length: 4 }]))
+    expect(html('hi <b>there </b>  ')).toEqual(new Formatted('hi there', [{ type: 'bold', offset: 3, length: 5 }]))
+    expect(html('<b>x </b>\n<i>y</i>')).toEqual(new Formatted('x\ny', [
+      { type: 'bold', offset: 0, length: 1 },
+      { type: 'italic', offset: 2, length: 1 }
+    ]))
+  })
+
+  it('drops an entity left empty by whitespace handling', () => {
+    expect(html('<b></b>x').entities).toEqual([])
+    expect(html('<b> </b>x').entities).toEqual([])
+  })
+
   it('returns a Formatted', () => {
     expect(html('plain')).toBeInstanceOf(Formatted)
   })

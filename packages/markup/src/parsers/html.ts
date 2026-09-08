@@ -232,12 +232,30 @@ export function parseHtml (source: string) {
   const stack: OpenTag[] = []
   let i = 0
 
+  const dropLastChar = () => {
+    const at = text.length - 1
+
+    text = text.slice(0, -1)
+
+    for (const entity of entities) {
+      if (entity.offset + entity.length > at) {
+        entity.length -= 1
+      }
+    }
+
+    for (const open of stack) {
+      if (open.startOffset > at) {
+        open.startOffset -= 1
+      }
+    }
+  }
+
   // collapses runs of horizontal whitespace to a single space; preserves newlines
   const appendText = (s: string) => {
     for (const ch of s) {
       if (ch === '\n') {
         if (text.endsWith(' ')) {
-          text = text.slice(0, -1)
+          dropLastChar()
         }
 
         text += '\n'
@@ -352,11 +370,20 @@ export function parseHtml (source: string) {
     throw new MarkupParseError(`unclosed tag <${unclosed.canonical}>`, unclosed.sourceOffset, source)
   }
 
-  text = text.trimEnd()
+  const trimmed = text.trimEnd()
+  const bounded: Entity[] = []
 
-  entities.sort((a, b) => a.offset - b.offset)
+  for (const entity of entities) {
+    const end = Math.min(entity.offset + entity.length, trimmed.length)
 
-  return new Formatted(text, entities)
+    if (end > entity.offset) {
+      bounded.push(end - entity.offset === entity.length ? entity : { ...entity, length: end - entity.offset })
+    }
+  }
+
+  bounded.sort((a, b) => a.offset - b.offset)
+
+  return new Formatted(trimmed, bounded)
 }
 
 // 0x02 (STX) survives the html lexer's whitespace collapse and is distinct from the
