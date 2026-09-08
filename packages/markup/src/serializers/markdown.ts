@@ -131,6 +131,10 @@ function renderRange (text: string, start: number, end: number, nodes: TagNode[]
       out += renderRange(text, node.start, node.end, node.children, innerRaw)
     }
 
+    if (out.endsWith('_') && w.close.startsWith('_')) {
+      out += '**'
+    }
+
     out += w.close
     cursor = node.end
   }

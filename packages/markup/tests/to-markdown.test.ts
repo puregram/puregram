@@ -69,6 +69,15 @@ describe('toMarkdown', () => {
     expect(md(toMarkdown(f))).toEqual(f)
   })
 
+  it('separates adjacent underscore delimiters with an empty bold', () => {
+    const f = new Formatted('x', [
+      { type: 'underline', offset: 0, length: 1 },
+      { type: 'italic', offset: 0, length: 1 }
+    ])
+
+    expect(toMarkdown(f)).toBe('___x_**__')
+  })
+
   it('emits ![X](tg://emoji?id=…) for custom_emoji', () => {
     const f = new Formatted('X', [{ type: 'custom_emoji', offset: 0, length: 1, custom_emoji_id: '5448' }])
 
