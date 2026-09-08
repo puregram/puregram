@@ -229,6 +229,23 @@ describe('runRequest — rich_message', () => {
     })
   })
 
+  it('lets a request hook rewrite params before the webhook reply is claimed', async () => {
+    const { httpClient } = capturingClient()
+    const deps = baseDeps(httpClient)
+    const slot = new ReplySlot()
+
+    deps.hooks.add('onBeforeRequest', (ctx, next) => {
+      ctx.params = { ...ctx.params, text: 'rewritten' }
+
+      return next()
+    })
+
+    await replyAls.run(slot, () => runRequest(deps, 'sendMessageDraft', { chat_id: 1, text: 'original' }))
+
+    expect(slot.consumed).toBe(true)
+    expect(slot.payload?.params.text).toBe('rewritten')
+  })
+
   it('skips the webhook reply slot when the rich message carries uploads', async () => {
     const { captured, httpClient } = capturingClient()
     const slot = new ReplySlot()

@@ -132,27 +132,6 @@ async function runOnce (
 
   delete params.suppress
 
-  let richFiles: Map<string, unknown> | undefined
-
-  if ('rich_message' in params) {
-    const rewrite = await rewriteRichMessage(params, deps.options.useLocal)
-
-    params = rewrite.params
-    richFiles = rewrite.files.size > 0 ? rewrite.files : undefined
-  }
-
-  // webhook-reply optimization — methods returning `true` ride the 200 body, invisible to callers
-  // skip when `suppress` (needs real error shape) or multipart (can't serialize as json)
-  const slot = replyAls.getStore()
-
-  if (slot !== undefined && !slot.consumed && !suppress &&
-      WEBHOOK_REPLY_SAFE_METHODS.has(method) &&
-      richFiles === undefined && !('media' in params) && !needsMultipart(params)) {
-    if (slot.tryClaim(method, params)) {
-      return true
-    }
-  }
-
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), deps.options.apiTimeout)
 
@@ -162,6 +141,28 @@ async function runOnce (
     await deps.hooks.run('onBeforeRequest', ctx)
 
     params = ctx.params ?? {}
+
+    let richFiles: Map<string, unknown> | undefined
+
+    if ('rich_message' in params) {
+      const rewrite = await rewriteRichMessage(params, deps.options.useLocal)
+
+      params = rewrite.params
+      ctx.params = params
+      richFiles = rewrite.files.size > 0 ? rewrite.files : undefined
+    }
+
+    // webhook-reply optimization — methods returning `true` ride the 200 body, invisible to callers
+    // skip when `suppress` (needs real error shape) or multipart (can't serialize as json)
+    const slot = replyAls.getStore()
+
+    if (slot !== undefined && !slot.consumed && !suppress &&
+        WEBHOOK_REPLY_SAFE_METHODS.has(method) &&
+        richFiles === undefined && !('media' in params) && !needsMultipart(params)) {
+      if (slot.tryClaim(method, params)) {
+        return true
+      }
+    }
 
     if ('media' in params) {
       const { body, headers } = await buildMediaGroupMultipart(params, deps.options.useLocal, richFiles)
