@@ -137,4 +137,23 @@ describe('@puregram/markup — plugin e2e', () => {
     expect(media[0]!.caption_entities).toEqual([{ type: 'bold', offset: 6, length: 7 }])
     expect(media[1]!.caption).toBe('plain')
   })
+
+  it('unwraps a Formatted on a direct api call made before start()', async () => {
+    const { tg, mock } = await makeTg(t => t.extend(markup()))
+
+    activeMock = mock
+
+    let captured: Record<string, unknown> | undefined
+
+    mock.expect('sendMessage', (params) => {
+      captured = params
+
+      return { ok: true, result: sentMessage }
+    })
+
+    await tg.api.sendMessage({ chat_id: 1, text: format`hi ${bold('there')}` })
+
+    expect(captured!.text).toBe('hi there')
+    expect(captured!.entities).toEqual([{ type: 'bold', offset: 3, length: 5 }])
+  })
 })
