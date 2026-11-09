@@ -225,7 +225,7 @@ in `editState` and `sendWidget`, a state key that is `undefined` is left alone a
 <a name='templates'></a>
 #### templates: html per message
 
-when part of the html is per message but never changes (a poll's question, a countdown's date), pass `html` as a function. the definition then has every state method (`sendShared`, `sharedContent`, `editState`, `editShared`, `decode`) and `render(args)`, which builds that message's html and returns a plain definition with `send` / `content`. each rendered html is checked once, before its first send
+when part of the html is per message but never changes (a poll's question, a countdown's date), pass `html` as a function. the definition then has every state method (`sendShared`, `sharedContent`, `editState`, `editShared`, `decode`) and `render(args)`, which builds that message's html and returns a plain definition accepted by the contextual `sendWidget` shortcuts, with its own `content()` helper. each rendered html is checked once, before its first send
 
 ```ts
 const Poll = defineWidget({
@@ -277,3 +277,9 @@ after dispatch, the plugin answers every `widget_query` / `shared_widget_query` 
 `WidgetQuery.type` and `SharedWidgetQuery.type` use the official `WidgetQueryType` union: `data` (with an optional wallet card), `sign_data` or `sent_transaction`. `queryData` matches the request's `data` prefix for all three; inspect `query.type` before handling a wallet outcome. the package never verifies signatures or payments for you. follow [telegram's wallet guide](https://core.telegram.org/bots/widgets#payments-with-the-wallet): validate signatures and wallet addresses, and check transactions on-chain before fulfilling an order.
 
 the query contains no state. keep authoritative state on the bot side, validate every query's data and commit local mutations only after the API edit succeeds. answers carry only `data`, not state changes: use `editState` or `editShared` separately. shared widgets accept at most one edit per second; coalesce frequent changes in your application. the showcase is an in-memory demonstration, not durable storage.
+
+### client compatibility
+
+test-server QA observed stale shared public state on an Android client, while iOS refreshed it correctly. a custom TDesktop 7.4-based client showed inline-result titles without rendering the widget preview; iOS rendered the preview without viewer or chat identity. affected and fixed client versions have not been established.
+
+test the clients your users run. a successful state edit or query answer is not confirmation that every client has refreshed its displayed public state.

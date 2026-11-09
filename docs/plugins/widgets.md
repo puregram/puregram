@@ -62,7 +62,7 @@ tg.onWidgetQuery(Increment.filter, async (query) => {
     return query.answer({ data: 'counter unavailable' })
   }
   const count = previous + 1
-  await Counter.editState(query, query, { chat: { count } })
+  await Counter.editState(tg, query, { chat: { count } })
   counts.set(key, count)
   await query.answer({ data: String(count) })
 })
@@ -100,7 +100,7 @@ card.assertFits()
 - each state: at most 1024 UTF-8 bytes, no NUL characters. `null` encodes as `''` to clear it; `undefined` omits a state field in sends and message edits.
 - request data: 1–64 UTF-8 bytes. answer data: at most 1024 bytes, within 15 seconds.
 
-`send()` and `content()` check the HTML once per definition before use. send **plain HTML** to the API; local compression measures it only. the package uses portable JavaScript zlib, `TextEncoder` and `puregram/runtime`, with no eager Node builtins or `Buffer` requirement.
+`sendWidget` and `content()` check the HTML once per definition before use. send **plain HTML** to the API; local compression measures it only. the package uses portable JavaScript zlib, `TextEncoder` and `puregram/runtime`, with no eager Node builtins or `Buffer` requirement.
 
 ## typed state and templates
 
@@ -133,7 +133,7 @@ use a template for content fixed at send time. changing a layout requires a new 
 | `Widget.editShared(tg, widgetId, publicState, options?)` | edits a shared widget's public state by its string identifier; `null` clears it |
 | `Widget.decode(message)` | typed `{ chat, public }` from a raw or wrapped widget |
 
-`send(..., { shared: true })` creates the shared widget; read its `widget.id` from the returned message. all messages showing it share the same HTML and public state. each message still has its own chat state. a static widget's forwarded copy is a snapshot without chat state; only shared forwards can request the bot. forwards are test-server-only today.
+`message.sendWidget(Widget, { shared: true })` creates the shared widget; read its `widget.id` from the returned message. all messages showing it share the same HTML and public state. each message still has its own chat state. a static widget's forwarded copy is a snapshot without chat state; only shared forwards can request the bot. forwards are test-server-only today.
 
 call `TelegramWidget.watchPublicData()` in a shared widget to receive live public-state changes while it is visible. the initial refresh period is 30 seconds. `editShared(..., publicState, { cacheTime: 10 })` changes it; values below 5 are rejected and the server clamps values above 3600. public state is required even when changing only `cacheTime`. shared widgets accept at most one edit per second; coalesce frequent changes in application code.
 
@@ -144,6 +144,12 @@ call `TelegramWidget.watchPublicData()` in a shared widget to receive live publi
 `widgets({ autoAnswer: true })` answers queries left unanswered by handlers, including shared queries and handler failures. it is off by default; `{ autoAnswer: { data: 'unavailable' } }` sets a fallback result. use `query.answer()` so the plugin tracks the answer; direct API calls are not tracked.
 
 wallet requests and outcomes use the official API objects without a package-specific wire format. **a wallet outcome is not proof of payment.** verify signatures and transactions against the wallet and blockchain before fulfilling anything. see [Telegram's wallet guide](https://core.telegram.org/bots/widgets#payments-with-the-wallet).
+
+## client compatibility
+
+test-server QA observed stale shared public state on an Android client, while iOS refreshed it correctly. a custom TDesktop 7.4-based client showed inline-result titles without rendering the widget preview; iOS rendered the preview with no viewer or chat identity. these are observed client differences, not guarantees about every build; affected and fixed versions have not been established.
+
+test the clients your users run. a successful API edit or query answer does not prove that every client has refreshed its displayed public state.
 
 ## see also
 
