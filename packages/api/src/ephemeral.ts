@@ -91,6 +91,9 @@ export function callbackEphemeralParams (queryId: string, params: EphemeralSendO
   const parameters = params.ephemeral_message_parameters ?? (params.ephemeral === true ? {} : undefined)
 
   return parameters !== undefined
-    ? { ...scrub, ephemeral_message_parameters: { ...parameters, callback_query_id: parameters.callback_query_id ?? queryId } }
+    ? {
+        ...scrub,
+        ephemeral_message_parameters: { ...parameters, callback_query_id: parameters.callback_query_id ?? queryId }
+      }
     : scrub
 }

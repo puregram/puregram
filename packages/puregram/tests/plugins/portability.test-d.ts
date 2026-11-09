@@ -21,7 +21,7 @@ const plugin: Plugin<'custom', { enabled: boolean }> = createPlugin({
   }
 })
 
-portable.extend(plugin).extend(markup()).extend(session()).extend(scenes()).extend(rateLimit())
+portable.extend(plugin).extend(markup()).extend(session()).extend(scenes()).extend(rateLimit()).extend(stream())
 node.extend(plugin).extend(markup()).extend(session()).extend(scenes()).extend(rateLimit())
 rateLimitFilter(portable, { limit: 1, window: 60 })
 rateLimitMiddleware(portable, { limit: 1, window: 60 })
@@ -34,8 +34,6 @@ node.extend(flow()).extend(throttler()).extend(stream())
 portable.extend(flow())
 // @ts-expect-error
 portable.extend(throttler())
-// @ts-expect-error
-portable.extend(stream())
 
 createPlugin({
   name: 'portable-default',

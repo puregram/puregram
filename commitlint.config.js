@@ -22,6 +22,7 @@ module.exports = {
       'test',
       'throttler',
       'utils',
+      'widgets',
 
       // shared / cross-package
       'plugins',

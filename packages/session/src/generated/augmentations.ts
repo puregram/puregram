@@ -17,6 +17,8 @@ declare module '@puregram/api' {
   interface InlineQueryUpdate { session: SessionContext }
   interface ChosenInlineResultUpdate { session: SessionContext }
   interface CallbackQueryUpdate { session: SessionContext }
+  interface WidgetQueryUpdate { session: SessionContext }
+  interface SharedWidgetQueryUpdate { session: SessionContext }
   interface ShippingQueryUpdate { session: SessionContext }
   interface PreCheckoutQueryUpdate { session: SessionContext }
   interface PollAnswerUpdate { session: SessionContext }
@@ -57,6 +59,8 @@ declare module '@puregram/api' {
   interface PassportDataUpdate { session: SessionContext }
   interface ProximityAlertTriggeredUpdate { session: SessionContext }
   interface WriteAccessAllowedUpdate { session: SessionContext }
+  interface PaidMessagesWaivedUpdate { session: SessionContext }
+  interface TonWalletTransferUpdate { session: SessionContext }
 }
 
 export {}

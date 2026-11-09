@@ -1,6 +1,6 @@
 {
   "name": "@puregram/rich",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "safe rich-message (html/markdown) emitter for puregram",
   "type": "module",
   "main": "./lib/index.js",

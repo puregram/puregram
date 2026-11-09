@@ -1,6 +1,6 @@
 {
   "name": "@puregram/markup",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "entity-based text formatting plugin for puregram",
   "type": "module",
   "sideEffects": false,

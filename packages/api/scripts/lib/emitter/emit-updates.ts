@@ -1542,7 +1542,12 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
 
   if (sc.callbackEphemeral === true && positionals[0]?.schemaArg === 'chat_id') {
     const tupleMember = (param: ts.ParameterDeclaration, optional = false, type = param.type!) =>
-      ts.factory.createNamedTupleMember(undefined, param.name as ts.Identifier, optional ? ts.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined, type)
+      ts.factory.createNamedTupleMember(
+        undefined,
+        param.name as ts.Identifier,
+        optional ? ts.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined,
+        type
+      )
     const fullTuple = ts.factory.createTupleTypeNode([
       ...positionalParams.map(p => tupleMember(p)),
       tupleMember(paramsParam, allRestOptional)
@@ -1553,7 +1558,10 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
       tupleMember(paramsParam, false, ts.factory.createIntersectionTypeNode([paramsTypeNode, optIn]))
     ])
     const normalizedTuple = ts.factory.createTupleTypeNode([
-      tupleMember(positionalParams[0]!, false, ts.factory.createUnionTypeNode([positionalParams[0]!.type!, ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)])),
+      tupleMember(positionalParams[0]!, false, ts.factory.createUnionTypeNode([
+        positionalParams[0]!.type!,
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)
+      ])),
       ...positionalParams.slice(1).map(p => tupleMember(p)),
       tupleMember(paramsParam, allRestOptional)
     ])
@@ -1562,7 +1570,7 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     const binding = declaration.declarationList.declarations[0]!.name
     const normalized = ts.factory.createVariableStatement(undefined, ts.factory.createVariableDeclarationList([
       ts.factory.createVariableDeclaration(binding, undefined, undefined, ts.factory.createAsExpression(
-        parseExpression('callbackOnly ? [undefined, ...args] : args'),
+        ts.factory.createParenthesizedExpression(parseExpression('callbackOnly ? [undefined, ...args] : args')),
         normalizedTuple
       ))
     ], ts.NodeFlags.Const))

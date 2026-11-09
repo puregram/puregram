@@ -1332,6 +1332,7 @@ __metadata:
     "@puregram/session": "workspace:^"
     "@puregram/storage": "workspace:^"
     "@puregram/utils": "workspace:^"
+    "@puregram/widgets": "workspace:^"
     esbuild: "npm:^0.27.7"
     puregram: "workspace:^"
     tsc-alias: "npm:1"
@@ -1410,7 +1411,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@puregram/test@npm:*, @puregram/test@workspace:packages/test":
+"@puregram/test@npm:*, @puregram/test@workspace:^, @puregram/test@workspace:packages/test":
   version: 0.0.0-use.local
   resolution: "@puregram/test@workspace:packages/test"
   dependencies:
@@ -1441,6 +1442,21 @@ __metadata:
     "@noble/hashes": "npm:^2.0.1"
     "@zxing/text-encoding": "npm:^0.9.0"
     buffer: "npm:^6.0.3"
+    tsc-alias: "npm:1"
+    typescript: "npm:^5.4.0"
+    vitest: "npm:^1.4.0"
+  languageName: unknown
+  linkType: soft
+
+"@puregram/widgets@npm:*, @puregram/widgets@workspace:^, @puregram/widgets@workspace:packages/widgets":
+  version: 0.0.0-use.local
+  resolution: "@puregram/widgets@workspace:packages/widgets"
+  dependencies:
+    "@puregram/api": "workspace:~"
+    "@puregram/test": "workspace:^"
+    "@types/pako": "npm:^2.0.3"
+    pako: "npm:^2.1.0"
+    puregram: "workspace:^"
     tsc-alias: "npm:1"
     typescript: "npm:^5.4.0"
     vitest: "npm:^1.4.0"
@@ -1851,6 +1867,13 @@ __metadata:
   version: 2.4.4
   resolution: "@types/normalize-package-data@npm:2.4.4"
   checksum: 10c0/aef7bb9b015883d6f4119c423dd28c4bdc17b0e8a0ccf112c78b4fe0e91fbc4af7c6204b04bba0e199a57d2f3fbbd5b4a14bf8739bf9d2a39b2a0aad545e0f86
+  languageName: node
+  linkType: hard
+
+"@types/pako@npm:^2.0.3":
+  version: 2.0.4
+  resolution: "@types/pako@npm:2.0.4"
+  checksum: 10c0/5765bf8bc7e77ee141c454118f03e544b8f6cb51eb257d82dc5830feeab8cd00818af3a1eabefdfbe8dd3ae9916ed5403937bf1031a0ee51deea27fdf4dccdfb
   languageName: node
   linkType: hard
 
@@ -6346,6 +6369,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pako@npm:^2.1.0":
+  version: 2.2.0
+  resolution: "pako@npm:2.2.0"
+  checksum: 10c0/e5d31de1940fdd13cc4014296b0026112483d0834bce4856ca29c8af8438d030c6416986a0f6df7d5372cae18d6dd6c57f48b24a49d6c207c0a4cc66af15c07d
+  languageName: node
+  linkType: hard
+
 "parent-module@npm:^1.0.0":
   version: 1.0.1
   resolution: "parent-module@npm:1.0.1"
@@ -6754,6 +6784,18 @@ __metadata:
     "@puregram/session": "workspace:^"
     "@tgcloud/cli": "npm:^0.2.0"
     puregram: "workspace:^"
+    typescript: "npm:^5.4.0"
+  languageName: unknown
+  linkType: soft
+
+"puregram-example-widgets-showcase@workspace:examples/recipes/widgets-showcase":
+  version: 0.0.0-use.local
+  resolution: "puregram-example-widgets-showcase@workspace:examples/recipes/widgets-showcase"
+  dependencies:
+    "@puregram/widgets": "npm:*"
+    "@types/node": "npm:^22.0.0"
+    puregram: "npm:*"
+    tsx: "npm:^4.19.0"
     typescript: "npm:^5.4.0"
   languageName: unknown
   linkType: soft

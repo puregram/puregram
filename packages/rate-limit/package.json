@@ -1,6 +1,6 @@
 {
   "name": "@puregram/rate-limit",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "per-user fixed-window rate limiting plugin for puregram",
   "type": "module",
   "main": "./lib/index.js",

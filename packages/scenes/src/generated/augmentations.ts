@@ -41,6 +41,12 @@ declare module '@puregram/api' {
   interface CallbackQueryUpdate {
     scene: SceneContext<SceneState>
   }
+  interface WidgetQueryUpdate {
+    scene: SceneContext<SceneState>
+  }
+  interface SharedWidgetQueryUpdate {
+    scene: SceneContext<SceneState>
+  }
   interface ShippingQueryUpdate {
     scene: SceneContext<SceneState>
   }
@@ -159,6 +165,12 @@ declare module '@puregram/api' {
     scene: SceneContext<SceneState>
   }
   interface WriteAccessAllowedUpdate {
+    scene: SceneContext<SceneState>
+  }
+  interface PaidMessagesWaivedUpdate {
+    scene: SceneContext<SceneState>
+  }
+  interface TonWalletTransferUpdate {
     scene: SceneContext<SceneState>
   }
 }

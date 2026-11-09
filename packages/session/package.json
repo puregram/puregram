@@ -1,6 +1,6 @@
 {
   "name": "@puregram/session",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "description": "transparent persistent session plugin for puregram",
   "type": "module",
   "main": "./lib/index.js",

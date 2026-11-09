@@ -7,13 +7,15 @@ import { Telegram } from '../../src/telegram'
 
 const recordingClient = () => {
   const urls: string[] = []
+  const requests: HttpRequestInput[] = []
   const request = vi.fn((input: HttpRequestInput) => {
     urls.push(input.url)
+    requests.push(input)
 
     return Promise.resolve({ status: 200, json: () => Promise.resolve({ ok: true, result: { message_id: 1 } }) })
   })
 
-  return { urls, httpClient: { request } }
+  return { urls, requests, httpClient: { request } }
 }
 
 function ephemeralParams (url: string) {
@@ -77,7 +79,7 @@ describe('tg.ephemeral', () => {
   })
 
   it('sends callback-only text and media shortcuts without a chat', async () => {
-    const { urls, httpClient } = recordingClient()
+    const { requests, httpClient } = recordingClient()
     const tg = new Telegram({ token: 'X', httpClient })
     const query = new CallbackQueryUpdate({
       id: 'inline_q',
@@ -89,16 +91,18 @@ describe('tg.ephemeral', () => {
     await query.send('private text', { ephemeral: true })
     await query.sendPhoto(MediaSource.fileId('photo'), { ephemeral_message_parameters: {} })
 
-    for (const url of urls) {
-      const params = new URL(url).searchParams
+    const payloads = await Promise.all(requests.map(async ({ url, init }) => init.body == null
+      ? new URL(url).searchParams
+      : await new Response(init.body, init).formData()))
 
+    for (const params of payloads) {
       expect(params.has('chat_id')).toBe(false)
       expect(params.has('ephemeral')).toBe(false)
-      expect(ephemeralParams(url)).toEqual({ callback_query_id: 'inline_q' })
+      expect(JSON.parse(String(params.get('ephemeral_message_parameters')))).toEqual({ callback_query_id: 'inline_q' })
     }
 
-    expect(new URL(urls[0]!).searchParams.get('text')).toBe('private text')
-    expect(new URL(urls[1]!).searchParams.get('photo')).toBe('photo')
+    expect(payloads[0]!.get('text')).toBe('private text')
+    expect(payloads[1]!.get('photo')).toBe('photo')
   })
 
   it('merges call-site ephemeral parameters field by field', async () => {

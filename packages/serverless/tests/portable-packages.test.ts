@@ -38,4 +38,39 @@ describe('portable public entry points', () => {
       await rm(root, { recursive: true, force: true })
     }
   }, 60_000)
+
+  it('renders widgets and checks RFC1950 size without Node capabilities', async () => {
+    const root = await mkdtemp(join(resolve('tests'), '.portable-widgets-'))
+
+    try {
+      const entry = join(root, 'bot.ts')
+
+      await writeFile(entry, `
+        import { defineWidget, html } from '@puregram/widgets'
+        const template = defineWidget({ html: html\`<b>\${'<x>'}</b>\` })
+        export default {
+          async handleUpdate () {
+            return { content: template.content({ chat: { count: 1 } }), check: template.html.check() }
+          }
+        }
+      `)
+      await build({ entry, updates: ['widget_query'], root })
+      execFileSync(process.execPath, ['--experimental-vm-modules', '--input-type=module', '-e', `
+        import assert from 'node:assert/strict'
+        import { readFile } from 'node:fs/promises'
+        import { createContext, SourceTextModule } from 'node:vm'
+        import { deflateSync } from 'node:zlib'
+        const module = new SourceTextModule(await readFile(process.argv[1], 'utf8'), { context: createContext({ TextEncoder, TextDecoder, crypto }) })
+        await module.link(name => { throw new Error('unexpected runtime import: ' + name) })
+        await module.evaluate()
+        const { content, check } = await module.namespace.default.handleUpdate()
+        assert.equal(content.html, '<b>&lt;x&gt;</b>')
+        assert.deepEqual(JSON.parse(content.chat_data), { count: 1 })
+        assert.equal(check.compressedBytes, deflateSync(content.html, { level: 9 }).length)
+        assert.equal(check.ok, true)
+      `, join(root, 'tgcloud/lib/bot.js')], { timeout: 30_000 })
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  }, 60_000)
 })

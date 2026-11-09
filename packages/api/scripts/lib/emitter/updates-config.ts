@@ -158,7 +158,6 @@ const WIDGET_QUERY_EXTRAS: UpdateExtra[] = [
   { kind: 'method', name: 'editWidgetData', params: 'params?: Omit<EditMessageWidgetDataParams, "chat_id" | "message_id" | "inline_message_id">', body: 'const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : this.raw.chat != null && this.raw.message_id != null ? { chat_id: this.raw.chat.id, message_id: this.raw.message_id } : undefined; if (ref == null) { throw new TypeError("widget query carries neither message nor inline_message_id"); } return this.tg.api.editMessageWidgetData({ ...ref, ...params })', returnType: 'Promise<true>' }
 ]
 
-
 const POLL_ANSWER_EXTRAS: UpdateExtra[] = [
   { kind: 'getter', name: 'senderId', expression: 'this.raw.user?.id ?? this.raw.voter_chat?.id', returnType: 'number | undefined', jsdoc: 'best-effort sender id: `user.id` → `voter_chat.id`' }
 ]

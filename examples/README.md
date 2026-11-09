@@ -82,6 +82,10 @@ standalone folders under `webhooks/` and `recipes/` are their own workspaces —
 - [buttons — inline button(...) + buttonRow(...) with a callback handler](src/rich/buttons.ts)
 - [document / expandable quote / compact table](src/rich/document-quote-table.ts)
 
+## @puregram/widgets
+
+- [widgets showcase](recipes/widgets-showcase) — HTML templates, private-chat widget messages, and query handling
+
 ## @puregram/flow
 
 - [waitFor basics](src/flow/wait-for-basics.ts)

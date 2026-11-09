@@ -36,6 +36,7 @@ complete mini-bots that combine multiple packages to solve a real pattern:
 - [mini app bot](https://github.com/puregram/puregram/tree/v3/examples/recipes/mini-app-bot)
 - [premium bot](https://github.com/puregram/puregram/tree/v3/examples/recipes/premium-bot)
 - [wizard bot](https://github.com/puregram/puregram/tree/v3/examples/recipes/wizard-bot)
+- [widgets showcase](https://github.com/puregram/puregram/tree/v3/examples/recipes/widgets-showcase)
 
 ## webhooks
 

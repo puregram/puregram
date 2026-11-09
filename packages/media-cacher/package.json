@@ -1,6 +1,6 @@
 {
   "name": "@puregram/media-cacher",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "transparent file_id caching plugin for puregram — skips re-uploading repeated media",
   "type": "module",
   "main": "./lib/index.js",

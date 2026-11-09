@@ -18,6 +18,7 @@ export function codec<T> (serialize: (value: T) => string, parse: (data: string)
       if (typeof data !== 'string' || data.includes('\0')) {
         throw new TypeError('widget state must serialize to a string without NUL characters')
       }
+
       const bytes = utf8Length(data)
 
       if (bytes > WIDGET_LIMITS.stateBytes) {

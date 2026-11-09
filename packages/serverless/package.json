@@ -58,6 +58,7 @@
     "@puregram/scenes": "workspace:^",
     "@puregram/session": "workspace:^",
     "@puregram/utils": "workspace:^",
+    "@puregram/widgets": "workspace:^",
     "tsc-alias": "1",
     "typescript": "^5.4.0",
     "vitest": "^1.4.0"

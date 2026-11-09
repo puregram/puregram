@@ -1,6 +1,6 @@
 {
   "name": "@puregram/callback-data",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "typed callback-data builder for puregram",
   "type": "module",
   "sideEffects": false,

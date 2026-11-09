@@ -36,16 +36,20 @@ declare module '@puregram/api' {
   interface NewChatMembersUpdate { flow: UpdateFlowExtension }
   interface NewChatPhotoUpdate { flow: UpdateFlowExtension }
   interface NewChatTitleUpdate { flow: UpdateFlowExtension }
+  interface PaidMessagesWaivedUpdate { flow: UpdateFlowExtension }
   interface PassportDataUpdate { flow: UpdateFlowExtension }
   interface PinnedMessageUpdate { flow: UpdateFlowExtension }
   interface ProximityAlertTriggeredUpdate { flow: UpdateFlowExtension }
+  interface SharedWidgetQueryUpdate { flow: UpdateFlowExtension }
   interface SuccessfulPaymentUpdate { flow: UpdateFlowExtension }
+  interface TonWalletTransferUpdate { flow: UpdateFlowExtension }
   interface UsersSharedUpdate { flow: UpdateFlowExtension }
   interface VideoChatEndedUpdate { flow: UpdateFlowExtension }
   interface VideoChatParticipantsInvitedUpdate { flow: UpdateFlowExtension }
   interface VideoChatScheduledUpdate { flow: UpdateFlowExtension }
   interface VideoChatStartedUpdate { flow: UpdateFlowExtension }
   interface WebAppDataUpdate { flow: UpdateFlowExtension }
+  interface WidgetQueryUpdate { flow: UpdateFlowExtension }
   interface WriteAccessAllowedUpdate { flow: UpdateFlowExtension }
 }
 

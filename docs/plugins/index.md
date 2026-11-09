@@ -23,6 +23,7 @@ puregram core is a thin wrapper. everything beyond the bot api — state, wizard
 - [rich](/plugins/rich) — safe rich-message emitter (headings, lists, code blocks, formulas, and more)
   - [rich grammar for LLMs](/plugins/rich-llm-grammar) — a system prompt that keeps a model's output inside telegram's rich grammar
 - [callback-data](/plugins/callback-data) — typed, packed `callback_data`
+- [widgets](/plugins/widgets) — typed HTML templates and data updates for widget messages
 
 ## rate limiting
 

@@ -5,13 +5,13 @@
 /// see scripts/emit.ts in @puregram/api
 
 import type { Readable } from "node:stream";
-import type { TelegramBotSubscriptionUpdated, TelegramBusinessBotRights, TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramCallbackQuery, TelegramChatBackground, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramEphemeralMessageParameters, TelegramForceReply, TelegramForumTopicClosed, TelegramForumTopicReopened, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveawayCreated, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInlineQueryResult, TelegramInlineQueryResultsButton, TelegramInputChecklist, TelegramInputFile, TelegramInputMedia, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPaidMedia, TelegramInputPollMedia, TelegramInputPollOption, TelegramInputRichMessage, TelegramLabeledPrice, TelegramLinkPreviewOptions, TelegramManagedBotCreated, TelegramManagedBotUpdated, TelegramMaybeInaccessibleMessage, TelegramMenuButton, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageGenerationStopped, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPaidMediaInfo, TelegramPaidMediaPurchased, TelegramPaidMessagePriceChanged, TelegramPaidMessagesWaived, TelegramPoll, TelegramPollAnswer, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramReactionType, TelegramRefundedPayment, TelegramReplyKeyboardMarkup, TelegramReplyKeyboardRemove, TelegramReplyParameters, TelegramRichMessage, TelegramSharedWidgetQuery, TelegramShippingOption, TelegramShippingQuery, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostParameters, TelegramSuggestedPostRefunded, TelegramTonWalletTransfer, TelegramUniqueGiftInfo, TelegramVideoChatStarted, TelegramWidget, TelegramWidgetQuery, TelegramWidgetQueryType } from "./types";
+import type { TelegramBotSubscriptionUpdated, TelegramBusinessBotRights, TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramCallbackQuery, TelegramChatBackground, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramEphemeralMessageParameters, TelegramForceReply, TelegramForumTopicClosed, TelegramForumTopicReopened, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveawayCreated, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInlineQueryResult, TelegramInlineQueryResultsButton, TelegramInputChecklist, TelegramInputFile, TelegramInputMedia, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPaidMedia, TelegramInputPollMedia, TelegramInputPollOption, TelegramInputRichMessage, TelegramLabeledPrice, TelegramLinkPreviewOptions, TelegramManagedBotCreated, TelegramManagedBotUpdated, TelegramMaybeInaccessibleMessage, TelegramMenuButton, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageGenerationStopped, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPaidMediaInfo, TelegramPaidMediaPurchased, TelegramPaidMessagePriceChanged, TelegramPoll, TelegramPollAnswer, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramReactionType, TelegramRefundedPayment, TelegramReplyKeyboardMarkup, TelegramReplyKeyboardRemove, TelegramReplyParameters, TelegramRichMessage, TelegramSharedWidgetQuery, TelegramShippingOption, TelegramShippingQuery, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostParameters, TelegramSuggestedPostRefunded, TelegramUniqueGiftInfo, TelegramVideoChatStarted, TelegramWidgetQuery, TelegramWidgetQueryType } from "./types";
 import type { DeleteMessageParams, EditMessageCaptionParams, EditMessageMediaParams, EditMessageReplyMarkupParams, EditMessageTextParams, EditMessageWidgetDataParams, SetMessageReactionParams } from "./methods";
 import type { ActionControllerLike, ActionControllerParams, TelegramLike } from "../telegram-like";
 import type { Has } from "../util-types";
 import type { Formattable } from "../formattable";
 import type { RichLike } from "../rich-like";
-import { Animation, Audio, Chat, ChatBoost, ChatInviteLink, ChatMember, ChatShared, Contact, Dice, Document, ExternalReplyInfo, ForumTopicCreated, ForumTopicEdited, Game, Giveaway, GiveawayCompleted, GiveawayWinners, InlineKeyboardMarkup, Invoice, LinkPreviewOptions, LivePhoto, Location, Message, MessageEntity, OrderInfo, PassportData, PhotoSize, Poll, PollMedia, PollOption, ProximityAlertTriggered, ReactionCount, ShippingAddress, Sticker, Story, SuccessfulPayment, TextQuote, User, UsersShared, Venue, Video, VideoChatEnded, VideoChatParticipantsInvited, VideoChatScheduled, VideoNote, Voice, WebAppData, WriteAccessAllowed } from "./structures";
+import { Animation, Audio, Chat, ChatBoost, ChatInviteLink, ChatMember, ChatShared, Contact, Dice, Document, ExternalReplyInfo, ForumTopicCreated, ForumTopicEdited, Game, Giveaway, GiveawayCompleted, GiveawayWinners, InlineKeyboardMarkup, Invoice, LinkPreviewOptions, LivePhoto, Location, Message, MessageEntity, OrderInfo, PaidMessagesWaived, PassportData, PhotoSize, Poll, PollMedia, PollOption, ProximityAlertTriggered, ReactionCount, ShippingAddress, Sticker, Story, SuccessfulPayment, TextQuote, TonWalletTransfer, User, UsersShared, Venue, Video, VideoChatEnded, VideoChatParticipantsInvited, VideoChatScheduled, VideoNote, Voice, WebAppData, Widget, WriteAccessAllowed } from "./structures";
 import { Photo, PollOptions, ReactionCounts, Reactions } from "../structures-handcrafted";
 import { callbackEphemeralParams, ephemeralSendParams, ephemeralTarget } from "../ephemeral";
 import { INSPECT, makeInspect } from "./inspect";
@@ -2489,6 +2489,7 @@ class MessageShared {
     private _video?: Video;
     private _videoNote?: VideoNote;
     private _voice?: Voice;
+    private _widget?: Widget;
     private _captionEntities?: MessageEntity[];
     private _contact?: Contact;
     private _dice?: Dice;
@@ -2511,6 +2512,8 @@ class MessageShared {
     private _giveaway?: Giveaway;
     private _giveawayWinners?: GiveawayWinners;
     private _giveawayCompleted?: GiveawayCompleted;
+    private _paidMessagesWaived?: PaidMessagesWaived;
+    private _tonWalletTransfer?: TonWalletTransfer;
     private _videoChatScheduled?: VideoChatScheduled;
     private _videoChatEnded?: VideoChatEnded;
     private _videoChatParticipantsInvited?: VideoChatParticipantsInvited;
@@ -2820,8 +2823,8 @@ class MessageShared {
     /**
      * Optional. Message is an HTML widget, information about the widget
      */
-    get widget(): TelegramWidget | undefined {
-        return this.raw.widget;
+    get widget(): Widget | undefined {
+        return this.raw.widget ? (this._widget ??= new Widget(this.raw.widget)) : undefined;
     }
     /**
      * Optional. Caption for the animation, audio, document, live photo, paid media, photo, video, voice, or widget
@@ -3162,8 +3165,8 @@ class MessageShared {
     /**
      * Optional. Service message: the sender of the message used a link of the other user, which allows sending messages to the user without paying Telegram Stars
      */
-    get paidMessagesWaived(): TelegramPaidMessagesWaived | undefined {
-        return this.raw.paid_messages_waived;
+    get paidMessagesWaived(): PaidMessagesWaived | undefined {
+        return this.raw.paid_messages_waived ? (this._paidMessagesWaived ??= new PaidMessagesWaived(this.raw.paid_messages_waived)) : undefined;
     }
     /**
      * Optional. Service message: answer option was added to a poll
@@ -3210,8 +3213,8 @@ class MessageShared {
     /**
      * Optional. Service message: a transfer with a TON wallet
      */
-    get tonWalletTransfer(): TelegramTonWalletTransfer | undefined {
-        return this.raw.ton_wallet_transfer;
+    get tonWalletTransfer(): TonWalletTransfer | undefined {
+        return this.raw.ton_wallet_transfer ? (this._tonWalletTransfer ??= new TonWalletTransfer(this.raw.ton_wallet_transfer)) : undefined;
     }
     /**
      * Optional. Service message: video chat scheduled
@@ -3582,7 +3585,7 @@ class MessageShared {
      * true if `widget` is set
      */
     hasWidget(): this is this & {
-        widget: TelegramWidget;
+        widget: Widget;
     } {
         return this.raw.widget != null;
     }
@@ -4038,7 +4041,7 @@ class MessageShared {
      * true if `paid_messages_waived` is set
      */
     hasPaidMessagesWaived(): this is this & {
-        paidMessagesWaived: TelegramPaidMessagesWaived;
+        paidMessagesWaived: PaidMessagesWaived;
     } {
         return this.raw.paid_messages_waived != null;
     }
@@ -4102,7 +4105,7 @@ class MessageShared {
      * true if `ton_wallet_transfer` is set
      */
     hasTonWalletTransfer(): this is this & {
-        tonWalletTransfer: TelegramTonWalletTransfer;
+        tonWalletTransfer: TonWalletTransfer;
     } {
         return this.raw.ton_wallet_transfer != null;
     }
@@ -7094,6 +7097,7 @@ export class GuestMessageUpdate {
     private _video?: Video;
     private _videoNote?: VideoNote;
     private _voice?: Voice;
+    private _widget?: Widget;
     private _captionEntities?: MessageEntity[];
     private _contact?: Contact;
     private _dice?: Dice;
@@ -7116,6 +7120,8 @@ export class GuestMessageUpdate {
     private _giveaway?: Giveaway;
     private _giveawayWinners?: GiveawayWinners;
     private _giveawayCompleted?: GiveawayCompleted;
+    private _paidMessagesWaived?: PaidMessagesWaived;
+    private _tonWalletTransfer?: TonWalletTransfer;
     private _videoChatScheduled?: VideoChatScheduled;
     private _videoChatEnded?: VideoChatEnded;
     private _videoChatParticipantsInvited?: VideoChatParticipantsInvited;
@@ -7425,8 +7431,8 @@ export class GuestMessageUpdate {
     /**
      * Optional. Message is an HTML widget, information about the widget
      */
-    get widget(): TelegramWidget | undefined {
-        return this.raw.widget;
+    get widget(): Widget | undefined {
+        return this.raw.widget ? (this._widget ??= new Widget(this.raw.widget)) : undefined;
     }
     /**
      * Optional. Caption for the animation, audio, document, live photo, paid media, photo, video, voice, or widget
@@ -7773,8 +7779,8 @@ export class GuestMessageUpdate {
     /**
      * Optional. Service message: the sender of the message used a link of the other user, which allows sending messages to the user without paying Telegram Stars
      */
-    get paidMessagesWaived(): TelegramPaidMessagesWaived | undefined {
-        return this.raw.paid_messages_waived;
+    get paidMessagesWaived(): PaidMessagesWaived | undefined {
+        return this.raw.paid_messages_waived ? (this._paidMessagesWaived ??= new PaidMessagesWaived(this.raw.paid_messages_waived)) : undefined;
     }
     /**
      * Optional. Service message: answer option was added to a poll
@@ -7821,8 +7827,8 @@ export class GuestMessageUpdate {
     /**
      * Optional. Service message: a transfer with a TON wallet
      */
-    get tonWalletTransfer(): TelegramTonWalletTransfer | undefined {
-        return this.raw.ton_wallet_transfer;
+    get tonWalletTransfer(): TonWalletTransfer | undefined {
+        return this.raw.ton_wallet_transfer ? (this._tonWalletTransfer ??= new TonWalletTransfer(this.raw.ton_wallet_transfer)) : undefined;
     }
     /**
      * Optional. Service message: video chat scheduled
@@ -8193,7 +8199,7 @@ export class GuestMessageUpdate {
      * true if `widget` is set
      */
     hasWidget(): this is this & {
-        widget: TelegramWidget;
+        widget: Widget;
     } {
         return this.raw.widget != null;
     }
@@ -8649,7 +8655,7 @@ export class GuestMessageUpdate {
      * true if `paid_messages_waived` is set
      */
     hasPaidMessagesWaived(): this is this & {
-        paidMessagesWaived: TelegramPaidMessagesWaived;
+        paidMessagesWaived: PaidMessagesWaived;
     } {
         return this.raw.paid_messages_waived != null;
     }
@@ -8713,7 +8719,7 @@ export class GuestMessageUpdate {
      * true if `ton_wallet_transfer` is set
      */
     hasTonWalletTransfer(): this is this & {
-        tonWalletTransfer: TelegramTonWalletTransfer;
+        tonWalletTransfer: TonWalletTransfer;
     } {
         return this.raw.ton_wallet_transfer != null;
     }
@@ -9534,7 +9540,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, animation, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, animation, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             animation: TelegramInputFile | string,
             params?: {
@@ -9631,7 +9637,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, audio, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, audio, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             audio: TelegramInputFile | string,
             params?: {
@@ -9718,7 +9724,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[2];
         const callbackOnly = args.length === 3 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, phoneNumber, firstName, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, phoneNumber, firstName, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             phoneNumber: string,
             firstName: string,
@@ -9806,7 +9812,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, document, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, document, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             document: TelegramInputFile | string,
             params?: {
@@ -9897,7 +9903,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[2];
         const callbackOnly = args.length === 3 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, livePhoto, photo, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, livePhoto, photo, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             livePhoto: TelegramInputFile | string,
             photo: TelegramInputFile | string,
@@ -9988,7 +9994,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[2];
         const callbackOnly = args.length === 3 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, latitude, longitude, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, latitude, longitude, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             latitude: number,
             longitude: number,
@@ -10074,7 +10080,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, text, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, text, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             text: string | Formattable,
             params?: {
@@ -10161,7 +10167,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, photo, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, photo, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             photo: TelegramInputFile | string,
             params?: {
@@ -10240,7 +10246,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, richMessage, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, richMessage, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             richMessage: TelegramInputRichMessage | RichLike,
             params?: {
@@ -10316,7 +10322,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, sticker, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, sticker, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             sticker: TelegramInputFile | string,
             params?: {
@@ -10405,7 +10411,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[4];
         const callbackOnly = args.length === 5 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, latitude, longitude, title, address, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, latitude, longitude, title, address, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             latitude: number,
             longitude: number,
@@ -10513,7 +10519,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, video, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, video, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             video: TelegramInputFile | string,
             params?: {
@@ -10605,7 +10611,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, videoNote, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, videoNote, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             videoNote: TelegramInputFile | string,
             params?: {
@@ -10690,7 +10696,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, voice, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, voice, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             voice: TelegramInputFile | string,
             params?: {
@@ -10768,7 +10774,7 @@ export class CallbackQueryUpdate {
     ]) {
         const options = args[1];
         const callbackOnly = args.length === 2 && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);
-        const [chat, richMessage, params = {}] = callbackOnly ? [undefined, ...args] : args as [
+        const [chat, richMessage, params = {}] = (callbackOnly ? [undefined, ...args] : args) as [
             chat: (number | string) | undefined,
             richMessage: TelegramInputRichMessage | RichLike,
             params?: {

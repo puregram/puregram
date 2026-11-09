@@ -1,6 +1,6 @@
 {
   "name": "@puregram/stream",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "stream LLM output to telegram via sendMessageDraft + finalize sendMessage",
   "type": "module",
   "main": "./lib/index.js",

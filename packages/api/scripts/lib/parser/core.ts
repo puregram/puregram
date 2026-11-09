@@ -1,8 +1,7 @@
 import * as cheerio from 'cheerio'
 
-import type { Schema } from '../schema-types'
-
 import { buildUpdateKinds } from '../emitter/updates-config'
+import type { Schema } from '../schema-types'
 
 import { extractFromHtml } from './normalize'
 
@@ -35,7 +34,8 @@ function parseVersion (html: string) {
 }
 
 function parseRecentChanges (html: string) {
-  const text = cheerio.load(html).root().text()
+  const $ = cheerio.load(html)
+  const text = $('h4, p').map((_, element) => $(element).text()).get().join('\n')
   const match = text.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s+(\d{4})\b/)
 
   if (!match) {

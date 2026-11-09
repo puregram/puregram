@@ -1,6 +1,6 @@
 {
   "name": "@puregram/throttler",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "outbound rate-limit (throttler) plugin for puregram — keeps bot api calls within telegram's limits",
   "type": "module",
   "main": "./lib/index.js",
