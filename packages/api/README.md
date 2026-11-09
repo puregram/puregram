@@ -354,13 +354,18 @@ every release commits a `schema/<bot-api-version>.json` snapshot — the parser'
 only the current `schema/<bot-api-version>.json` ships in the npm tarball — `files` globs `schema/*.json`, which doesn't reach `archive/`. superseded checkpoints stay in git so schema diffs remain reviewable. the JSON file is canonical and reviewable. diffing schema PRs surfaces what bot-api actually changed before the codegen output does. emit is reproducible offline:
 
 ```sh
-$ yarn parse        # rescrape corefork + core, write schema/<latest>.json (shelving the previous one)
+$ yarn parse        # scrape the official production reference, write schema/<latest>.json
 $ yarn emit         # codegen src/generated/*.ts from the committed schema
 $ yarn verify       # CI check — fails if generated/ drifts from emit's output
 $ yarn regenerate   # parse + emit in one go
 ```
 
 the package `version`'s `major.minor` records the bot-api version this checkpoint targets (e.g. `10.0.x` → bot api 10.0); the trailing patch is puregram's own iteration counter
+
+The [Bot API watcher](../../.github/workflows/bot-api-watch.yml) accepts manual dispatch.
+An external scheduler can trigger it using the generic service and timer in
+[`scripts/automation`](../../scripts/automation). Production checkpoints come from the
+official reference; beta schemas must not replace production update definitions.
 
 ---
 

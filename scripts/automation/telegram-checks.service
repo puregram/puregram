@@ -1,0 +1,11 @@
+[Unit]
+Description=Dispatch Telegram API and documentation checks
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/node %h/.local/lib/telegram-checks/dispatch-checks.mjs
+Environment=GH_PROMPT_DISABLED=1
+TimeoutStartSec=90
+NoNewPrivileges=true
+UMask=0077

@@ -1,0 +1,12 @@
+[Unit]
+Description=Dispatch Telegram checks every half hour
+
+[Timer]
+OnCalendar=*-*-* *:00,30:00
+AccuracySec=1s
+RandomizedDelaySec=0
+Persistent=true
+Unit=telegram-checks.service
+
+[Install]
+WantedBy=timers.target
