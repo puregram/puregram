@@ -154,7 +154,7 @@ const JS_ESCAPES: Readonly<Record<string, string>> = {
   '\u2029': '\\u2029'
 }
 
-function createScanState (): ScanState {
+function createScanState () {
   const ignore = () => {}
   const state: ScanState = {
     context: 'markup',
@@ -200,7 +200,7 @@ function createScanState (): ScanState {
   return state
 }
 
-function renderValue (value: HtmlValue, context: HtmlContext): string {
+function renderValue (value: HtmlValue, context: HtmlContext) {
   if (value instanceof WidgetJs) {
     if (context !== 'script') {
       throw new WidgetHtmlContextError(context, 'js() values only belong inside <script>')

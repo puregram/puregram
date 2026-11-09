@@ -216,7 +216,7 @@ send through the current message or client; `chat` and `public` are inferred fro
 | `sendShared(tg, chatId, widgetId, { chat?, ...sendSharedWidget params })` | another message of an existing shared widget, with its own chat state |
 | `content({ chat?, public?, allowQueries?, shared?, ...InputWidgetMessageContent fields })` | an `InputWidgetMessageContent` (`width`, `height`, `caption`, `parse_mode`, …) for an inline `article` result (refused on prod for now, see above) |
 | `sharedContent(widgetId, { chat?, ...InputSharedWidgetMessageContent fields })` | reuse an existing shared widget in an inline `article` (test server only) |
-| `editState(tg, target, { chat?, public? })` | `editMessageWidgetData`. `target` is `{ chat_id, message_id }`, `{ inline_message_id }` or a `WidgetQueryUpdate`. resolves `true` when the state changed and `false` on `message is not modified`; every other error is rethrown |
+| `editState(tg, target, { chat?, public? })` | `editMessageWidgetData`. `target` is `{ chat_id, message_id }`, `{ inline_message_id }` or a `WidgetQueryUpdate`. returns the API's `true` on success and `false` on `message is not modified`; every other error is rethrown. an empty edit can succeed without changing state |
 | `editShared(tg, widgetId, value, { cacheTime? })` | `editSharedWidgetData`; public state is required (`null` clears it). `cacheTime` must be an integer at least 5 (`RangeError` otherwise); the server clamps values above 3600. to change only the refresh period, resend the current public state |
 | `decode(message)` | `{ chat, public }` from a message's `widget` (raw or structure) |
 
