@@ -115,6 +115,7 @@ rich`
 |---|---|
 | `rich.bold(x)` / `rich.italic(x)` / `rich.underline(x)` / `rich.strikethrough(x)` / `rich.spoiler(x)` / `rich.code(x)` / `rich.marked(x)` / `rich.subscript(x)` / `rich.superscript(x)` | `{ type, text }` |
 | `rich.link(text, url)` | `{ type: 'url', text, url }` |
+| `rich.tonAddress(text, address)` | `{ type: 'ton_address', text, address }` — a native TON address node (Bot API 10.4) |
 | `rich.mentionUser(text, userId, options?)` | `{ type: 'text_mention', text, user }` — a real user object, works without a username. `options`: `{ firstName?, lastName?, username?, isBot? }` |
 | `rich.math(latex)` | `{ type: 'mathematical_expression', expression }` |
 | `rich.customEmoji(id, alt)` | `{ type: 'custom_emoji', … }` |
@@ -125,6 +126,8 @@ rich`
 | `rich.button(label, options)` | `{ type: 'button', button }` — an interactive button inside the text run; see [buttons](#buttons) |
 
 content args (`x`, `text`) accept `RichContent` — strings, numbers, nested inline builders, arrays.
+
+TON address and bank-card nodes have no dedicated HTML or Markdown syntax in the [official formatting grammar](https://core.telegram.org/bots/api/rich-messages.md). serializers emit their visible text, preserving nested formatting but not the address/card metadata. local parsers do not auto-detect these entities; use native builders/blocks to retain metadata. `rich.raw.md` / `rich.raw.html` remain unchanged strings parsed by Telegram.
 
 ---
 

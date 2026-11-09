@@ -109,7 +109,7 @@ export function expandText (text: TelegramRichText, slots: readonly RichContent[
 const NODE_STRING_FIELDS = [
   'url', 'anchor_name', 'name', 'custom_emoji_id', 'alternative_text', 'date_time_format',
   'reference_name', 'username', 'hashtag', 'cashtag', 'bot_command', 'email_address',
-  'phone_number', 'bank_card_number'
+  'phone_number', 'bank_card_number', 'address'
 ] as const
 
 function expandNode (node: Exclude<TelegramRichText, string | TelegramRichText[]>, slots: readonly RichContent[]) {

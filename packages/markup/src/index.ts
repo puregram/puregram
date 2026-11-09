@@ -5,7 +5,8 @@ export { toMarkdown } from './serializers/markdown'
 export { format, formatDedent } from './compose'
 export {
   bold, italic, underline, strikethrough,
-  spoiler, blockquote, expandableBlockquote, code
+  spoiler, blockquote, expandableBlockquote, code,
+  tonAddress, bankCardNumber
 } from './builders/modifier'
 export {
   link, textMention, customEmoji, pre,

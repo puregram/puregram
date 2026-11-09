@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { bold, format, html, markup } from '../src'
+import { bankCardNumber, bold, format, html, markup, tonAddress } from '../src'
 
 import type { MockTelegram } from './helpers/make-tg'
 import { makeTg } from './helpers/make-tg'
@@ -38,6 +38,42 @@ describe('@puregram/markup — plugin e2e', () => {
 
     expect(captured!.text).toBe('hello world!')
     expect(captured!.entities).toEqual([{ type: 'bold', offset: 6, length: 5 }])
+  })
+
+  it('preserves TON/card entities in text, captions, and nested reply quotes', async () => {
+    const { tg, mock } = await makeTg(t => t.extend(markup()))
+
+    activeMock = mock
+
+    const address = 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c'
+    const text = format`💎 ${tonAddress(address)} ${bankCardNumber('4242 4242 4242 4242')}`
+    const payload = text.toPayload()
+    const captured: Record<string, unknown>[] = []
+
+    mock.expect('sendMessage', (params) => {
+      captured.push(params)
+
+      return { ok: true, result: sentMessage }
+    })
+    mock.expect('editMessageCaption', (params) => {
+      captured.push(params)
+
+      return { ok: true, result: sentMessage }
+    })
+
+    await tg.api.sendMessage({
+      chat_id: 1, text, reply_parameters: { message_id: 2, quote: text }
+    })
+    await tg.api.editMessageCaption({ chat_id: 1, message_id: 1, caption: text })
+
+    expect(captured[0]!.text).toBe(payload.text)
+    expect(captured[0]!.entities).toEqual(payload.entities)
+    expect(captured[0]!.reply_parameters).toEqual({
+      message_id: 2, quote: payload.text, quote_entities: payload.entities
+    })
+    expect(captured[1]!.caption).toBe(payload.text)
+    expect(captured[1]!.caption_entities).toEqual(payload.entities)
+    expect(text.toPayload()).toEqual(payload)
   })
 
   it('rewrites caption + caption_entities for editMessageCaption', async () => {

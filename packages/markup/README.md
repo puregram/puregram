@@ -134,6 +134,18 @@ formatDedent`
 
 ![`formatDedent` result](assets/format-dedent.png)
 
+### `tonAddress(text)` / `bankCardNumber(text)`
+
+Bot API 10.4 entities for TON blockchain addresses and bank card numbers. both builders also accept tagged templates and chain with text styles:
+
+```ts
+tonAddress('EQ…')
+bankCardNumber`4242 4242 4242 4242`
+bold.tonAddress('EQ…')
+```
+
+these entities carry only UTF-16 offsets and lengths, not a separate address/card field. the plugin sends them through `entities` / `caption_entities`, and `Formatted.fromMessage(...).toPayload()` preserves them. neither has dedicated syntax in the [official HTML/Markdown grammar](https://core.telegram.org/bots/api/formatting.md), so `.toHtml()` / `.toMarkdown()` emit escaped visible text without an entity marker. local `html` / `md` parsers do not auto-detect addresses or card numbers; use builders when you need explicit entities. do not use address/card entities to wrap arbitrary labels.
+
 ### `bold(text)`
 
 ```ts

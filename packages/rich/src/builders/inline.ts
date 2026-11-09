@@ -35,6 +35,10 @@ export function link (text: RichContent, href: string) {
   return makeNode('inline', () => ({ type: 'url', text: emitText(text), url: href }))
 }
 
+export function tonAddress (text: RichContent, address: string) {
+  return makeNode('inline', () => ({ type: 'ton_address', text: emitText(text), address }))
+}
+
 /** the optional identity fields a `text_mention` user can carry */
 export interface MentionUserOptions {
   firstName?: string

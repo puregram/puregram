@@ -16,3 +16,6 @@ export const blockquote: Modifier = makeModifier(['blockquote'])
 export const expandableBlockquote: Modifier = makeModifier(['expandableBlockquote'])
 /** `code` */
 export const code: Modifier = makeModifier(['code'])
+
+export const tonAddress: Modifier = makeModifier(['tonAddress'])
+export const bankCardNumber: Modifier = makeModifier(['bankCardNumber'])

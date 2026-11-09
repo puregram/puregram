@@ -60,6 +60,7 @@ export function serializeHtmlText (text: TelegramRichText): string {
     case 'email_address':
     case 'phone_number':
     case 'bank_card_number':
+    case 'ton_address':
       return serializeHtmlText(text.text)
     default:
       throw new RichError(`cannot serialize rich text node: ${JSON.stringify(text)}`)

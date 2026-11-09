@@ -5,10 +5,12 @@ import { interpolate, type Piece } from '../interpolate'
 export type ModifierName =
   | 'bold' | 'italic' | 'underline' | 'strikethrough'
   | 'spoiler' | 'blockquote' | 'expandableBlockquote' | 'code'
+  | 'tonAddress' | 'bankCardNumber'
 
 export const MODIFIER_NAMES: ReadonlySet<ModifierName> = new Set<ModifierName>([
   'bold', 'italic', 'underline', 'strikethrough',
-  'spoiler', 'blockquote', 'expandableBlockquote', 'code'
+  'spoiler', 'blockquote', 'expandableBlockquote', 'code',
+  'tonAddress', 'bankCardNumber'
 ])
 
 const TYPE_MAP: Readonly<Record<ModifierName, Entity['type']>> = {
@@ -19,7 +21,9 @@ const TYPE_MAP: Readonly<Record<ModifierName, Entity['type']>> = {
   spoiler: 'spoiler',
   blockquote: 'blockquote',
   expandableBlockquote: 'expandable_blockquote',
-  code: 'code'
+  code: 'code',
+  tonAddress: 'ton_address',
+  bankCardNumber: 'bank_card_number'
 }
 
 type Interp =

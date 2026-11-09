@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest'
 import { makeModifier, MODIFIER_NAMES } from '../src/builders/chain'
 import {
   bold, italic, underline, strikethrough, spoiler,
-  blockquote, expandableBlockquote, code
+  blockquote, expandableBlockquote, code, tonAddress, bankCardNumber
 } from '../src/builders/modifier'
 
 describe('makeModifier (primitive)', () => {
@@ -29,7 +29,9 @@ describe('makeModifier (primitive)', () => {
     expect(MODIFIER_NAMES.has('italic')).toBe(true)
     expect(MODIFIER_NAMES.has('expandableBlockquote')).toBe(true)
     expect(MODIFIER_NAMES.has('code')).toBe(true)
-    expect(MODIFIER_NAMES.size).toBe(8)
+    expect(MODIFIER_NAMES.has('tonAddress')).toBe(true)
+    expect(MODIFIER_NAMES.has('bankCardNumber')).toBe(true)
+    expect(MODIFIER_NAMES.size).toBe(10)
   })
 })
 
@@ -96,8 +98,11 @@ describe('modifier exports', () => {
     ])
   })
 
-  it('all 8 modifiers are exported', () => {
-    const exports = { bold, italic, underline, strikethrough, spoiler, blockquote, expandableBlockquote, code }
+  it('all modifiers are exported', () => {
+    const exports = {
+      bold, italic, underline, strikethrough, spoiler, blockquote, expandableBlockquote, code,
+      tonAddress, bankCardNumber
+    }
 
     for (const m of Object.values(exports)) {
       expect(typeof m).toBe('function')
