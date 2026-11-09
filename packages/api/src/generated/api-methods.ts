@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
 import * as api from "./methods";
@@ -55,6 +55,12 @@ export interface ApiMethods {
      */
     answerWebAppQuery: api.answerWebAppQuery;
     /**
+     * Use this method to send an answer to a query from a widget. The query must be answered within 15 seconds. The answer is received only by the widget that sent the query and doesn't change data of the widget; use editMessageWidgetData or editSharedWidgetData to change it. On success, True is returned.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#answerwidgetquery)
+     */
+    answerWidgetQuery: api.answerWidgetQuery;
+    /**
      * Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#approvechatjoinrequest)
@@ -103,13 +109,13 @@ export interface ApiMethods {
      */
     convertGiftToStars: api.convertGiftToStars;
     /**
-     * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+     * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, invoice messages, and widget messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#copymessage)
      */
     copyMessage: api.copyMessage;
     /**
-     * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an Array of MessageId of the sent messages is returned.
+     * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, invoice messages, and widget messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an Array of MessageId of the sent messages is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#copymessages)
      */
@@ -127,7 +133,7 @@ export interface ApiMethods {
      */
     createChatSubscriptionInviteLink: api.createChatSubscriptionInviteLink;
     /**
-     * Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns information about the created topic as a ForumTopic object.
+     * Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. In the case of a private chat, a link to the topic can be created in the format https://t.me/<bot_username>/<message_thread_id>; the link opens the topic only for the user. Returns information about the created topic as a ForumTopic object.
      *
      * [bot api docs](https://core.telegram.org/bots/api#createforumtopic)
      */
@@ -162,6 +168,12 @@ export interface ApiMethods {
      * [bot api docs](https://core.telegram.org/bots/api#deleteallmessagereactions)
      */
     deleteAllMessageReactions: api.deleteAllMessageReactions;
+    /**
+     * Deletes a regular gift owned by a managed business account without receiving Telegram Stars for it. Requires the can_convert_gifts_to_stars business bot right. The gift can be deleted only if it isn't limited (the field total_count of the Gift is omitted) and wasn't refunded. Returns True on success.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#deletebusinessaccountgift)
+     */
+    deleteBusinessAccountGift: api.deleteBusinessAccountGift;
     /**
      * Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
      *
@@ -325,6 +337,18 @@ export interface ApiMethods {
      */
     editMessageText: api.editMessageText;
     /**
+     * Use this method to edit data of a widget in a message sent by the bot or via the bot (for inline bots). Public data of a shared widget can be changed at most once per second. On success, True is returned.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#editmessagewidgetdata)
+     */
+    editMessageWidgetData: api.editMessageWidgetData;
+    /**
+     * Use this method to edit public data of a shared widget created by the bot. A shared widget can be edited at most once per second. On success, True is returned.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#editsharedwidgetdata)
+     */
+    editSharedWidgetData: api.editSharedWidgetData;
+    /**
      * Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editstory)
@@ -415,6 +439,12 @@ export interface ApiMethods {
      */
     getChatMenuButton: api.getChatMenuButton;
     /**
+     * Use this method to get the list of backdrops, which can be used as the background of a theme of the screen for sharing a link to a user or a chat. Requires no parameters. Returns a ChatShareThemeBackdrops object.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#getchatsharethemebackdrops)
+     */
+    getChatShareThemeBackdrops: api.getChatShareThemeBackdrops;
+    /**
      * Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects.
      *
      * [bot api docs](https://core.telegram.org/bots/api#getcustomemojistickers)
@@ -504,6 +534,12 @@ export interface ApiMethods {
      * [bot api docs](https://core.telegram.org/bots/api#getstickerset)
      */
     getStickerSet: api.getStickerSet;
+    /**
+     * Use this method to get information about a unique gift by its name. Returns a UniqueGift object on success.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#getuniquegift)
+     */
+    getUniqueGift: api.getUniqueGift;
     /**
      * Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects.
      *
@@ -807,6 +843,12 @@ export interface ApiMethods {
      */
     sendRichMessageDraft: api.sendRichMessageDraft;
     /**
+     * Use this method to send again a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#sendsharedwidget)
+     */
+    sendSharedWidget: api.sendSharedWidget;
+    /**
      * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendsticker)
@@ -836,6 +878,12 @@ export interface ApiMethods {
      * [bot api docs](https://core.telegram.org/bots/api#sendvoice)
      */
     sendVoice: api.sendVoice;
+    /**
+     * Use this method to send a message with an HTML widget. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#sendwidget)
+     */
+    sendWidget: api.sendWidget;
     /**
      * Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.
      *

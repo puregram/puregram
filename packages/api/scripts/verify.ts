@@ -3,8 +3,10 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { emitApiMethods } from './lib/emitter/emit-api-methods'
+import { emitDispatch } from './lib/emitter/emit-dispatch'
 import { emitEnums } from './lib/emitter/emit-enums'
 import { emitFactories } from './lib/emitter/emit-factories'
+import { emitFilterTypes } from './lib/emitter/emit-filter-types'
 import { emitFilters } from './lib/emitter/emit-filters'
 import { emitFormattableFields } from './lib/emitter/emit-formattable-fields'
 import { emitInspect } from './lib/emitter/emit-inspect'
@@ -15,6 +17,7 @@ import { emitShortcuts } from './lib/emitter/emit-shortcuts'
 import { emitStructures } from './lib/emitter/emit-structures'
 import { emitTypes } from './lib/emitter/emit-types'
 import { emitUpdates } from './lib/emitter/emit-updates'
+import { emitWebhookReplySafe } from './lib/emitter/emit-webhook-reply-safe'
 import { loadLatestSchema } from './lib/emitter/load-schema'
 import { applyMethodReturnOverrides } from './lib/emitter/method-overrides'
 import { applySoftEnums } from './lib/emitter/soft-enums'
@@ -38,7 +41,10 @@ async function main () {
     ['service-events.ts', emitServiceEvents(schema)],
     ['factories.ts', emitFactories(schema)],
     ['formattable-fields.ts', emitFormattableFields(schema)],
-    ['filters.ts', emitFilters(schema)]
+    ['filters.ts', emitFilters(schema)],
+    ['filter-types.ts', emitFilterTypes(schema)],
+    ['dispatch.ts', emitDispatch(schema)],
+    ['webhook-reply-safe.ts', emitWebhookReplySafe(schema)]
   ]
 
   const here = dirname(fileURLToPath(import.meta.url))

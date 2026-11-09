@@ -103,7 +103,7 @@ jobs:
 
       - name: regenerate
         if: steps.detect.outputs.changed == 'true'
-        run: yarn regenerate-all
+        run: yarn regenerate-all --skip-parse
 
       - name: affected skills
         id: skills
@@ -134,8 +134,9 @@ jobs:
 
             - `packages/api/schema/${{ steps.detect.outputs.version }}.json`
             - `packages/api/src/generated/**`
-            - `packages/flow/src/generated/augmentations/**`
-            - `packages/session/src/generated/augmentations/**`
+            - `packages/flow/src/generated/augmentations.ts`
+            - `packages/session/src/generated/augmentations.ts`
+            - `packages/scenes/src/generated/augmentations.ts`
             - `@puregram/api` version bump → `${{ env.next }}`
 
             review the diff before merging — schema bumps occasionally need manual touch-ups in handcrafted code (telegram routinely renames fields in "minor" bumps)

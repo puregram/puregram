@@ -1,3 +1,9 @@
+import * as cheerio from 'cheerio'
+
+import type { Schema } from '../schema-types'
+
+import { buildUpdateKinds } from '../emitter/updates-config'
+
 import { extractFromHtml } from './normalize'
 
 export function parseCore (html: string) {
@@ -5,11 +11,21 @@ export function parseCore (html: string) {
   const version = parseVersion(html)
   const recentChanges = parseRecentChanges(html)
 
-  return { methods, objects, version, recentChanges }
+  const fragment = {
+    methods: methods.sort((a, b) => a.name.localeCompare(b.name)),
+    objects: objects.sort((a, b) => a.name.localeCompare(b.name)),
+    version,
+    recentChanges
+  }
+
+  buildUpdateKinds({ ...fragment, source: { core: '', fetchedAt: '' } } satisfies Schema)
+
+  return fragment
 }
 
 function parseVersion (html: string) {
-  const match = html.match(/Bot API\s+(\d+)\.(\d+)(?:\.(\d+))?/i)
+  const text = cheerio.load(html).root().text()
+  const match = text.match(/Bot API\s+(\d+)\.(\d+)(?:\.(\d+))?/i)
 
   if (!match) {
     throw new Error('could not detect bot-api version in core html')
@@ -19,15 +35,14 @@ function parseVersion (html: string) {
 }
 
 function parseRecentChanges (html: string) {
-  const match = html.match(/(\w+)\s+(\d{1,2}),\s+(\d{4})/)
+  const text = cheerio.load(html).root().text()
+  const match = text.match(/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s+(\d{4})\b/)
 
   if (!match) {
-    const now = new Date()
-
-    return { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }
+    throw new Error('could not detect bot-api release date in core html')
   }
 
   const monthIndex = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].indexOf(match[1]!)
 
-  return { year: Number(match[3]), month: monthIndex >= 0 ? monthIndex + 1 : 1, day: Number(match[2]) }
+  return { year: Number(match[3]), month: monthIndex + 1, day: Number(match[2]) }
 }

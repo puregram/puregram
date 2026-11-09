@@ -9,14 +9,17 @@ interface Step {
   args: string[]
 }
 
+const skipParse = process.argv.includes('--skip-parse')
+
 const STEPS: Step[] = [
-  // 1. fetch + parse the latest schema, emit @puregram/api/src/generated/*
-  { label: '@puregram/api regenerate', command: 'yarn', args: ['workspace', '@puregram/api', 'regenerate'] },
+  ...(!skipParse ? [{ label: '@puregram/api parse', command: 'yarn', args: ['workspace', '@puregram/api', 'parse'] }] : []),
+  { label: '@puregram/api emit', command: 'yarn', args: ['workspace', '@puregram/api', 'emit'] },
   { label: '@puregram/api verify', command: 'yarn', args: ['workspace', '@puregram/api', 'verify'] },
 
   // 2. plugin augmentations (per-update declaration merges driven by the same schema)
   { label: '@puregram/flow augmentations', command: 'yarn', args: ['workspace', '@puregram/flow', 'generate:augmentations'] },
   { label: '@puregram/session augmentations', command: 'yarn', args: ['workspace', '@puregram/session', 'generate:augmentations'] },
+  { label: '@puregram/scenes augmentations', command: 'yarn', args: ['workspace', '@puregram/scenes', 'generate:augmentations'] },
 
   // 3. build everything so downstream packages pick up the new types
   { label: 'workspace build', command: 'yarn', args: ['build'] },

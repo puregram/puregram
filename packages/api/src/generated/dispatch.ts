@@ -1,13 +1,13 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { Filter } from "../filter-runtime";
 import type { Modify } from "../util-types";
 import type { OnOptions, UpdateHandler } from "../dispatch-runtime";
-import type { BoostAddedUpdate, BusinessConnectionUpdate, BusinessMessageUpdate, CallbackQueryUpdate, ChannelPostUpdate, ChatBoostUpdate, ChatJoinRequestUpdate, ChatMemberUpdate, ChatSharedUpdate, ChosenInlineResultUpdate, CommunityChatAddedUpdate, CommunityChatRemovedUpdate, DeleteChatPhotoUpdate, DeletedBusinessMessagesUpdate, EditedBusinessMessageUpdate, EditedChannelPostUpdate, EditedMessageUpdate, ForumTopicClosedUpdate, ForumTopicCreatedUpdate, ForumTopicEditedUpdate, ForumTopicReopenedUpdate, GeneralForumTopicHiddenUpdate, GeneralForumTopicUnhiddenUpdate, GiveawayCompletedUpdate, GiveawayCreatedUpdate, GiveawayWinnersUpdate, GroupChatCreatedUpdate, GuestMessageUpdate, InlineQueryUpdate, InvoiceUpdate, LeftChatMemberUpdate, ManagedBotUpdate, MessageAutoDeleteTimerChangedUpdate, MessageReactionCountUpdate, MessageReactionUpdate, MessageUpdate, MigrateFromChatIdUpdate, MigrateToChatIdUpdate, MyChatMemberUpdate, NewChatMembersUpdate, NewChatPhotoUpdate, NewChatTitleUpdate, PassportDataUpdate, PinnedMessageUpdate, PollAnswerUpdate, PollUpdate, PreCheckoutQueryUpdate, ProximityAlertTriggeredUpdate, PurchasedPaidMediaUpdate, RemovedChatBoostUpdate, ShippingQueryUpdate, StoppedMessageGenerationUpdate, SubscriptionUpdate, SuccessfulPaymentUpdate, UsersSharedUpdate, VideoChatEndedUpdate, VideoChatParticipantsInvitedUpdate, VideoChatScheduledUpdate, VideoChatStartedUpdate, WebAppDataUpdate, WriteAccessAllowedUpdate } from "./updates";
+import type { BoostAddedUpdate, BusinessConnectionUpdate, BusinessMessageUpdate, CallbackQueryUpdate, ChannelPostUpdate, ChatBoostUpdate, ChatJoinRequestUpdate, ChatMemberUpdate, ChatSharedUpdate, ChosenInlineResultUpdate, CommunityChatAddedUpdate, CommunityChatRemovedUpdate, DeleteChatPhotoUpdate, DeletedBusinessMessagesUpdate, EditedBusinessMessageUpdate, EditedChannelPostUpdate, EditedMessageUpdate, ForumTopicClosedUpdate, ForumTopicCreatedUpdate, ForumTopicEditedUpdate, ForumTopicReopenedUpdate, GeneralForumTopicHiddenUpdate, GeneralForumTopicUnhiddenUpdate, GiveawayCompletedUpdate, GiveawayCreatedUpdate, GiveawayWinnersUpdate, GroupChatCreatedUpdate, GuestMessageUpdate, InlineQueryUpdate, InvoiceUpdate, LeftChatMemberUpdate, ManagedBotUpdate, MessageAutoDeleteTimerChangedUpdate, MessageReactionCountUpdate, MessageReactionUpdate, MessageUpdate, MigrateFromChatIdUpdate, MigrateToChatIdUpdate, MyChatMemberUpdate, NewChatMembersUpdate, NewChatPhotoUpdate, NewChatTitleUpdate, PaidMessagesWaivedUpdate, PassportDataUpdate, PinnedMessageUpdate, PollAnswerUpdate, PollUpdate, PreCheckoutQueryUpdate, ProximityAlertTriggeredUpdate, PurchasedPaidMediaUpdate, RemovedChatBoostUpdate, SharedWidgetQueryUpdate, ShippingQueryUpdate, StoppedMessageGenerationUpdate, SubscriptionUpdate, SuccessfulPaymentUpdate, TonWalletTransferUpdate, UsersSharedUpdate, VideoChatEndedUpdate, VideoChatParticipantsInvitedUpdate, VideoChatScheduledUpdate, VideoChatStartedUpdate, WebAppDataUpdate, WidgetQueryUpdate, WriteAccessAllowedUpdate } from "./updates";
 export interface TelegramDispatchers {
     /**
      * register a handler for every `message` update
@@ -121,6 +121,22 @@ export interface TelegramDispatchers {
      * register a filter-gated handler for `callback_query` updates. handler arg narrows via `Modify<CallbackQueryUpdate, Mod>`
      */
     onCallbackQuery<Mod>(filter: Filter<unknown, Mod>, handler: UpdateHandler<Modify<CallbackQueryUpdate, Mod>>, options?: OnOptions): this;
+    /**
+     * register a handler for every `widget_query` update
+     */
+    onWidgetQuery(handler: UpdateHandler<WidgetQueryUpdate>, options?: OnOptions): this;
+    /**
+     * register a filter-gated handler for `widget_query` updates. handler arg narrows via `Modify<WidgetQueryUpdate, Mod>`
+     */
+    onWidgetQuery<Mod>(filter: Filter<unknown, Mod>, handler: UpdateHandler<Modify<WidgetQueryUpdate, Mod>>, options?: OnOptions): this;
+    /**
+     * register a handler for every `shared_widget_query` update
+     */
+    onSharedWidgetQuery(handler: UpdateHandler<SharedWidgetQueryUpdate>, options?: OnOptions): this;
+    /**
+     * register a filter-gated handler for `shared_widget_query` updates. handler arg narrows via `Modify<SharedWidgetQueryUpdate, Mod>`
+     */
+    onSharedWidgetQuery<Mod>(filter: Filter<unknown, Mod>, handler: UpdateHandler<Modify<SharedWidgetQueryUpdate, Mod>>, options?: OnOptions): this;
     /**
      * register a handler for every `shipping_query` update
      */
@@ -497,4 +513,20 @@ export interface TelegramDispatchers {
      * register a filter-gated handler for `community_chat_removed` updates. handler arg narrows via `Modify<CommunityChatRemovedUpdate, Mod>`
      */
     onCommunityChatRemoved<Mod>(filter: Filter<unknown, Mod>, handler: UpdateHandler<Modify<CommunityChatRemovedUpdate, Mod>>, options?: OnOptions): this;
+    /**
+     * register a handler for every `paid_messages_waived` update
+     */
+    onPaidMessagesWaived(handler: UpdateHandler<PaidMessagesWaivedUpdate>, options?: OnOptions): this;
+    /**
+     * register a filter-gated handler for `paid_messages_waived` updates. handler arg narrows via `Modify<PaidMessagesWaivedUpdate, Mod>`
+     */
+    onPaidMessagesWaived<Mod>(filter: Filter<unknown, Mod>, handler: UpdateHandler<Modify<PaidMessagesWaivedUpdate, Mod>>, options?: OnOptions): this;
+    /**
+     * register a handler for every `ton_wallet_transfer` update
+     */
+    onTonWalletTransfer(handler: UpdateHandler<TonWalletTransferUpdate>, options?: OnOptions): this;
+    /**
+     * register a filter-gated handler for `ton_wallet_transfer` updates. handler arg narrows via `Modify<TonWalletTransferUpdate, Mod>`
+     */
+    onTonWalletTransfer<Mod>(filter: Filter<unknown, Mod>, handler: UpdateHandler<Modify<TonWalletTransferUpdate, Mod>>, options?: OnOptions): this;
 }

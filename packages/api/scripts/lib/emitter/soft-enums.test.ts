@@ -14,7 +14,7 @@ const schemaWith = (args: SchemaField[], fields: SchemaField[]) => {
   const schema: Schema = {
     version: { major: 10, minor: 0, patch: 0 },
     recentChanges: { year: 2025, month: 1, day: 1 },
-    source: { corefork: '', core: '', fetchedAt: '' },
+    source: { core: '', fetchedAt: '' },
     methods: [{ name: 'sendMessage', description: '', multipartOnly: false, arguments: args, returnType: { kind: 'true' } }],
     objects: [{ kind: 'object', name: 'InputMedia', description: '', fields }]
   }

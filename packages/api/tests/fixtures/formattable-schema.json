@@ -2,7 +2,6 @@
   "version": { "major": 0, "minor": 0, "patch": 0 },
   "recentChanges": { "year": 2026, "month": 1, "day": 1 },
   "source": {
-    "corefork": "test",
     "core": "test",
     "fetchedAt": "2026-01-01T00:00:00.000Z"
   },

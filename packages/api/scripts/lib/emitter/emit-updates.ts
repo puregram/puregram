@@ -267,7 +267,7 @@ export function emitUpdates (schema: Schema) {
     nodes,
     imports,
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }
@@ -1344,7 +1344,9 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
   })
 
   const positionalProps = positionals.map(p =>
-    ts.factory.createPropertyAssignment(p.schemaArg, ts.factory.createIdentifier(p.name))
+    sc.callbackEphemeral === true && p.schemaArg === 'chat_id'
+      ? ts.factory.createSpreadAssignment(parseExpression(`${p.name} == null ? {} : { chat_id: ${p.name} }`))
+      : ts.factory.createPropertyAssignment(p.schemaArg, ts.factory.createIdentifier(p.name))
   )
 
   // reply twins fill `reply_parameters.message_id` from the update and merge any
@@ -1510,7 +1512,7 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     }),
     // opt-out switch for the ephemeral auto-injection — consumed by ephemeralSendParams,
     // never sent to telegram
-    ...(sc.ephemeralSend === true
+    ...(sc.ephemeralSend === true || sc.callbackEphemeral === true
       ? [ts.factory.createPropertySignature(
           undefined,
           ts.factory.createIdentifier('ephemeral'),
@@ -1535,13 +1537,54 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     defaultInit
   )
 
+  let methodParams = [...positionalParams, paramsParam]
+  let methodBody = body
+
+  if (sc.callbackEphemeral === true && positionals[0]?.schemaArg === 'chat_id') {
+    const tupleMember = (param: ts.ParameterDeclaration, optional = false, type = param.type!) =>
+      ts.factory.createNamedTupleMember(undefined, param.name as ts.Identifier, optional ? ts.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined, type)
+    const fullTuple = ts.factory.createTupleTypeNode([
+      ...positionalParams.map(p => tupleMember(p)),
+      tupleMember(paramsParam, allRestOptional)
+    ])
+    const optIn = parseTypeNode('{ ephemeral: true } | { ephemeral_message_parameters: TelegramEphemeralMessageParameters }')
+    const shortTuple = ts.factory.createTupleTypeNode([
+      ...positionalParams.slice(1).map(p => tupleMember(p)),
+      tupleMember(paramsParam, false, ts.factory.createIntersectionTypeNode([paramsTypeNode, optIn]))
+    ])
+    const normalizedTuple = ts.factory.createTupleTypeNode([
+      tupleMember(positionalParams[0]!, false, ts.factory.createUnionTypeNode([positionalParams[0]!.type!, ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)])),
+      ...positionalParams.slice(1).map(p => tupleMember(p)),
+      tupleMember(paramsParam, allRestOptional)
+    ])
+    const names = [...positionals.map(p => p.name), 'params = {}'].join(', ')
+    const declaration = parseStatements(`const [${names}] = args`)[0] as ts.VariableStatement
+    const binding = declaration.declarationList.declarations[0]!.name
+    const normalized = ts.factory.createVariableStatement(undefined, ts.factory.createVariableDeclarationList([
+      ts.factory.createVariableDeclaration(binding, undefined, undefined, ts.factory.createAsExpression(
+        parseExpression('callbackOnly ? [undefined, ...args] : args'),
+        normalizedTuple
+      ))
+    ], ts.NodeFlags.Const))
+
+    methodParams = [ts.factory.createParameterDeclaration(
+      undefined, ts.factory.createToken(ts.SyntaxKind.DotDotDotToken), 'args', undefined,
+      ts.factory.createUnionTypeNode([fullTuple, shortTuple]), undefined
+    )]
+    methodBody = ts.factory.createBlock([
+      ...parseStatements(`const options = args[${positionals.length - 1}]; const callbackOnly = args.length === ${positionals.length} && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);`),
+      normalized,
+      ...body.statements
+    ], true)
+  }
+
   const method = ts.factory.createMethodDeclaration(
     undefined, undefined,
     ts.factory.createIdentifier(verbFor(sc)),
     undefined, undefined,
-    [...positionalParams, paramsParam],
+    methodParams,
     undefined,
-    body
+    methodBody
   )
 
   const ephemeralNote = sc.ephemeralTwin !== undefined
@@ -1549,7 +1592,7 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     : sc.ephemeralSend === true
       ? ' — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)'
       : sc.callbackEphemeral === true
-        ? ' — pass `ephemeral_message_parameters` to send an ephemeral response; its `callback_query_id` then auto-fills from this query'
+        ? ' — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument'
         : ''
 
   const doc = sc.reply

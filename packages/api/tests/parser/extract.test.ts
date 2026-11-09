@@ -9,8 +9,8 @@ import { extractFromHtml } from '../../scripts/lib/parser/normalize'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 describe('extractFromHtml', () => {
-  it('extracts methods from corefork fixture', async () => {
-    const html = await readFile(resolve(__dirname, '../fixtures/corefork-snippet.html'), 'utf8')
+  it('extracts methods from core fixture', async () => {
+    const html = await readFile(resolve(__dirname, '../fixtures/core-snippet.html'), 'utf8')
     const { methods, objects } = extractFromHtml(html)
 
     const getMe = methods.find(m => m.name === 'getMe')

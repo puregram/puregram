@@ -48,7 +48,7 @@ export function emitFormattableFields (schema: Schema) {
     nodes: [decl],
     imports: [],
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }

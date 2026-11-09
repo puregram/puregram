@@ -89,7 +89,7 @@ export function emitInspect (schema: Schema) {
   return formatModule({
     nodes: [],
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   }) + '\n' + INSPECT_BODY + '\n'
 }

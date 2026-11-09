@@ -63,7 +63,6 @@ export interface Schema {
   version: SchemaVersion
   recentChanges: SchemaRecentChanges
   source: {
-    corefork: string
     core: string
     fetchedAt: string
   }

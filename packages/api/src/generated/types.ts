@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { Formattable } from "../formattable";
@@ -97,6 +97,36 @@ export interface TelegramAnimation {
      * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
      */
     file_size?: number;
+}
+
+/**
+ * Describes the position of a rectangle area on a story media or a TON wallet card.
+ */
+export interface TelegramAreaPosition {
+    /**
+     * The abscissa of the area's center, as a percentage of the media or the card width
+     */
+    x_percentage: number;
+    /**
+     * The ordinate of the area's center, as a percentage of the media or the card height
+     */
+    y_percentage: number;
+    /**
+     * The width of the area's rectangle, as a percentage of the media or the card width
+     */
+    width_percentage: number;
+    /**
+     * The height of the area's rectangle, as a percentage of the media or the card height
+     */
+    height_percentage: number;
+    /**
+     * The clockwise rotation angle of the rectangle, in degrees; 0-360
+     */
+    rotation_angle: number;
+    /**
+     * The radius of the rectangle corner rounding, as a percentage of the media or the card width
+     */
+    corner_radius_percentage: number;
 }
 
 /**
@@ -1157,6 +1187,14 @@ export interface TelegramChatFullInfo {
      * Optional. The Community to which the chat belongs
      */
     community?: TelegramCommunity;
+    /**
+     * Optional. For private chats, the TON wallet card of the user, which is shown on their profile page
+     */
+    ton_wallet_card?: TelegramTonWalletCard;
+    /**
+     * Optional. For private chats, supergroups and channels, the theme of the screen for sharing a link to the user or the chat; omitted if the default theme is used
+     */
+    share_theme?: TelegramChatShareTheme;
 }
 
 /**
@@ -1485,7 +1523,7 @@ export interface TelegramChatMemberRestricted {
      */
     can_send_polls: boolean;
     /**
-     * True, if the user is allowed to send animations, games, stickers and use inline bots
+     * True, if the user is allowed to send animations, games, stickers, widgets and use inline bots
      */
     can_send_other_messages: boolean;
     /**
@@ -1617,7 +1655,7 @@ export interface TelegramChatPermissions {
      */
     can_send_polls?: boolean;
     /**
-     * Optional. True, if the user is allowed to send animations, games, stickers and use inline bots
+     * Optional. True, if the user is allowed to send animations, games, stickers, widgets and use inline bots
      */
     can_send_other_messages?: boolean;
     /**
@@ -1696,6 +1734,71 @@ export interface TelegramChatShared {
      * Optional. Available sizes of the chat photo, if the photo was requested by the bot
      */
     photo?: TelegramPhotoSize[];
+}
+
+/**
+ * This object describes the theme of the screen for sharing a link to a user or a chat. Currently, it can be one of
+ */
+export type TelegramChatShareTheme = TelegramChatShareThemeEmoji | TelegramChatShareThemeUniqueGift;
+
+/**
+ * This object describes a backdrop, which can be used as the background of a theme of the screen for sharing a link to a user or a chat.
+ */
+export interface TelegramChatShareThemeBackdrop {
+    /**
+     * Unique identifier of the backdrop
+     */
+    id: number;
+    /**
+     * Name of the backdrop
+     */
+    name: string;
+    /**
+     * Colors of the backdrop
+     */
+    colors: TelegramUniqueGiftBackdropColors;
+}
+
+/**
+ * This object contains a list of backdrops, which can be used as the background of a theme of the screen for sharing a link to a user or a chat.
+ */
+export interface TelegramChatShareThemeBackdrops {
+    /**
+     * The list of backdrops
+     */
+    backdrops: TelegramChatShareThemeBackdrop[];
+}
+
+/**
+ * The theme with emoji placed on a background.
+ */
+export interface TelegramChatShareThemeEmoji {
+    /**
+     * Type of the theme, always “emoji”
+     */
+    type: "emoji";
+    /**
+     * The emoji; 0-6 regular or custom emoji
+     */
+    emojis: TelegramEmojiType[];
+    /**
+     * Optional. Identifier of the backdrop used as the background; omitted if the default background is used. Use getChatShareThemeBackdrops to get details about the backdrop.
+     */
+    background_backdrop_id?: number;
+}
+
+/**
+ * The theme based on a unique gift owned by the user or the chat.
+ */
+export interface TelegramChatShareThemeUniqueGift {
+    /**
+     * Type of the theme, always “unique_gift”
+     */
+    type: "unique_gift";
+    /**
+     * The gift
+     */
+    gift: TelegramUniqueGift;
 }
 
 /**
@@ -1967,6 +2070,39 @@ export interface TelegramDocument {
 }
 
 /**
+ * This object describes an emoji. Currently, it can be one of
+ */
+export type TelegramEmojiType = TelegramEmojiTypeEmoji | TelegramEmojiTypeCustomEmoji;
+
+/**
+ * A custom emoji.
+ */
+export interface TelegramEmojiTypeCustomEmoji {
+    /**
+     * Type of the emoji, always “custom_emoji”
+     */
+    type: "custom_emoji";
+    /**
+     * Identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker.
+     */
+    custom_emoji_id: string;
+}
+
+/**
+ * A regular emoji.
+ */
+export interface TelegramEmojiTypeEmoji {
+    /**
+     * Type of the emoji, always “emoji”
+     */
+    type: "emoji";
+    /**
+     * The emoji
+     */
+    emoji: string;
+}
+
+/**
  * Describes data required for decrypting and authenticating EncryptedPassportElement. See the Telegram Passport Documentation for a complete description of the data decryption and authentication processes.
  */
 export interface TelegramEncryptedCredentials {
@@ -2032,11 +2168,11 @@ export interface TelegramEncryptedPassportElement {
 
 export interface TelegramEphemeralMessageParameters {
     /**
-     * Identifier of the user who will receive the message. It is not guaranteed that the user will receive the message, especially if they are offline. See here for more details.
+     * Optional. Identifier of the user who will receive the message; required unless the message is sent as an ephemeral reply to a callback query. If omitted, then the parameter chat_id of the method is ignored. If specified together with callback_query_id, then it must be the identifier of the user who pressed the button. Must be omitted for messages sent in chats where the bot isn't a member, unless the message is a reply to an ephemeral message. It is not guaranteed that the user will receive the message, especially if they are offline. See here for more details.
      */
-    receiver_user_id: number;
+    receiver_user_id?: number;
     /**
-     * Optional. Identifier of the callback query which triggered the message, if any
+     * Optional. Identifier of the callback query which triggered the message, if any. If specified and receiver_user_id is omitted, then the message is sent as an ephemeral reply to the callback query and will be shown only to the user who pressed the button. Ephemeral replies can't be sent to callback queries from messages in channel direct messages chats. The bot must still answer the callback query using answerCallbackQuery.
      */
     callback_query_id?: string;
     /**
@@ -2109,6 +2245,10 @@ export interface TelegramExternalReplyInfo {
      * Optional. Message is a voice message, information about the file
      */
     voice?: TelegramVoice;
+    /**
+     * Optional. Message is an HTML widget, information about the widget
+     */
+    widget?: TelegramWidget;
     /**
      * Optional. True, if the message media is covered by a spoiler animation
      */
@@ -2632,7 +2772,7 @@ export interface TelegramInlineKeyboardButton {
      */
     callback_data?: string;
     /**
-     * Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
+     * Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account and ephemeral messages.
      */
     web_app?: TelegramWebAppInfo;
     /**
@@ -4339,7 +4479,7 @@ export interface TelegramInputMediaVoiceNote {
 /**
  * This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following types:
  */
-export type TelegramInputMessageContent = TelegramInputTextMessageContent | TelegramInputRichMessageContent | TelegramInputLocationMessageContent | TelegramInputVenueMessageContent | TelegramInputContactMessageContent | TelegramInputInvoiceMessageContent;
+export type TelegramInputMessageContent = TelegramInputTextMessageContent | TelegramInputRichMessageContent | TelegramInputLocationMessageContent | TelegramInputVenueMessageContent | TelegramInputContactMessageContent | TelegramInputInvoiceMessageContent | TelegramInputWidgetMessageContent | TelegramInputSharedWidgetMessageContent;
 
 /**
  * This object describes the paid media to be sent. Currently, it can be one of
@@ -5003,6 +5143,36 @@ export interface TelegramInputRichMessageMedia {
 }
 
 /**
+ * Represents the content of a message with a shared widget to be sent as the result of an inline query. Currently, widgets can't be sent in response to inline queries in the production environment.
+ */
+export interface TelegramInputSharedWidgetMessageContent {
+    /**
+     * Unique identifier of the shared widget created by the bot
+     */
+    widget_id: string;
+    /**
+     * Optional. Data of the widget, which is specific to the message, 0-1024 bytes
+     */
+    chat_data?: string;
+    /**
+     * Optional. Widget caption, 0-1024 characters after entities parsing
+     */
+    caption?: string | Formattable;
+    /**
+     * Optional. Mode for parsing entities in the widget caption. See formatting options for more details.
+     */
+    parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
+    /**
+     * Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+     */
+    caption_entities?: TelegramMessageEntity[];
+    /**
+     * Optional. Pass True if the caption must be shown above the widget
+     */
+    show_caption_above_media?: boolean;
+}
+
+/**
  * This object describes a sticker to be added to a sticker set.
  */
 export interface TelegramInputSticker {
@@ -5131,6 +5301,56 @@ export interface TelegramInputVenueMessageContent {
      * Optional. Google Places type of the venue. (See supported types.)
      */
     google_place_type?: string;
+}
+
+/**
+ * Represents the content of a message with an HTML widget to be sent as the result of an inline query. Currently, widgets can't be sent in response to inline queries in the production environment.
+ */
+export interface TelegramInputWidgetMessageContent {
+    /**
+     * HTML code of the widget, 1-32768 bytes. The code must not exceed 4096 bytes when compressed by zlib with the maximum compression level.
+     */
+    html: string;
+    /**
+     * Optional. Width of the widget in logical pixels; omit if the widget must occupy the whole width of the message bubble. The width is clamped by the app to the range from 200 to the maximum width of the message bubble.
+     */
+    width?: number;
+    /**
+     * Optional. Height of the widget in logical pixels; omit if the height of the widget isn't fixed. The height is clamped by the app to the range 50-600.
+     */
+    height?: number;
+    /**
+     * Optional. Public data of the widget, 0-1024 bytes, which will be available wherever the widget is shown. If the widget is shared, then all messages with it will have the same public data.
+     */
+    public_data?: string;
+    /**
+     * Optional. Data of the widget, which is specific to the message, 0-1024 bytes
+     */
+    chat_data?: string;
+    /**
+     * Optional. Widget caption, 0-1024 characters after entities parsing
+     */
+    caption?: string | Formattable;
+    /**
+     * Optional. Mode for parsing entities in the widget caption. See formatting options for more details.
+     */
+    parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
+    /**
+     * Optional. List of special entities that appear in the caption, which can be specified instead of parse_mode
+     */
+    caption_entities?: TelegramMessageEntity[];
+    /**
+     * Optional. Pass True if the caption must be shown above the widget
+     */
+    show_caption_above_media?: boolean;
+    /**
+     * Optional. Pass True to allow the widget to send queries to the bot
+     */
+    allow_queries?: boolean;
+    /**
+     * Optional. Pass True to create a shared widget. Each message sent from the result creates a separate shared widget, whose identifier is received by the bot only in the field widget_id of queries from the widget. To send an existing shared widget in response to an inline query, use InputSharedWidgetMessageContent instead.
+     */
+    is_shared?: boolean;
 }
 
 /**
@@ -5278,7 +5498,7 @@ export interface TelegramKeyboardButtonRequestManagedBot {
      */
     suggested_name?: string;
     /**
-     * Optional. Suggested username for the bot
+     * Optional. Suggested username for the bot. The username must end with “bot”. If the user creating the bot has a Telegram Premium subscription, then the username can also end with “agent”, “ai”, “app”, “game”, or “gay”; in this case, the username will be assigned to the bot as a secondary username, and a regular username ending with “bot” will be assigned to the bot automatically.
      */
     suggested_username?: string;
 }
@@ -5779,7 +5999,11 @@ export interface TelegramMessage {
      */
     voice?: TelegramVoice;
     /**
-     * Optional. Caption for the animation, audio, document, paid media, photo, video or voice
+     * Optional. Message is an HTML widget, information about the widget
+     */
+    widget?: TelegramWidget;
+    /**
+     * Optional. Caption for the animation, audio, document, live photo, paid media, photo, video, voice, or widget
      */
     caption?: string;
     /**
@@ -5787,7 +6011,7 @@ export interface TelegramMessage {
      */
     caption_entities?: TelegramMessageEntity[];
     /**
-     * Optional. True, if the caption must be shown above the message media
+     * Optional. True, if the caption must be shown above the message media or the widget
      */
     show_caption_above_media?: true;
     /**
@@ -6007,6 +6231,10 @@ export interface TelegramMessage {
      */
     paid_message_price_changed?: TelegramPaidMessagePriceChanged;
     /**
+     * Optional. Service message: the sender of the message used a link of the other user, which allows sending messages to the user without paying Telegram Stars
+     */
+    paid_messages_waived?: TelegramPaidMessagesWaived;
+    /**
      * Optional. Service message: answer option was added to a poll
      */
     poll_option_added?: TelegramPollOptionAdded;
@@ -6034,6 +6262,10 @@ export interface TelegramMessage {
      * Optional. Service message: payment for a suggested post was refunded
      */
     suggested_post_refunded?: TelegramSuggestedPostRefunded;
+    /**
+     * Optional. Service message: a transfer with a TON wallet
+     */
+    ton_wallet_transfer?: TelegramTonWalletTransfer;
     /**
      * Optional. Service message: video chat scheduled
      */
@@ -6075,9 +6307,9 @@ export interface TelegramMessageAutoDeleteTimerChanged {
  */
 export interface TelegramMessageEntity {
     /**
-     * Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), or “date_time” (for formatted date and time).
+     * Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bank_card_number” (bank card number), “ton_address” (address in the TON blockchain), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), or “date_time” (for formatted date and time).
      */
-    type: "mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "expandable_blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji" | "date_time";
+    type: "mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bank_card_number" | "ton_address" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "expandable_blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji" | "date_time";
     /**
      * Offset in UTF-16 code units to the start of the entity
      */
@@ -6543,6 +6775,12 @@ export interface TelegramPaidMessagePriceChanged {
      * The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message
      */
     paid_message_star_count: number;
+}
+
+/**
+ * Describes a service message about the sender of the message using a link of the other user, which allows sending messages to the user without paying Telegram Stars. Currently holds no information.
+ */
+export interface TelegramPaidMessagesWaived {
 }
 
 /**
@@ -7274,7 +7512,7 @@ export interface TelegramReplyParameters {
      */
     message_id?: number;
     /**
-     * Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the bot, supergroup or channel in the format @username. Not supported for messages sent on behalf of a business account, messages from channel direct messages chats and ephemeral messages.
+     * Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of the bot, supergroup, or channel in the format @username. Not supported for messages sent on behalf of a business account, messages from channel direct messages chats and ephemeral messages.
      */
     chat_id?: number | string;
     /**
@@ -7298,7 +7536,11 @@ export interface TelegramReplyParameters {
      */
     quote_entities?: TelegramMessageEntity[];
     /**
-     * Optional. Position of the quote in the original message in UTF-16 code units
+     * Optional. A JSON-serialized list of quoted parts of the rich message to be replied to. Must contain one element for each quoted text of the message in the order of their appearance. Each of the following is a separate quoted text: the text of a paragraph, a heading, a preformatted block, a footer, or a mathematical expression; the text and the credit of a block quotation or a pull quotation; the summary of a details block; the caption and each cell of a table; the text and the credit of a caption of a media block, a collage, a slideshow, or a map. Texts of blocks nested in lists, block quotations, details, collages, and slideshows are separate quoted texts too. The first and the last elements can contain only a part of the corresponding text; all other elements must contain the whole text. Formatting of the quoted parts must be kept, and rich texts must be nested in the same way as in the message received from the server. Mathematical expressions must be quoted entirely. Buttons in RichBlockButtons, anchors and dividers can't be quoted. Up to 32 quoted texts with total length up to 1024 characters can be specified. Only plain text, RichTextBold, RichTextItalic, RichTextUnderline, RichTextStrikethrough, RichTextSpoiler, RichTextSubscript, RichTextSuperscript, RichTextDateTime, RichTextCustomEmoji, RichTextMathematicalExpression, and arrays of them are kept in the quote; other rich text types are replaced with their text. If non-empty, then quote, quote_parse_mode and quote_entities are ignored.
+     */
+    quote_rich_texts?: TelegramRichText[];
+    /**
+     * Optional. Position of the quote in the original message in UTF-16 code units. For quotes from rich messages, it is the position in the text formed by joining plain texts of all quotable texts of the message, separated by line feeds.
      */
     quote_position?: number;
     /**
@@ -7954,7 +8196,7 @@ export interface TelegramRichMessageButton {
 /**
  * This object represents a rich formatted text. Currently, it can be either a String for plain text, an Array of RichText, or any of the following types:
  */
-export type TelegramRichText = string | TelegramRichText[] | TelegramRichTextBold | TelegramRichTextItalic | TelegramRichTextUnderline | TelegramRichTextStrikethrough | TelegramRichTextSpoiler | TelegramRichTextDateTime | TelegramRichTextTextMention | TelegramRichTextSubscript | TelegramRichTextSuperscript | TelegramRichTextMarked | TelegramRichTextCode | TelegramRichTextCustomEmoji | TelegramRichTextMathematicalExpression | TelegramRichTextUrl | TelegramRichTextEmailAddress | TelegramRichTextPhoneNumber | TelegramRichTextBankCardNumber | TelegramRichTextMention | TelegramRichTextHashtag | TelegramRichTextCashtag | TelegramRichTextBotCommand | TelegramRichTextButton | TelegramRichTextAnchor | TelegramRichTextAnchorLink | TelegramRichTextReference | TelegramRichTextReferenceLink;
+export type TelegramRichText = string | TelegramRichText[] | TelegramRichTextBold | TelegramRichTextItalic | TelegramRichTextUnderline | TelegramRichTextStrikethrough | TelegramRichTextSpoiler | TelegramRichTextDateTime | TelegramRichTextTextMention | TelegramRichTextSubscript | TelegramRichTextSuperscript | TelegramRichTextMarked | TelegramRichTextCode | TelegramRichTextCustomEmoji | TelegramRichTextMathematicalExpression | TelegramRichTextUrl | TelegramRichTextEmailAddress | TelegramRichTextPhoneNumber | TelegramRichTextBankCardNumber | TelegramRichTextTonAddress | TelegramRichTextMention | TelegramRichTextHashtag | TelegramRichTextCashtag | TelegramRichTextBotCommand | TelegramRichTextButton | TelegramRichTextAnchor | TelegramRichTextAnchorLink | TelegramRichTextReference | TelegramRichTextReferenceLink;
 
 /**
  * An anchor.
@@ -8349,6 +8591,24 @@ export interface TelegramRichTextTextMention {
 }
 
 /**
+ * An address in the TON blockchain.
+ */
+export interface TelegramRichTextTonAddress {
+    /**
+     * Type of the rich text, always “ton_address”
+     */
+    type: "ton_address";
+    /**
+     * Text of the address
+     */
+    text: TelegramRichText;
+    /**
+     * The address
+     */
+    address: string;
+}
+
+/**
  * An underlined text.
  */
 export interface TelegramRichTextUnderline {
@@ -8424,6 +8684,32 @@ export interface TelegramSharedUser {
      * Optional. Available sizes of the chat photo, if the photo was requested by the bot
      */
     photo?: TelegramPhotoSize[];
+}
+
+/**
+ * This object represents an incoming query from a forwarded message with a shared widget created by the bot. Use answerWidgetQuery to answer the query. Each user can send at most 5 queries per 5 seconds to the bot from all its widgets.
+ */
+export interface TelegramSharedWidgetQuery {
+    /**
+     * Unique identifier for this query
+     */
+    id: string;
+    /**
+     * Sender
+     */
+    from: TelegramUser;
+    /**
+     * Type of the query
+     */
+    type: TelegramWidgetQueryType;
+    /**
+     * Data of the query, 1-64 bytes
+     */
+    data: string;
+    /**
+     * Unique identifier of the shared widget, which sent the query
+     */
+    widget_id: string;
 }
 
 /**
@@ -8663,41 +8949,11 @@ export interface TelegramStoryArea {
     /**
      * Position of the area
      */
-    position: TelegramStoryAreaPosition;
+    position: TelegramAreaPosition;
     /**
      * Type of the area
      */
     type: TelegramStoryAreaType;
-}
-
-/**
- * Describes the position of a clickable area within a story.
- */
-export interface TelegramStoryAreaPosition {
-    /**
-     * The abscissa of the area's center, as a percentage of the media width
-     */
-    x_percentage: number;
-    /**
-     * The ordinate of the area's center, as a percentage of the media height
-     */
-    y_percentage: number;
-    /**
-     * The width of the area's rectangle, as a percentage of the media width
-     */
-    width_percentage: number;
-    /**
-     * The height of the area's rectangle, as a percentage of the media height
-     */
-    height_percentage: number;
-    /**
-     * The clockwise rotation angle of the rectangle, in degrees; 0-360
-     */
-    rotation_angle: number;
-    /**
-     * The radius of the rectangle corner rounding, as a percentage of the media width
-     */
-    corner_radius_percentage: number;
 }
 
 /**
@@ -9004,7 +9260,7 @@ export interface TelegramSwitchInlineQueryChosenChat {
  */
 export interface TelegramTextQuote {
     /**
-     * Text of the quoted part of a message that is replied to by the given message
+     * Text of the quoted part of a message that is replied to by the given message; may be empty if the quote was chosen from a rich message
      */
     text: string;
     /**
@@ -9012,13 +9268,123 @@ export interface TelegramTextQuote {
      */
     entities?: TelegramMessageEntity[];
     /**
-     * Approximate quote position in the original message in UTF-16 code units as specified by the sender
+     * Optional. Rich text of the quote if it was chosen from a rich message. May contain only plain text, RichTextBold, RichTextItalic, RichTextUnderline, RichTextStrikethrough, RichTextSpoiler, RichTextSubscript, RichTextSuperscript, RichTextDateTime, RichTextCustomEmoji, RichTextMathematicalExpression, and arrays of them.
+     */
+    rich_texts?: TelegramRichText[];
+    /**
+     * Approximate quote position in the original message in UTF-16 code units as specified by the sender. For quotes from rich messages, it is the position in the text formed by joining plain texts of all quotable texts of the message, separated by line feeds.
      */
     position: number;
     /**
      * Optional. True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
      */
     is_manual?: true;
+}
+
+/**
+ * This object represents an NFT in the TON blockchain.
+ */
+export interface TelegramTonNft {
+    /**
+     * Address of the NFT
+     */
+    address: string;
+    /**
+     * Optional. Address of the collection to which the NFT belongs; omitted if unknown
+     */
+    collection_address?: string;
+    /**
+     * Index of the NFT among all NFTs from the collection as a decimal number
+     */
+    index: string;
+    /**
+     * Name of the NFT
+     */
+    name: string;
+    /**
+     * Description of the NFT
+     */
+    description: string;
+    /**
+     * Optional. Attributes of the NFT
+     */
+    attributes?: TelegramTonNftAttribute[];
+    /**
+     * Optional. The unique gift corresponding to the NFT
+     */
+    gift?: TelegramUniqueGift;
+}
+
+/**
+ * This object represents an attribute of an NFT in the TON blockchain.
+ */
+export interface TelegramTonNftAttribute {
+    /**
+     * Trait type of the attribute
+     */
+    trait_type: string;
+    /**
+     * Value of the attribute
+     */
+    value: string;
+}
+
+/**
+ * This object describes a TON wallet card, which is shown on the profile page of a user to everyone.
+ */
+export interface TelegramTonWalletCard {
+    /**
+     * Address of the wallet
+     */
+    address: string;
+    /**
+     * Balance of the wallet, in the smallest units of the cryptocurrency, as a decimal number
+     */
+    amount: string;
+    /**
+     * Stickers placed on the card
+     */
+    stickers: TelegramTonWalletCardSticker[];
+    /**
+     * Optional. Address of the NFT of one of the stickers, whose colors must be used for the card background; omitted if the default background must be used
+     */
+    background_nft_address?: string;
+}
+
+/**
+ * This object describes a sticker on a TON wallet card.
+ */
+export interface TelegramTonWalletCardSticker {
+    /**
+     * Position of the sticker on the card
+     */
+    position: TelegramAreaPosition;
+    /**
+     * The NFT shown as the sticker
+     */
+    nft: TelegramTonNft;
+}
+
+/**
+ * Describes a service message about a transfer with a TON wallet.
+ */
+export interface TelegramTonWalletTransfer {
+    /**
+     * Unique identifier of the transaction; may be empty if the transfer hasn't been sent yet
+     */
+    transaction_id: string;
+    /**
+     * Address of the transfer peer in the TON blockchain
+     */
+    peer_address: string;
+    /**
+     * The amount of transferred cryptocurrency, in the smallest units of the cryptocurrency, as a decimal number; negative for outgoing transfers
+     */
+    amount: string;
+    /**
+     * Optional. Comment added to the transfer; omitted if the comment is encrypted
+     */
+    comment?: string;
 }
 
 /**
@@ -9430,6 +9796,14 @@ export interface TelegramUpdate {
      * Optional. New incoming callback query
      */
     callback_query?: TelegramCallbackQuery;
+    /**
+     * Optional. New incoming query from a widget in a message sent by the bot or via the bot
+     */
+    widget_query?: TelegramWidgetQuery;
+    /**
+     * Optional. New incoming query from a forwarded message with a shared widget
+     */
+    shared_widget_query?: TelegramSharedWidgetQuery;
     /**
      * Optional. New incoming shipping query. Only for invoices with flexible price.
      */
@@ -9910,6 +10284,159 @@ export interface TelegramWebhookInfo {
      * Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member, message_reaction, and message_reaction_count.
      */
     allowed_updates?: string[];
+}
+
+/**
+ * This object describes an HTML widget.
+ */
+export interface TelegramWidget {
+    /**
+     * Optional. Unique identifier of the shared widget, which can be used to send the widget again using the method sendSharedWidget; omitted if the widget isn't shared
+     */
+    id?: string;
+    /**
+     * Optional. Width of the widget in logical pixels; omitted if the widget must occupy the whole width of the message bubble
+     */
+    width?: number;
+    /**
+     * Optional. Height of the widget in logical pixels; omitted if the height of the widget isn't fixed
+     */
+    height?: number;
+    /**
+     * HTML code of the widget
+     */
+    html: string;
+    /**
+     * Optional. Public data of the widget, which is available wherever the widget is shown. All messages with a shared widget have the same public data.
+     */
+    public_data?: string;
+    /**
+     * Optional. Data of the widget, which is specific to the message
+     */
+    chat_data?: string;
+}
+
+/**
+ * This object represents an incoming query from a widget in a message sent by the bot or via the bot. Use answerWidgetQuery to answer the query. Each user can send at most 5 queries per 5 seconds to the bot from all its widgets.
+ */
+export interface TelegramWidgetQuery {
+    /**
+     * Unique identifier for this query
+     */
+    id: string;
+    /**
+     * Sender
+     */
+    from: TelegramUser;
+    /**
+     * Optional. Chat with the message containing the widget; omitted if the widget is in an inline message
+     */
+    chat?: TelegramChat;
+    /**
+     * Optional. Identifier of the message containing the widget; omitted if the widget is in an inline message
+     */
+    message_id?: number;
+    /**
+     * Optional. Identifier of the inline message containing the widget
+     */
+    inline_message_id?: string;
+    /**
+     * Global identifier, uniquely corresponding to the chat to which the message with the widget was sent
+     */
+    chat_instance: string;
+    /**
+     * Optional. For widgets in inline messages, type of the chat to which the message was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”.
+     */
+    chat_type?: "sender" | "private" | "group" | "supergroup" | "channel";
+    /**
+     * Type of the query
+     */
+    type: TelegramWidgetQueryType;
+    /**
+     * Data of the query, 1-64 bytes
+     */
+    data: string;
+    /**
+     * Optional. Unique identifier of the shared widget, which sent the query; omitted if the widget isn't shared
+     */
+    widget_id?: string;
+}
+
+/**
+ * This object describes the type of a query from a widget. Currently, it can be one of
+ */
+export type TelegramWidgetQueryType = TelegramWidgetQueryTypeData | TelegramWidgetQueryTypeSignData | TelegramWidgetQueryTypeSentTransaction;
+
+/**
+ * The query contains data for the bot.
+ */
+export interface TelegramWidgetQueryTypeData {
+    /**
+     * Type of the query, always “data”
+     */
+    type: "data";
+    /**
+     * Optional. TON wallet card of the user who sent the query, if it was sent to the bot along with the query
+     */
+    wallet_card?: TelegramTonWalletCard;
+}
+
+/**
+ * The query notifies the bot about a transaction sent from a TON wallet of the user who sent the query.
+ */
+export interface TelegramWidgetQueryTypeSentTransaction {
+    /**
+     * Type of the query, always “sent_transaction”
+     */
+    type: "sent_transaction";
+    /**
+     * The wallet from which the transaction was sent
+     */
+    wallet: TelegramWidgetQueryWallet;
+    /**
+     * Value of msg_hash of the transaction
+     */
+    msg_hash: string;
+}
+
+/**
+ * The query contains data signed by a TON wallet of the user who sent the query. The data is signed for the domain bot<bot_id>, where <bot_id> is the identifier of the bot.
+ */
+export interface TelegramWidgetQueryTypeSignData {
+    /**
+     * Type of the query, always “sign_data”
+     */
+    type: "sign_data";
+    /**
+     * The wallet that signed the data
+     */
+    wallet: TelegramWidgetQueryWallet;
+    /**
+     * JSON-serialized signed data
+     */
+    sign_data: string;
+}
+
+/**
+ * This object describes a TON wallet of the user, which is used in a query from a widget.
+ */
+export interface TelegramWidgetQueryWallet {
+    /**
+     * Address of the wallet
+     */
+    address: string;
+    /**
+     * Balance of the wallet, in the smallest units of the cryptocurrency, as a decimal number
+     */
+    amount: string;
+    /**
+     * Optional. Hex-encoded public key of the wallet; omitted if unknown
+     */
+    public_key?: string;
+    /**
+     * Optional. Base64-encoded serialized StateInit of the wallet contract; omitted if and only if public_key is omitted
+     */
+    state_init?: string;
 }
 
 /**

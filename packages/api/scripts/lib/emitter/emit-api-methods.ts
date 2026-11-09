@@ -41,7 +41,7 @@ export function emitApiMethods (schema: Schema) {
     nodes: [apiMethodsInterface],
     imports: [namespaceImport],
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }

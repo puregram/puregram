@@ -7,7 +7,7 @@ import { emitUpdatesPage } from './emit-updates'
 const schema: Schema = {
   version: { major: 10, minor: 0, patch: 0 },
   recentChanges: { year: 2025, month: 1, day: 1 },
-  source: { corefork: '', core: '', fetchedAt: '' },
+  source: { core: '', fetchedAt: '' },
   methods: [
     {
       name: 'sendMessage',

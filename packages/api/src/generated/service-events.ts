@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
 export const SERVICE_EVENT_FIELDS = {
@@ -38,7 +38,9 @@ export const SERVICE_EVENT_FIELDS = {
     "proximity_alert_triggered": "proximity_alert_triggered",
     "write_access_allowed": "write_access_allowed",
     "community_chat_added": "community_chat_added",
-    "community_chat_removed": "community_chat_removed"
+    "community_chat_removed": "community_chat_removed",
+    "paid_messages_waived": "paid_messages_waived",
+    "ton_wallet_transfer": "ton_wallet_transfer"
 } as const;
 
-export const SERVICE_EVENT_ORDER = ["new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "pinned_message", "invoice", "successful_payment", "users_shared", "chat_shared", "web_app_data", "video_chat_scheduled", "video_chat_started", "video_chat_ended", "video_chat_participants_invited", "forum_topic_created", "forum_topic_edited", "forum_topic_closed", "forum_topic_reopened", "general_forum_topic_hidden", "general_forum_topic_unhidden", "giveaway_created", "giveaway_completed", "giveaway_winners", "boost_added", "message_auto_delete_timer_changed", "migrate_to_chat_id", "migrate_from_chat_id", "passport_data", "proximity_alert_triggered", "write_access_allowed", "community_chat_added", "community_chat_removed"] as const;
+export const SERVICE_EVENT_ORDER = ["new_chat_members", "left_chat_member", "new_chat_title", "new_chat_photo", "delete_chat_photo", "group_chat_created", "pinned_message", "invoice", "successful_payment", "users_shared", "chat_shared", "web_app_data", "video_chat_scheduled", "video_chat_started", "video_chat_ended", "video_chat_participants_invited", "forum_topic_created", "forum_topic_edited", "forum_topic_closed", "forum_topic_reopened", "general_forum_topic_hidden", "general_forum_topic_unhidden", "giveaway_created", "giveaway_completed", "giveaway_winners", "boost_added", "message_auto_delete_timer_changed", "migrate_to_chat_id", "migrate_from_chat_id", "passport_data", "proximity_alert_triggered", "write_access_allowed", "community_chat_added", "community_chat_removed", "paid_messages_waived", "ton_wallet_transfer"] as const;

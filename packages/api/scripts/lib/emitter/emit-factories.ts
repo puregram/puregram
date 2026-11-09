@@ -39,7 +39,7 @@ export function emitFactories (schema: Schema) {
     nodes,
     imports,
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }

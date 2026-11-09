@@ -1,10 +1,10 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
-import type { TelegramAnimation, TelegramAudio, TelegramCallbackGame, TelegramChat, TelegramChatBackground, TelegramChatBoost, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatInviteLink, TelegramChatJoinRequest, TelegramChatLocation, TelegramChatMember, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChatPhoto, TelegramChatShared, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramContact, TelegramCopyTextButton, TelegramDice, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramDisabledButton, TelegramDocument, TelegramEncryptedCredentials, TelegramEncryptedPassportElement, TelegramExternalReplyInfo, TelegramFile, TelegramForumTopicClosed, TelegramForumTopicCreated, TelegramForumTopicEdited, TelegramForumTopicReopened, TelegramGame, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveaway, TelegramGiveawayCompleted, TelegramGiveawayCreated, TelegramGiveawayWinners, TelegramInlineKeyboardButton, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInvoice, TelegramLink, TelegramLinkPreviewOptions, TelegramLivePhoto, TelegramLocation, TelegramLoginUrl, TelegramManagedBotCreated, TelegramMaskPosition, TelegramMaybeInaccessibleMessage, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageId, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramOrderInfo, TelegramPaidMediaInfo, TelegramPaidMessagePriceChanged, TelegramPassportData, TelegramPhotoSize, TelegramPoll, TelegramPollAnswer, TelegramPollMedia, TelegramPollOption, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramProximityAlertTriggered, TelegramReactionCount, TelegramReactionType, TelegramRefundedPayment, TelegramRichMessage, TelegramSharedUser, TelegramShippingAddress, TelegramShippingQuery, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramSuccessfulPayment, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostRefunded, TelegramSwitchInlineQueryChosenChat, TelegramTextQuote, TelegramUniqueGiftInfo, TelegramUser, TelegramUserProfilePhotos, TelegramUsersShared, TelegramVenue, TelegramVideo, TelegramVideoChatEnded, TelegramVideoChatParticipantsInvited, TelegramVideoChatScheduled, TelegramVideoChatStarted, TelegramVideoNote, TelegramVideoQuality, TelegramVoice, TelegramWebAppData, TelegramWebAppInfo, TelegramWriteAccessAllowed } from "./types";
+import type { TelegramAnimation, TelegramAudio, TelegramCallbackGame, TelegramChat, TelegramChatBackground, TelegramChatBoost, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatInviteLink, TelegramChatJoinRequest, TelegramChatLocation, TelegramChatMember, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChatPhoto, TelegramChatShared, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramContact, TelegramCopyTextButton, TelegramDice, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramDisabledButton, TelegramDocument, TelegramEncryptedCredentials, TelegramEncryptedPassportElement, TelegramExternalReplyInfo, TelegramFile, TelegramForumTopicClosed, TelegramForumTopicCreated, TelegramForumTopicEdited, TelegramForumTopicReopened, TelegramGame, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveaway, TelegramGiveawayCompleted, TelegramGiveawayCreated, TelegramGiveawayWinners, TelegramInlineKeyboardButton, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInvoice, TelegramLink, TelegramLinkPreviewOptions, TelegramLivePhoto, TelegramLocation, TelegramLoginUrl, TelegramManagedBotCreated, TelegramMaskPosition, TelegramMaybeInaccessibleMessage, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageId, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramOrderInfo, TelegramPaidMediaInfo, TelegramPaidMessagePriceChanged, TelegramPaidMessagesWaived, TelegramPassportData, TelegramPhotoSize, TelegramPoll, TelegramPollAnswer, TelegramPollMedia, TelegramPollOption, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramProximityAlertTriggered, TelegramReactionCount, TelegramReactionType, TelegramRefundedPayment, TelegramRichMessage, TelegramRichText, TelegramSharedUser, TelegramShippingAddress, TelegramShippingQuery, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramSuccessfulPayment, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostRefunded, TelegramSwitchInlineQueryChosenChat, TelegramTextQuote, TelegramTonWalletTransfer, TelegramUniqueGiftInfo, TelegramUser, TelegramUserProfilePhotos, TelegramUsersShared, TelegramVenue, TelegramVideo, TelegramVideoChatEnded, TelegramVideoChatParticipantsInvited, TelegramVideoChatScheduled, TelegramVideoChatStarted, TelegramVideoNote, TelegramVideoQuality, TelegramVoice, TelegramWebAppData, TelegramWebAppInfo, TelegramWidget, TelegramWriteAccessAllowed } from "./types";
 import type { Has } from "../util-types";
 import { INSPECT, makeInspect } from "./inspect";
 import { Photo, PollOptions, ReactionCounts, Reactions, VideoQualities } from "../structures-handcrafted";
@@ -861,7 +861,7 @@ export class ChatPermissions {
         return this.raw.can_send_polls;
     }
     /**
-     * Optional. True, if the user is allowed to send animations, games, stickers and use inline bots
+     * Optional. True, if the user is allowed to send animations, games, stickers, widgets and use inline bots
      */
     get canSendOtherMessages(): boolean | undefined {
         return this.raw.can_send_other_messages;
@@ -1552,6 +1552,12 @@ export class ExternalReplyInfo {
         return this._voice;
     }
     /**
+     * Optional. Message is an HTML widget, information about the widget
+     */
+    get widget(): TelegramWidget | undefined {
+        return this.raw.widget;
+    }
+    /**
      * Optional. True, if the message media is covered by a spoiler animation
      */
     get hasMediaSpoiler(): true | undefined {
@@ -1755,6 +1761,14 @@ export class ExternalReplyInfo {
         voice: Voice;
     } {
         return this.raw.voice != null;
+    }
+    /**
+     * true if `widget` is set
+     */
+    hasWidget(): this is this & {
+        widget: TelegramWidget;
+    } {
+        return this.raw.widget != null;
     }
     /**
      * true if `checklist` is set
@@ -2413,7 +2427,7 @@ export class InlineKeyboardButton {
         return this.raw.callback_data;
     }
     /**
-     * Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
+     * Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account and ephemeral messages.
      */
     get webApp(): WebAppInfo | undefined {
         if (this._webApp === undefined) {
@@ -3486,7 +3500,13 @@ export class Message {
         return this._voice;
     }
     /**
-     * Optional. Caption for the animation, audio, document, paid media, photo, video or voice
+     * Optional. Message is an HTML widget, information about the widget
+     */
+    get widget(): TelegramWidget | undefined {
+        return this.raw.widget;
+    }
+    /**
+     * Optional. Caption for the animation, audio, document, live photo, paid media, photo, video, voice, or widget
      */
     get caption(): string | undefined {
         return this.raw.caption;
@@ -3498,7 +3518,7 @@ export class Message {
         return this.raw.caption_entities ? (this._captionEntities ??= this.raw.caption_entities.map(x => new MessageEntity(x))) : undefined;
     }
     /**
-     * Optional. True, if the caption must be shown above the message media
+     * Optional. True, if the caption must be shown above the message media or the widget
      */
     get showCaptionAboveMedia(): true | undefined {
         return this.raw.show_caption_above_media;
@@ -3888,6 +3908,12 @@ export class Message {
         return this.raw.paid_message_price_changed;
     }
     /**
+     * Optional. Service message: the sender of the message used a link of the other user, which allows sending messages to the user without paying Telegram Stars
+     */
+    get paidMessagesWaived(): TelegramPaidMessagesWaived | undefined {
+        return this.raw.paid_messages_waived;
+    }
+    /**
      * Optional. Service message: answer option was added to a poll
      */
     get pollOptionAdded(): TelegramPollOptionAdded | undefined {
@@ -3928,6 +3954,12 @@ export class Message {
      */
     get suggestedPostRefunded(): TelegramSuggestedPostRefunded | undefined {
         return this.raw.suggested_post_refunded;
+    }
+    /**
+     * Optional. Service message: a transfer with a TON wallet
+     */
+    get tonWalletTransfer(): TelegramTonWalletTransfer | undefined {
+        return this.raw.ton_wallet_transfer;
     }
     /**
      * Optional. Service message: video chat scheduled
@@ -4315,6 +4347,14 @@ export class Message {
         voice: Voice;
     } {
         return this.raw.voice != null;
+    }
+    /**
+     * true if `widget` is set
+     */
+    hasWidget(): this is this & {
+        widget: TelegramWidget;
+    } {
+        return this.raw.widget != null;
     }
     /**
      * true if `caption` is set
@@ -4765,6 +4805,14 @@ export class Message {
         return this.raw.paid_message_price_changed != null;
     }
     /**
+     * true if `paid_messages_waived` is set
+     */
+    hasPaidMessagesWaived(): this is this & {
+        paidMessagesWaived: TelegramPaidMessagesWaived;
+    } {
+        return this.raw.paid_messages_waived != null;
+    }
+    /**
      * true if `poll_option_added` is set
      */
     hasPollOptionAdded(): this is this & {
@@ -4819,6 +4867,14 @@ export class Message {
         suggestedPostRefunded: TelegramSuggestedPostRefunded;
     } {
         return this.raw.suggested_post_refunded != null;
+    }
+    /**
+     * true if `ton_wallet_transfer` is set
+     */
+    hasTonWalletTransfer(): this is this & {
+        tonWalletTransfer: TelegramTonWalletTransfer;
+    } {
+        return this.raw.ton_wallet_transfer != null;
     }
     /**
      * true if `video_chat_scheduled` is set
@@ -4883,9 +4939,9 @@ export class MessageEntity {
         return new MessageEntity(raw);
     }
     /**
-     * Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), or “date_time” (for formatted date and time).
+     * Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bank_card_number” (bank card number), “ton_address” (address in the TON blockchain), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), or “date_time” (for formatted date and time).
      */
-    get type(): "mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "expandable_blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji" | "date_time" {
+    get type(): "mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bank_card_number" | "ton_address" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "expandable_blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji" | "date_time" {
         return this.raw.type;
     }
     /**
@@ -5018,6 +5074,14 @@ export type EmailMessageEntity = Omit<MessageEntity, "type"> & {
 
 export type PhoneNumberMessageEntity = Omit<MessageEntity, "type"> & {
     type: "phone_number";
+};
+
+export type BankCardNumberMessageEntity = Omit<MessageEntity, "type"> & {
+    type: "bank_card_number";
+};
+
+export type TonAddressMessageEntity = Omit<MessageEntity, "type"> & {
+    type: "ton_address";
 };
 
 export type BoldMessageEntity = Omit<MessageEntity, "type"> & {
@@ -6596,7 +6660,7 @@ export class TextQuote {
         return new TextQuote(raw);
     }
     /**
-     * Text of the quoted part of a message that is replied to by the given message
+     * Text of the quoted part of a message that is replied to by the given message; may be empty if the quote was chosen from a rich message
      */
     get text(): string {
         return this.raw.text;
@@ -6608,7 +6672,13 @@ export class TextQuote {
         return this.raw.entities ? (this._entities ??= this.raw.entities.map(x => new MessageEntity(x))) : undefined;
     }
     /**
-     * Approximate quote position in the original message in UTF-16 code units as specified by the sender
+     * Optional. Rich text of the quote if it was chosen from a rich message. May contain only plain text, RichTextBold, RichTextItalic, RichTextUnderline, RichTextStrikethrough, RichTextSpoiler, RichTextSubscript, RichTextSuperscript, RichTextDateTime, RichTextCustomEmoji, RichTextMathematicalExpression, and arrays of them.
+     */
+    get richTexts(): TelegramRichText[] | undefined {
+        return this.raw.rich_texts;
+    }
+    /**
+     * Approximate quote position in the original message in UTF-16 code units as specified by the sender. For quotes from rich messages, it is the position in the text formed by joining plain texts of all quotable texts of the message, separated by line feeds.
      */
     get position(): number {
         return this.raw.position;
@@ -6626,6 +6696,14 @@ export class TextQuote {
         entities: MessageEntity[];
     } {
         return this.raw.entities != null && this.raw.entities.length > 0;
+    }
+    /**
+     * true if `rich_texts` has at least one item
+     */
+    hasRichTexts(): this is this & {
+        richTexts: TelegramRichText[];
+    } {
+        return this.raw.rich_texts != null && this.raw.rich_texts.length > 0;
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("TextQuote", this, depth, options, inspect);

@@ -1,11 +1,11 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { TelegramInputFile, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPollOption, TelegramMessage, TelegramMessageId, TelegramReactionType } from "./types";
-import type { BanChatMemberParams, CopyMessageParams, CopyMessagesParams, DeleteMessageParams, DeleteMessagesParams, ForwardMessageParams, ForwardMessagesParams, PinChatMessageParams, SendAnimationParams, SendAudioParams, SendChatActionParams, SendContactParams, SendDiceParams, SendDocumentParams, SendLivePhotoParams, SendLocationParams, SendMediaGroupParams, SendMessageParams, SendPhotoParams, SendPollParams, SendStickerParams, SendVenueParams, SendVideoNoteParams, SendVideoParams, SendVoiceParams, SetMessageReactionParams, UnbanChatMemberParams, UnpinChatMessageParams } from "./methods";
+import type { BanChatMemberParams, CopyMessageParams, CopyMessagesParams, DeleteMessageParams, DeleteMessagesParams, ForwardMessageParams, ForwardMessagesParams, PinChatMessageParams, SendAnimationParams, SendAudioParams, SendChatActionParams, SendContactParams, SendDiceParams, SendDocumentParams, SendLivePhotoParams, SendLocationParams, SendMediaGroupParams, SendMessageParams, SendPhotoParams, SendPollParams, SendSharedWidgetParams, SendStickerParams, SendVenueParams, SendVideoNoteParams, SendVideoParams, SendVoiceParams, SendWidgetParams, SetMessageReactionParams, UnbanChatMemberParams, UnpinChatMessageParams } from "./methods";
 import type { Formattable } from "../formattable";
 export interface TelegramShortcuts {
     /**
@@ -50,6 +50,14 @@ export interface TelegramShortcuts {
      */
     sendSticker(chat: number | string, sticker: TelegramInputFile | string, params?: Omit<SendStickerParams, "chat_id" | "sticker">): Promise<TelegramMessage>;
     /**
+     * Shortcut for `tg.api.sendWidget`. Use this method to send a message with an HTML widget. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+     */
+    sendWidget(chat: number | string, html: string, params?: Omit<SendWidgetParams, "chat_id" | "html">): Promise<TelegramMessage>;
+    /**
+     * Shortcut for `tg.api.sendSharedWidget`. Use this method to send again a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+     */
+    sendSharedWidget(chat: number | string, widgetId: string, params?: Omit<SendSharedWidgetParams, "chat_id" | "widget_id">): Promise<TelegramMessage>;
+    /**
      * Shortcut for `tg.api.sendLocation`. Use this method to send point on the map. On success, the sent Message is returned.
      */
     sendLocation(chat: number | string, latitude: number, longitude: number, params?: Omit<SendLocationParams, "chat_id" | "latitude" | "longitude">): Promise<TelegramMessage>;
@@ -87,11 +95,11 @@ export interface TelegramShortcuts {
      */
     forwardMany(from: number | string, to: number | string, messageIds: number[], params?: Omit<ForwardMessagesParams, "from_chat_id" | "chat_id" | "message_ids">): Promise<TelegramMessageId[]>;
     /**
-     * Shortcut for `tg.api.copyMessage`. Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+     * Shortcut for `tg.api.copyMessage`. Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, invoice messages, and widget messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
      */
     copy(from: number | string, to: number | string, messageId: number, params?: Omit<CopyMessageParams, "from_chat_id" | "chat_id" | "message_id">): Promise<TelegramMessageId>;
     /**
-     * Shortcut for `tg.api.copyMessages`. Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an Array of MessageId of the sent messages is returned.
+     * Shortcut for `tg.api.copyMessages`. Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, invoice messages, and widget messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an Array of MessageId of the sent messages is returned.
      */
     copyMany(from: number | string, to: number | string, messageIds: number[], params?: Omit<CopyMessagesParams, "from_chat_id" | "chat_id" | "message_ids">): Promise<TelegramMessageId[]>;
     /**
