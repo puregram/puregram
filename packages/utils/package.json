@@ -3,6 +3,7 @@
   "version": "3.2.0",
   "description": "small standalone utilities for puregram — slot-machine value decoder + telegram web app initData validation",
   "type": "module",
+  "sideEffects": false,
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "exports": {
@@ -22,6 +23,11 @@
     "build": "rm -rf lib && tsc --project tsconfig.json && tsc-alias -p tsconfig.json --resolve-full-paths",
     "test": "vitest run",
     "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.0.1",
+    "@zxing/text-encoding": "^0.9.0",
+    "buffer": "^6.0.3"
   },
   "devDependencies": {
     "tsc-alias": "1",

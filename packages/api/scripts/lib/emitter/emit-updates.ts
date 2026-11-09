@@ -132,6 +132,7 @@ export function emitUpdates (schema: Schema) {
   nodes.push(emitUpdateKindMap(kinds))
   nodes.push(emitUpdateUnion(kinds))
   nodes.push(emitUpdateKindsConst(kinds))
+  nodes.push(emitUpdateClassesConst(kinds))
 
   const referencedTypes = new Set<string>()
 
@@ -1668,6 +1669,26 @@ function emitUpdateKindsConst (kinds: UpdateKindSpec[]) {
         ),
         ts.factory.createArrayLiteralExpression(
           kinds.map(k => ts.factory.createStringLiteral(k.kindName)),
+          true
+        )
+      )
+    ], ts.NodeFlags.Const)
+  )
+}
+
+function emitUpdateClassesConst (kinds: UpdateKindSpec[]) {
+  return ts.factory.createVariableStatement(
+    [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+    ts.factory.createVariableDeclarationList([
+      ts.factory.createVariableDeclaration(
+        ts.factory.createIdentifier('UPDATE_CLASSES'),
+        undefined,
+        undefined,
+        ts.factory.createObjectLiteralExpression(
+          kinds.map(k => ts.factory.createPropertyAssignment(
+            ts.factory.createStringLiteral(k.kindName),
+            ts.factory.createIdentifier(k.className)
+          )),
           true
         )
       )

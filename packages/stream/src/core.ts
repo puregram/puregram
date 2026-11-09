@@ -188,6 +188,7 @@ export async function runStream (api: StreamApi, opts: RunStreamOptions) {
   const maxBackoff = opts.maxEditBackoff ?? DEFAULT_MAX_EDIT_BACKOFF
   const wantThinking = opts.thinkingPlaceholder ?? true
   const stop = opts.stop
+  const timers = typeof setTimeout === 'function'
   const draftFields: Record<string, unknown> = {
     ...(opts.canStop === undefined ? {} : { can_stop: opts.canStop }),
     ...(opts.keepOnStop === undefined ? {} : { keep_on_stop: opts.keepOnStop })
@@ -211,8 +212,8 @@ export async function runStream (api: StreamApi, opts: RunStreamOptions) {
     wakeResolve = undefined
   }
 
-  const waitForWork = () => new Promise<void>((resolve) => {
-    if (!pulling || completed.length > 0 || dirty || stop?.stopped === true || opts.signal?.aborted) {
+  const waitForWake = (ready: () => boolean) => new Promise<void>((resolve) => {
+    if (ready()) {
       resolve()
 
       return
@@ -372,6 +373,16 @@ export async function runStream (api: StreamApi, opts: RunStreamOptions) {
       const delta = editInterval - (Date.now() - lastDraftTs)
 
       if (delta > 0) {
+        if (!timers) {
+          if (pulling) {
+            await waitForWake(() => stop?.stopped === true || opts.signal?.aborted === true)
+          } else {
+            dirty = false
+          }
+
+          continue
+        }
+
         driftSleep = Math.min(driftSleep + delta, maxBackoff)
 
         if (driftSleep >= maxBackoff && lastDraftTs !== 0) {
@@ -422,7 +433,8 @@ export async function runStream (api: StreamApi, opts: RunStreamOptions) {
       continue
     }
 
-    await waitForWork()
+    await waitForWake(() =>
+      !pulling || completed.length > 0 || dirty || stop?.stopped === true || opts.signal?.aborted === true)
   }
 
   const tail = currentSlot()

@@ -34,6 +34,16 @@ describe('InlineKeyboard', () => {
     expect(() => InlineKeyboard.textButton({ text: 'x', payload: '' })).toThrow(RangeError)
   })
 
+  it('counts UTF-8 bytes for surrogate pairs and unpaired surrogates', () => {
+    const paired = '\uD83D\uDE00'.repeat(16)
+    const unpaired = '\uD800'.repeat(21) + 'a'
+
+    expect(InlineKeyboard.textButton({ text: 'x', payload: paired }).callback_data).toBe(paired)
+    expect(InlineKeyboard.textButton({ text: 'x', payload: unpaired }).callback_data).toBe(unpaired)
+    expect(() => InlineKeyboard.textButton({ text: 'x', payload: paired + 'a' })).toThrow(RangeError)
+    expect(() => InlineKeyboard.textButton({ text: 'x', payload: unpaired + 'a' })).toThrow(RangeError)
+  })
+
   it('button styles propagate', () => {
     const button = InlineKeyboard.textButton({ text: 'x', payload: 'y', style: 'success' })
 

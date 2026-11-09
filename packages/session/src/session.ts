@@ -1,8 +1,8 @@
 import { isTtlStorage, type KVStorage, MemoryStorage } from '@puregram/storage'
-import { createPlugin, type Telegram } from 'puregram'
+import { createPlugin, type TelegramCore } from 'puregram/runtime'
 
 import { wrap } from './proxy'
-import type { TtlData } from './ttl'
+import { expireSession, readSession, type TtlData, writeSession } from './ttl'
 import type { AnyUpdate, SessionContext, SessionOptions, StorageKeyDescriptor } from './types'
 
 interface KeyResolvable {
@@ -82,7 +82,6 @@ const resolveKey = (
   return normalized.length === 0 ? undefined : normalized
 }
 
-/** direct storage handle exposed as `tg.session` — methods proxy to the configured `KVStorage<unknown>` */
 export interface SessionExtension {
   get: (key: string) => Promise<unknown>
   set: (key: string, value: unknown) => Promise<void>
@@ -100,9 +99,9 @@ export function session (options: SessionOptions = {}) {
 
   return createPlugin({
     name: 'session',
-    install: (tg: Telegram) => {
+    install: (tg: TelegramCore) => {
       tg.useHook('onUpdate', async (update, next) => {
-        const key = resolveKey(update as AnyUpdate, getStorageKey)
+        const key = resolveKey(update, getStorageKey)
 
         if (key === undefined) {
           await next()
@@ -110,7 +109,7 @@ export function session (options: SessionOptions = {}) {
           return
         }
 
-        const ttlMap = new Map<string, TtlData>()
+        let ttlMap = new Map<string, TtlData>()
         let changed = false
         let touched = false
         let loaded = false
@@ -127,14 +126,17 @@ export function session (options: SessionOptions = {}) {
             return
           }
 
+          expireSession(sessionData, ttlMap)
+
           if (Object.keys(sessionData).length !== 0) {
+            await storage.set(key, writeSession(sessionData, ttlMap))
             changed = false
-            await storage.set(key, sessionData)
 
             return
           }
 
           await storage.delete(key)
+          changed = false
         }
 
         const load = async () => {
@@ -144,9 +146,13 @@ export function session (options: SessionOptions = {}) {
 
           loaded = true
           stored = await storage.get(key)
-          sessionData = stored !== undefined
-            ? stored as Record<string, unknown>
-            : initial(update as AnyUpdate) as Record<string, unknown>
+          const decoded = readSession(stored)
+
+          ttlMap = decoded.ttlMap
+          sessionData = decoded.value !== undefined
+            ? decoded.value as Record<string, unknown>
+            : initial(update) as Record<string, unknown>
+          changed = expireSession(sessionData, ttlMap)
 
           proxy = wrap(sessionData, $forceUpdate, ttlMap, onChange) as SessionContext
 
@@ -194,11 +200,32 @@ export function session (options: SessionOptions = {}) {
         }
       }, { priority: 'high' })
 
+      const get = async (key: string) => {
+        const stored = await storage.get(key)
+        const decoded = readSession(stored)
+
+        if (expireSession(decoded.value, decoded.ttlMap)) {
+          if (typeof decoded.value === 'object' && decoded.value !== null && Object.keys(decoded.value).length === 0) {
+            await storage.delete(key)
+
+            return undefined
+          }
+
+          await storage.set(key, writeSession(decoded.value, decoded.ttlMap))
+        }
+
+        return decoded.value
+      }
+
       const ext: SessionExtension = {
-        get: (key: string) => storage.get(key),
-        set: (key: string, value: unknown) => storage.set(key, value),
+        get,
+        set: (key: string, value: unknown) => storage.set(key, writeSession(value, new Map())),
         delete: (key: string) => storage.delete(key),
-        has: (key: string) => storage.has(key)
+        has: async (key: string) => {
+          await get(key)
+
+          return storage.has(key)
+        }
       }
 
       return ext

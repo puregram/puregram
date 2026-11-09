@@ -59,17 +59,6 @@ describe('wrap()', () => {
     expect(proxy.$forceUpdate).toBe($forceUpdate)
   })
 
-  it('writing ttl(value, ms) records a ttl entry and stores the unwrapped value', () => {
-    const ttlMap = new Map<string, { t: number, at: number }>()
-    const proxy = wrap({}, vi.fn(), ttlMap, vi.fn())
-
-    proxy.token = ttl('secret', 5_000)
-
-    expect(proxy.token).toBe('secret')
-    expect(ttlMap.get('token')?.t).toBe(5_000)
-    expect(ttlMap.get('token')?.at).toBeTypeOf('number')
-  })
-
   describe('ttl expiry', () => {
     beforeEach(() => {
       vi.useFakeTimers()
@@ -79,44 +68,43 @@ describe('wrap()', () => {
       vi.useRealTimers()
     })
 
-    it('reading a ttl-expired key returns undefined and removes the underlying entry', () => {
-      const ttlMap = new Map<string, { t: number, at: number }>()
-      const proxy = wrap({}, vi.fn(), ttlMap, vi.fn())
+    it('removes expired fields from reads, membership, and enumeration at the deadline', () => {
+      const onChange = vi.fn()
+      const proxy = wrap({}, vi.fn(), new Map(), onChange)
 
       proxy.token = ttl('secret', 1_000)
-
       expect(proxy.token).toBe('secret')
+      onChange.mockClear()
+      vi.advanceTimersByTime(1_000)
 
-      vi.advanceTimersByTime(1_500)
-
+      expect('token' in proxy).toBe(false)
+      expect(Object.keys(proxy)).toEqual([])
       expect(proxy.token).toBeUndefined()
-      expect(ttlMap.has('token')).toBe(false)
+      expect(onChange).toHaveBeenCalled()
     })
-  })
 
-  it('writing ttl(value, 0) clears any existing ttl entry', () => {
-    const ttlMap = new Map<string, { t: number, at: number }>([['token', { t: 5_000, at: 0 }]])
-    const proxy = wrap({ token: 'old' }, vi.fn(), ttlMap, vi.fn())
+    it('refreshes a field deadline on ordinary reassignment', () => {
+      const proxy = wrap({}, vi.fn(), new Map(), vi.fn())
 
-    proxy.token = ttl('new', 0)
+      proxy.token = ttl('first', 1_000)
+      vi.advanceTimersByTime(500)
+      proxy.token = 'second'
+      vi.advanceTimersByTime(500)
 
-    expect(ttlMap.has('token')).toBe(false)
-    expect(proxy.token).toBe('new')
-  })
+      expect(proxy.token).toBe('second')
+      vi.advanceTimersByTime(500)
+      expect(proxy.token).toBeUndefined()
+    })
 
-  it('overwriting an existing ttl key refreshes the timestamp', () => {
-    const ttlMap = new Map<string, { t: number, at: number }>()
-    const proxy = wrap({}, vi.fn(), ttlMap, vi.fn())
+    it('clears a field deadline with ttl(value, 0)', () => {
+      const proxy = wrap({}, vi.fn(), new Map(), vi.fn())
 
-    proxy.token = ttl('a', 5_000)
+      proxy.token = ttl('old', 1_000)
+      proxy.token = ttl('new', 0)
+      vi.advanceTimersByTime(2_000)
 
-    const firstAt = ttlMap.get('token')?.at ?? 0
-
-    proxy.token = 'b'
-
-    const secondAt = ttlMap.get('token')?.at ?? 0
-
-    expect(secondAt).toBeGreaterThanOrEqual(firstAt)
+      expect(proxy.token).toBe('new')
+    })
   })
 
   it('returns the original value unchanged for non-objects', () => {

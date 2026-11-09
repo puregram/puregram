@@ -1,4 +1,5 @@
-import { createPlugin, type RequestContext, type Telegram } from 'puregram'
+import type { Telegram } from 'puregram'
+import { createPlugin, type RequestContext } from 'puregram/runtime'
 
 import { BucketRegistry, createWindow, type SlidingWindow } from './buckets'
 import {

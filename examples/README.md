@@ -160,3 +160,17 @@ standalone folders under `webhooks/` and `recipes/` are their own workspaces —
 - [premium bot — Telegram Stars: one-time + subscription + refund](recipes/premium-bot/)
 - [mini-app bot — fastify + initData validation + session-persisted settings](recipes/mini-app-bot/)
 - [broadcast bot — admin /broadcast + throttled copyMessage fan-out + blocked-user cleanup](recipes/broadcast-bot/)
+- [serverless bot — telegram-hosted handlers + formatting + database sessions](recipes/serverless-bot/)
+
+### serverless bot
+
+experimental; verified on the hosted runtime. unlike the other examples, this needs no `.env` or bot API token. enable serverless in BotFather, then from `examples/recipes/serverless-bot/`:
+
+```sh
+yarn build
+yarn tgcloud login
+yarn tgcloud push
+yarn tgcloud migrate
+```
+
+edit `src/bot.ts` and `schema.js`, not the generated `tgcloud/` files. rebuild and push after changes (`yarn deploy` does both); review migrations separately. the bot remembers the previous message per user/chat through `TelegramStorage`. concurrent writes to a shared session are last-write-wins, not serialized by this adapter

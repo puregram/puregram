@@ -1,6 +1,7 @@
 import type * as Interfaces from '@puregram/api'
 
 import type { ButtonStyleParams } from './types'
+import { cloneButtons } from './types'
 
 /** keyboard builder */
 export class KeyboardBuilder {
@@ -37,7 +38,7 @@ export class KeyboardBuilder {
   static from (markup: Interfaces.TelegramReplyKeyboardMarkup) {
     const builder = new KeyboardBuilder()
 
-    builder.rows = structuredClone(markup.keyboard)
+    builder.rows = cloneButtons(markup.keyboard)
     builder.isResized = markup.resize_keyboard ?? false
     builder.isOneTime = markup.one_time_keyboard ?? false
     builder.isSelective = markup.selective ?? false
@@ -291,8 +292,8 @@ export class KeyboardBuilder {
   clone () {
     const builder = new KeyboardBuilder()
 
-    builder.rows = structuredClone(this.rows)
-    builder.currentRow = structuredClone(this.currentRow)
+    builder.rows = cloneButtons(this.rows)
+    builder.currentRow = cloneButtons(this.currentRow)
     builder.isOneTime = this.isOneTime
     builder.isResized = this.isResized
     builder.isSelective = this.isSelective

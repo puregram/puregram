@@ -51,7 +51,7 @@ once polling or a webhook starts, the plugin list is frozen. calling `.extend(pl
 `createPlugin` is a thin factory that gives you the typed spec:
 
 ```ts
-import { createPlugin } from 'puregram'
+import { createPlugin } from 'puregram/runtime'
 
 const greeter = createPlugin({
   name: 'greeter',
@@ -65,7 +65,9 @@ const tg = Telegram.fromToken(process.env.TOKEN!).extend(greeter)
 await tg.greeter.hello(100) // typed!
 ```
 
-the `install` function receives the `Telegram` instance and returns anything — an object, a class instance, a primitive. that return value becomes `tg.<plugin.name>`
+the `install` function receives a client and returns the value exposed as `tg.<plugin.name>`. its default target is the portable `TelegramCore`, so a plugin using only core operations can be installed on either the Node or serverless client
+
+transport-specific plugins should opt in explicitly with `install: (tg: Telegram) => ...` and a type-only `Telegram` import. that keeps Node-only operations from appearing compatible with a serverless bot. import portable helpers from `puregram/runtime`; importing the Node barrel can pull unavailable builtins into a bundle. portable imports alone do not make timers or process-local state survive invocation boundaries — see [serverless compatibility](/guide/deployment/serverless#plugin-compatibility)
 
 ## `dependsOn`
 

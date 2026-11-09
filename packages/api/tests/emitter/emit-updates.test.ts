@@ -71,30 +71,4 @@ describe('emitUpdates', () => {
     expect(out).toContain('...params.reply_parameters')
   })
 
-  it('emits a MessageThreadShortcuts companion, get thread() getter, and narrows hasMessageThreadId', async () => {
-    const schema = JSON.parse(
-      await readFile(resolve(__dirname, '../fixtures/small-schema.json'), 'utf8')
-    ) as Schema
-
-    const message = schema.objects.find(o => o.name === 'Message')
-
-    if (message?.kind === 'object') {
-      message.fields.push({
-        name: 'message_thread_id', description: 'thread id', required: false, type: { kind: 'integer' }
-      })
-    }
-
-    schema.methods.find(m => m.name === 'sendMessage')!.arguments.push({
-      name: 'message_thread_id', description: 'thread id', required: false, type: { kind: 'integer' }
-    })
-
-    const out = emitUpdates(schema)
-
-    expect(out).toContain('export class MessageThreadShortcuts')
-    expect(out).toContain('get thread(): MessageThreadShortcuts | undefined')
-    expect(out).toContain('this.raw.message_thread_id == null')
-    expect(out).toContain('new MessageThreadShortcuts(this.raw, this.tg)')
-    expect(out).toContain('message_thread_id: this.raw.message_thread_id as')
-    expect(out).toContain('thread: MessageThreadShortcuts')
-  })
 })

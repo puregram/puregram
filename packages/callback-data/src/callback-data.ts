@@ -1,8 +1,8 @@
-import { createHash } from 'node:crypto'
-
+import { md5 } from '@noble/hashes/legacy.js'
 import type { Filter, TelegramInlineKeyboardButton } from '@puregram/api'
 import { defineFilter } from '@puregram/api'
-import { attach } from 'puregram'
+import { Buffer } from 'buffer/index.js'
+import { attach } from 'puregram/runtime'
 
 import { conditionsPass, type ConditionalObject, type ValidateConditions } from './conditions'
 import { packBody, unpackBody } from './encoder'
@@ -109,7 +109,9 @@ export function defineCallbackData (
     throw new RangeError('slugLength must be an integer in [1, 22]')
   }
 
-  const slugHash = createHash('md5').update(slug).digest('base64url').slice(0, slugLength)
+  const digest = md5(Buffer.from(slug, 'utf8'))
+  const slugHash = Buffer.from(digest.buffer, digest.byteOffset, digest.byteLength)
+    .toString('base64').replace(/\+/g, '-').replace(/\//g, '_').slice(0, slugLength)
 
   return makeCallbackData<Record<never, never>, Record<never, never>>({
     rawSlug: slug,
@@ -168,13 +170,20 @@ function makeCallbackData<
   function pack (state: State) {
     const codes = packBody(fields, state as Record<string, unknown>)
     let body = ''
+    let byteLen = slug.length
+    let highSurrogate = false
 
     for (const code of codes) {
       body += String.fromCharCode(code)
+      byteLen += code < 0x80
+        ? 1
+        : code < 0x800
+          ? 2
+          : highSurrogate && code >= 0xdc00 && code <= 0xdfff ? 1 : 3
+      highSurrogate = code >= 0xd800 && code <= 0xdbff
     }
 
     const out = slug + body
-    const byteLen = Buffer.byteLength(out, 'utf8')
 
     if (byteLen > TELEGRAM_PAYLOAD_LIMIT) {
       throw new CallbackDataTooLong(out, byteLen)

@@ -1,11 +1,11 @@
-import type { Telegram } from '../telegram'
+import type { TelegramCore } from '../core'
 
-export interface Plugin<N extends string = string, Ext = unknown> {
+export interface Plugin<N extends string = string, Ext = unknown, Target = TelegramCore> {
   readonly name: N
   readonly dependsOn?: readonly string[]
-  install: (tg: Telegram) => Ext | Promise<Ext>
+  install: (tg: Target) => Ext | Promise<Ext>
 }
 
-export function createPlugin<N extends string, Ext> (spec: Plugin<N, Ext>) {
+export function createPlugin<N extends string, Ext, Target = TelegramCore> (spec: Plugin<N, Ext, Target>) {
   return spec
 }

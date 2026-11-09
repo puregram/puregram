@@ -4065,9 +4065,9 @@ class MessageShared {
         return this.raw.chat.type === "channel";
     }
     /**
-     * download the message attachment as a `Buffer`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`
+     * download the message attachment as a `Uint8Array`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`
      */
-    download(): Promise<Buffer | null> {
+    download(): Promise<Uint8Array | null> {
         const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.download(t);
     }
@@ -8506,9 +8506,9 @@ export class GuestMessageUpdate {
         return this.raw.chat.type === "channel";
     }
     /**
-     * download the message attachment as a `Buffer`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`
+     * download the message attachment as a `Uint8Array`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`
      */
-    download(): Promise<Buffer | null> {
+    download(): Promise<Uint8Array | null> {
         const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.download(t);
     }
@@ -16191,3 +16191,67 @@ export const UPDATE_KINDS: readonly UpdateKind[] = [
     "community_chat_added",
     "community_chat_removed"
 ];
+
+export const UPDATE_CLASSES = {
+    "message": MessageUpdate,
+    "edited_message": EditedMessageUpdate,
+    "channel_post": ChannelPostUpdate,
+    "edited_channel_post": EditedChannelPostUpdate,
+    "business_connection": BusinessConnectionUpdate,
+    "business_message": BusinessMessageUpdate,
+    "edited_business_message": EditedBusinessMessageUpdate,
+    "deleted_business_messages": DeletedBusinessMessagesUpdate,
+    "guest_message": GuestMessageUpdate,
+    "message_reaction": MessageReactionUpdate,
+    "message_reaction_count": MessageReactionCountUpdate,
+    "inline_query": InlineQueryUpdate,
+    "chosen_inline_result": ChosenInlineResultUpdate,
+    "callback_query": CallbackQueryUpdate,
+    "shipping_query": ShippingQueryUpdate,
+    "pre_checkout_query": PreCheckoutQueryUpdate,
+    "purchased_paid_media": PurchasedPaidMediaUpdate,
+    "poll": PollUpdate,
+    "poll_answer": PollAnswerUpdate,
+    "my_chat_member": MyChatMemberUpdate,
+    "chat_member": ChatMemberUpdate,
+    "chat_join_request": ChatJoinRequestUpdate,
+    "chat_boost": ChatBoostUpdate,
+    "removed_chat_boost": RemovedChatBoostUpdate,
+    "managed_bot": ManagedBotUpdate,
+    "subscription": SubscriptionUpdate,
+    "stopped_message_generation": StoppedMessageGenerationUpdate,
+    "new_chat_members": NewChatMembersUpdate,
+    "left_chat_member": LeftChatMemberUpdate,
+    "new_chat_title": NewChatTitleUpdate,
+    "new_chat_photo": NewChatPhotoUpdate,
+    "delete_chat_photo": DeleteChatPhotoUpdate,
+    "group_chat_created": GroupChatCreatedUpdate,
+    "pinned_message": PinnedMessageUpdate,
+    "invoice": InvoiceUpdate,
+    "successful_payment": SuccessfulPaymentUpdate,
+    "users_shared": UsersSharedUpdate,
+    "chat_shared": ChatSharedUpdate,
+    "web_app_data": WebAppDataUpdate,
+    "video_chat_scheduled": VideoChatScheduledUpdate,
+    "video_chat_started": VideoChatStartedUpdate,
+    "video_chat_ended": VideoChatEndedUpdate,
+    "video_chat_participants_invited": VideoChatParticipantsInvitedUpdate,
+    "forum_topic_created": ForumTopicCreatedUpdate,
+    "forum_topic_edited": ForumTopicEditedUpdate,
+    "forum_topic_closed": ForumTopicClosedUpdate,
+    "forum_topic_reopened": ForumTopicReopenedUpdate,
+    "general_forum_topic_hidden": GeneralForumTopicHiddenUpdate,
+    "general_forum_topic_unhidden": GeneralForumTopicUnhiddenUpdate,
+    "giveaway_created": GiveawayCreatedUpdate,
+    "giveaway_completed": GiveawayCompletedUpdate,
+    "giveaway_winners": GiveawayWinnersUpdate,
+    "boost_added": BoostAddedUpdate,
+    "message_auto_delete_timer_changed": MessageAutoDeleteTimerChangedUpdate,
+    "migrate_to_chat_id": MigrateToChatIdUpdate,
+    "migrate_from_chat_id": MigrateFromChatIdUpdate,
+    "passport_data": PassportDataUpdate,
+    "proximity_alert_triggered": ProximityAlertTriggeredUpdate,
+    "write_access_allowed": WriteAccessAllowedUpdate,
+    "community_chat_added": CommunityChatAddedUpdate,
+    "community_chat_removed": CommunityChatRemovedUpdate
+};

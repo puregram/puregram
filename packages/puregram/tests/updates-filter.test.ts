@@ -1,51 +1,49 @@
-import { UPDATE_KINDS } from '@puregram/api'
+import { SERVICE_EVENT_ORDER } from '@puregram/api'
 import { describe, expect, it } from 'vitest'
 
 import { UpdatesFilter } from '../src/updates-filter'
 
 describe('UpdatesFilter', () => {
-  it('all() returns every update kind', () => {
+  it('subscribes to message parents and opt-in fields, never service event kinds', () => {
     const all = UpdatesFilter.all()
 
-    expect(all).toEqual([...UPDATE_KINDS])
-    expect(all).toHaveLength(UPDATE_KINDS.length)
+    expect(all).toEqual(expect.arrayContaining([
+      'message', 'edited_message', 'channel_post', 'edited_channel_post',
+      'chat_member', 'message_reaction', 'message_reaction_count'
+    ]))
+
+    for (const service of SERVICE_EVENT_ORDER) {
+      expect(all).not.toContain(service)
+    }
   })
 
-  it('all() returns a fresh array — mutating the result does not affect UPDATE_KINDS', () => {
-    const all = UpdatesFilter.all()
+  it('keeps later subscriptions isolated from mutations to previous results', () => {
+    const before = UpdatesFilter.all()
+    const mutable = UpdatesFilter.all()
 
-    all.pop()
+    mutable.splice(0, mutable.length)
 
-    expect(UPDATE_KINDS.length).toBeGreaterThan(all.length)
-    expect(UpdatesFilter.all()).toHaveLength(UPDATE_KINDS.length)
+    expect(UpdatesFilter.all()).toEqual(before)
   })
 
   it('except(kind) drops a single kind', () => {
     const out = UpdatesFilter.except('chat_member')
 
     expect(out).not.toContain('chat_member')
-    expect(out).toHaveLength(UPDATE_KINDS.length - 1)
     expect(out).toContain('message')
   })
 
-  it('except(kinds[]) drops all listed kinds', () => {
+  it('excludes the selected fields while retaining other valid subscriptions', () => {
     const out = UpdatesFilter.except(['business_connection', 'business_message'])
 
     expect(out).not.toContain('business_connection')
     expect(out).not.toContain('business_message')
-    expect(out).toHaveLength(UPDATE_KINDS.length - 2)
+    expect(out).toContain('edited_business_message')
+    expect(out).toContain('message')
+
+    for (const service of SERVICE_EVENT_ORDER) {
+      expect(out).not.toContain(service)
+    }
   })
 
-  it('except([]) returns every kind', () => {
-    const out = UpdatesFilter.except([])
-
-    expect(out).toEqual([...UPDATE_KINDS])
-  })
-
-  it('preserves UPDATE_KINDS order', () => {
-    const out = UpdatesFilter.except(['chat_member'])
-    const expected = UPDATE_KINDS.filter(k => k !== 'chat_member')
-
-    expect(out).toEqual(expected)
-  })
 })

@@ -3,6 +3,7 @@
   "version": "3.0.2",
   "description": "entity-based text formatting plugin for puregram",
   "type": "module",
+  "sideEffects": false,
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "exports": {

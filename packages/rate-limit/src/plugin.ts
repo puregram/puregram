@@ -1,5 +1,5 @@
 import { type KVStorage, MemoryStorage } from '@puregram/storage'
-import { createPlugin, type Telegram } from 'puregram'
+import { createPlugin } from 'puregram/runtime'
 
 import { hit as coreHit, reset as coreReset } from './core'
 import { composeKey, defaultGetStorageKey } from './key'
@@ -42,7 +42,7 @@ export function rateLimit (options: RateLimitOptions = {}) {
 
   return createPlugin({
     name: 'rateLimit',
-    install: (_tg: Telegram) => {
+    install: () => {
       const hit = async (key: string, limit: number, window: number) =>
         toRetryAfter(await coreHit(storage, key, limit, window, Date.now()))
 

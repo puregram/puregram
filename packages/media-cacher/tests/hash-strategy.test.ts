@@ -56,6 +56,14 @@ describe('hashBytes / hashMediaInput', () => {
     expect(hashBytes(ab)).toBe(expected)
   })
 
+  it('hashes only the selected bytes of a DataView', () => {
+    const backing = new Uint8Array([99, 1, 2, 3, 99])
+    const view = new DataView(backing.buffer, 1, 3)
+    const expected = createHash('sha256').update(new Uint8Array([1, 2, 3])).digest('hex')
+
+    expect(hashBytes(view)).toBe(expected)
+  })
+
   it('hashMediaInput hashes Buffer sources directly', async () => {
     const buf = Buffer.from('some bytes')
     const media = MediaSource.buffer(buf)
@@ -191,6 +199,72 @@ describe('mediaCacher — keyStrategy: hash', () => {
       expect(fetchSpy).toHaveBeenCalledOnce()
     } finally {
       globalThis.fetch = originalFetch
+    }
+  })
+
+  it('caches byte uploads by content and leaves them uncached under sourceValue', async () => {
+    const hashed = new MemoryStorage<string>()
+    const plain = new MemoryStorage<string>()
+    const harness = makeHarness()
+    const raw = makeHarness()
+
+    mediaCacher({ storage: hashed, keyStrategy: 'hash' }).install(harness.tg)
+    mediaCacher({ storage: plain }).install(raw.tg)
+
+    const first: RequestContext = { method: 'sendDocument', params: { chat_id: 3, document: MediaSource.bytes(new Uint8Array([1, 2, 3])) } }
+
+    await harness.run('onBeforeRequest', first)
+    first.json = { ok: true, result: { document: { file_id: 'bytes_fid' } } }
+    await harness.run('onResponseIntercept', first)
+
+    const second: RequestContext = { method: 'sendDocument', params: { chat_id: 3, document: MediaSource.buffer(Buffer.from([1, 2, 3])) } }
+
+    await harness.run('onBeforeRequest', second)
+
+    expect(second.params!.document).toMatchObject({ type: 'file_id', value: 'bytes_fid' })
+
+    const bytesSource = MediaSource.bytes(new Uint8Array([1, 2, 3]))
+    const untouched: RequestContext = { method: 'sendDocument', params: { chat_id: 3, document: bytesSource } }
+
+    await raw.run('onBeforeRequest', untouched)
+    untouched.json = { ok: true, result: { document: { file_id: 'never_stored' } } }
+    await raw.run('onResponseIntercept', untouched)
+
+    expect(untouched.params!.document).toBe(bytesSource)
+
+    const keys: string[] = []
+
+    for await (const key of plain.keys?.() ?? []) {
+      keys.push(key)
+    }
+
+    expect(keys).toEqual([])
+  })
+
+  it('hashes url sources through the fetch option when no global fetch exists', async () => {
+    vi.stubGlobal('fetch', undefined)
+
+    try {
+      const storage = new MemoryStorage<string>()
+      const harness = makeHarness()
+      const fetchOption = vi.fn(() => Promise.resolve({
+        ok: true,
+        status: 200,
+        body: ReadableStream.from([new Uint8Array([104, 105]), new Uint8Array([33])])
+      }))
+
+      mediaCacher({ storage, keyStrategy: 'hash', fetch: fetchOption }).install(harness.tg)
+
+      const ctx: RequestContext = { method: 'sendPhoto', params: { chat_id: 4, photo: MediaSource.url('https://example/y.jpg') } }
+
+      await harness.run('onBeforeRequest', ctx)
+      ctx.json = { ok: true, result: { photo: [{ file_id: 'sdk_fid' }] } }
+      await harness.run('onResponseIntercept', ctx)
+
+      expect(await storage.get(`4:${createHash('sha256').update('hi!').digest('hex')}`)).toBe('sdk_fid')
+      expect(fetchOption).toHaveBeenCalledWith('https://example/y.jpg')
+    } finally {
+      vi.unstubAllGlobals()
     }
   })
 })

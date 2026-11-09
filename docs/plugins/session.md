@@ -55,7 +55,7 @@ await telegram.startPolling()
 
 - registers a high-priority `onUpdate` hook that loads the user's data from storage, wraps it in a proxy, and attaches it as `update.session`
 - flushes any changes back to storage when the handler chain returns
-- exposes the configured backing store directly as `tg.session` for out-of-handler access
+- exposes session values as `tg.session` for out-of-handler access
 
 ## core api
 
@@ -90,7 +90,7 @@ idempotent — safe to call multiple times
 
 ### `tg.session`
 
-direct access to the backing `KVStorage`, bypasses the proxy and ttl layer. use it from cron jobs, webhooks from other services, or admin tooling that runs outside an update context:
+access without the auto-flushing proxy. `get` decodes persisted TTL records and removes expired fields before returning ordinary values; the raw backing `KVStorage` may contain an internal envelope. use it from cron jobs, webhooks from other services, or admin tooling:
 
 ```ts
 await tg.session.set('promo:flag', { active: true })
@@ -124,7 +124,9 @@ clear ttl by re-assigning with `t = 0`:
 message.session.user = ttl(user, 0)
 ```
 
-if your backend supports sliding-window expiry (redis, sqlite) it will be detected automatically via `isTtlStorage` and `touch()`-d on every read, rolling the backend timer forward without re-wrapping
+if your backend supports sliding-window expiry, `isTtlStorage` detects it and unchanged sessions are `touch()`-d after access. that renews the backend's whole-session timer, not individual field deadlines
+
+field deadlines persist across serialized storage and cold invocations. TTL-bearing records use a versioned outer envelope without reserving user-object property names. older plain records remain readable, but lost deadlines from older versions cannot be reconstructed. upgrade all processes sharing a session store together before writing the new format — older session versions cannot read it
 
 ## options
 

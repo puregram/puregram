@@ -17,8 +17,8 @@ export class PluginMissingDep extends Error {
   }
 }
 
-export function resolveInstallOrder (plugins: Plugin[]) {
-  const byName = new Map<string, Plugin>()
+export function resolveInstallOrder<P extends Pick<Plugin, 'name' | 'dependsOn'>> (plugins: P[]) {
+  const byName = new Map<string, P>()
 
   for (const p of plugins) {
     if (byName.has(p.name)) {
@@ -30,7 +30,7 @@ export function resolveInstallOrder (plugins: Plugin[]) {
 
   const visited = new Set<string>()
   const onStack = new Set<string>()
-  const order: Plugin[] = []
+  const order: P[] = []
 
   const visit = (name: string, path: string[]): void => {
     if (visited.has(name)) {

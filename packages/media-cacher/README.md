@@ -67,7 +67,7 @@ $ npm i -S @puregram/media-cacher
 | `sendSticker` | `sticker` | ✅ |
 | every other api method | — | ❌ untouched |
 
-cache only fires for `MediaSource.path(...)` and `MediaSource.url(...)` inputs. buffers, streams, base64 — those are typically one-off and don't repeat enough to be worth tracking
+cache fires for `MediaSource.path(...)` and `MediaSource.url(...)` inputs. with `keyStrategy: 'hash'` it also fires for `MediaSource.bytes(...)` / `.buffer(...)` / `.arrayBuffer(...)`, keyed by content. streams and files are never cached
 
 the live list lives at `MEDIA_METHOD_TO_KEY_MAP` and `ALLOWED_MEDIA_TYPES` if you need to introspect
 
@@ -148,7 +148,8 @@ await telegram.mediaCacher.storage.set('whatever:key', 'AgADAQA…')
 |---|---|---|
 | `storage` | `KVStorage<string>` | backing store. default: a fresh `MemoryStorage<string>`. swap for redis/sqlite/`LruMemoryStorage`/etc to persist or bound the cache |
 | `getStorageKey` | `(ctx: RequestContext) => string` | how to derive the cache scope key from each outgoing request. default: `String(ctx.params.chat_id)`. throws if `chat_id` is absent and you haven't overridden |
-| `keyStrategy` | `'sourceValue' \| 'hash'` | how the second half of the cache key is derived. default `'sourceValue'` (raw path/url). `'hash'` keys by sha-256 of the bytes so distinct sources with identical content share one entry |
+| `keyStrategy` | `'sourceValue' \| 'hash'` | how the second half of the cache key is derived. default `'sourceValue'` (raw path/url). `'hash'` keys by sha-256 of the bytes so distinct sources with identical content share one entry, and caches in-memory byte uploads too |
+| `fetch` | `(url) => Promise<{ ok, status, body }>` | fetch used to hash url sources under `'hash'`. default: the global `fetch`. pass the platform's `fetch` on telegram serverless |
 | `staleFileIdPatterns` | `readonly string[]` | substrings that trigger the auto-evict + retry path on a 400 response, matched case-insensitively against `description`. defaults cover the three known telegram messages |
 
 ---
@@ -222,7 +223,7 @@ what the hash is computed over, per source type:
 | source | how |
 |---|---|
 | `MediaSource.path(...)` | `fs.readFile` once, sha-256 of the bytes |
-| `MediaSource.url(...)` | `fetch(url)`, sha-256 of the response body |
+| `MediaSource.url(...)` | `fetch(url)`, sha-256 of the streamed response body |
 | `MediaSource.buffer(...)` | sha-256 of the buffer directly |
 | `MediaSource.arrayBuffer(...)` | sha-256 of the arraybuffer directly |
 | `MediaSource.stream(...)` / `MediaSource.file(...)` | not supported — streams aren't replayable. use `'sourceValue'` for these |
@@ -237,6 +238,24 @@ const fileId = await telegram.mediaCacher.get(String(chatId), hash)
 ```
 
 `hashBytes` and `hashMediaInput` are exported for direct use
+
+### telegram serverless
+
+on [telegram serverless](https://puregram.cool/guide/deployment/serverless) every invocation starts empty, so give the cache a persistent table and the platform's `fetch`:
+
+```ts
+import { mediaCacher } from '@puregram/media-cacher'
+import { TelegramStorage } from '@puregram/serverless/storage'
+import { fetch } from 'sdk'
+
+const tg = createBot().extend(mediaCacher({
+  storage: new TelegramStorage({ table: 'media' }),
+  keyStrategy: 'hash',
+  fetch
+}))
+```
+
+repeat uploads of the same bytes then reuse the cached `file_id` across invocations. `MediaSource.path` is unavailable there
 
 ---
 

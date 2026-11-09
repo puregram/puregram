@@ -1,6 +1,7 @@
 import type { CallbackQueryUpdate, MessageUpdate, UpdateKindMap } from '@puregram/api'
 import type { KVStorage } from '@puregram/storage'
-import { createPlugin, type Telegram } from 'puregram'
+import type { Telegram } from 'puregram'
+import { createPlugin } from 'puregram/runtime'
 
 import { createAugmentMiddleware } from './augment/middleware'
 import { FlowPersistenceUnconfigured } from './errors'

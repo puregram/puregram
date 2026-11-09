@@ -25,7 +25,7 @@ export type {
   Middleware,
   RequestContext
 } from './dispatch/hooks'
-export type { AnyUpdate, OnOptions, Priority, UpdateHandler, UpdatePredicate } from './dispatch/on'
+export type { UpdatePredicate } from './dispatch/on'
 export type { StartPollingOptions } from './transport/polling'
 export type {
   NodeWebhookCallback,

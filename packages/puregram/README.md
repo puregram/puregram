@@ -712,6 +712,7 @@ a few accessors keep the same name across kinds, so cross-kind code never juggle
 
 - `update.senderId` — the acting user's id on every kind whose payload identifies one (`callback_query`, `inline_query`, `pre_checkout_query`, `chat_member`, `business_connection`, …). messages fall back `from.id` → `sender_chat.id` → `chat.id`; `poll_answer` / `message_reaction` fall back to their anonymous-chat actor and may be `undefined`
 - `update.tg` — the client that dispatched the update; `update.tg.bot` is the bot's own identity (the `getMe` result, resolved before dispatch starts) — handy for mention-stripping, deep links, and self-detection
+- shared update download helpers are typed as `Uint8Array` (or `null` where media can be absent), including on Node. the concrete Node client's `telegram.download(target)` still returns `Buffer`; use it or `Buffer.from(bytes)` when you need Buffer-only methods. portable wrappers do not claim a Node Buffer contract
 - `message.startPayload` — the deep-link payload after `/start` (`t.me/<bot>?start=ref-42` → `'ref-42'`), grounded in the `bot_command` entity telegram parsed — plain text that merely looks like a command never matches, and a `/start@other_bot` addressed to a different bot yields `undefined`. `filters.start` gates handlers on /start too, but is regex-based and mention-agnostic by design
 
 callback queries also carry the message-scoped edit family — `edit`, `editCaption`, `editMedia`, `editReplyMarkup`, `editRich`, `delete` — auto-filling `chat_id` + `message_id` from the originating message, or `inline_message_id` for inline-mode messages (those resolve `true` instead of the edited message; `delete` throws for them). the pager pattern in one call:
@@ -910,8 +911,11 @@ const telegram = Telegram.fromToken(TOKEN)
 
 writing your own takes ~5 lines. `createPlugin` returns a typed plugin spec; the install function's return value gets keyed under `plugin.name` and merged onto `telegram`
 
+plugin targets default to portable `TelegramCore`. use `createPlugin` and portable helpers from `puregram/runtime` when a plugin does not need the Node transport. a Node-specific plugin should annotate `install: (telegram: Telegram) => ...` explicitly; it will not typecheck against a serverless client
+
 ```ts
-import { createPlugin, Telegram } from 'puregram'
+import { Telegram } from 'puregram'
+import { createPlugin } from 'puregram/runtime'
 
 const greeter = createPlugin({
   name: 'greeter',
@@ -1020,9 +1024,9 @@ UpdatesFilter.except('chat_member')
 
 | method | returns |
 |---|---|
-| `UpdatesFilter.all()` | `UpdateKind[]` — every kind in `UPDATE_KINDS` |
-| `UpdatesFilter.except(kind)` | `UpdateKind[]` — every kind except the named one |
-| `UpdatesFilter.except([kind1, kind2])` | `UpdateKind[]` — every kind except the listed ones |
+| `UpdatesFilter.all()` | `UpdateKind[]` — every top-level Bot API update field, excluding service-event dispatch kinds |
+| `UpdatesFilter.except(kind)` | `UpdateKind[]` — every top-level update field except the named one |
+| `UpdatesFilter.except([kind1, kind2])` | `UpdateKind[]` — every top-level update field except the listed ones |
 
 want the raw constant? `import { UPDATE_KINDS } from 'puregram'` — readonly tuple of every update kind in dispatch order
 

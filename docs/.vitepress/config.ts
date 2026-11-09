@@ -96,6 +96,7 @@ export default defineConfig({
           items: [
             { text: 'polling', link: '/guide/deployment/polling' },
             { text: 'webhook', link: '/guide/deployment/webhook' },
+            { text: 'telegram serverless', link: '/guide/deployment/serverless' },
             { text: 'resilience', link: '/guide/deployment/resilience' }
           ]
         },

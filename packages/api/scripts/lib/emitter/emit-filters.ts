@@ -235,7 +235,7 @@ function emitPresenceFilter (
         ts.factory.createIdentifier(hasName),
         undefined,
         filterType,
-        call
+        pure(call)
       )],
       ts.NodeFlags.Const
     )
@@ -344,11 +344,11 @@ function emitKindShorthand (kinds: UpdateKindSpec[]) {
 
     return ts.factory.createPropertyAssignment(
       ts.factory.createIdentifier(propName),
-      ts.factory.createCallExpression(
+      pure(ts.factory.createCallExpression(
         ts.factory.createIdentifier('_kind'),
         undefined,
         [ts.factory.createStringLiteral(k.kindName)]
-      )
+      ))
     )
   })
 
@@ -359,7 +359,7 @@ function emitKindShorthand (kinds: UpdateKindSpec[]) {
         ts.factory.createIdentifier('kind'),
         undefined,
         undefined,
-        ts.factory.createCallExpression(
+        pure(ts.factory.createCallExpression(
           ts.factory.createPropertyAccessExpression(
             ts.factory.createIdentifier('Object'),
             'assign'
@@ -369,7 +369,7 @@ function emitKindShorthand (kinds: UpdateKindSpec[]) {
             ts.factory.createIdentifier('_kind'),
             ts.factory.createObjectLiteralExpression(props, true)
           ]
-        )
+        ))
       )],
       ts.NodeFlags.Const
     )
@@ -435,11 +435,11 @@ function emitActionShorthand (kinds: UpdateKindSpec[]) {
 
     return ts.factory.createPropertyAssignment(
       ts.factory.createIdentifier(propName),
-      ts.factory.createCallExpression(
+      pure(ts.factory.createCallExpression(
         ts.factory.createIdentifier('_action'),
         undefined,
         [ts.factory.createStringLiteral(k.kindName)]
-      )
+      ))
     )
   })
 
@@ -450,7 +450,7 @@ function emitActionShorthand (kinds: UpdateKindSpec[]) {
         ts.factory.createIdentifier('action'),
         undefined,
         undefined,
-        ts.factory.createCallExpression(
+        pure(ts.factory.createCallExpression(
           ts.factory.createPropertyAccessExpression(
             ts.factory.createIdentifier('Object'),
             'assign'
@@ -460,11 +460,15 @@ function emitActionShorthand (kinds: UpdateKindSpec[]) {
             ts.factory.createIdentifier('_action'),
             ts.factory.createObjectLiteralExpression(props, true)
           ]
-        )
+        ))
       )],
       ts.NodeFlags.Const
     )
   )
 
   return jsDoc('filter — match a service-event update kind. shorthand for `kind` restricted to derived (Message-payload) events', decl)
+}
+
+function pure (call: ts.CallExpression) {
+  return ts.addSyntheticLeadingComment(call, ts.SyntaxKind.MultiLineCommentTrivia, '#__PURE__', false)
 }

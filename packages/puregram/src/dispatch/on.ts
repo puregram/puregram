@@ -1,5 +1,7 @@
 import type { AnyUpdate, Priority, UpdateHandler } from '@puregram/api'
-import { isFilter } from '@puregram/api'
+import { isFilter, SERVICE_EVENT_ORDER, UPDATE_KINDS } from '@puregram/api'
+
+import { SERVICE_EVENT_PARENTS } from './update-builder'
 
 export type { AnyUpdate, OnOptions, Priority, UpdateHandler } from '@puregram/api'
 
@@ -18,6 +20,9 @@ const PRIORITY_RANK: Record<Priority, number> = {
   normal: 1,
   low: 2
 }
+
+const UPDATE_FIELDS = new Set<string>(UPDATE_KINDS)
+const SERVICE_KINDS = new Set<string>(SERVICE_EVENT_ORDER)
 
 interface KindEntry {
   type: 'kind'
@@ -146,16 +151,28 @@ export class Dispatcher {
     const kinds = new Set<string>()
     let opaque = false
 
+    const addKind = (kind: string) => {
+      if (SERVICE_KINDS.has(kind)) {
+        for (const parent of SERVICE_EVENT_PARENTS) {
+          kinds.add(parent)
+        }
+      } else if (UPDATE_FIELDS.has(kind)) {
+        kinds.add(kind)
+      } else {
+        opaque = true
+      }
+    }
+
     for (const entry of this.entries) {
       if (entry.type === 'kind') {
-        kinds.add(entry.kind)
+        addKind(entry.kind)
 
         continue
       }
 
       if (isFilter(entry.predicate) && entry.predicate.kinds) {
         for (const kind of entry.predicate.kinds) {
-          kinds.add(kind)
+          addKind(kind)
         }
 
         continue

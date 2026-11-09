@@ -1,5 +1,5 @@
 import { defineAsyncFilter } from '@puregram/api'
-import type { Telegram } from 'puregram'
+import type { TelegramCore } from 'puregram/runtime'
 
 import type { RateLimitCheckOptions } from './types'
 
@@ -27,7 +27,7 @@ const formatName = (opts: RateLimitCheckOptions) =>
  * tg.onMessage(and(command('/buy'), rateLimitFilter(tg, { limit: 5, window: 60 })), handler)
  * ```
  */
-export function rateLimitFilter (tg: Telegram, opts: RateLimitCheckOptions) {
+export function rateLimitFilter (tg: TelegramCore, opts: RateLimitCheckOptions) {
   const target = tg as unknown as TgWithRateLimit
 
   return defineAsyncFilter(formatName(opts), async (update) => {

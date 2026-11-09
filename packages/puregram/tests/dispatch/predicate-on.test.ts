@@ -154,7 +154,7 @@ describe('tg.on predicate types', () => {
     const tg = new Telegram({ token: 'X', bot: STUB_BOT })
 
     tg.onUpdate(
-      update => update.kind === 'message',
+      (update): boolean => update.kind === 'message',
       (update) => {
         expectTypeOf(update).toEqualTypeOf<AnyUpdate>()
       }

@@ -1,5 +1,6 @@
 import type { UpdateKindMap } from '@puregram/api'
-import type { Middleware, Telegram } from 'puregram'
+import type { Telegram } from 'puregram'
+import type { Middleware } from 'puregram/runtime'
 
 import type { WaiterRegistry } from './registry'
 

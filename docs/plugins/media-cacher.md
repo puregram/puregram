@@ -70,7 +70,7 @@ installs a `tg.extend(...)` plugin that hooks `onBeforeRequest` (before send) an
 | `sendDocument` | `document` |
 | `sendSticker` | `sticker` |
 
-only `MediaSource.path(...)` and `MediaSource.url(...)` inputs trigger caching. all other methods pass through untouched
+`MediaSource.path(...)` and `MediaSource.url(...)` inputs trigger caching; with `keyStrategy: 'hash'`, so do `MediaSource.bytes(...)` / `.buffer(...)` / `.arrayBuffer(...)`. all other methods pass through untouched
 
 ### `tg.mediaCacher` — manual inspection
 
@@ -139,7 +139,7 @@ telegram.extend(mediaCacher({ keyStrategy: 'hash' }))
 | source | how the hash is computed |
 |---|---|
 | `MediaSource.path(...)` | `fs.readFile`, sha-256 of the bytes |
-| `MediaSource.url(...)` | `fetch(url)`, sha-256 of the response body |
+| `MediaSource.url(...)` | `fetch(url)`, sha-256 of the streamed response body |
 | `MediaSource.buffer(...)` | sha-256 of the buffer directly |
 | `MediaSource.arrayBuffer(...)` | sha-256 of the arraybuffer directly |
 | `MediaSource.stream(...)` / `MediaSource.file(...)` | not supported — use `'sourceValue'` |
@@ -157,6 +157,24 @@ import { MediaSource } from 'puregram'
 const hash = await hashMediaInput(MediaSource.path('./cat.png'))
 const fileId = await telegram.mediaCacher.get(String(chatId), hash)
 ```
+
+### telegram serverless
+
+each [serverless](/guide/deployment/serverless) invocation starts empty, so pair the cache with a persistent table and the platform's `fetch`:
+
+```ts
+import { mediaCacher } from '@puregram/media-cacher'
+import { TelegramStorage } from '@puregram/serverless/storage'
+import { fetch } from 'sdk'
+
+const tg = createBot().extend(mediaCacher({
+  storage: new TelegramStorage({ table: 'media' }),
+  keyStrategy: 'hash',
+  fetch
+}))
+```
+
+repeat uploads of identical bytes then reuse one `file_id` across invocations. `MediaSource.path` is unavailable there
 
 ### auto-evict + retry on stale `file_id`
 
@@ -197,7 +215,8 @@ mediaCacher({
 |---|---|---|---|
 | `storage` | `KVStorage<string>` | fresh `MemoryStorage<string>` | backing store |
 | `getStorageKey` | `(ctx: RequestContext) => string` | `String(ctx.params.chat_id)` | derive the cache scope key from an outgoing request |
-| `keyStrategy` | `'sourceValue' \| 'hash'` | `'sourceValue'` | second half of the cache key — raw path/url or sha-256 of bytes |
+| `keyStrategy` | `'sourceValue' \| 'hash'` | `'sourceValue'` | second half of the cache key — raw path/url or sha-256 of bytes (also caches byte uploads) |
+| `fetch` | `(url) => Promise<{ ok, status, body }>` | global `fetch` | used to hash url sources under `'hash'` |
 | `staleFileIdPatterns` | `readonly string[]` | three built-in patterns | substrings that trigger auto-evict + retry on a 400 response |
 
 ## exported surface

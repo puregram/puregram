@@ -1,4 +1,4 @@
-import { createPlugin, type Telegram } from 'puregram'
+import { createPlugin, type TelegramCore } from 'puregram/runtime'
 
 /** any callback-data schema, narrowed to just the slug pair the plugin actually inspects */
 export interface AnyCallbackData {
@@ -30,7 +30,7 @@ export interface CallbackDataExtension {
 export function callbackData (schemas: readonly AnyCallbackData[] = []) {
   return createPlugin({
     name: 'callbackData',
-    install: (_tg: Telegram) => {
+    install: (_tg: TelegramCore) => {
       const all = new Map<string, AnyCallbackData>()
 
       const register = (schema: AnyCallbackData) => {

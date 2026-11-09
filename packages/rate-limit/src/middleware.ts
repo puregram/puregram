@@ -1,4 +1,4 @@
-import type { Middleware, Telegram } from 'puregram'
+import type { Middleware, TelegramCore } from 'puregram/runtime'
 
 import type { AnyUpdate, RateLimitCheckOptions } from './types'
 
@@ -21,7 +21,7 @@ interface TgWithRateLimit {
  * tg.use(when(kind.message, rateLimitMiddleware(tg, { limit: 5, window: 60 })))
  * ```
  */
-export function rateLimitMiddleware (tg: Telegram, opts: RateLimitCheckOptions) {
+export function rateLimitMiddleware (tg: TelegramCore, opts: RateLimitCheckOptions) {
   const target = tg as unknown as TgWithRateLimit
 
   const middleware: Middleware<AnyUpdate> = async (update, next) => {

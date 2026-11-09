@@ -7,8 +7,8 @@ import type {
   TelegramMessage
 } from '@puregram/api'
 
+import type { TelegramCore } from '../core'
 import type { InputMediaSticker, InputMediaVideoNote, InputMediaVoice } from '../factories'
-import type { Telegram } from '../telegram'
 
 /**
  * polymorphic media query for `tg.sendMedia(chat, media)` — dispatches to
@@ -56,12 +56,12 @@ function omit<T extends object, K extends keyof T> (obj: T, keys: readonly K[]) 
   return result
 }
 
-export function installShortcuts (tg: Telegram) {
-  define(tg, 'send', function (this: Telegram, chat: number | string, text: string, params: Record<string, unknown> = {}) {
+export function installShortcuts (tg: TelegramCore) {
+  define(tg, 'send', function (this: TelegramCore, chat: number | string, text: string, params: Record<string, unknown> = {}) {
     return (this.api as any).sendMessage({ chat_id: chat, text, ...params })
   })
 
-  define(tg, 'sendMedia', function (this: Telegram, chat: number | string, media: SendMediaQuery, params: Record<string, unknown> = {}) {
+  define(tg, 'sendMedia', function (this: TelegramCore, chat: number | string, media: SendMediaQuery, params: Record<string, unknown> = {}) {
     // each branch narrows `media` to a single variant — surrogate `media` field
     // and discriminating `type` are stripped per branch
     switch (media.type) {
@@ -89,40 +89,40 @@ export function installShortcuts (tg: Telegram) {
     }
   })
 
-  define(tg, 'forward', function (this: Telegram, from: number | string, to: number | string, messageId: number, params: Record<string, unknown> = {}) {
+  define(tg, 'forward', function (this: TelegramCore, from: number | string, to: number | string, messageId: number, params: Record<string, unknown> = {}) {
     return (this.api as any).forwardMessage({ from_chat_id: from, chat_id: to, message_id: messageId, ...params })
   })
 
-  define(tg, 'copy', function (this: Telegram, from: number | string, to: number | string, messageId: number, params: Record<string, unknown> = {}) {
+  define(tg, 'copy', function (this: TelegramCore, from: number | string, to: number | string, messageId: number, params: Record<string, unknown> = {}) {
     return (this.api as any).copyMessage({ from_chat_id: from, chat_id: to, message_id: messageId, ...params })
   })
 
-  define(tg, 'delete', function (this: Telegram, chat: number | string, messageId: number) {
+  define(tg, 'delete', function (this: TelegramCore, chat: number | string, messageId: number) {
     return (this.api as any).deleteMessage({ chat_id: chat, message_id: messageId })
   })
 
-  define(tg, 'pin', function (this: Telegram, chat: number | string, messageId: number, params: Record<string, unknown> = {}) {
+  define(tg, 'pin', function (this: TelegramCore, chat: number | string, messageId: number, params: Record<string, unknown> = {}) {
     return (this.api as any).pinChatMessage({ chat_id: chat, message_id: messageId, ...params })
   })
 
-  define(tg, 'unpin', function (this: Telegram, chat: number | string, messageId: number) {
+  define(tg, 'unpin', function (this: TelegramCore, chat: number | string, messageId: number) {
     return (this.api as any).unpinChatMessage({ chat_id: chat, message_id: messageId })
   })
 
-  define(tg, 'kick', function (this: Telegram, chat: number | string, user: number, params: Record<string, unknown> = {}) {
+  define(tg, 'kick', function (this: TelegramCore, chat: number | string, user: number, params: Record<string, unknown> = {}) {
     return (this.api as any).banChatMember({ chat_id: chat, user_id: user, ...params })
   })
 
-  define(tg, 'ban', function (this: Telegram, chat: number | string, user: number, params: Record<string, unknown> = {}) {
+  define(tg, 'ban', function (this: TelegramCore, chat: number | string, user: number, params: Record<string, unknown> = {}) {
     return (this.api as any).banChatMember({ chat_id: chat, user_id: user, ...params })
   })
 
-  define(tg, 'unban', function (this: Telegram, chat: number | string, user: number, params: Record<string, unknown> = {}) {
+  define(tg, 'unban', function (this: TelegramCore, chat: number | string, user: number, params: Record<string, unknown> = {}) {
     return (this.api as any).unbanChatMember({ chat_id: chat, user_id: user, ...params })
   })
 
   define(tg, 'react', function (
-    this: Telegram,
+    this: TelegramCore,
     chat: number | string,
     messageId: number,
     reactions: unknown,
@@ -137,7 +137,7 @@ export function installShortcuts (tg: Telegram) {
   })
 }
 
-function define (target: Telegram, name: string, fn: (...args: any[]) => unknown) {
+function define (target: TelegramCore, name: string, fn: (...args: any[]) => unknown) {
   Object.defineProperty(Object.getPrototypeOf(target), name, {
     value: fn,
     writable: true,

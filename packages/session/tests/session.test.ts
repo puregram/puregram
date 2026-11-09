@@ -1,8 +1,12 @@
-import { MemoryStorage, type TtlStorage } from '@puregram/storage'
+import { setImmediate as immediate } from 'node:timers/promises'
+
+import { type KVStorage, MemoryStorage, type TtlStorage } from '@puregram/storage'
 import { Telegram } from 'puregram'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { session } from '../src/session'
+import { ttl } from '../src/ttl'
+import type { SessionContext } from '../src/types'
 
 // MemoryStorage doesn't implement TtlStorage, so the "touch instead of flush" test
 // uses this minimal subclass to verify session calls touch when isTtlStorage(storage)
@@ -518,5 +522,166 @@ describe('session() — composite keys', () => {
     expect(await storage.get('singleton')).toEqual({ hit: true })
 
     await t.shutdown()
+  })
+})
+
+describe('session() — persistent field ttl', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  const serializedStorage = (): KVStorage<unknown> => {
+    const rows = new Map<string, string>()
+
+    return {
+      get: (key) => {
+        const value = rows.get(key)
+
+        return Promise.resolve(value === undefined ? undefined : JSON.parse(value) as unknown)
+      },
+      set: (key, value) => {
+        rows.set(key, JSON.stringify(value))
+
+        return Promise.resolve()
+      },
+      delete: (key) => {
+        rows.delete(key)
+
+        return Promise.resolve()
+      },
+      has: key => Promise.resolve(rows.has(key))
+    }
+  }
+
+  const invoke = async (storage: KVStorage<unknown>, handler: (data: SessionContext) => void) => {
+    const tg = new Telegram({ token: 'TEST', bot: STUB_BOT }).extend(session({ storage }))
+    let failure: unknown
+
+    tg.catch(error => { failure = error })
+    await tg.start()
+    tg.defineUpdate('probe')
+    tg.on('probe', update => handler(update.session as SessionContext))
+    tg.emit('probe', { from: { id: 7 } })
+    await immediate()
+    await tg.shutdown()
+
+    if (failure !== undefined) {
+      throw failure
+    }
+  }
+
+  it('expires serialized fields on cold reload without colliding with user metadata or nested names', async () => {
+    let now = 1_000
+
+    vi.spyOn(Date, 'now').mockImplementation(() => now)
+    const storage = serializedStorage()
+    const legacy = {
+      __ttl: { token: 'user metadata' },
+      data: { version: 1, ttl: 'user data' },
+      left: { token: 'left' },
+      right: { token: 'right' },
+      'left.token': 'literal'
+    }
+
+    await storage.set('user:7', legacy)
+    await invoke(storage, (data) => {
+      ;(data.left as Record<string, unknown>).token = ttl('short', 1_000)
+      ;(data.right as Record<string, unknown>).token = ttl('long', 3_000)
+    })
+    now = 2_000
+    let observed: unknown
+
+    await invoke(storage, (data) => {
+      observed = JSON.parse(JSON.stringify(data))
+    })
+    expect(observed).toEqual({ ...legacy, left: {}, right: { token: 'long' } })
+    const tg = new Telegram({ token: 'TEST', bot: STUB_BOT }).extend(session({ storage }))
+
+    await tg.start()
+
+    now = 4_000
+    expect(await tg.session.get('user:7')).toEqual({ ...legacy, left: {}, right: {} })
+    expect(await storage.get('user:7')).toEqual({ ...legacy, left: {}, right: {} })
+    await tg.shutdown()
+  })
+
+  it('renews saved field deadlines on reassignment and removes expired fields through direct access', async () => {
+    let now = 1_000
+
+    vi.spyOn(Date, 'now').mockImplementation(() => now)
+    const storage = serializedStorage()
+
+    await invoke(storage, (data) => {
+      data.token = ttl('first', 1_000)
+    })
+    now = 1_500
+    await invoke(storage, (data) => {
+      data.token = 'second'
+    })
+    const tg = new Telegram({ token: 'TEST', bot: STUB_BOT }).extend(session({ storage }))
+
+    await tg.start()
+
+    now = 2_000
+    expect(await tg.session.get('user:7')).toEqual({ token: 'second' })
+    now = 2_500
+    expect(await tg.session.has('user:7')).toBe(false)
+    expect(await tg.session.get('user:7')).toBeUndefined()
+    expect(await storage.has('user:7')).toBe(false)
+    await tg.shutdown()
+  })
+
+  it('clears persisted ttl on zero assignment or deletion without expiring replacement fields', async () => {
+    let now = 1_000
+
+    vi.spyOn(Date, 'now').mockImplementation(() => now)
+    const storage = serializedStorage()
+
+    await invoke(storage, (data) => {
+      data.cleared = ttl('old', 1_000)
+      data.deleted = ttl('old', 1_000)
+      data.parent = { child: 'old' }
+      ;(data.parent as Record<string, unknown>).child = ttl('old', 1_000)
+    })
+    now = 1_500
+    await invoke(storage, (data) => {
+      data.cleared = ttl('permanent', 0)
+      delete data.deleted
+      data.deleted = 'permanent'
+      data.parent = { child: 'permanent' }
+    })
+    now = 5_000
+    const tg = new Telegram({ token: 'TEST', bot: STUB_BOT }).extend(session({ storage }))
+
+    await tg.start()
+
+    expect(await tg.session.get('user:7')).toEqual({
+      cleared: 'permanent',
+      deleted: 'permanent',
+      parent: { child: 'permanent' }
+    })
+    await tg.shutdown()
+  })
+
+  it('does not retain the first invocation proxy when memory-backed nested fields acquire ttl later', async () => {
+    let now = 1_000
+
+    vi.spyOn(Date, 'now').mockImplementation(() => now)
+    const storage = new MemoryStorage()
+
+    await invoke(storage, (data) => {
+      data.profile = { token: 'original' }
+      ;(data.profile as Record<string, unknown>).token = 'accessed'
+    })
+    await invoke(storage, (data) => {
+      ;(data.profile as Record<string, unknown>).token = ttl('expiring', 1_000)
+    })
+    now = 2_000
+    const tg = new Telegram({ token: 'TEST', bot: STUB_BOT }).extend(session({ storage }))
+
+    await tg.start()
+
+    expect(await tg.session.get('user:7')).toEqual({ profile: {} })
+    await tg.shutdown()
   })
 })

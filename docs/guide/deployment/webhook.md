@@ -7,6 +7,8 @@ description: receive telegram updates via webhook — mount on your existing ser
 
 polling is fine for development and small bots. for anything serious you want webhooks — telegram pushes updates to your server over HTTPS, no long-polling loop needed. there are three ways to wire them up
 
+for telegram-hosted handlers without an HTTP server, see [telegram serverless](/guide/deployment/serverless)
+
 ## the easiest path — `tg.startWebhook(...)`
 
 one call: registers the webhook with telegram and optionally spins up a built-in `node:http` listener. perfect for a "bot in a single process" deployment:

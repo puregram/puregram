@@ -69,7 +69,7 @@ export interface TelegramLike {
   /** the bot's own identity — resolved via `getMe` (or the `bot` option) before dispatch starts */
   readonly bot: TelegramUser
 
-  download: (target: DownloadableLike) => Promise<Buffer>
+  download: (target: DownloadableLike) => Promise<Uint8Array>
   downloadStream: (target: DownloadableLike) => Promise<Readable>
   downloadIterable: (target: DownloadableLike) => Promise<AsyncIterable<Uint8Array>>
   downloadToFile: (path: string, target: DownloadableLike) => Promise<void>

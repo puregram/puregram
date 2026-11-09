@@ -3,6 +3,7 @@
   "version": "3.0.2",
   "description": "typed callback-data builder for puregram",
   "type": "module",
+  "sideEffects": false,
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "exports": {
@@ -24,7 +25,9 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@noble/hashes": "^2.0.1",
     "@puregram/api": "workspace:~",
+    "buffer": "^6.0.3",
     "puregram": "workspace:^"
   },
   "devDependencies": {

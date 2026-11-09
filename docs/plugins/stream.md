@@ -154,7 +154,27 @@ await message.stream(generate())
 |---|---|
 | `fromTextStream` | web `ReadableStream<string>` |
 | `fromBytes` | `AsyncIterable<Uint8Array>` (utf-8 decoded) |
+| `fromSSE` | raw `text/event-stream` bytes — yields each event's `data` parsed as JSON, skipping `[DONE]` |
 | `fromEventEmitter` | node `EventEmitter` — listens on `'text'` events by default |
+
+### telegram serverless
+
+[telegram serverless](/guide/deployment/serverless) has no LLM SDKs, timers, or global `fetch`. call the HTTP API through the platform's `fetch` and parse the event stream with `fromSSE`; parsed anthropic/openai events are auto-detected:
+
+```ts
+import { fromSSE } from '@puregram/stream'
+import { fetch } from 'sdk'
+
+const res = await fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+  body: JSON.stringify({ model, max_tokens: 1024, stream: true, messages })
+})
+
+await message.stream(fromSSE(res.body))
+```
+
+without timers, draft throttling follows incoming pieces instead of sleeping: a draft goes out on the first piece after `editIntervalMs`, and the final message is always sent. a stop button press arrives as its own invocation, so its in-memory stop signal is not guaranteed to reach a running stream
 
 ## rich-message streaming
 
@@ -324,6 +344,7 @@ import {
   fromTextStream,
   fromBytes,
   fromEventEmitter,
+  fromSSE,
   // constants
   DRAFT_TTL_MS,
   DRAFT_SAFETY_MS,

@@ -3,7 +3,7 @@ import {
   EditedChannelPostUpdate, EditedMessageUpdate, MessageUpdate
 } from '@puregram/api'
 import type { TelegramMessage } from '@puregram/api'
-import { createPlugin, type Telegram } from 'puregram'
+import { createPlugin, type TelegramCore } from 'puregram/runtime'
 
 import { DRAFT_IDS_PER_RUN } from './constants'
 import { runStream, type RichDialect, type StreamApi, type StreamResult, type StreamStopController } from './core'
@@ -134,7 +134,7 @@ function isStopUpdate (update: unknown): update is StopUpdateLike {
 export function stream () {
   return createPlugin({
     name: 'stream',
-    install: (tg: Telegram) => {
+    install: (tg: TelegramCore) => {
       const api = tg.api as unknown as StreamApi
       const richSource = tg.api as unknown as RichApi
       const richApi: StreamApi = {

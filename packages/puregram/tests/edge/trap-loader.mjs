@@ -7,6 +7,7 @@ const FORBIDDEN = new Set([
   'node:fs/promises', 'fs/promises',
   'node:http', 'http',
   'node:https', 'https',
+  'node:string_decoder', 'string_decoder',
   'formdata-node/file-from-path'
 ])
 

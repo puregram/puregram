@@ -3,6 +3,7 @@
   "version": "3.10.0",
   "description": "powerful and modern telegram bot api sdk for node.js and typescript 😁",
   "type": "module",
+  "sideEffects": false,
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "exports": {
@@ -30,6 +31,11 @@
       "types": "./lib/plugins/plugin.d.ts",
       "import": "./lib/plugins/plugin.js",
       "default": "./lib/plugins/plugin.js"
+    },
+    "./runtime": {
+      "types": "./lib/runtime.d.ts",
+      "import": "./lib/runtime.js",
+      "default": "./lib/runtime.js"
     },
     "./webhook": {
       "types": "./lib/transport/webhook/index.d.ts",

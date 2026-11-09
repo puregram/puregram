@@ -2,6 +2,10 @@ import type { TelegramInlineKeyboardButton, TelegramKeyboardButton } from '@pure
 
 export type MaybeArray<T> = T | T[]
 
+export function cloneButtons<T> (buttons: T) {
+  return JSON.parse(JSON.stringify(buttons)) as T
+}
+
 export type ButtonStyle = NonNullable<TelegramKeyboardButton['style']>
 
 /** named constants for `ButtonStyle` — `ButtonStyle.Primary` and `'primary'` are interchangeable */
@@ -25,7 +29,23 @@ export type CallbackData = string | number
 
 export function normalizeCallbackData (data: CallbackData) {
   const str = typeof data === 'number' ? String(data) : data
-  const bytes = new TextEncoder().encode(str).length
+  let bytes = 0
+
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i)
+
+    if (code < 0x80) {
+      bytes++
+    } else if (code < 0x800) {
+      bytes += 2
+    } else if (code >= 0xd800 && code <= 0xdbff &&
+               str.charCodeAt(i + 1) >= 0xdc00 && str.charCodeAt(i + 1) <= 0xdfff) {
+      bytes += 4
+      i++
+    } else {
+      bytes += 3
+    }
+  }
 
   if (bytes < 1 || bytes > 64) {
     throw new RangeError(`callback_data must be 1-64 bytes (got ${bytes})`)

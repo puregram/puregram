@@ -14,6 +14,9 @@ export function callbackData (pattern: RegExp): Filter<
   CallbackQueryUpdate,
   { raw: { data: string }, match: RegExpMatchArray }
 >
+export function callbackData (value: string | RegExp):
+  | Filter<CallbackQueryUpdate, { data: string }>
+  | Filter<CallbackQueryUpdate, { raw: { data: string }, match: RegExpMatchArray }>
 export function callbackData (value: string | RegExp) {
   if (typeof value === 'string') {
     return defineFilter<CallbackQueryUpdate, { data: string }>(

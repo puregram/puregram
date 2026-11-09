@@ -24,6 +24,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@noble/hashes": "^2.0.1",
     "@puregram/storage": "workspace:^",
     "puregram": "workspace:^"
   },

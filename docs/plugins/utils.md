@@ -112,14 +112,14 @@ app.post('/api/me', (req, res) => {
 })
 ```
 
-returns a `Buffer`. cache it; re-deriving per-request burns cpu for nothing
+returns the native `Buffer` on Node, or the portable `buffer` implementation where Node globals are unavailable. the return type reflects both implementations; common methods such as `.toString('hex')` remain available without promising Node-only methods. cache the key rather than deriving it on every request
 
 ### `WebApp.validate(params)` — full check
 
 | field | type | description |
 |---|---|---|
 | `initData` | `string` | raw query string from `Telegram.WebApp.initData` (not `initDataUnsafe`) |
-| `key` | `Buffer` | pre-derived HMAC key. mutually exclusive with `token` |
+| `key` | `Uint8Array` | pre-derived HMAC key, including native or portable Buffer. mutually exclusive with `token` |
 | `token` | `string` | bot token; derives the key on each call. use `key` on hot paths |
 | `throwError` | `boolean` | default `false` — when `true`, throws on mismatch instead of returning `false` |
 

@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+import { createHash } from 'node:crypto'
+
+import { describe, expect, it, vi } from 'vitest'
 
 import { CallbackDataBuilder, CallbackDataInvalid, CallbackDataTooLong, defineCallbackData } from '../src'
 
@@ -20,8 +22,20 @@ describe('defineCallbackData', () => {
     expect(() => defineCallbackData('x', { slugLength: 23 })).toThrow(RangeError)
   })
 
-  it('produces stable slug for identical raw slug', () => {
-    expect(defineCallbackData('ban').slug).toBe(defineCallbackData('ban').slug)
+  it('preserves MD5 base64url wire prefixes across UTF-8 and block boundaries', () => {
+    expect(defineCallbackData('', { slugLength: 22 }).slug).toBe('1B2M2Y8AsgTpgAmY7PhCfg')
+
+    const slugs = [
+      'ban', 'Привет/世界', '\u0000\u007f\u0080\u07ff\u0800\uffff', 'a\ud800b\udc00c', '\ud83d\ude00',
+      ...[55, 56, 63, 64, 65].map(length => 'a'.repeat(length))
+    ]
+
+    for (const slug of slugs) {
+      const expected = createHash('md5').update(slug).digest('base64url')
+
+      expect(defineCallbackData(slug).slug).toBe(expected.slice(0, 6))
+      expect(defineCallbackData(slug, { slugLength: 22 }).slug).toBe(expected)
+    }
   })
 
   it('produces distinct slugs for distinct raw slugs', () => {
@@ -95,6 +109,37 @@ describe('pack / unpack', () => {
 
     // 30 code units, 60 bytes — plus header/length/slug should overflow
     expect(() => cd.pack({ s: fifteenEmoji })).toThrow(CallbackDataTooLong)
+  })
+
+  it('preserves the exact UTF-8 payload limit without Node or encoding globals', () => {
+    const strings = [
+      'a'.repeat(57),
+      'a'.repeat(55) + '\u0080',
+      'a'.repeat(54) + '\u0800',
+      'a'.repeat(53) + '\ud83d\ude00',
+      'a'.repeat(54) + '\ud800',
+      'a'.repeat(54) + '\udc00',
+      'a'.repeat(56) + '\u0000'
+    ]
+    const expectedSlug = createHash('md5').update('boundary').digest('base64url').slice(0, 6)
+
+    vi.stubGlobal('Buffer', undefined)
+    vi.stubGlobal('TextEncoder', undefined)
+    vi.stubGlobal('TextDecoder', undefined)
+
+    try {
+      const cd = defineCallbackData('boundary').string('s')
+
+      for (const s of strings) {
+        const packed = cd.pack({ s })
+
+        expect(packed).toBe(expectedSlug + String.fromCharCode(s.length) + s)
+        expect(cd.unpack(packed)).toEqual({ s })
+        expect(() => cd.pack({ s: s + 'a' })).toThrow(CallbackDataTooLong)
+      }
+    } finally {
+      vi.unstubAllGlobals()
+    }
   })
 
   it('produces ascii-only wire bytes for primitives (no slug-byte expansion under utf-8)', () => {

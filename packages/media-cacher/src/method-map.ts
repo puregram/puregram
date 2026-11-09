@@ -1,4 +1,4 @@
-import { MediaSourceType } from 'puregram'
+import { MediaSourceType } from 'puregram/runtime'
 
 export type AllowedMediaMethod =
   | 'sendPhoto' | 'sendVideo' | 'sendAnimation' | 'sendVideoNote'

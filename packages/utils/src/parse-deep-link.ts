@@ -51,12 +51,12 @@ function isNumeric (value: string) {
   return NUMERIC_RE.test(value)
 }
 
-function nonEmpty (value: string | null) {
-  return value !== null && value.length > 0 ? value : undefined
+function nonEmpty (value: string | undefined) {
+  return value !== undefined && value.length > 0 ? value : undefined
 }
 
-function toPositiveInt (value: string | null) {
-  if (value === null) {
+function toPositiveInt (value: string | undefined) {
+  if (value === undefined) {
     return undefined
   }
 
@@ -65,15 +65,62 @@ function toPositiveInt (value: string | null) {
   return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : undefined
 }
 
-// telegram joins list params with `+`, which `URLSearchParams` decodes to a space
-function splitList<T extends string> (value: string | null) {
-  if (value === null || value.length === 0) {
+// telegram joins list params with `+`, which query decoding turns into a space
+function splitList<T extends string> (value: string | undefined) {
+  if (value === undefined || value.length === 0) {
     return undefined
   }
 
   const parts = value.split(/[+\s]+/).filter(Boolean) as T[]
 
   return parts.length > 0 ? parts : undefined
+}
+
+const utf8Encoder = new TextEncoder()
+const utf8Decoder = new TextDecoder('utf-8', { ignoreBOM: true })
+
+function decodeQueryComponent (value: string) {
+  const spaced = value.replaceAll('+', ' ')
+
+  if (!spaced.includes('%')) {
+    return spaced
+  }
+
+  const input = utf8Encoder.encode(spaced)
+  const output = new Uint8Array(input.length)
+  let length = 0
+
+  for (let i = 0; i < input.length; i++) {
+    const escape = input[i] === 0x25 ? String.fromCharCode(input[i + 1] ?? 0, input[i + 2] ?? 0) : ''
+
+    if (/^[0-9a-f]{2}$/i.test(escape)) {
+      output[length++] = Number.parseInt(escape, 16)
+      i += 2
+    } else {
+      output[length++] = input[i]!
+    }
+  }
+
+  return utf8Decoder.decode(output.subarray(0, length))
+}
+
+function parseQuery (query: string) {
+  const params = new Map<string, string>()
+
+  for (const pair of query.split('&')) {
+    if (pair.length === 0) {
+      continue
+    }
+
+    const separator = pair.indexOf('=')
+    const name = decodeQueryComponent(separator === -1 ? pair : pair.slice(0, separator))
+
+    if (!params.has(name)) {
+      params.set(name, decodeQueryComponent(separator === -1 ? '' : pair.slice(separator + 1)))
+    }
+  }
+
+  return params
 }
 
 /**
@@ -113,22 +160,15 @@ export function parseDeepLink (input: string): ParsedDeepLink | undefined {
     return undefined
   }
 
-  let url: URL
-
-  try {
-    url = new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`)
-  } catch {
-    return undefined
-  }
-
-  const host = url.hostname.toLowerCase().replace(/^www\./, '')
+  const parts = /^(?:[a-z][a-z0-9+.-]*:\/\/)?([^/?#\\]*)([^?#]*)(?:\?([^#]*))?/i.exec(trimmed)!
+  const host = parts[1]!.replace(/^.*@/, '').replace(/:\d*$/, '').toLowerCase().replace(/^www\./, '')
 
   if (!Object.hasOwn(TG_HOSTS, host)) {
     return undefined
   }
 
-  const segments = url.pathname.split('/').filter(Boolean)
-  const query = url.searchParams
+  const segments = parts[2]!.split(/[/\\]/).filter(Boolean)
+  const query = parseQuery(parts[3] ?? '')
 
   const first = segments[0]
   const second = segments[1]
@@ -141,7 +181,7 @@ export function parseDeepLink (input: string): ParsedDeepLink | undefined {
   if (first === 'share') {
     const shareUrl = query.get('url')
 
-    if (shareUrl === null) {
+    if (shareUrl === undefined) {
       return undefined
     }
 
@@ -169,8 +209,8 @@ export function parseDeepLink (input: string): ParsedDeepLink | undefined {
   }
 
   if (first === 'c') {
-    const channelId = toPositiveInt(second ?? null)
-    const a = toPositiveInt(third ?? null)
+    const channelId = toPositiveInt(second)
+    const a = toPositiveInt(third)
 
     if (channelId === undefined || a === undefined) {
       return undefined

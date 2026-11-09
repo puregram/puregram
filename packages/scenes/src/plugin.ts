@@ -1,4 +1,4 @@
-import { createPlugin, type Telegram } from 'puregram'
+import { createPlugin, type TelegramCore } from 'puregram/runtime'
 
 import { SceneContext, type ScenePayload } from './contexts/scene'
 import { SceneManager } from './manager'
@@ -50,7 +50,7 @@ export function scenes (options: SceneOptions = {}) {
   return createPlugin({
     name: 'scenes',
     dependsOn: ['session'],
-    install: (tg: Telegram) => {
+    install: (tg: TelegramCore) => {
       tg.useHook('onUpdate', async (update, next) => {
         const key = getStorageKey(update)
 

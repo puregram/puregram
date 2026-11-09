@@ -1,5 +1,5 @@
 import type { CallbackQueryUpdate, MessageUpdate, UpdateKindMap } from '@puregram/api'
-import { attach, type Middleware } from 'puregram'
+import { attach, type Middleware } from 'puregram/runtime'
 
 import type {
   CollectMediaGroupOptions,

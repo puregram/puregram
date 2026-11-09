@@ -1,0 +1,21 @@
+{
+  "name": "puregram-example-serverless-bot",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "puregram-serverless build src/bot.ts --schema schema.js",
+    "deploy": "yarn build && tgcloud push",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@puregram/markup": "workspace:^",
+    "@puregram/serverless": "workspace:^",
+    "@puregram/session": "workspace:^",
+    "puregram": "workspace:^"
+  },
+  "devDependencies": {
+    "@tgcloud/cli": "^0.2.0",
+    "typescript": "^5.4.0"
+  }
+}

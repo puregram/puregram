@@ -138,6 +138,14 @@
   },
   "overrides": [
     {
+      "files": ["**/packages/**/src/**"],
+      "settings": {
+        "import/resolver": {
+          "typescript": {}
+        }
+      }
+    },
+    {
       "files": ["**/src/generated/**", "**/generated/**"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off",
@@ -186,6 +194,23 @@
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/naming-convention": "off",
         "max-len": "off"
+      }
+    },
+    {
+      "files": ["**/packages/puregram/src/core.ts"],
+      "rules": {
+        "@typescript-eslint/no-unsafe-declaration-merging": "off",
+        "@typescript-eslint/no-unused-vars": ["error", {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^(_|Ext$)",
+          "caughtErrorsIgnorePattern": "^_"
+        }]
+      }
+    },
+    {
+      "files": ["**/packages/puregram/src/runtime.ts"],
+      "rules": {
+        "import/export": "off"
       }
     },
     {

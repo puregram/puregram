@@ -290,6 +290,8 @@ structural `{ text: string, entities?: readonly TelegramMessageEntity[] }` shape
 
 structural interface every `Telegram` instance satisfies, exposed without a circular dep on `puregram` core. plugins that don't need the full `Telegram<Ext>` type can take `TelegramLike` and stay loose. beyond `api` and the download / chat-action helpers it carries `bot: TelegramUser` — the bot's own identity, resolved via `getMe` (or the `bot` option) before dispatch starts, so `update.tg.bot` is always populated inside handlers
 
+shared download contracts return portable `Uint8Array` bytes, with `null` retained on helpers that can have no downloadable media. this includes update-level helpers and `TelegramLike.download`. the concrete Node client's `telegram.download(target)` still returns `Buffer`. Node code that needs Buffer-only methods should call that concrete client method or convert non-null helper results with `Buffer.from(bytes)`; shared wrappers no longer promise Node-only methods
+
 ### `FORMATTABLE_FIELDS` and `WEBHOOK_REPLY_SAFE_METHODS`
 
 two codegen'd lookup maps:

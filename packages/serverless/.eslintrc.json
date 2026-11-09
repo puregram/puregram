@@ -1,0 +1,5 @@
+{
+  "settings": {
+    "import/core-modules": ["sdk", "sdk/api", "sdk/db", "sdk/fetch"]
+  }
+}

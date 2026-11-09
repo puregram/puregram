@@ -1,6 +1,6 @@
 import type { UpdateKindMap } from '@puregram/api'
 import type { KVStorage } from '@puregram/storage'
-import type { CustomUpdate } from 'puregram'
+import type { CustomUpdate } from 'puregram/runtime'
 
 /**
  * user-augmentable session shape. widen the typed surface of `update.session`

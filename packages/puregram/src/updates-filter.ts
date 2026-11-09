@@ -1,4 +1,8 @@
-import { type UpdateKind, UPDATE_KINDS } from '@puregram/api'
+import { type UpdateKind, SERVICE_EVENT_ORDER, UPDATE_KINDS } from '@puregram/api'
+
+const BOT_API_UPDATE_KINDS = UPDATE_KINDS.filter(
+  kind => !(SERVICE_EVENT_ORDER as readonly string[]).includes(kind)
+)
 
 type MaybeArray<T> = T | readonly T[]
 
@@ -21,15 +25,15 @@ type MaybeArray<T> = T | readonly T[]
  * ```
  */
 export class UpdatesFilter {
-  /** every update kind, including the opt-in ones */
+  /** every Bot API update field, including the opt-in ones */
   static all () {
-    return [...UPDATE_KINDS]
+    return [...BOT_API_UPDATE_KINDS]
   }
 
   /** every update kind except the listed ones */
   static except (kinds: MaybeArray<UpdateKind>) {
     const skip = new Set(Array.isArray(kinds) ? kinds : [kinds])
 
-    return UPDATE_KINDS.filter(k => !skip.has(k))
+    return BOT_API_UPDATE_KINDS.filter(k => !skip.has(k))
   }
 }

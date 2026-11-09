@@ -1,49 +1,64 @@
-import { createHash } from 'node:crypto'
-import { readFile } from 'node:fs/promises'
+import { sha256 } from '@noble/hashes/sha2.js'
+import { bytesToHex } from '@noble/hashes/utils.js'
+import { type MediaInput, MediaSourceType } from 'puregram/runtime'
 
-import { type MediaInput, MediaSourceType } from 'puregram'
+export interface HashFetchResponse {
+  ok: boolean
+  status: number
+  body: AsyncIterable<Uint8Array> | null
+}
 
-/** sha-256 of arbitrary bytes as lowercase hex */
-export function hashBytes (bytes: Buffer | Uint8Array | ArrayBufferLike) {
-  const hasher = createHash('sha256')
+export type HashFetch = (url: string) => Promise<HashFetchResponse>
 
-  if (Buffer.isBuffer(bytes)) {
-    hasher.update(bytes)
-  } else if (bytes instanceof Uint8Array) {
-    hasher.update(bytes)
-  } else {
-    hasher.update(new Uint8Array(bytes))
+function toBytes (bytes: ArrayBufferView | ArrayBufferLike) {
+  if (bytes instanceof Uint8Array) {
+    return bytes
   }
 
-  return hasher.digest('hex')
+  return ArrayBuffer.isView(bytes)
+    ? new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+    : new Uint8Array(bytes)
+}
+
+/** sha-256 of arbitrary bytes as lowercase hex */
+export function hashBytes (bytes: ArrayBufferView | ArrayBufferLike) {
+  return bytesToHex(sha256(toBytes(bytes)))
 }
 
 /** computes a sha-256 hex digest of the bytes a `MediaInput` resolves to */
-export async function hashMediaInput (media: MediaInput, fetchImpl: typeof fetch = fetch) {
-  if (media.type === MediaSourceType.Buffer) {
-    return hashBytes(media.value)
-  }
-
-  if (media.type === MediaSourceType.ArrayBuffer) {
+export async function hashMediaInput (media: MediaInput, fetchImpl?: HashFetch) {
+  if (media.type === MediaSourceType.Buffer || media.type === MediaSourceType.ArrayBuffer) {
     return hashBytes(media.value)
   }
 
   if (media.type === MediaSourceType.Path) {
-    const buf = await readFile(media.value)
+    // node:fs is absent on serverless runtimes
+    const { readFile } = await import('node:fs/promises')
 
-    return hashBytes(buf)
+    return hashBytes(await readFile(media.value))
   }
 
   if (media.type === MediaSourceType.Url) {
-    const res = await fetchImpl(media.value)
+    // the DOM lib types Response.body without the async iterator node provides
+    const request = fetchImpl ?? (globalThis.fetch as HashFetch | undefined)
 
-    if (!res.ok) {
+    if (request === undefined) {
+      throw new TypeError('mediaCacher: no global fetch to hash url sources — pass `fetch` to mediaCacher()')
+    }
+
+    const res = await request(media.value)
+
+    if (!res.ok || res.body === null) {
       throw new Error(`mediaCacher: hash fetch failed for ${media.value} (status ${res.status})`)
     }
 
-    const ab = await res.arrayBuffer()
+    const hasher = sha256.create()
 
-    return hashBytes(ab)
+    for await (const chunk of res.body) {
+      hasher.update(chunk)
+    }
+
+    return bytesToHex(hasher.digest())
   }
 
   // streams and File are intentionally not supported: they're not deterministically replayable

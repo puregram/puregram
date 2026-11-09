@@ -1,7 +1,7 @@
 import type * as Interfaces from '@puregram/api'
 
 import type { ButtonStyleParams, InlineButtonParams, CallbackData } from './types'
-import { decorateInlineButton, normalizeCallbackData } from './types'
+import { cloneButtons, decorateInlineButton, normalizeCallbackData } from './types'
 
 interface TextButtonParams {
   text: string
@@ -94,7 +94,7 @@ export class InlineKeyboardBuilder {
   static from (markup: Interfaces.TelegramInlineKeyboardMarkup) {
     const builder = new InlineKeyboardBuilder()
 
-    builder.rows = structuredClone(markup.inline_keyboard)
+    builder.rows = cloneButtons(markup.inline_keyboard)
     builder.isForceReply = markup.force_reply ?? false
 
     return builder
@@ -246,8 +246,8 @@ export class InlineKeyboardBuilder {
   clone () {
     const builder = new InlineKeyboardBuilder()
 
-    builder.rows = structuredClone(this.rows)
-    builder.currentRow = structuredClone(this.currentRow)
+    builder.rows = cloneButtons(this.rows)
+    builder.currentRow = cloneButtons(this.currentRow)
 
     return builder
   }

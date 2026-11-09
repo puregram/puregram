@@ -47,7 +47,7 @@ await telegram.startPolling()
 `.extend(session())` does three things at install time:
 - registers a high-priority `onUpdate` middleware that loads the user's data from storage, wraps it in a proxy, and attaches it as `update.session`;
 - flushes any changes back to storage when the handler chain returns;
-- exposes the configured backing store directly as `telegram.session` so you can read or evict keys outside an update context
+- exposes session values as `telegram.session` so you can read or evict keys outside an update context
 
 ### installation
 
@@ -102,7 +102,9 @@ message.session.counter += 1                                     // counter = 3
 setTimeout(() => console.log(message.session.counter), 50_000)   // logs: 3
 ```
 
-if your backend already supports sliding-window expiry (redis, sqlite with `last_seen`, …) it'll be detected automatically via `isTtlStorage(storage)` and `touch()`'d on every read, so the timer rolls forward without you having to re-wrap
+if your backend supports sliding-window expiry, `isTtlStorage(storage)` detects it and unchanged sessions are `touch()`'d after access. that renews the backend's whole-session timer, not individual field deadlines
+
+field deadlines persist with the session across serialized storage and cold invocations. TTL-bearing records use a versioned outer envelope; user-object property names are not reserved, and `telegram.session.get` returns ordinary session data with expired fields removed. older plain records remain readable, but lost deadlines from older versions cannot be reconstructed. upgrade all processes sharing a session store together before writing the new TTL format — older session versions cannot read it
 
 ---
 
@@ -127,7 +129,7 @@ idempotent — you can call it as many times as you want
 
 ## direct storage access (`telegram.session`)
 
-inside an update handler you've got `update.session` (proxied + auto-flushed). outside one — a cron job, a webhook from another service, a scheduled cleanup — you want raw access to the backing store, and that's what `telegram.session` is. it forwards to whatever `KVStorage<unknown>` you passed in:
+outside an update handler, `telegram.session` provides access without the auto-flushing proxy. it decodes persisted TTL records and removes expired fields before returning ordinary values; the raw backing store may contain the internal envelope:
 
 ```ts
 await telegram.session.set('promo:flag', { active: true, until: Date.now() + 86_400_000 })

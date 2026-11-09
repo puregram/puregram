@@ -1,0 +1,76 @@
+{
+  "name": "@puregram/serverless",
+  "version": "3.0.0",
+  "description": "telegram serverless runtime and module builder for puregram",
+  "type": "module",
+  "sideEffects": [
+    "./lib/cli.js"
+  ],
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
+    },
+    "./build": {
+      "types": "./lib/build.d.ts",
+      "import": "./lib/build.js",
+      "default": "./lib/build.js"
+    },
+    "./schema": {
+      "types": "./lib/storage-schema.d.ts",
+      "import": "./lib/storage-schema.js",
+      "default": "./lib/storage-schema.js"
+    },
+    "./storage": {
+      "types": "./lib/storage.d.ts",
+      "import": "./lib/storage.js",
+      "default": "./lib/storage.js"
+    }
+  },
+  "bin": {
+    "puregram-serverless": "./lib/cli.js"
+  },
+  "files": [
+    "lib",
+    "sdk.d.ts"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc --project tsconfig.json && tsc-alias -p tsconfig.json --resolve-full-paths",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@puregram/api": "workspace:~",
+    "@puregram/storage": "workspace:^",
+    "esbuild": "^0.27.7",
+    "puregram": "workspace:^"
+  },
+  "devDependencies": {
+    "@puregram/callback-data": "workspace:^",
+    "@puregram/markup": "workspace:^",
+    "@puregram/rate-limit": "workspace:^",
+    "@puregram/scenes": "workspace:^",
+    "@puregram/session": "workspace:^",
+    "@puregram/utils": "workspace:^",
+    "tsc-alias": "1",
+    "typescript": "^5.4.0",
+    "vitest": "^1.4.0"
+  },
+  "license": "MPL-2.0",
+  "author": "starkow",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://puregram.cool/docs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/puregram/puregram",
+    "directory": "packages/serverless"
+  }
+}

@@ -66,6 +66,40 @@ describe('runRequest', () => {
     expect(out).toEqual({ ok: false, error_code: 400, description: 'bad' })
   })
 
+  it('uses a replacement response from an interceptor', async () => {
+    const deps = baseDeps({
+      request: async () => ({
+        status: 200,
+        json: async () => ({ ok: false, error_code: 401, description: 'unauthorized' })
+      })
+    })
+
+    deps.hooks.add('onResponseIntercept', async (ctx, next) => {
+      ctx.json = { ok: true, result: { id: 42 } }
+      await next()
+    })
+
+    await expect(runRequest(deps, 'getMe', undefined)).resolves.toEqual({ id: 42 })
+  })
+
+  it('applies suppression to an interceptor replacement error', async () => {
+    const deps = baseDeps({
+      request: async () => ({
+        status: 200,
+        json: async () => ({ ok: true, result: { id: 1 } })
+      })
+    })
+    const error = { ok: false, error_code: 403, description: 'blocked by policy' }
+
+    deps.hooks.add('onResponseIntercept', async (ctx, next) => {
+      ctx.json = error
+      await next()
+    })
+
+    await expect(runRequest(deps, 'getMe', undefined)).rejects.toMatchObject({ code: 403 })
+    await expect(runRequest(deps, 'getMe', { suppress: true })).resolves.toEqual(error)
+  })
+
   it('runs hook chain stages in order', async () => {
     const httpClient: HttpClient = {
       request: vi.fn().mockResolvedValue({

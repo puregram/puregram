@@ -1,5 +1,4 @@
-import type { Update } from '@puregram/api'
-import type { CustomUpdate } from 'puregram'
+import type { CustomUpdate, Update } from '@puregram/api'
 
 import type { SceneInterface } from './scenes/scene'
 

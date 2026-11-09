@@ -15,7 +15,7 @@ export {
 
 export {
   fromOpenAI, fromAnthropic, fromVercelAI, fromOllama,
-  fromLangChain, fromTextStream, fromBytes, fromEventEmitter
+  fromLangChain, fromTextStream, fromBytes, fromEventEmitter, fromSSE
 } from './adapters'
 
 export { normalize } from './normalize'

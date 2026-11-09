@@ -1,3 +1,4 @@
+import { defineFilter } from '@puregram/api'
 import { describe, it, expect } from 'vitest'
 
 import { Dispatcher } from '../../src/dispatch/on'
@@ -26,6 +27,55 @@ describe('resolveAllowedUpdates', () => {
     tg.onChatMember(() => {})
 
     expect(tg.resolveAllowedUpdates('auto')).toEqual(['chat_member'])
+  })
+
+  it('subscribes to every service-event parent without duplicate message fields', () => {
+    const tg = new Telegram({ token: 'X' })
+
+    tg.onMessage(() => {})
+    tg.onNewChatMembers(() => {})
+    tg.onPinnedMessage(() => {})
+
+    expect(tg.resolveAllowedUpdates('auto').sort()).toEqual([
+      'channel_post', 'edited_channel_post', 'edited_message', 'message'
+    ])
+  })
+
+  it('maps service kinds in predicate metadata and preserves independent fields', () => {
+    const tg = new Telegram({ token: 'X' })
+
+    tg.onUpdate(defineFilter(
+      'service-or-reaction',
+      (_update: unknown): _update is object => true,
+      { kinds: ['new_chat_members', 'message_reaction'] }
+    ), () => {})
+
+    expect(tg.resolveAllowedUpdates('auto').sort()).toEqual([
+      'channel_post', 'edited_channel_post', 'edited_message', 'message', 'message_reaction'
+    ])
+  })
+
+  it('falls back for custom kinds rather than sending invalid Bot API fields', () => {
+    const tg = new Telegram({ token: 'X' })
+
+    tg.defineUpdate('job_done')
+    tg.on('job_done', () => {})
+    tg.onMessage(() => {})
+
+    expect(tg.resolveAllowedUpdates('auto')).toEqual([])
+  })
+
+  it('does not trust unknown filter kinds as Bot API subscriptions', () => {
+    const tg = new Telegram({ token: 'X' })
+
+    tg.onUpdate(defineFilter(
+      'custom-kind',
+      (_update: unknown): _update is object => true,
+      { kinds: ['job_done'] }
+    ), () => {})
+    tg.onMessage(() => {})
+
+    expect(tg.resolveAllowedUpdates('auto')).toEqual([])
   })
 
   it('falls back to the default when an opaque predicate is present', () => {

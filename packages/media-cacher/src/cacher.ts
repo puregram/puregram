@@ -1,9 +1,9 @@
 import { type KVStorage, MemoryStorage } from '@puregram/storage'
 import {
-  createPlugin, type MediaInput, MediaSource, MediaSourceType, type RequestContext, type Telegram
-} from 'puregram'
+  createPlugin, type MediaInput, MediaSource, MediaSourceType, type RequestContext, type TelegramCore
+} from 'puregram/runtime'
 
-import { hashMediaInput } from './hash'
+import { type HashFetch, hashMediaInput } from './hash'
 import { type AllowedMediaMethod, MEDIA_METHOD_TO_KEY_MAP } from './method-map'
 
 type GetStorageKey = (ctx: RequestContext) => string
@@ -31,8 +31,9 @@ export interface MediaCacherOptions {
    *
    * - `'sourceValue'` (default): the raw string the `MediaSource` carries (path/url)
    * - `'hash'`: sha-256 of the bytes the source resolves to — collapses distinct paths/urls
-   *   that point at identical content to one entry. note that url-keyed-by-hash uploads
-   *   fetch the source twice (once for the digest, once for the actual upload)
+   *   that point at identical content to one entry, and also caches `MediaSource.bytes`/`.buffer`
+   *   uploads. note that url-keyed-by-hash uploads fetch the source twice (once for the digest,
+   *   once for the actual upload)
    */
   keyStrategy?: KeyStrategy
   /**
@@ -40,6 +41,8 @@ export interface MediaCacherOptions {
    * against `description`. defaults cover the known stale-file-id paths
    */
   staleFileIdPatterns?: readonly string[]
+  /** fetch used to hash url sources with `keyStrategy: 'hash'`. default: global `fetch` */
+  fetch?: HashFetch
 }
 
 /** handle attached as `tg.mediaCacher` for manual cache inspection and eviction */
@@ -126,7 +129,7 @@ function filenameOptsFor (media: MediaInput) {
   return media.filename !== undefined ? { filename: media.filename } : {}
 }
 
-/** transparent file_id caching plugin. on cache hit, swaps `Path`/`Url` media for `MediaSource.fileId` */
+/** transparent file_id caching plugin. on cache hit, swaps cacheable media for `MediaSource.fileId` */
 export function mediaCacher (options: MediaCacherOptions = {}) {
   const storage = options.storage ?? new MemoryStorage<string>()
   const getStorageKey = options.getStorageKey ?? defaultGetStorageKey
@@ -138,9 +141,13 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
   // guarantees "at most once" retry per params object
   const retried = new WeakSet<Record<string, unknown>>()
 
+  const cacheableTypes = new Set<MediaSourceType>(keyStrategy === 'hash'
+    ? [MediaSourceType.Path, MediaSourceType.Url, MediaSourceType.Buffer, MediaSourceType.ArrayBuffer]
+    : [MediaSourceType.Path, MediaSourceType.Url])
+
   const deriveSecondHalf = async (media: MediaInput) => {
     if (keyStrategy === 'hash') {
-      return hashMediaInput(media)
+      return hashMediaInput(media, options.fetch)
     }
 
     return typeof media.value === 'string' ? media.value : undefined
@@ -148,7 +155,7 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
 
   return createPlugin({
     name: 'mediaCacher',
-    install: (tg: Telegram) => {
+    install: (tg: TelegramCore) => {
       tg.useHook('onBeforeRequest', async (raw, next) => {
         const ctx = raw
 
@@ -173,7 +180,7 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
           throw new TypeError(`mediaCacher: ${ctx.method}.${mediaKey} must be created via MediaSource.*`)
         }
 
-        if (media.type !== MediaSourceType.Path && media.type !== MediaSourceType.Url) {
+        if (!cacheableTypes.has(media.type)) {
           await next()
 
           return
@@ -345,12 +352,12 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
   })
 }
 
-function resolveApi (tg: Telegram) {
+function resolveApi (tg: TelegramCore) {
   return (tg as unknown as { api: Record<string, ApiCallable | undefined> }).api
 }
 
 async function doReupload (
-  tg: Telegram,
+  tg: TelegramCore,
   method: string,
   originalParams: Record<string, unknown>,
   mediaKey: string,
@@ -374,7 +381,7 @@ async function doReupload (
 }
 
 async function sendWithFileId (
-  tg: Telegram,
+  tg: TelegramCore,
   method: string,
   originalParams: Record<string, unknown>,
   mediaKey: string,

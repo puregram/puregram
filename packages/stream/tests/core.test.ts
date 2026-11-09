@@ -393,3 +393,48 @@ describe('runStream — rich mode', () => {
     })).rejects.toThrow(/mutually exclusive/)
   })
 })
+
+describe('runStream — runtimes without timers', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  it('sends a due draft on the next piece instead of sleeping, then finalizes the full text', async () => {
+    let now = 10_000
+    const gates = Array.from({ length: 4 }, () => Promise.withResolvers<void>())
+
+    vi.spyOn(Date, 'now').mockImplementation(() => now)
+    vi.stubGlobal('setTimeout', undefined)
+
+    async function * pieces () {
+      for (const [index, piece] of ['a', 'b', 'c'].entries()) {
+        await gates[index]!.promise
+        yield piece
+      }
+
+      await gates[3]!.promise
+    }
+
+    const { api, drafts, messages } = makeMockApi()
+    const run = runStream(api, {
+      chatId: 1,
+      source: pieces(),
+      draftIdOffset: 1,
+      editIntervalMs: 1000,
+      thinkingPlaceholder: true
+    })
+
+    for (const [index, at] of [10_100, 11_200, 11_300, 11_400].entries()) {
+      await new Promise(resolve => setImmediate(resolve))
+      now = at
+      gates[index]!.resolve()
+    }
+
+    const result = await run
+
+    expect(drafts.map(draft => draft.text)).toEqual(['', 'ab'])
+    expect(messages.map(message => message.text)).toEqual(['abc'])
+    expect(result.skipped).toBe(0)
+  })
+})
