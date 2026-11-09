@@ -1,0 +1,21 @@
+{
+  "name": "puregram-example-widgets-showcase",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "start": "tsx --env-file=.env src/index.ts",
+    "sizes": "tsx src/sizes.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@puregram/widgets": "*",
+    "puregram": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "@puregram/widgets",
+  "version": "0.0.0",
+  "description": "HTML widgets for puregram",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc --project tsconfig.json && tsc-alias -p tsconfig.json --resolve-full-paths",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@puregram/api": "workspace:~",
+    "pako": "^2.1.0",
+    "puregram": "workspace:^"
+  },
+  "devDependencies": {
+    "@puregram/test": "workspace:^",
+    "@types/pako": "^2.0.3",
+    "tsc-alias": "1",
+    "typescript": "^5.4.0",
+    "vitest": "^1.4.0"
+  },
+  "license": "MPL-2.0",
+  "author": "starkow",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://puregram.cool/docs",
+  "bugs": {
+    "url": "https://github.com/puregram/puregram/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/puregram/puregram",
+    "directory": "packages/widgets"
+  },
+  "keywords": [
+    "telegram",
+    "telegram-bot-api",
+    "puregram",
+    "plugin",
+    "widgets",
+    "html"
+  ]
+}
