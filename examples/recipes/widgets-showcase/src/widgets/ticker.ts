@@ -236,7 +236,7 @@ export function registerTicker (tg: Telegram) {
       return Ticker.sendShared(tg, message.chat.id, widgetId)
     }
 
-    const sent = await Ticker.send(tg, message.chat.id, { shared: true, allowQueries: true, public: state })
+    const sent = await message.sendWidget(Ticker, { shared: true, allowQueries: true, public: state })
 
     widgetId = sent.widget?.id
     console.log('ticker: created shared widget', widgetId)

@@ -4,8 +4,11 @@ import type {
   TelegramInputMediaDocument,
   TelegramInputMediaPhoto,
   TelegramInputMediaVideo,
-  TelegramMessage
+  TelegramMessage,
+  WidgetInput,
+  WidgetSendOptions
 } from '@puregram/api'
+import { widgetSendParams } from '@puregram/api'
 
 import type { TelegramCore } from '../core'
 import type { InputMediaSticker, InputMediaVideoNote, InputMediaVoice } from '../factories'
@@ -59,6 +62,15 @@ function omit<T extends object, K extends keyof T> (obj: T, keys: readonly K[]) 
 export function installShortcuts (tg: TelegramCore) {
   define(tg, 'send', function (this: TelegramCore, chat: number | string, text: string, params: Record<string, unknown> = {}) {
     return (this.api as any).sendMessage({ chat_id: chat, text, ...params })
+  })
+
+  define(tg, 'sendWidget', function<W extends WidgetInput> (
+    this: TelegramCore,
+    chat: number | string,
+    widget: W,
+    params?: WidgetSendOptions<W>
+  ) {
+    return this.api.sendWidget({ chat_id: chat, ...widgetSendParams(widget, params) })
   })
 
   define(tg, 'sendMedia', function (this: TelegramCore, chat: number | string, media: SendMediaQuery, params: Record<string, unknown> = {}) {

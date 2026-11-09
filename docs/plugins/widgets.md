@@ -49,7 +49,7 @@ document.getElementById('increment').onclick = () => {
 
 tg.command('counter', async (message) => {
   if (message.chat.type !== 'private') return
-  const sent = await Counter.send(tg, message.chat.id, {
+  const sent = await message.sendWidget(Counter, {
     chat: { count: 0 }, allowQueries: true, caption: 'interactive counter'
   })
   counts.set(`${message.chat.id}:${sent.message_id}`, 0)
@@ -116,7 +116,7 @@ const Greeting = defineWidget({
   chat: json<{ count: number }>()
 })
 
-await Greeting.render('Alice').send(tg, chatId, { chat: { count: 0 } })
+await tg.sendWidget(chatId, Greeting.render('Alice'), { chat: { count: 0 } })
 ```
 
 use a template for content fixed at send time. changing a layout requires a new widget message, not a state edit. captions remain editable through `editMessageCaption`.
@@ -125,7 +125,7 @@ use a template for content fixed at send time. changing a layout requires a new 
 
 | helper | result |
 |---|---|
-| `Widget.send(tg, chatId, options?)` | sends HTML, typed `chat` / `public` state, `allowQueries`, `shared`, and ordinary `sendWidget` options |
+| `message.sendWidget(Widget, options?)` / `tg.sendWidget(chatId, Widget, options?)` | sends HTML, typed `chat` / `public` state, `allowQueries`, `shared`, and ordinary `sendWidget` options |
 | `Widget.sendShared(tg, chatId, widgetId, options?)` | reuses an existing shared widget, with this message's chat state and caption |
 | `Widget.content(options?)` | new inline widget content; **test server only** |
 | `Widget.sharedContent(widgetId, options?)` | existing shared widget inline content; **test server only** |

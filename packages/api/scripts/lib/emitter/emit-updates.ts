@@ -217,6 +217,7 @@ export function emitUpdates (schema: Schema) {
   const usesRichLike = Object.entries(analysis.byKind).some(([, list]) =>
     list.some(sc => sc.userArgs.some(a => isRichMessageRef(a.type))))
 
+  const usesWidget = Object.values(analysis.byKind).some(list => list.some(sc => sc.method === 'sendWidget'))
   // ephemeral helpers back the send-injection / twin-routing / callback opt-in shortcut flags
   const usesEphemeral = Object.values(analysis.byKind).some(list =>
     list.some(sc => sc.ephemeralSend === true || sc.ephemeralTwin !== undefined || sc.callbackEphemeral === true))
@@ -255,6 +256,8 @@ export function emitUpdates (schema: Schema) {
     ...(usesHas ? [importTypeNamed(['Has'], '../util-types')] : []),
     ...(usesFormattable ? [importTypeNamed(['Formattable'], '../formattable')] : []),
     ...(usesRichLike ? [importTypeNamed(['RichLike'], '../rich-like')] : []),
+    ...(usesWidget ? [importTypeNamed(['WidgetInput', 'WidgetSendOptions'], '../widget-like')] : []),
+    ...(usesWidget ? [importNamed(['widgetSendParams'], '../widget-like')] : []),
     ...(wrappedNames.size > 0 ? [importNamed([...wrappedNames].sort(), './structures')] : []),
     ...(usedArrayWrappers.length > 0
       ? [importNamed(usedArrayWrappers, '../structures-handcrafted')]
@@ -1252,6 +1255,7 @@ function emitPrimitiveGetter (f: SchemaField, camelName: string) {
 }
 
 function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<string>>) {
+  const isWidget = sc.method === 'sendWidget'
   const filledProps = sc.filledArgs.map((anchor) => {
     const buildAccess = () => {
       let access: ts.Expression = ts.factory.createThis()
@@ -1322,7 +1326,9 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
   const positionalParams = positionals.map((p) => {
     let type = typeRefToTs(p.arg.type)
 
-    if (isRichMessageRef(p.arg.type)) {
+    if (isWidget && p.schemaArg === 'html') {
+      type = ts.factory.createTypeReferenceNode('W')
+    } else if (isRichMessageRef(p.arg.type)) {
       type = ts.factory.createUnionTypeNode([
         type,
         ts.factory.createTypeReferenceNode('RichLike')
@@ -1343,11 +1349,18 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     )
   })
 
-  const positionalProps = positionals.map(p =>
-    sc.callbackEphemeral === true && p.schemaArg === 'chat_id'
+  const positionalProps = positionals.map((p) => {
+    if (isWidget && p.schemaArg === 'html') {
+      return ts.factory.createSpreadAssignment(ts.factory.createCallExpression(
+        ts.factory.createIdentifier('widgetSendParams'), undefined,
+        [ts.factory.createIdentifier(p.name), ts.factory.createIdentifier('params')]
+      ))
+    }
+
+    return sc.callbackEphemeral === true && p.schemaArg === 'chat_id'
       ? ts.factory.createSpreadAssignment(parseExpression(`${p.name} == null ? {} : { chat_id: ${p.name} }`))
       : ts.factory.createPropertyAssignment(p.schemaArg, ts.factory.createIdentifier(p.name))
-  )
+  })
 
   // reply twins fill `reply_parameters.message_id` from the update and merge any
   // user-supplied reply_parameters on top (so quote / allow_sending_without_reply survive,
@@ -1456,7 +1469,7 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
           ts.factory.createObjectLiteralExpression([
             ...filledProps,
             ...positionalProps,
-            ts.factory.createSpreadAssignment(ts.factory.createIdentifier('params')),
+            ...(!isWidget ? [ts.factory.createSpreadAssignment(ts.factory.createIdentifier('params'))] : []),
             ...replyProps,
             ...ephemeralProps
           ], true)
@@ -1529,12 +1542,23 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     ? ts.factory.createObjectLiteralExpression([], false)
     : undefined
 
+  const widgetOptions = ts.factory.createTypeReferenceNode('WidgetSendOptions', [ts.factory.createTypeReferenceNode('W')])
+  const paramsType = isWidget
+    ? sc.filledArgs.length === 0
+      ? widgetOptions
+      : ts.factory.createTypeReferenceNode('Omit', [
+        widgetOptions,
+        ts.factory.createUnionTypeNode(sc.filledArgs.map(a =>
+          ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(a.schemaArg))))
+      ])
+    : paramsTypeNode
+
   const paramsParam = ts.factory.createParameterDeclaration(
     undefined, undefined,
     ts.factory.createIdentifier('params'),
     undefined,
-    paramsTypeNode,
-    defaultInit
+    paramsType,
+    isWidget && defaultInit !== undefined ? ts.factory.createAsExpression(defaultInit, paramsType) : defaultInit
   )
 
   let methodParams = [...positionalParams, paramsParam]
@@ -1589,7 +1613,12 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
   const method = ts.factory.createMethodDeclaration(
     undefined, undefined,
     ts.factory.createIdentifier(verbFor(sc)),
-    undefined, undefined,
+    undefined,
+    isWidget
+      ? [ts.factory.createTypeParameterDeclaration(
+          undefined, 'W', ts.factory.createTypeReferenceNode('WidgetInput')
+        )]
+      : undefined,
     methodParams,
     undefined,
     methodBody

@@ -27,20 +27,15 @@ const Counter = defineWidget({
   public: text()
 })
 
-describe('defineWidget.send', () => {
-  it('encodes state and maps the flags', async () => {
-    const { api, holder } = fakeApi()
-
-    await Counter.send(holder, 42, {
+describe('defineWidget.content', () => {
+  it('encodes state and maps the flags', () => {
+    expect(Counter.content({
       chat: { count: 0 },
       public: 'hello',
       allowQueries: true,
       shared: true,
       caption: 'counter'
-    })
-
-    expect(api.sendWidget).toHaveBeenCalledWith({
-      chat_id: 42,
+    })).toEqual({
       html: '<div id="n"></div>',
       chat_data: '{"count":0}',
       public_data: 'hello',
@@ -50,39 +45,18 @@ describe('defineWidget.send', () => {
     })
   })
 
-  it('omits state that was not given and clears state given as null', async () => {
-    const { api, holder } = fakeApi()
-
-    await Counter.send(holder, 42, { public: null })
-
-    expect(api.sendWidget).toHaveBeenCalledWith({ chat_id: 42, html: '<div id="n"></div>', public_data: '' })
+  it('omits absent state and clears null state', () => {
+    expect(Counter.content({ public: null })).toEqual({ html: '<div id="n"></div>', public_data: '' })
   })
 
-  it('checks the html once per definition', async () => {
-    const source = html`<b>x</b>`
-    const assertFits = vi.spyOn(source, 'assertFits')
-    const widget = defineWidget({ html: source })
-    const { holder } = fakeApi()
-
-    await widget.send(holder, 1)
-    await widget.send(holder, 1)
-    widget.content()
-
-    expect(assertFits).toHaveBeenCalledTimes(1)
-  })
-
-  it('refuses html that does not fit before calling the api', () => {
+  it('refuses html that exceeds the size limit', () => {
     const widget = defineWidget({ html: raw('a'.repeat(40_000)) })
-    const { api, holder } = fakeApi()
 
-    expect(() => widget.send(holder, 1)).toThrow(WidgetTooLargeError)
-    expect(api.sendWidget).not.toHaveBeenCalled()
+    expect(() => widget.content()).toThrow(WidgetTooLargeError)
   })
 
   it('refuses oversized state', () => {
-    const { holder } = fakeApi()
-
-    expect(() => Counter.send(holder, 1, { public: 'x'.repeat(1025) })).toThrow(WidgetStateTooLargeError)
+    expect(() => Counter.content({ public: 'x'.repeat(1025) })).toThrow(WidgetStateTooLargeError)
   })
 })
 
@@ -230,13 +204,8 @@ describe('defineWidget with an html template', () => {
     public: json<number[]>()
   })
 
-  it('renders the html per call and sends it', async () => {
-    const { api, holder } = fakeApi()
-
-    await Poll.render('a < b?').send(holder, 42, { public: [0, 0], shared: true })
-
-    expect(api.sendWidget).toHaveBeenCalledWith({
-      chat_id: 42,
+  it('renders escaped html and state per call', () => {
+    expect(Poll.render('a < b?').content({ public: [0, 0], shared: true })).toEqual({
       html: '<h3>a &lt; b?</h3>',
       public_data: '[0,0]',
       is_shared: true
@@ -253,15 +222,11 @@ describe('defineWidget with an html template', () => {
     expect(api.editSharedWidgetData).toHaveBeenCalledWith({ widget_id: '7', public_data: '[1,2]' })
     expect(api.editMessageWidgetData).toHaveBeenCalledWith({ chat_id: 1, message_id: 2, public_data: '[3]' })
     expect(Poll.decode({ widget: { html: '', public_data: '[4]' } })).toEqual({ chat: null, public: [4] })
-    expect('send' in Poll).toBe(false)
   })
 
-  it('checks each rendered html before sending it', () => {
+  it('checks each rendered html against the size limit', () => {
     const Big = defineWidget({ html: (size: number) => raw('a'.repeat(size)) })
-    const { api, holder } = fakeApi()
 
-    expect(() => Big.render(40_000).send(holder, 1)).toThrow(WidgetTooLargeError)
-    expect(api.sendWidget).not.toHaveBeenCalled()
-    expect(() => Big.render(10).content()).not.toThrow()
+    expect(() => Big.render(40_000).content()).toThrow(WidgetTooLargeError)
   })
 })

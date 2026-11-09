@@ -149,7 +149,7 @@ export function registerPoll (tg: Telegram) {
       return message.send(`usage: ${USAGE}\n2 to ${MAX_OPTIONS} options`)
     }
 
-    await Poll.render(poll).send(tg, message.chat.id, { shared: true, allowQueries: true, public: emptyTally() })
+    await message.sendWidget(Poll.render(poll), { shared: true, allowQueries: true, public: emptyTally() })
   })
 
   const vote = async (query: VoteQuery) => {

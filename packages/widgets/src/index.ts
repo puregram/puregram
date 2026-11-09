@@ -28,7 +28,6 @@ export type {
   WidgetDefinitionOptions,
   WidgetEditSharedOptions,
   WidgetMessageRef,
-  WidgetSendOptions,
   WidgetSendSharedOptions,
   WidgetSharedContentOptions,
   WidgetSource,

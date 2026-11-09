@@ -237,7 +237,7 @@ export function registerCountdown (tg: Telegram) {
       return message.send(`usage: ${USAGE}\na date without a zone is utc`)
     }
 
-    await Countdown.render(event).send(tg, message.chat.id, { allowQueries: true, chat: emptyRsvp() })
+    await message.sendWidget(Countdown.render(event), { allowQueries: true, chat: emptyRsvp() })
   })
 
   tg.onWidgetQuery(Rsvp.filter, async (query) => {

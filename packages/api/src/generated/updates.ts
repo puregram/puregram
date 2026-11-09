@@ -11,6 +11,8 @@ import type { ActionControllerLike, ActionControllerParams, TelegramLike } from 
 import type { Has } from "../util-types";
 import type { Formattable } from "../formattable";
 import type { RichLike } from "../rich-like";
+import type { WidgetInput, WidgetSendOptions } from "../widget-like";
+import { widgetSendParams } from "../widget-like";
 import { Animation, Audio, Chat, ChatBoost, ChatInviteLink, ChatMember, ChatShared, Contact, Dice, Document, ExternalReplyInfo, ForumTopicCreated, ForumTopicEdited, Game, Giveaway, GiveawayCompleted, GiveawayWinners, InlineKeyboardMarkup, Invoice, LinkPreviewOptions, LivePhoto, Location, Message, MessageEntity, OrderInfo, PaidMessagesWaived, PassportData, PhotoSize, Poll, PollMedia, PollOption, ProximityAlertTriggered, ReactionCount, ShippingAddress, Sticker, Story, SuccessfulPayment, TextQuote, TonWalletTransfer, User, UsersShared, Venue, Video, VideoChatEnded, VideoChatParticipantsInvited, VideoChatScheduled, VideoNote, Voice, WebAppData, Widget, WriteAccessAllowed } from "./structures";
 import { Photo, PollOptions, ReactionCounts, Reactions } from "../structures-handcrafted";
 import { callbackEphemeralParams, ephemeralSendParams, ephemeralTarget } from "../ephemeral";
@@ -1429,61 +1431,21 @@ export class MessageThreadShortcuts {
     /**
      * shortcut for `tg.api.sendWidget`
      */
-    sendWidget(html: string, params: {
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    sendWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id" | "message_thread_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id" | "message_thread_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            html: html,
-            ...params
+            ...widgetSendParams(widget, params)
         });
     }
     /**
      * reply shortcut for `tg.api.sendWidget` — sets `reply_parameters` to this message
      */
-    replyWithWidget(html: string, params: {
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    replyWithWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id" | "message_thread_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id" | "message_thread_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            html: html,
-            ...params,
+            ...widgetSendParams(widget, params),
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
         });
     }
@@ -2365,31 +2327,11 @@ export class MessageGenerationStoppedThreadShortcuts {
     /**
      * shortcut for `tg.api.sendWidget`
      */
-    sendWidget(html: string, params: {
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    sendWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id" | "message_thread_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id" | "message_thread_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            html: html,
-            ...params
+            ...widgetSendParams(widget, params)
         });
     }
     /**
@@ -6526,61 +6468,19 @@ class MessageShared {
     /**
      * shortcut for `tg.api.sendWidget`
      */
-    sendWidget(html: string, params: {
-        message_thread_id?: number;
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    sendWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
-            html: html,
-            ...params
+            ...widgetSendParams(widget, params)
         });
     }
     /**
      * reply shortcut for `tg.api.sendWidget` — sets `reply_parameters` to this message
      */
-    replyWithWidget(html: string, params: {
-        message_thread_id?: number;
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    replyWithWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
-            html: html,
-            ...params,
+            ...widgetSendParams(widget, params),
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
         });
     }
@@ -13298,31 +13198,10 @@ class ChatMemberUpdatedShared {
     /**
      * shortcut for `tg.api.sendWidget`
      */
-    sendWidget(html: string, params: {
-        message_thread_id?: number;
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    sendWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
-            html: html,
-            ...params
+            ...widgetSendParams(widget, params)
         });
     }
     /**
@@ -15208,31 +15087,10 @@ export class ChatJoinRequestUpdate {
     /**
      * shortcut for `tg.api.sendWidget`
      */
-    sendWidget(html: string, params: {
-        message_thread_id?: number;
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    sendWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
-            html: html,
-            ...params
+            ...widgetSendParams(widget, params)
         });
     }
     /**
@@ -17187,31 +17045,10 @@ export class StoppedMessageGenerationUpdate {
     /**
      * shortcut for `tg.api.sendWidget`
      */
-    sendWidget(html: string, params: {
-        message_thread_id?: number;
-        width?: number;
-        height?: number;
-        public_data?: string;
-        chat_data?: string;
-        caption?: string | Formattable;
-        parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
-        caption_entities?: TelegramMessageEntity[];
-        show_caption_above_media?: boolean;
-        allow_queries?: boolean;
-        is_shared?: boolean;
-        disable_notification?: boolean;
-        protect_content?: boolean;
-        allow_paid_broadcast?: boolean;
-        message_effect_id?: string;
-        reply_parameters?: TelegramReplyParameters;
-        reply_markup?: (TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply) | {
-            toJSON: () => TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
-        };
-    } = {}) {
+    sendWidget<W extends WidgetInput>(widget: W, params: Omit<WidgetSendOptions<W>, "chat_id"> = {} as Omit<WidgetSendOptions<W>, "chat_id">) {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
-            html: html,
-            ...params
+            ...widgetSendParams(widget, params)
         });
     }
     /**

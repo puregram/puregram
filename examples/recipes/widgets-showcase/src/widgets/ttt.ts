@@ -249,7 +249,7 @@ export function registerTtt (tg: Telegram) {
       w: null
     }
 
-    const sent = await Ttt.send(tg, message.chat.id, { allowQueries: true, chat: game })
+    const sent = await message.sendWidget(Ttt, { allowQueries: true, chat: game })
 
     games.set(chatMessageKey(message.chat.id, sent.message_id), game)
   })

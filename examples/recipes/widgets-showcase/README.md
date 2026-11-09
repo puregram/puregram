@@ -42,7 +42,7 @@ every widget here follows the same four rules:
 - **every state has a revision `r`** the bot raises on each edit: the widget ignores a state older than the one it drew, whatever order the answer, the change event and a poll arrive in
 - **`widgets({ autoAnswer: true })`** answers whatever a handler didn't, so no tap waits 15 s for a `TIMEOUT`
 
-`html` escapes every value for the context it lands in: text and attributes are entity-escaped (a poll option `pizza <again>` renders as text), values inside `<script>` must go through `js(value)`, inside `<style>` only `raw()` is allowed (the shared `src/widgets/style.ts`). widgets whose html depends on the message (the poll's question, the habit's name, the event's date) are templates: `defineWidget({ html: (poll: PollSpec) => html`...` })`, sent with `Poll.render(poll).send(...)` and edited with `Poll.editShared(...)` without rendering anything
+`html` escapes every value for the context it lands in: text and attributes are entity-escaped (a poll option `pizza <again>` renders as text), values inside `<script>` must go through `js(value)`, inside `<style>` only `raw()` is allowed (the shared `src/widgets/style.ts`). widgets whose html depends on the message (the poll's question, the habit's name, the event's date) are templates: `defineWidget({ html: (poll: PollSpec) => html`...` })`, sent with `message.sendWidget(Poll.render(poll), options)` and edited with `Poll.editShared(...)` without rendering anything
 
 ## the widgets
 
@@ -57,7 +57,7 @@ run `yarn sizes` for the sample HTML's current sizes (limit: 32768 utf-8 bytes a
 | chat_data | none |
 | queries | `tick:now` → answers with the current public_data json (the "↻ refresh" link); works from forwarded copies too |
 
-the bot fetches coingecko every 60 s (a self-rescheduling timer, so a slow request never overlaps the next), keeps 30 points per coin and `editShared`s the one shared ticker object. the first `/ticker` creates it with `send({ shared: true })` and sets the clients' polling period by resending the current public state with `editShared(id, state, { cacheTime: 20 })`; every later `/ticker` sends the same object with `sendShared`. the widget calls `watchPublicData()` to follow it while on screen. switching tabs is client-side only (and remembered in `localStorage`)
+the bot fetches coingecko every 60 s (a self-rescheduling timer, so a slow request never overlaps the next), keeps 30 points per coin and `editShared`s the one shared ticker object. the first `/ticker` creates it with `message.sendWidget(Ticker, { shared: true, ... })` and sets the clients' polling period by resending the current public state with `editShared(id, state, { cacheTime: 20 })`; every later `/ticker` sends the same object with `sendShared`. the widget calls `watchPublicData()` to follow it while on screen. switching tabs is client-side only (and remembered in `localStorage`)
 
 ### `/poll` (`src/widgets/poll.ts`)
 

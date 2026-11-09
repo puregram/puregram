@@ -17,7 +17,7 @@ export const METHOD_POSITIONALS: Record<string, MethodPositional[]> = {
   sendVideoNote: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'videoNote', schemaArg: 'video_note' }],
   sendLivePhoto: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'livePhoto', schemaArg: 'live_photo' }, { name: 'photo', schemaArg: 'photo' }],
   sendSticker: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'sticker', schemaArg: 'sticker' }],
-  sendWidget: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'html', schemaArg: 'html' }],
+  sendWidget: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'widget', schemaArg: 'html' }],
   sendSharedWidget: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'widgetId', schemaArg: 'widget_id' }],
   sendLocation: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'latitude', schemaArg: 'latitude' }, { name: 'longitude', schemaArg: 'longitude' }],
   sendVenue: [{ name: 'chat', schemaArg: 'chat_id' }, { name: 'latitude', schemaArg: 'latitude' }, { name: 'longitude', schemaArg: 'longitude' }, { name: 'title', schemaArg: 'title' }, { name: 'address', schemaArg: 'address' }],

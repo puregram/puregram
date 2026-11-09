@@ -152,7 +152,7 @@ export function registerHabit (tg: Telegram) {
       return message.send('usage: /habit <name>, e.g. /habit read 20 pages')
     }
 
-    await Habit.render(name).send(tg, message.chat.id, { allowQueries: true, chat: { r: 0, d: 0, m: '0' } })
+    await message.sendWidget(Habit.render(name), { allowQueries: true, chat: { r: 0, d: 0, m: '0' } })
   })
 
   tg.onWidgetQuery(Done.filter, async (query) => {

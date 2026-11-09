@@ -26,7 +26,7 @@ a widget is a small self-contained html document (inline `<style>` and `<script>
 
 - an `html` tagged template that escapes everything you interpolate for the context it lands in and measures the result against the server's limits before sending
 - typed state codecs, so `chat_data` / `public_data` are values, not hand-built strings
-- `defineWidget(...)` with `send` / `sendShared` / `content` / `sharedContent` / `editState` / `editShared` / `decode`
+- `defineWidget(...)` values accepted by `message.sendWidget(Widget, options)` and `tg.sendWidget(chatId, Widget, options)`, with state-editing and inline-content helpers
 - `queryData(prefix)`, a filter for the `data` a widget sends
 - a `widgets()` plugin that answers the queries no handler answered
 
@@ -58,7 +58,7 @@ inc.onclick = () => TW.request(${js(Inc.encode('next'))}).catch(error => { n.tex
 
 tg.command('counter', async (message) => {
   if (message.chat.type !== 'private') return
-  const sent = await Counter.send(tg, message.chat.id, {
+  const sent = await message.sendWidget(Counter, {
     chat: { count: 0 }, allowQueries: true, caption: 'interactive counter'
   })
   counts.set(`${message.chat.id}:${sent.message_id}`, 0)
@@ -101,7 +101,7 @@ const tallies = new Map<string, number[]>()
 
 tg.command('poll', async (message) => {
   if (message.chat.type !== 'private') return
-  const sent = await Poll.send(tg, message.chat.id, {
+  const sent = await message.sendWidget(Poll, {
     shared: true, allowQueries: true, public: [0, 0], caption: 'pizza or sushi?'
   })
 
@@ -186,7 +186,7 @@ the result is a `WidgetHtml`:
 | `.check()` | `{ ok, bytes, compressedBytes, problems }`: errors for empty / NUL-containing HTML and the size limits; warnings above 3800 compressed bytes and for remote resources clients never load (a remote `src=`, `<link rel=stylesheet>`, `@import`, a remote css `url()`) |
 | `.assertFits()` | throws `WidgetTooLargeError` (with `.check`) unless `check().ok` |
 
-`send` and `content` call `assertFits()` once per definition, so an oversized widget fails before any request
+`sendWidget` serializes the definition through `content`, which checks the HTML limits before any request
 
 compression builds may differ near the limit. the server is authoritative; [telegram recommends Python's `zlib.compress(html, 9)`](https://core.telegram.org/bots/widgets#counting-the-size) for an exact count. aim below 3800 bytes. pass plain HTML to the API: compression is only a local preflight, not a payload to upload. interpolate only into text or quoted attributes, not tag names, event handlers or URLs you have not validated.
 
@@ -208,11 +208,11 @@ codec<number>(String, Number)   // your own
 const Counter = defineWidget({ html, chat?: StateCodec<C>, public?: StateCodec<P> })
 ```
 
-every method that talks to telegram takes something with `.api` first: `tg`, or any update
+send through the current message or client; `chat` and `public` are inferred from the definition's codecs. no plugin is required for sending: `widgets()` adds query auto-answering. state-editing helpers still take the client explicitly.
 
 | method | |
 |---|---|
-| `send(tg, chatId, { chat?, public?, allowQueries?, shared?, ...sendWidget params })` | `sendWidget` |
+| `message.sendWidget(Counter, options?)` / `tg.sendWidget(chatId, Counter, options?)` | sends the widget with typed `chat` / `public` state, `allowQueries`, `shared`, and ordinary `sendWidget` parameters |
 | `sendShared(tg, chatId, widgetId, { chat?, ...sendSharedWidget params })` | another message of an existing shared widget, with its own chat state |
 | `content({ chat?, public?, allowQueries?, shared?, ...InputWidgetMessageContent fields })` | an `InputWidgetMessageContent` (`width`, `height`, `caption`, `parse_mode`, …) for an inline `article` result (refused on prod for now, see above) |
 | `sharedContent(widgetId, { chat?, ...InputSharedWidgetMessageContent fields })` | reuse an existing shared widget in an inline `article` (test server only) |
@@ -220,7 +220,7 @@ every method that talks to telegram takes something with `.api` first: `tg`, or 
 | `editShared(tg, widgetId, value, { cacheTime? })` | `editSharedWidgetData`; public state is required (`null` clears it). `cacheTime` must be an integer at least 5 (`RangeError` otherwise); the server clamps values above 3600. to change only the refresh period, resend the current public state |
 | `decode(message)` | `{ chat, public }` from a message's `widget` (raw or structure) |
 
-in `editState` / `send`, a state key that is `undefined` is left alone and `null` clears it
+in `editState` and `sendWidget`, a state key that is `undefined` is left alone and `null` clears it. raw HTML remains supported as `tg.sendWidget(chatId, htmlString, rawApiOptions)`; `tg.api.sendWidget` keeps the Bot API's all-object form.
 
 <a name='templates'></a>
 #### templates: html per message
@@ -235,7 +235,7 @@ ${poll.options.map((option, i) => html`<button data-i="${i}">${option}</button>`
 <script>const OPTIONS = ${js(poll.options)}</script>`
 })
 
-await Poll.render({ question: 'lunch?', options: ['pizza', 'sushi'] }).send(tg, chatId, { shared: true, public: [0, 0] })
+await tg.sendWidget(chatId, Poll.render({ question: 'lunch?', options: ['pizza', 'sushi'] }), { shared: true, public: [0, 0] })
 await Poll.editShared(tg, widgetId, [1, 0])   // no render: edits never touch the html
 ```
 

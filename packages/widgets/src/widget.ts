@@ -2,11 +2,11 @@ import type {
   ApiMethods,
   EditSharedWidgetDataParams,
   SendSharedWidgetParams,
-  SendWidgetParams,
   TelegramInputSharedWidgetMessageContent,
   TelegramInputWidgetMessageContent,
   TelegramMessage,
-  TelegramWidget
+  TelegramWidget,
+  WidgetLike
 } from '@puregram/api'
 import { Widget, WidgetQueryUpdate } from '@puregram/api'
 
@@ -42,11 +42,6 @@ type ManagedParams = 'html' | 'chat_data' | 'public_data' | 'allow_queries' | 'i
 
 export interface WidgetContentOptions<C, P>
   extends WidgetState<C, P>, Omit<TelegramInputWidgetMessageContent, ManagedParams> {
-  allowQueries?: boolean
-  shared?: boolean
-}
-
-export interface WidgetSendOptions<C, P> extends WidgetState<C, P>, Omit<SendWidgetParams, 'chat_id' | ManagedParams> {
   allowQueries?: boolean
   shared?: boolean
 }
@@ -98,9 +93,8 @@ export interface WidgetStateMethods<C = unknown, P = unknown> {
   decode: (source: WidgetSource) => DecodedWidgetState<C, P>
 }
 
-export interface WidgetDefinition<C = unknown, P = unknown> extends WidgetStateMethods<C, P> {
+export interface WidgetDefinition<C = unknown, P = unknown> extends WidgetStateMethods<C, P>, WidgetLike<C, P> {
   readonly html: WidgetHtml
-  send: (holder: WidgetApi, chatId: number | string, options?: WidgetSendOptions<C, P>) => Promise<TelegramMessage>
   content: (options?: WidgetContentOptions<C, P>) => TelegramInputWidgetMessageContent
 }
 
@@ -241,20 +235,6 @@ function bindHtml<C, P> (html: WidgetHtml, methods: WidgetStateMethods<C, P>) {
   const definition: WidgetDefinition<C, P> = {
     ...methods,
     html,
-
-    send: (holder, chatId, sendOptions = {}) => {
-      ensureFits()
-
-      const { chat, public: publicValue, allowQueries, shared, ...rest } = sendOptions
-
-      return holder.api.sendWidget({
-        ...rest,
-        chat_id: chatId,
-        html: html.source,
-        ...stateParams(methods, { chat, public: publicValue }),
-        ...flags(allowQueries, shared)
-      })
-    },
 
     content: (contentOptions = {}) => {
       ensureFits()
