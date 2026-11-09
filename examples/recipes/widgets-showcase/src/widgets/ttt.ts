@@ -255,6 +255,10 @@ export function registerTtt (tg: Telegram) {
   })
 
   const handle = (act: (game: TttState, query: GameQuery) => string | undefined) => async (query: GameQuery) => {
+    if (query.type.type !== 'data') {
+      return query.answer({ data: 'unsupported query type' })
+    }
+
     const game = games.get(messageKey(query))
 
     if (game === undefined) {

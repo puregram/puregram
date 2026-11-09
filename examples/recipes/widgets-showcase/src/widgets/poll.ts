@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto'
+
 import { defineWidget, html, js, json, queryData } from '@puregram/widgets'
 import { InlineQueryResult, type Modify, type SharedWidgetQueryUpdate, type Telegram, type WidgetQueryUpdate } from 'puregram'
 
@@ -12,6 +14,7 @@ const MAX_OPTION = 60
 export interface PollSpec {
   question: string
   options: string[]
+  id?: string
 }
 
 export interface PollTally {
@@ -22,6 +25,7 @@ export interface PollTally {
 export const USAGE = '/poll question | option | option …'
 
 const Vote = queryData('vote')
+const issuedPolls = new Map<string, number>()
 
 export const Poll = defineWidget({
   public: json<PollTally>(),
@@ -49,7 +53,7 @@ ${poll.options.map(option => html`<button class="opt"><div class="top"><span cla
 <script>
 const TW = window.TelegramWidget
 const $ = (id) => document.getElementById(id)
-const VOTE = ${js(Vote.prefix)} + ':'
+const VOTE = ${js(Vote.prefix)} + ':' + ${js(poll.id ?? '')} + ':'
 const buttons = [...document.querySelectorAll('.opt')]
 const canVote = Boolean(TW && TW.viewer && !TW.isPreview)
 let tally = null
@@ -123,18 +127,27 @@ export function parsePoll (text: string) {
 
 const emptyTally = () => ({ r: 0, c: [] })
 
+function issuePoll (poll: PollSpec) {
+  const id = randomUUID()
+
+  issuedPolls.set(id, poll.options.length)
+
+  return { ...poll, id }
+}
+
 export function pollArticle (poll: PollSpec) {
   return InlineQueryResult.article({
     id: 'poll',
     title: `📊 ${poll.question}`,
     description: poll.options.join(' · '),
-    content: Poll.render(poll).content({ shared: true, allowQueries: true, public: emptyTally() })
+    content: Poll.render(issuePoll(poll)).content({ shared: true, allowQueries: true, public: emptyTally() })
   })
 }
 
 type VoteQuery = Modify<WidgetQueryUpdate, { payload: string }> | Modify<SharedWidgetQueryUpdate, { payload: string }>
 
 interface PollVotes {
+  id: string
   tally: PollTally
   voters: Map<number, number>
 }
@@ -149,17 +162,31 @@ export function registerPoll (tg: Telegram) {
       return message.send(`usage: ${USAGE}\n2 to ${MAX_OPTIONS} options`)
     }
 
-    await message.sendWidget(Poll.render(poll), { shared: true, allowQueries: true, public: emptyTally() })
+    const issued = issuePoll(poll)
+    const sent = await message.sendWidget(Poll.render(issued), { shared: true, allowQueries: true, public: emptyTally() })
+
+    if (sent.widget?.id !== undefined) {
+      polls.set(sent.widget.id, { id: issued.id, tally: emptyTally(), voters: new Map() })
+    }
   })
 
   const vote = async (query: VoteQuery) => {
-    const choice = Number(query.payload)
-
-    if (query.widgetId === undefined || !Number.isInteger(choice) || choice < 0 || choice >= MAX_OPTIONS) {
-      return query.answer({ data: 'this poll is closed' })
+    if (query.type.type !== 'data') {
+      return query.answer({ data: 'unsupported query type' })
     }
 
-    const poll: PollVotes = polls.get(query.widgetId) ?? { tally: emptyTally(), voters: new Map() }
+    const [id = '', index = '', extra] = query.payload.split(':')
+    const count = issuedPolls.get(id)
+    const choice = Number(index)
+    const previousPoll = query.widgetId === undefined ? undefined : polls.get(query.widgetId)
+
+    if (query.widgetId === undefined || count === undefined || extra !== undefined ||
+      !/^(0|[1-9]\d*)$/.test(index) || !Number.isSafeInteger(choice) || choice >= count ||
+      (previousPoll !== undefined && previousPoll.id !== id)) {
+      return query.answer({ data: 'this poll is closed: send /poll for a new one' })
+    }
+
+    const poll: PollVotes = previousPoll ?? { id, tally: emptyTally(), voters: new Map() }
     const tally = { r: poll.tally.r, c: [...poll.tally.c] }
     const voters = new Map(poll.voters)
     const previous = voters.get(query.from.id)
@@ -181,7 +208,7 @@ export function registerPoll (tg: Telegram) {
     tally.r += 1
 
     await Poll.editShared(query, query.widgetId, tally)
-    polls.set(query.widgetId, { tally, voters })
+    polls.set(query.widgetId, { id, tally, voters })
     await query.answer({ data: JSON.stringify({ ...tally, v: voters.get(query.from.id) ?? -1 }) })
   }
 

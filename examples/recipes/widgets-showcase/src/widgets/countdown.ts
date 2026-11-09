@@ -196,7 +196,7 @@ interface Guests {
   answers: Map<number, Guest>
 }
 
-function rsvpState (guests: Guests) {
+function rsvpState (guests: Guests, vote: Answer | '') {
   const names = (answer: Answer) =>
     [...guests.answers.values()].flatMap(guest => guest.answer === answer ? [guest.name] : [])
 
@@ -210,11 +210,15 @@ function rsvpState (guests: Guests) {
     mn: maybe.length
   }
 
-  while (Buffer.byteLength(JSON.stringify(state)) > WIDGET_LIMITS.stateBytes) {
+  const answer = { ...state, v: vote }
+  let data = JSON.stringify(answer)
+
+  while (Buffer.byteLength(data) > WIDGET_LIMITS.stateBytes) {
     (state.g.length >= state.m.length ? state.g : state.m).pop()
+    data = JSON.stringify(answer)
   }
 
-  return state
+  return { state, data }
 }
 
 function answerFor (guests: Guests, user: User, answer: Answer) {
@@ -241,6 +245,10 @@ export function registerCountdown (tg: Telegram) {
   })
 
   tg.onWidgetQuery(Rsvp.filter, async (query) => {
+    if (query.type.type !== 'data') {
+      return query.answer({ data: 'unsupported query type' })
+    }
+
     if (query.payload !== 'g' && query.payload !== 'm') {
       return query.answer({ data: 'unknown answer' })
     }
@@ -251,11 +259,11 @@ export function registerCountdown (tg: Telegram) {
 
     answerFor(guests, query.from, query.payload)
 
-    const state = rsvpState(guests)
+    const { state, data } = rsvpState(guests, guests.answers.get(query.from.id)?.answer ?? '')
 
     await Countdown.editState(query, query, { chat: state })
     events.set(key, guests)
 
-    await query.answer({ data: JSON.stringify({ ...state, v: guests.answers.get(query.from.id)?.answer ?? '' }) })
+    await query.answer({ data })
   })
 }

@@ -1,7 +1,7 @@
 import { defineWidget, html, js, json, queryData } from '@puregram/widgets'
 import type { Telegram } from 'puregram'
 
-import { commandArgs } from '../util'
+import { chatMessageKey, commandArgs, messageKey } from '../util'
 
 import { baseStyle } from './style'
 
@@ -98,7 +98,7 @@ $('done').onclick = () => {
   if (busy || !TW) return
   busy = true
   $('msg').textContent = ''
-  TW.request(DONE + [offset(), habit.d, habit.r, habit.m].join(':')).then((answer) => {
+  TW.request(DONE + [offset(), habit.r].join(':')).then((answer) => {
     const next = parse(answer.result)
     if (!next) { $('msg').textContent = answer.result || ''; return }
     apply(next)
@@ -117,14 +117,20 @@ draw()
 })
 
 function parseDone (payload: string) {
-  const [offset, day, revision, mask = ''] = payload.split(':')
-  const [minutes = NaN, d = NaN, r = NaN] = [offset, day, revision].map(Number)
+  const match = /^(-?\d+):(\d+)$/.exec(payload)
 
-  if (![minutes, d, r].every(Number.isInteger) || Math.abs(minutes) > MAX_OFFSET_MINUTES || !/^[0-9a-f]{1,21}$/.test(mask)) {
+  if (match === null) {
     return undefined
   }
 
-  return { offset: minutes, habit: { r, d, m: mask } }
+  const minutes = Number(match[1])
+  const revision = Number(match[2])
+
+  if (!Number.isInteger(minutes) || Math.abs(minutes) > MAX_OFFSET_MINUTES || !Number.isSafeInteger(revision)) {
+    return undefined
+  }
+
+  return { offset: minutes, revision }
 }
 
 function toggleToday (habit: HabitState, offset: number) {
@@ -141,6 +147,9 @@ function toggleToday (habit: HabitState, offset: number) {
 }
 
 export function registerHabit (tg: Telegram) {
+  const habits = new Map<string, HabitState>()
+  const editing = new Set<string>()
+
   tg.command('habit', async (message) => {
     const name = commandArgs(message).slice(0, MAX_NAME)
 
@@ -152,19 +161,45 @@ export function registerHabit (tg: Telegram) {
       return message.send('usage: /habit <name>, e.g. /habit read 20 pages')
     }
 
-    await message.sendWidget(Habit.render(name), { allowQueries: true, chat: { r: 0, d: 0, m: '0' } })
+    const habit = { r: 0, d: 0, m: '0' }
+    const sent = await message.sendWidget(Habit.render(name), { allowQueries: true, chat: habit })
+
+    habits.set(chatMessageKey(message.chat.id, sent.message_id), habit)
   })
 
   tg.onWidgetQuery(Done.filter, async (query) => {
+    if (query.type.type !== 'data') {
+      return query.answer({ data: 'unsupported query type' })
+    }
+
+    const key = messageKey(query)
+    const previous = habits.get(key)
+
+    if (previous === undefined || query.chat?.type !== 'private') {
+      return query.answer({ data: 'this habit has ended: send /habit for a new one' })
+    }
+
     const parsed = parseDone(query.payload)
 
     if (parsed === undefined) {
       return query.answer({ data: 'could not read the habit, try again' })
     }
 
-    const habit = toggleToday(parsed.habit, parsed.offset)
+    if (parsed.revision !== previous.r || editing.has(key)) {
+      return query.answer({ data: Habit.chatCodec.encode(previous) })
+    }
 
-    await Habit.editState(query, query, { chat: habit })
+    const habit = toggleToday(previous, parsed.offset)
+
+    editing.add(key)
+
+    try {
+      await Habit.editState(query, query, { chat: habit })
+      habits.set(key, habit)
+    } finally {
+      editing.delete(key)
+    }
+
     await query.answer({ data: Habit.chatCodec.encode(habit) })
   })
 }

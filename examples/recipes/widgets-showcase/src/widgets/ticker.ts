@@ -246,8 +246,13 @@ export function registerTicker (tg: Telegram) {
     }
   })
 
-  const refresh = (query: TickerQuery) =>
-    query.answer(state === undefined ? {} : { data: Ticker.publicCodec.encode(state) })
+  const refresh = (query: TickerQuery) => {
+    if (query.type.type !== 'data') {
+      return query.answer({ data: 'unsupported query type' })
+    }
+
+    return query.answer(state === undefined ? {} : { data: Ticker.publicCodec.encode(state) })
+  }
 
   tg.onWidgetQuery(Refresh.filter, refresh)
   tg.onSharedWidgetQuery(Refresh.filter, refresh)

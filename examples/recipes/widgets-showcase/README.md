@@ -37,7 +37,7 @@ the html never changes after sending; the bot changes only the state, and the wi
 
 every widget here follows the same four rules:
 
-- **one prefix per query kind**, built with `queryData('vote')`: the widget sends `vote:2`, the bot registers `tg.onWidgetQuery(Vote.filter, ...)` and reads `query.payload`. the prefix reaches the widget's script through `js(Vote.prefix)`, so the two sides can't drift
+- **one prefix per query kind**, built with `queryData('vote')`: the widget sends `vote:<poll id>:2`, the bot registers `tg.onWidgetQuery(Vote.filter, ...)` and reads `query.payload`. handlers accept only the `data` query type, not wallet outcomes with matching data. the prefix reaches the widget's script through `js(Vote.prefix)`, so the two sides can't drift
 - **the answer carries the new state** as json, so the tapping user sees the result at once; everyone else gets it through the state change event
 - **every state has a revision `r`** the bot raises on each edit: the widget ignores a state older than the one it drew, whatever order the answer, the change event and a poll arrive in
 - **`widgets({ autoAnswer: true })`** answers whatever a handler didn't, so no tap waits 15 s for a `TIMEOUT`
@@ -66,9 +66,9 @@ the bot fetches coingecko every 60 s (a self-rescheduling timer, so a slow reque
 | html | template: the question and options, escaped at send time |
 | public_data | `{ r, c: [count, …] }`, one object for the poll's every message and forward |
 | chat_data | none |
-| queries | `vote:<i>` → moves the voter's vote to option `i`, or retracts it when `i` is their current vote. answers `{ r, c, v }`, `v` being the voter's choice (`-1` after a retraction) |
+| queries | `vote:<poll id>:<i>` → moves the voter's vote to option `i`, or retracts it when `i` is their current vote. answers `{ r, c, v }`, `v` being the voter's choice (`-1` after a retraction) |
 
-sent shared, so a forward is the same poll: a vote from a forwarded copy arrives as `shared_widget_query` and lands in the same tally (the handler is registered for both kinds). the bot keeps a `voters` map per `widget_id`, one vote per user. the bot never stores the question: the html has it, and an inline poll's `widget_id` only becomes known at its first vote, so the tally is created then. the voter's own choice lives in the answer and in `localStorage`; the shared state holds only counts. in an inline preview or a copy that may not ask, the poll draws read-only
+sent shared, so a forward is the same poll: a vote from a forwarded copy arrives as `shared_widget_query` and lands in the same tally (the handler is registered for both kinds). every direct or inline poll gets a server-issued identity with its option count stored in memory; votes must name that identity and a real option. the bot keeps a `voters` map per `widget_id`, one vote per user, and binds each widget to its poll identity (at send time for direct polls, on its first vote for inline polls). after a restart, send a new poll. the voter's own choice lives in the answer and in `localStorage`; the shared state holds only counts. in an inline preview or a copy that may not ask, the poll draws read-only
 
 ### `/ttt` (`src/widgets/ttt.ts`)
 
@@ -88,16 +88,16 @@ whose turn it is follows from the board (x moves when both have placed equally),
 | html | template: the habit's name |
 | chat_data | `{ r, d, m }`: `m` is an 84-bit day bitmap in hex (bit 0 = day `d`), `d` the user's local day number of the last write |
 | public_data | none |
-| queries | `done:<utc offset>:<d>:<r>:<m>` → toggles today, answers the new chat_data |
+| queries | `done:<utc offset>:<r>` → toggles today only when `r` matches the server revision; stale actions answer the current chat_data without toggling |
 
-the bot can't know the user's time zone, so the widget sends `getTimezoneOffset()` and the bot computes the user's today from it, shifts the bitmap to it and flips the bit. the widget also sends the state it shows, so the bot keeps nothing for this widget and it survives restarts: fine for a private chat, where the only person who could forge it is its owner. streaks, the heatmap and the month labels are computed client-side from the bitmap and the viewer's clock
+the bot can't know the user's time zone, so the widget sends `getTimezoneOffset()` and the bot computes the user's today from it, shifts the bitmap to it and flips the bit. authoritative state lives in a map keyed by the sent message; client-supplied bitmaps are never accepted, and repeated or overlapping actions cannot replay a toggle. after a restart, an old habit asks for a new `/habit` instead of reconstructing its history from the client. streaks, the heatmap and the month labels are computed client-side from the bitmap and the viewer's clock
 
 ### `/countdown` (`src/widgets/countdown.ts`)
 
 | | |
 |---|---|
 | html | template: the title and the timestamp (shown in each viewer's own locale and time zone) |
-| chat_data | `{ r, g: [names], gn, m: [names], mn }`: up to 12 first names per answer plus the totals, trimmed until it fits 1024 bytes; the widget shows "+N" for the rest |
+| chat_data | `{ r, g: [names], gn, m: [names], mn }`: up to 12 first names per answer plus the totals, trimmed until the full personalized answer (including `v`) fits 1024 utf-8 bytes; the widget shows "+N" for the rest |
 | public_data | none |
 | queries | `rsvp:g` / `rsvp:m` → sets the answer, or clears it when it's the current one; answers the new chat_data plus `v`, the user's answer |
 
@@ -105,7 +105,7 @@ the clock ticks client-side with `setInterval` and stops on `deactivated` (resta
 
 ## what this recipe leaves out
 
-- **storage and concurrency.** polls, games and rsvps live in memory, not a durable database. the habit widget deliberately trusts its owner's submitted state and is not suitable for rewards or access control. production applications must validate queries against authoritative state, serialize mutations per message and coalesce shared-state edits to at most one per second. swap the maps for [`@puregram/storage`](../../../packages/storage) to persist them
+- **storage and concurrency.** poll metadata, votes, games, habits and rsvps live in memory, not a durable database. habit actions are revision-checked and overlapping toggles are refused; production applications should serialize other mutations per message and coalesce shared-state edits to at most one per second. swap the maps for [`@puregram/storage`](../../../packages/storage) to persist them
 - **the wallet.** `request(data, { wallet: true })` and `wallet.sendTransaction` aren't used here
 
 ## see also
