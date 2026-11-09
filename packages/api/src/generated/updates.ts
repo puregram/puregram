@@ -10733,6 +10733,12 @@ export class WidgetQueryUpdate {
         return this.raw.chat ? (this._chat ??= new Chat(this.raw.chat)) : undefined;
     }
     /**
+     * Optional. Identifier of the message containing the widget; omitted if the widget is in an inline message
+     */
+    get messageId(): number | undefined {
+        return this.raw.message_id;
+    }
+    /**
      * Optional. Identifier of the inline message containing the widget
      */
     get inlineMessageId(): string | undefined {
@@ -10779,8 +10785,8 @@ export class WidgetQueryUpdate {
     /**
      * true if `message_id` is set
      */
-    hasId(): this is this & {
-        id: number;
+    hasMessageId(): this is this & {
+        messageId: number;
     } {
         return this.raw.message_id != null;
     }

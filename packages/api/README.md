@@ -44,6 +44,9 @@ new bot api versions are picked up by an automated watcher workflow that opens a
 rich-text quotes, TON-address and bank-card entities, and the new gift methods. `StoryAreaPosition`
 is replaced by `AreaPosition`, matching Telegram's rename.
 
+Widget queries keep the string query ID in `query.id`. The optional message ID is
+`query.messageId`; `query.hasMessageId()` narrows that field without changing the query ID.
+
 send methods supporting ephemeral callback replies now allow omitted `chat_id`; use
 `ephemeral_message_parameters.callback_query_id` to target the callback's client. The receiver
 user is optional for that path. Other sends still require the target described by the method.

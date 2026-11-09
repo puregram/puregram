@@ -6,7 +6,8 @@ import {
   InlineQueryUpdate,
   MessageUpdate,
   PollAnswerUpdate,
-  PreCheckoutQueryUpdate
+  PreCheckoutQueryUpdate,
+  WidgetQueryUpdate
 } from '../src/generated/updates'
 
 const noTg = {} as TelegramLike
@@ -207,5 +208,30 @@ describe('callback query edit family', () => {
 
     expect(deleteMessage).toHaveBeenCalledWith({ chat_id: 100, message_id: 7 })
     expect(() => inlineQuery({ deleteMessage }).delete()).toThrow(TypeError)
+  })
+})
+
+describe('widget query message ids', () => {
+  it.each([undefined, 42])('keeps the query id distinct from message id %s', (messageId) => {
+    const query = new WidgetQueryUpdate({
+      id: 'widget-query-1',
+      from: { id: 1, is_bot: false, first_name: 'ann' },
+      chat_instance: 'chat-instance',
+      type: { type: 'data' },
+      data: 'tap',
+      ...messageId === undefined ? {} : { message_id: messageId }
+    }, noTg)
+
+    expect(query.hasMessageId()).toBe(messageId !== undefined)
+    expect(query.messageId).toBe(messageId)
+    expect(query.id).toBe('widget-query-1')
+
+    if (query.hasMessageId()) {
+      const id: number = query.messageId
+      const queryId: string = query.id
+
+      expect(id).toBe(messageId)
+      expect(queryId.toUpperCase()).toBe('WIDGET-QUERY-1')
+    }
   })
 })

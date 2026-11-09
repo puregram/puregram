@@ -4,8 +4,10 @@ const FIELD_NAME_OVERRIDES: Record<string, string> = {
   message_id: 'id'
 }
 
-export function getterNameFor (snakeField: string) {
-  return FIELD_NAME_OVERRIDES[snakeField] ?? camelCase(snakeField)
+export function getterNameFor (snakeField: string, fields: readonly { name: string }[]) {
+  const alias = FIELD_NAME_OVERRIDES[snakeField]
+
+  return alias === undefined || fields.some(field => field.name === alias) ? camelCase(snakeField) : alias
 }
 
 export function camelCase (snake: string) {
