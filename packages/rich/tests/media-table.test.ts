@@ -52,6 +52,38 @@ describe('media blocks', () => {
     expect(media('https://x/clip.mp4?token=b.pdf').emit()).toMatchObject({ type: 'video' })
   })
 
+  it.each([
+    ['clip.MP4#preview.mp3?download=1', 'video'],
+    ['./report.PDF?name=clip.mp4', 'document'],
+    ['C:\\music\\track.MP3', 'audio'],
+    ['urn:report.pdf', 'document'],
+    ['//example.zip', 'document'],
+    ['HTTPS://example.mp3?download=report.pdf', 'photo'],
+    ['custom+v1.2://example.zip/track.OGG#preview', 'audio'],
+    ['file:///tmp/report.PDF?download=1', 'document'],
+    ['https://example.zip/#report.pdf', 'photo']
+  ])('media() preserves extension inference for %s', (source, type) => {
+    expect(media(source).emit()).toMatchObject({ type })
+  })
+
+  it.each(['\n', '\r', '\u2028', '\u2029'])('media() preserves line boundary semantics for %j', (lineBreak) => {
+    expect(media(`clip.mp4##${lineBreak}`).emit()).toMatchObject({ type: 'photo' })
+    expect(media(`clip.mp4##${lineBreak}tail.mp3`).emit()).toMatchObject({ type: 'audio' })
+    expect(media(`clip.mp4##${lineBreak}tail.mp3#ignored.pdf`).emit()).toMatchObject({ type: 'audio' })
+    expect(media(`clip.mp4##${lineBreak}#ignored.mp3`).emit()).toMatchObject({ type: 'photo' })
+  })
+
+  it.each(['#', '?'])('media() handles long runs of %s before a line break', (marker) => {
+    const markers = marker.repeat(32000)
+    const source = `clip.mp4${markers}\ntail.mp3`
+
+    expect(media(source).emit()).toEqual({
+      type: 'audio',
+      audio: { type: 'audio', media: source }
+    })
+    expect(media(`clip.mp4${markers}`).emit()).toMatchObject({ type: 'video' })
+  })
+
   it('media() defaults an envelope source to photo', () => {
     expect(media({ type: 'path', value: '/x.bin' }).emit()).toMatchObject({ type: 'photo' })
   })

@@ -165,6 +165,8 @@ captions everywhere take `{ caption, credit }` — a `credit` without a `caption
 
 `src` is an http(s) url string **or** a puregram `MediaSource.*` envelope — `MediaSource.path`, `.buffer`, `.stream`, `.fileId`, `.url`. envelopes travel through the block untouched and resolve at send time in puregram core: `fileId`/`url` substitute as plain strings, `path`/`buffer`/`stream` upload via multipart.
 
+media kind inference stays linear for repeated query/fragment markers, including malformed multiline strings; the original source is passed through unchanged.
+
 ```ts
 import { MediaSource } from 'puregram'
 
