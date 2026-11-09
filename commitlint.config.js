@@ -16,6 +16,7 @@ module.exports = {
       'rate-limit',
       'rich',
       'scenes',
+      'serverless',
       'session',
       'storage',
       'stream',
