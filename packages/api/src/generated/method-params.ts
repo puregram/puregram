@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
 export const METHOD_PARAMS: Record<string, readonly string[]> = {
@@ -13,6 +13,7 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "answerPreCheckoutQuery": ["pre_checkout_query_id", "ok", "error_message"],
     "answerShippingQuery": ["shipping_query_id", "ok", "shipping_options", "error_message"],
     "answerWebAppQuery": ["web_app_query_id", "result"],
+    "answerWidgetQuery": ["widget_query_id", "data"],
     "approveChatJoinRequest": ["chat_id", "user_id"],
     "approveSuggestedPost": ["chat_id", "message_id", "send_date"],
     "banChatMember": ["chat_id", "user_id", "until_date", "revoke_messages"],
@@ -31,6 +32,7 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "declineChatJoinRequest": ["chat_id", "user_id"],
     "declineSuggestedPost": ["chat_id", "message_id", "comment"],
     "deleteAllMessageReactions": ["chat_id", "user_id", "actor_chat_id"],
+    "deleteBusinessAccountGift": ["business_connection_id", "owned_gift_id"],
     "deleteBusinessMessages": ["business_connection_id", "message_ids"],
     "deleteChatPhoto": ["chat_id"],
     "deleteChatStickerSet": ["chat_id"],
@@ -58,6 +60,8 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "editMessageMedia": ["business_connection_id", "chat_id", "message_id", "inline_message_id", "media", "reply_markup"],
     "editMessageReplyMarkup": ["business_connection_id", "chat_id", "message_id", "inline_message_id", "reply_markup"],
     "editMessageText": ["business_connection_id", "chat_id", "message_id", "inline_message_id", "text", "parse_mode", "entities", "link_preview_options", "rich_message", "reply_markup"],
+    "editMessageWidgetData": ["chat_id", "message_id", "inline_message_id", "public_data", "chat_data"],
+    "editSharedWidgetData": ["widget_id", "public_data", "cache_time"],
     "editStory": ["business_connection_id", "story_id", "content", "caption", "parse_mode", "caption_entities", "areas"],
     "editUserStarSubscription": ["user_id", "telegram_payment_charge_id", "is_canceled"],
     "exportChatInviteLink": ["chat_id"],
@@ -73,6 +77,7 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "getChatMember": ["chat_id", "user_id"],
     "getChatMemberCount": ["chat_id"],
     "getChatMenuButton": ["chat_id"],
+    "getChatShareThemeBackdrops": [],
     "getCustomEmojiStickers": ["custom_emoji_ids"],
     "getFile": ["file_id"],
     "getForumTopicIconStickers": [],
@@ -88,6 +93,7 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "getMyStarBalance": [],
     "getStarTransactions": ["offset", "limit"],
     "getStickerSet": ["name"],
+    "getUniqueGift": ["name"],
     "getUpdates": ["offset", "limit", "timeout", "allowed_updates"],
     "getUserChatBoosts": ["chat_id", "user_id"],
     "getUserGifts": ["user_id", "exclude_unlimited", "exclude_limited_upgradable", "exclude_limited_non_upgradable", "exclude_from_blockchain", "exclude_unique", "sort_by_price", "offset", "limit"],
@@ -138,11 +144,13 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "sendPoll": ["business_connection_id", "chat_id", "message_thread_id", "question", "question_parse_mode", "question_entities", "options", "is_anonymous", "type", "allows_multiple_answers", "allows_revoting", "shuffle_options", "allow_adding_options", "hide_results_until_closes", "members_only", "country_codes", "correct_option_ids", "explanation", "explanation_parse_mode", "explanation_entities", "explanation_media", "open_period", "close_date", "is_closed", "description", "description_parse_mode", "description_entities", "media", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "reply_parameters", "reply_markup"],
     "sendRichMessage": ["business_connection_id", "chat_id", "message_thread_id", "direct_messages_topic_id", "ephemeral_message_parameters", "rich_message", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "suggested_post_parameters", "reply_parameters", "reply_markup"],
     "sendRichMessageDraft": ["chat_id", "message_thread_id", "draft_id", "rich_message", "can_stop", "keep_on_stop"],
+    "sendSharedWidget": ["chat_id", "message_thread_id", "widget_id", "chat_data", "caption", "parse_mode", "caption_entities", "show_caption_above_media", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "reply_parameters", "reply_markup"],
     "sendSticker": ["business_connection_id", "chat_id", "message_thread_id", "direct_messages_topic_id", "ephemeral_message_parameters", "sticker", "emoji", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "suggested_post_parameters", "reply_parameters", "reply_markup"],
     "sendVenue": ["business_connection_id", "chat_id", "message_thread_id", "direct_messages_topic_id", "ephemeral_message_parameters", "latitude", "longitude", "title", "address", "foursquare_id", "foursquare_type", "google_place_id", "google_place_type", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "suggested_post_parameters", "reply_parameters", "reply_markup"],
     "sendVideo": ["business_connection_id", "chat_id", "message_thread_id", "direct_messages_topic_id", "ephemeral_message_parameters", "video", "duration", "width", "height", "thumbnail", "cover", "start_timestamp", "caption", "parse_mode", "caption_entities", "show_caption_above_media", "has_spoiler", "supports_streaming", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "suggested_post_parameters", "reply_parameters", "reply_markup"],
     "sendVideoNote": ["business_connection_id", "chat_id", "message_thread_id", "direct_messages_topic_id", "ephemeral_message_parameters", "video_note", "duration", "length", "thumbnail", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "suggested_post_parameters", "reply_parameters", "reply_markup"],
     "sendVoice": ["business_connection_id", "chat_id", "message_thread_id", "direct_messages_topic_id", "ephemeral_message_parameters", "voice", "caption", "parse_mode", "caption_entities", "duration", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "suggested_post_parameters", "reply_parameters", "reply_markup"],
+    "sendWidget": ["chat_id", "message_thread_id", "html", "width", "height", "public_data", "chat_data", "caption", "parse_mode", "caption_entities", "show_caption_above_media", "allow_queries", "is_shared", "disable_notification", "protect_content", "allow_paid_broadcast", "message_effect_id", "reply_parameters", "reply_markup"],
     "setBusinessAccountBio": ["business_connection_id", "bio"],
     "setBusinessAccountGiftSettings": ["business_connection_id", "show_gift_button", "accepted_gift_types"],
     "setBusinessAccountName": ["business_connection_id", "first_name", "last_name"],
@@ -188,6 +196,6 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "unpinChatMessage": ["business_connection_id", "chat_id", "message_id"],
     "upgradeGift": ["business_connection_id", "owned_gift_id", "keep_original_details", "star_count"],
     "uploadStickerFile": ["user_id", "sticker", "sticker_format"],
-    "verifyChat": ["chat_id", "custom_description"],
-    "verifyUser": ["user_id", "custom_description"]
+    "verifyChat": ["chat_id", "custom_description", "custom_description_parse_mode", "custom_description_entities"],
+    "verifyUser": ["user_id", "custom_description", "custom_description_parse_mode", "custom_description_entities"]
 };

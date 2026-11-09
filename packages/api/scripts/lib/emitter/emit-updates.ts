@@ -132,6 +132,7 @@ export function emitUpdates (schema: Schema) {
   nodes.push(emitUpdateKindMap(kinds))
   nodes.push(emitUpdateUnion(kinds))
   nodes.push(emitUpdateKindsConst(kinds))
+  nodes.push(emitUpdateClassesConst(kinds))
 
   const referencedTypes = new Set<string>()
 
@@ -216,6 +217,7 @@ export function emitUpdates (schema: Schema) {
   const usesRichLike = Object.entries(analysis.byKind).some(([, list]) =>
     list.some(sc => sc.userArgs.some(a => isRichMessageRef(a.type))))
 
+  const usesWidget = Object.values(analysis.byKind).some(list => list.some(sc => sc.method === 'sendWidget'))
   // ephemeral helpers back the send-injection / twin-routing / callback opt-in shortcut flags
   const usesEphemeral = Object.values(analysis.byKind).some(list =>
     list.some(sc => sc.ephemeralSend === true || sc.ephemeralTwin !== undefined || sc.callbackEphemeral === true))
@@ -254,6 +256,8 @@ export function emitUpdates (schema: Schema) {
     ...(usesHas ? [importTypeNamed(['Has'], '../util-types')] : []),
     ...(usesFormattable ? [importTypeNamed(['Formattable'], '../formattable')] : []),
     ...(usesRichLike ? [importTypeNamed(['RichLike'], '../rich-like')] : []),
+    ...(usesWidget ? [importTypeNamed(['WidgetInput', 'WidgetSendOptions'], '../widget-like')] : []),
+    ...(usesWidget ? [importNamed(['widgetSendParams'], '../widget-like')] : []),
     ...(wrappedNames.size > 0 ? [importNamed([...wrappedNames].sort(), './structures')] : []),
     ...(usedArrayWrappers.length > 0
       ? [importNamed(usedArrayWrappers, '../structures-handcrafted')]
@@ -266,7 +270,7 @@ export function emitUpdates (schema: Schema) {
     nodes,
     imports,
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }
@@ -1251,6 +1255,7 @@ function emitPrimitiveGetter (f: SchemaField, camelName: string) {
 }
 
 function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<string>>) {
+  const isWidget = sc.method === 'sendWidget'
   const filledProps = sc.filledArgs.map((anchor) => {
     const buildAccess = () => {
       let access: ts.Expression = ts.factory.createThis()
@@ -1321,7 +1326,9 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
   const positionalParams = positionals.map((p) => {
     let type = typeRefToTs(p.arg.type)
 
-    if (isRichMessageRef(p.arg.type)) {
+    if (isWidget && p.schemaArg === 'html') {
+      type = ts.factory.createTypeReferenceNode('W')
+    } else if (isRichMessageRef(p.arg.type)) {
       type = ts.factory.createUnionTypeNode([
         type,
         ts.factory.createTypeReferenceNode('RichLike')
@@ -1342,9 +1349,18 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     )
   })
 
-  const positionalProps = positionals.map(p =>
-    ts.factory.createPropertyAssignment(p.schemaArg, ts.factory.createIdentifier(p.name))
-  )
+  const positionalProps = positionals.map((p) => {
+    if (isWidget && p.schemaArg === 'html') {
+      return ts.factory.createSpreadAssignment(ts.factory.createCallExpression(
+        ts.factory.createIdentifier('widgetSendParams'), undefined,
+        [ts.factory.createIdentifier(p.name), ts.factory.createIdentifier('params')]
+      ))
+    }
+
+    return sc.callbackEphemeral === true && p.schemaArg === 'chat_id'
+      ? ts.factory.createSpreadAssignment(parseExpression(`${p.name} == null ? {} : { chat_id: ${p.name} }`))
+      : ts.factory.createPropertyAssignment(p.schemaArg, ts.factory.createIdentifier(p.name))
+  })
 
   // reply twins fill `reply_parameters.message_id` from the update and merge any
   // user-supplied reply_parameters on top (so quote / allow_sending_without_reply survive,
@@ -1453,7 +1469,7 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
           ts.factory.createObjectLiteralExpression([
             ...filledProps,
             ...positionalProps,
-            ts.factory.createSpreadAssignment(ts.factory.createIdentifier('params')),
+            ...(!isWidget ? [ts.factory.createSpreadAssignment(ts.factory.createIdentifier('params'))] : []),
             ...replyProps,
             ...ephemeralProps
           ], true)
@@ -1509,7 +1525,7 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     }),
     // opt-out switch for the ephemeral auto-injection — consumed by ephemeralSendParams,
     // never sent to telegram
-    ...(sc.ephemeralSend === true
+    ...(sc.ephemeralSend === true || sc.callbackEphemeral === true
       ? [ts.factory.createPropertySignature(
           undefined,
           ts.factory.createIdentifier('ephemeral'),
@@ -1526,21 +1542,86 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     ? ts.factory.createObjectLiteralExpression([], false)
     : undefined
 
+  const widgetOptions = ts.factory.createTypeReferenceNode('WidgetSendOptions', [ts.factory.createTypeReferenceNode('W')])
+  const paramsType = isWidget
+    ? sc.filledArgs.length === 0
+      ? widgetOptions
+      : ts.factory.createTypeReferenceNode('Omit', [
+        widgetOptions,
+        ts.factory.createUnionTypeNode(sc.filledArgs.map(a =>
+          ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(a.schemaArg))))
+      ])
+    : paramsTypeNode
+
   const paramsParam = ts.factory.createParameterDeclaration(
     undefined, undefined,
     ts.factory.createIdentifier('params'),
     undefined,
-    paramsTypeNode,
-    defaultInit
+    paramsType,
+    isWidget && defaultInit !== undefined ? ts.factory.createAsExpression(defaultInit, paramsType) : defaultInit
   )
+
+  let methodParams = [...positionalParams, paramsParam]
+  let methodBody = body
+
+  if (sc.callbackEphemeral === true && positionals[0]?.schemaArg === 'chat_id') {
+    const tupleMember = (param: ts.ParameterDeclaration, optional = false, type = param.type!) =>
+      ts.factory.createNamedTupleMember(
+        undefined,
+        param.name as ts.Identifier,
+        optional ? ts.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined,
+        type
+      )
+    const fullTuple = ts.factory.createTupleTypeNode([
+      ...positionalParams.map(p => tupleMember(p)),
+      tupleMember(paramsParam, allRestOptional)
+    ])
+    const optIn = parseTypeNode('{ ephemeral: true } | { ephemeral_message_parameters: TelegramEphemeralMessageParameters }')
+    const shortTuple = ts.factory.createTupleTypeNode([
+      ...positionalParams.slice(1).map(p => tupleMember(p)),
+      tupleMember(paramsParam, false, ts.factory.createIntersectionTypeNode([paramsTypeNode, optIn]))
+    ])
+    const normalizedTuple = ts.factory.createTupleTypeNode([
+      tupleMember(positionalParams[0]!, false, ts.factory.createUnionTypeNode([
+        positionalParams[0]!.type!,
+        ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)
+      ])),
+      ...positionalParams.slice(1).map(p => tupleMember(p)),
+      tupleMember(paramsParam, allRestOptional)
+    ])
+    const names = [...positionals.map(p => p.name), 'params = {}'].join(', ')
+    const declaration = parseStatements(`const [${names}] = args`)[0] as ts.VariableStatement
+    const binding = declaration.declarationList.declarations[0]!.name
+    const normalized = ts.factory.createVariableStatement(undefined, ts.factory.createVariableDeclarationList([
+      ts.factory.createVariableDeclaration(binding, undefined, undefined, ts.factory.createAsExpression(
+        ts.factory.createParenthesizedExpression(parseExpression('callbackOnly ? [undefined, ...args] : args')),
+        normalizedTuple
+      ))
+    ], ts.NodeFlags.Const))
+
+    methodParams = [ts.factory.createParameterDeclaration(
+      undefined, ts.factory.createToken(ts.SyntaxKind.DotDotDotToken), 'args', undefined,
+      ts.factory.createUnionTypeNode([fullTuple, shortTuple]), undefined
+    )]
+    methodBody = ts.factory.createBlock([
+      ...parseStatements(`const options = args[${positionals.length - 1}]; const callbackOnly = args.length === ${positionals.length} && options != null && typeof options === "object" && ("ephemeral" in options || "ephemeral_message_parameters" in options);`),
+      normalized,
+      ...body.statements
+    ], true)
+  }
 
   const method = ts.factory.createMethodDeclaration(
     undefined, undefined,
     ts.factory.createIdentifier(verbFor(sc)),
-    undefined, undefined,
-    [...positionalParams, paramsParam],
     undefined,
-    body
+    isWidget
+      ? [ts.factory.createTypeParameterDeclaration(
+          undefined, 'W', ts.factory.createTypeReferenceNode('WidgetInput')
+        )]
+      : undefined,
+    methodParams,
+    undefined,
+    methodBody
   )
 
   const ephemeralNote = sc.ephemeralTwin !== undefined
@@ -1548,7 +1629,7 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
     : sc.ephemeralSend === true
       ? ' — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)'
       : sc.callbackEphemeral === true
-        ? ' — pass `ephemeral_message_parameters` to send an ephemeral response; its `callback_query_id` then auto-fills from this query'
+        ? ' — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument'
         : ''
 
   const doc = sc.reply
@@ -1668,6 +1749,26 @@ function emitUpdateKindsConst (kinds: UpdateKindSpec[]) {
         ),
         ts.factory.createArrayLiteralExpression(
           kinds.map(k => ts.factory.createStringLiteral(k.kindName)),
+          true
+        )
+      )
+    ], ts.NodeFlags.Const)
+  )
+}
+
+function emitUpdateClassesConst (kinds: UpdateKindSpec[]) {
+  return ts.factory.createVariableStatement(
+    [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+    ts.factory.createVariableDeclarationList([
+      ts.factory.createVariableDeclaration(
+        ts.factory.createIdentifier('UPDATE_CLASSES'),
+        undefined,
+        undefined,
+        ts.factory.createObjectLiteralExpression(
+          kinds.map(k => ts.factory.createPropertyAssignment(
+            ts.factory.createStringLiteral(k.kindName),
+            ts.factory.createIdentifier(k.className)
+          )),
           true
         )
       )

@@ -16,4 +16,19 @@ describe('parseCore', () => {
     expect(fragment.methods.find(m => m.name === 'sendMessage')).toBeDefined()
     expect(fragment.objects.find(o => o.name === 'User')).toBeDefined()
   })
+
+  it('reads release metadata through markup and rejects missing dates', () => {
+    const html = '<h4>November 9, 2026</h4><p><strong>Bot API <em>10.4</em></strong></p><h4>Update</h4><table><tbody><tr><td>update_id</td><td>Integer</td><td>Identifier</td></tr></tbody></table>'
+    const schema = parseCore(html)
+
+    expect(schema.version).toEqual({ major: 10, minor: 4, patch: 0 })
+    expect(schema.recentChanges).toEqual({ year: 2026, month: 11, day: 9 })
+    expect(() => parseCore(html.replace('November 9, 2026', ''))).toThrow('release date')
+  })
+
+  it('refuses to silently drop an update field with an unsupported payload union', () => {
+    const html = '<p>Bot API 10.4</p><h4>November 9, 2026</h4><h4>Update</h4><table><tbody><tr><td>callback_query</td><td>CallbackQuery or InlineCallbackQuery</td><td>Optional. Query</td></tr></tbody></table>'
+
+    expect(() => parseCore(html)).toThrow('Update.callback_query')
+  })
 })

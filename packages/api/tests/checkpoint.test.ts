@@ -38,5 +38,19 @@ describe('schema checkpoint', () => {
 
     expect(sendMessage.arguments.find(a => a.name === 'chat_id')).toBeDefined()
     expect(sendMessage.arguments.find(a => a.name === 'text')).toBeDefined()
+
+    const update = schema.objects.find(o => o.name === 'Update')!
+
+    expect(update.kind).toBe('object')
+
+    if (update.kind === 'object') {
+      expect(update.fields.find(f => f.name === 'callback_query')?.type).toEqual({ kind: 'reference', name: 'CallbackQuery' })
+      expect(update.fields.find(f => f.name === 'widget_query')?.type).toEqual({ kind: 'reference', name: 'WidgetQuery' })
+      expect(update.fields.find(f => f.name === 'shared_widget_query')?.type).toEqual({ kind: 'reference', name: 'SharedWidgetQuery' })
+    }
+
+    expect(sendMessage.arguments.find(a => a.name === 'chat_id')?.required).toBe(false)
+    expect(schema.objects.some(o => o.name === 'AreaPosition')).toBe(true)
+    expect(schema.objects.some(o => o.name === 'StoryAreaPosition')).toBe(false)
   })
 })

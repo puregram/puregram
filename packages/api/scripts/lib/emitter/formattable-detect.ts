@@ -19,16 +19,24 @@ function isMessageEntityArray (ref: SchemaTypeRef) {
   return ref.kind === 'array' && ref.of.kind === 'reference' && ref.of.name === 'MessageEntity'
 }
 
-function refToObjectName (ref: SchemaTypeRef) {
+function refToObjectNames (ref: SchemaTypeRef) {
   if (ref.kind === 'reference') {
-    return { name: ref.name, isArray: false }
+    return [{ name: ref.name, isArray: false }]
+  }
+
+  if (ref.kind === 'union') {
+    return ref.of.flatMap(member => (member.kind === 'reference' ? [{ name: member.name, isArray: false }] : []))
   }
 
   if (ref.kind === 'array' && ref.of.kind === 'reference' && ref.of.name !== 'MessageEntity') {
-    return { name: ref.of.name, isArray: true }
+    return [{ name: ref.of.name, isArray: true }]
   }
 
-  return null
+  if (ref.kind === 'array' && ref.of.kind === 'union') {
+    return ref.of.of.flatMap(member => (member.kind === 'reference' ? [{ name: member.name, isArray: true }] : []))
+  }
+
+  return []
 }
 
 function pairedEntitiesKey (textFieldName: string, entityFieldNames: ReadonlySet<string>) {
@@ -79,37 +87,33 @@ function findSlots (
   // member with the same path — the runtime walker no-ops at the leaf when the actual
   // payload doesn't carry the slot's text/entities pair
   for (const f of fields) {
-    const inner = refToObjectName(f.type)
+    for (const inner of refToObjectNames(f.type)) {
+      if (visited.has(inner.name)) {
+        continue
+      }
 
-    if (inner === null) {
-      continue
-    }
+      const obj = objectsByName.get(inner.name)
 
-    if (visited.has(inner.name)) {
-      continue
-    }
+      if (obj === undefined) {
+        continue
+      }
 
-    const obj = objectsByName.get(inner.name)
+      const nextPath = inner.isArray ? [...pathSoFar, f.name, '*'] : [...pathSoFar, f.name]
+      const nextVisited = new Set([...visited, inner.name])
 
-    if (obj === undefined) {
-      continue
-    }
+      if (obj.kind === 'object') {
+        slots.push(...findSlots(obj.fields, nextPath, objectsByName, nextVisited))
+      } else if (obj.kind === 'union') {
+        for (const m of obj.members) {
+          if (m.kind !== 'reference') {
+            continue
+          }
 
-    const nextPath = inner.isArray ? [...pathSoFar, f.name, '*'] : [...pathSoFar, f.name]
-    const nextVisited = new Set([...visited, inner.name])
+          const memberObj = objectsByName.get(m.name)
 
-    if (obj.kind === 'object') {
-      slots.push(...findSlots(obj.fields, nextPath, objectsByName, nextVisited))
-    } else if (obj.kind === 'union') {
-      for (const m of obj.members) {
-        if (m.kind !== 'reference') {
-          continue
-        }
-
-        const memberObj = objectsByName.get(m.name)
-
-        if (memberObj?.kind === 'object') {
-          slots.push(...findSlots(memberObj.fields, nextPath, objectsByName, new Set([...nextVisited, m.name])))
+          if (memberObj?.kind === 'object') {
+            slots.push(...findSlots(memberObj.fields, nextPath, objectsByName, new Set([...nextVisited, m.name])))
+          }
         }
       }
     }

@@ -1,10 +1,10 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
-import type { TelegramAnimation, TelegramAudio, TelegramCallbackGame, TelegramChat, TelegramChatBackground, TelegramChatBoost, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatInviteLink, TelegramChatJoinRequest, TelegramChatLocation, TelegramChatMember, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChatPhoto, TelegramChatShared, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramContact, TelegramCopyTextButton, TelegramDice, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramDisabledButton, TelegramDocument, TelegramEncryptedCredentials, TelegramEncryptedPassportElement, TelegramExternalReplyInfo, TelegramFile, TelegramForumTopicClosed, TelegramForumTopicCreated, TelegramForumTopicEdited, TelegramForumTopicReopened, TelegramGame, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveaway, TelegramGiveawayCompleted, TelegramGiveawayCreated, TelegramGiveawayWinners, TelegramInlineKeyboardButton, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInvoice, TelegramLink, TelegramLinkPreviewOptions, TelegramLivePhoto, TelegramLocation, TelegramLoginUrl, TelegramManagedBotCreated, TelegramMaskPosition, TelegramMaybeInaccessibleMessage, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageId, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramOrderInfo, TelegramPaidMediaInfo, TelegramPaidMessagePriceChanged, TelegramPassportData, TelegramPhotoSize, TelegramPoll, TelegramPollAnswer, TelegramPollMedia, TelegramPollOption, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramProximityAlertTriggered, TelegramReactionCount, TelegramReactionType, TelegramRefundedPayment, TelegramRichMessage, TelegramSharedUser, TelegramShippingAddress, TelegramShippingQuery, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramSuccessfulPayment, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostRefunded, TelegramSwitchInlineQueryChosenChat, TelegramTextQuote, TelegramUniqueGiftInfo, TelegramUser, TelegramUserProfilePhotos, TelegramUsersShared, TelegramVenue, TelegramVideo, TelegramVideoChatEnded, TelegramVideoChatParticipantsInvited, TelegramVideoChatScheduled, TelegramVideoChatStarted, TelegramVideoNote, TelegramVideoQuality, TelegramVoice, TelegramWebAppData, TelegramWebAppInfo, TelegramWriteAccessAllowed } from "./types";
+import type { TelegramAnimation, TelegramAreaPosition, TelegramAudio, TelegramCallbackGame, TelegramChat, TelegramChatBackground, TelegramChatBoost, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatInviteLink, TelegramChatJoinRequest, TelegramChatLocation, TelegramChatMember, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChatPhoto, TelegramChatShareThemeBackdrop, TelegramChatShareThemeBackdrops, TelegramChatShared, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramContact, TelegramCopyTextButton, TelegramDice, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramDisabledButton, TelegramDocument, TelegramEncryptedCredentials, TelegramEncryptedPassportElement, TelegramExternalReplyInfo, TelegramFile, TelegramForumTopicClosed, TelegramForumTopicCreated, TelegramForumTopicEdited, TelegramForumTopicReopened, TelegramGame, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveaway, TelegramGiveawayCompleted, TelegramGiveawayCreated, TelegramGiveawayWinners, TelegramInlineKeyboardButton, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInvoice, TelegramLink, TelegramLinkPreviewOptions, TelegramLivePhoto, TelegramLocation, TelegramLoginUrl, TelegramManagedBotCreated, TelegramMaskPosition, TelegramMaybeInaccessibleMessage, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageId, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramOrderInfo, TelegramPaidMediaInfo, TelegramPaidMessagePriceChanged, TelegramPaidMessagesWaived, TelegramPassportData, TelegramPhotoSize, TelegramPoll, TelegramPollAnswer, TelegramPollMedia, TelegramPollOption, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramProximityAlertTriggered, TelegramReactionCount, TelegramReactionType, TelegramRefundedPayment, TelegramRichMessage, TelegramRichText, TelegramSharedUser, TelegramShippingAddress, TelegramShippingQuery, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramSuccessfulPayment, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostRefunded, TelegramSwitchInlineQueryChosenChat, TelegramTextQuote, TelegramTonNft, TelegramTonNftAttribute, TelegramTonWalletCard, TelegramTonWalletCardSticker, TelegramTonWalletTransfer, TelegramUniqueGift, TelegramUniqueGiftBackdropColors, TelegramUniqueGiftInfo, TelegramUser, TelegramUserProfilePhotos, TelegramUsersShared, TelegramVenue, TelegramVideo, TelegramVideoChatEnded, TelegramVideoChatParticipantsInvited, TelegramVideoChatScheduled, TelegramVideoChatStarted, TelegramVideoNote, TelegramVideoQuality, TelegramVoice, TelegramWebAppData, TelegramWebAppInfo, TelegramWidget, TelegramWidgetQueryWallet, TelegramWriteAccessAllowed } from "./types";
 import type { Has } from "../util-types";
 import { INSPECT, makeInspect } from "./inspect";
 import { Photo, PollOptions, ReactionCounts, Reactions, VideoQualities } from "../structures-handcrafted";
@@ -108,6 +108,55 @@ export class Animation {
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("Animation", this, depth, options, inspect);
+    }
+}
+
+/**
+ * Describes the position of a rectangle area on a story media or a TON wallet card.
+ */
+export class AreaPosition {
+    constructor(public raw: TelegramAreaPosition) { }
+    static fromPayload(raw: TelegramAreaPosition): AreaPosition {
+        return new AreaPosition(raw);
+    }
+    /**
+     * The abscissa of the area's center, as a percentage of the media or the card width
+     */
+    get xPercentage(): number {
+        return this.raw.x_percentage;
+    }
+    /**
+     * The ordinate of the area's center, as a percentage of the media or the card height
+     */
+    get yPercentage(): number {
+        return this.raw.y_percentage;
+    }
+    /**
+     * The width of the area's rectangle, as a percentage of the media or the card width
+     */
+    get widthPercentage(): number {
+        return this.raw.width_percentage;
+    }
+    /**
+     * The height of the area's rectangle, as a percentage of the media or the card height
+     */
+    get heightPercentage(): number {
+        return this.raw.height_percentage;
+    }
+    /**
+     * The clockwise rotation angle of the rectangle, in degrees; 0-360
+     */
+    get rotationAngle(): number {
+        return this.raw.rotation_angle;
+    }
+    /**
+     * The radius of the rectangle corner rounding, as a percentage of the media or the card width
+     */
+    get cornerRadiusPercentage(): number {
+        return this.raw.corner_radius_percentage;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("AreaPosition", this, depth, options, inspect);
     }
 }
 
@@ -861,7 +910,7 @@ export class ChatPermissions {
         return this.raw.can_send_polls;
     }
     /**
-     * Optional. True, if the user is allowed to send animations, games, stickers and use inline bots
+     * Optional. True, if the user is allowed to send animations, games, stickers, widgets and use inline bots
      */
     get canSendOtherMessages(): boolean | undefined {
         return this.raw.can_send_other_messages;
@@ -1150,6 +1199,57 @@ export class ChatShared {
 }
 
 /**
+ * This object describes a backdrop, which can be used as the background of a theme of the screen for sharing a link to a user or a chat.
+ */
+export class ChatShareThemeBackdrop {
+    constructor(public raw: TelegramChatShareThemeBackdrop) { }
+    static fromPayload(raw: TelegramChatShareThemeBackdrop): ChatShareThemeBackdrop {
+        return new ChatShareThemeBackdrop(raw);
+    }
+    /**
+     * Unique identifier of the backdrop
+     */
+    get id(): number {
+        return this.raw.id;
+    }
+    /**
+     * Name of the backdrop
+     */
+    get name(): string {
+        return this.raw.name;
+    }
+    /**
+     * Colors of the backdrop
+     */
+    get colors(): TelegramUniqueGiftBackdropColors {
+        return this.raw.colors;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("ChatShareThemeBackdrop", this, depth, options, inspect);
+    }
+}
+
+/**
+ * This object contains a list of backdrops, which can be used as the background of a theme of the screen for sharing a link to a user or a chat.
+ */
+export class ChatShareThemeBackdrops {
+    private _backdrops?: ChatShareThemeBackdrop[];
+    constructor(public raw: TelegramChatShareThemeBackdrops) { }
+    static fromPayload(raw: TelegramChatShareThemeBackdrops): ChatShareThemeBackdrops {
+        return new ChatShareThemeBackdrops(raw);
+    }
+    /**
+     * The list of backdrops
+     */
+    get backdrops(): ChatShareThemeBackdrop[] {
+        return this._backdrops ??= this.raw.backdrops.map(x => new ChatShareThemeBackdrop(x));
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("ChatShareThemeBackdrops", this, depth, options, inspect);
+    }
+}
+
+/**
  * Represents a result of an inline query that was chosen by the user and sent to their chat partner.
  */
 export class ChosenInlineResult {
@@ -1412,6 +1512,7 @@ export class ExternalReplyInfo {
     private _video?: Video | undefined;
     private _videoNote?: VideoNote | undefined;
     private _voice?: Voice | undefined;
+    private _widget?: Widget | undefined;
     private _contact?: Contact | undefined;
     private _dice?: Dice | undefined;
     private _game?: Game | undefined;
@@ -1550,6 +1651,15 @@ export class ExternalReplyInfo {
             this._voice = this.raw.voice ? new Voice(this.raw.voice) : undefined;
         }
         return this._voice;
+    }
+    /**
+     * Optional. Message is an HTML widget, information about the widget
+     */
+    get widget(): Widget | undefined {
+        if (this._widget === undefined) {
+            this._widget = this.raw.widget ? new Widget(this.raw.widget) : undefined;
+        }
+        return this._widget;
     }
     /**
      * Optional. True, if the message media is covered by a spoiler animation
@@ -1755,6 +1865,14 @@ export class ExternalReplyInfo {
         voice: Voice;
     } {
         return this.raw.voice != null;
+    }
+    /**
+     * true if `widget` is set
+     */
+    hasWidget(): this is this & {
+        widget: Widget;
+    } {
+        return this.raw.widget != null;
     }
     /**
      * true if `checklist` is set
@@ -2413,7 +2531,7 @@ export class InlineKeyboardButton {
         return this.raw.callback_data;
     }
     /**
-     * Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
+     * Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account and ephemeral messages.
      */
     get webApp(): WebAppInfo | undefined {
         if (this._webApp === undefined) {
@@ -3088,6 +3206,7 @@ export class Message {
     private _video?: Video | undefined;
     private _videoNote?: VideoNote | undefined;
     private _voice?: Voice | undefined;
+    private _widget?: Widget | undefined;
     private _captionEntities?: MessageEntity[] | undefined;
     private _contact?: Contact | undefined;
     private _dice?: Dice | undefined;
@@ -3110,6 +3229,8 @@ export class Message {
     private _giveaway?: Giveaway | undefined;
     private _giveawayWinners?: GiveawayWinners | undefined;
     private _giveawayCompleted?: GiveawayCompleted | undefined;
+    private _paidMessagesWaived?: PaidMessagesWaived | undefined;
+    private _tonWalletTransfer?: TonWalletTransfer | undefined;
     private _videoChatScheduled?: VideoChatScheduled | undefined;
     private _videoChatEnded?: VideoChatEnded | undefined;
     private _videoChatParticipantsInvited?: VideoChatParticipantsInvited | undefined;
@@ -3486,7 +3607,16 @@ export class Message {
         return this._voice;
     }
     /**
-     * Optional. Caption for the animation, audio, document, paid media, photo, video or voice
+     * Optional. Message is an HTML widget, information about the widget
+     */
+    get widget(): Widget | undefined {
+        if (this._widget === undefined) {
+            this._widget = this.raw.widget ? new Widget(this.raw.widget) : undefined;
+        }
+        return this._widget;
+    }
+    /**
+     * Optional. Caption for the animation, audio, document, live photo, paid media, photo, video, voice, or widget
      */
     get caption(): string | undefined {
         return this.raw.caption;
@@ -3498,7 +3628,7 @@ export class Message {
         return this.raw.caption_entities ? (this._captionEntities ??= this.raw.caption_entities.map(x => new MessageEntity(x))) : undefined;
     }
     /**
-     * Optional. True, if the caption must be shown above the message media
+     * Optional. True, if the caption must be shown above the message media or the widget
      */
     get showCaptionAboveMedia(): true | undefined {
         return this.raw.show_caption_above_media;
@@ -3888,6 +4018,15 @@ export class Message {
         return this.raw.paid_message_price_changed;
     }
     /**
+     * Optional. Service message: the sender of the message used a link of the other user, which allows sending messages to the user without paying Telegram Stars
+     */
+    get paidMessagesWaived(): PaidMessagesWaived | undefined {
+        if (this._paidMessagesWaived === undefined) {
+            this._paidMessagesWaived = this.raw.paid_messages_waived ? new PaidMessagesWaived(this.raw.paid_messages_waived) : undefined;
+        }
+        return this._paidMessagesWaived;
+    }
+    /**
      * Optional. Service message: answer option was added to a poll
      */
     get pollOptionAdded(): TelegramPollOptionAdded | undefined {
@@ -3928,6 +4067,15 @@ export class Message {
      */
     get suggestedPostRefunded(): TelegramSuggestedPostRefunded | undefined {
         return this.raw.suggested_post_refunded;
+    }
+    /**
+     * Optional. Service message: a transfer with a TON wallet
+     */
+    get tonWalletTransfer(): TonWalletTransfer | undefined {
+        if (this._tonWalletTransfer === undefined) {
+            this._tonWalletTransfer = this.raw.ton_wallet_transfer ? new TonWalletTransfer(this.raw.ton_wallet_transfer) : undefined;
+        }
+        return this._tonWalletTransfer;
     }
     /**
      * Optional. Service message: video chat scheduled
@@ -4315,6 +4463,14 @@ export class Message {
         voice: Voice;
     } {
         return this.raw.voice != null;
+    }
+    /**
+     * true if `widget` is set
+     */
+    hasWidget(): this is this & {
+        widget: Widget;
+    } {
+        return this.raw.widget != null;
     }
     /**
      * true if `caption` is set
@@ -4765,6 +4921,14 @@ export class Message {
         return this.raw.paid_message_price_changed != null;
     }
     /**
+     * true if `paid_messages_waived` is set
+     */
+    hasPaidMessagesWaived(): this is this & {
+        paidMessagesWaived: PaidMessagesWaived;
+    } {
+        return this.raw.paid_messages_waived != null;
+    }
+    /**
      * true if `poll_option_added` is set
      */
     hasPollOptionAdded(): this is this & {
@@ -4819,6 +4983,14 @@ export class Message {
         suggestedPostRefunded: TelegramSuggestedPostRefunded;
     } {
         return this.raw.suggested_post_refunded != null;
+    }
+    /**
+     * true if `ton_wallet_transfer` is set
+     */
+    hasTonWalletTransfer(): this is this & {
+        tonWalletTransfer: TonWalletTransfer;
+    } {
+        return this.raw.ton_wallet_transfer != null;
     }
     /**
      * true if `video_chat_scheduled` is set
@@ -4883,9 +5055,9 @@ export class MessageEntity {
         return new MessageEntity(raw);
     }
     /**
-     * Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), or “date_time” (for formatted date and time).
+     * Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bank_card_number” (bank card number), “ton_address” (address in the TON blockchain), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers), or “date_time” (for formatted date and time).
      */
-    get type(): "mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "expandable_blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji" | "date_time" {
+    get type(): "mention" | "hashtag" | "cashtag" | "bot_command" | "url" | "email" | "phone_number" | "bank_card_number" | "ton_address" | "bold" | "italic" | "underline" | "strikethrough" | "spoiler" | "blockquote" | "expandable_blockquote" | "code" | "pre" | "text_link" | "text_mention" | "custom_emoji" | "date_time" {
         return this.raw.type;
     }
     /**
@@ -5018,6 +5190,14 @@ export type EmailMessageEntity = Omit<MessageEntity, "type"> & {
 
 export type PhoneNumberMessageEntity = Omit<MessageEntity, "type"> & {
     type: "phone_number";
+};
+
+export type BankCardNumberMessageEntity = Omit<MessageEntity, "type"> & {
+    type: "bank_card_number";
+};
+
+export type TonAddressMessageEntity = Omit<MessageEntity, "type"> & {
+    type: "ton_address";
 };
 
 export type BoldMessageEntity = Omit<MessageEntity, "type"> & {
@@ -5282,6 +5462,19 @@ export class OrderInfo {
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("OrderInfo", this, depth, options, inspect);
+    }
+}
+
+/**
+ * Describes a service message about the sender of the message using a link of the other user, which allows sending messages to the user without paying Telegram Stars. Currently holds no information.
+ */
+export class PaidMessagesWaived {
+    constructor(public raw: TelegramPaidMessagesWaived) { }
+    static fromPayload(raw: TelegramPaidMessagesWaived): PaidMessagesWaived {
+        return new PaidMessagesWaived(raw);
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("PaidMessagesWaived", this, depth, options, inspect);
     }
 }
 
@@ -6596,7 +6789,7 @@ export class TextQuote {
         return new TextQuote(raw);
     }
     /**
-     * Text of the quoted part of a message that is replied to by the given message
+     * Text of the quoted part of a message that is replied to by the given message; may be empty if the quote was chosen from a rich message
      */
     get text(): string {
         return this.raw.text;
@@ -6608,7 +6801,13 @@ export class TextQuote {
         return this.raw.entities ? (this._entities ??= this.raw.entities.map(x => new MessageEntity(x))) : undefined;
     }
     /**
-     * Approximate quote position in the original message in UTF-16 code units as specified by the sender
+     * Optional. Rich text of the quote if it was chosen from a rich message. May contain only plain text, RichTextBold, RichTextItalic, RichTextUnderline, RichTextStrikethrough, RichTextSpoiler, RichTextSubscript, RichTextSuperscript, RichTextDateTime, RichTextCustomEmoji, RichTextMathematicalExpression, and arrays of them.
+     */
+    get richTexts(): TelegramRichText[] | undefined {
+        return this.raw.rich_texts;
+    }
+    /**
+     * Approximate quote position in the original message in UTF-16 code units as specified by the sender. For quotes from rich messages, it is the position in the text formed by joining plain texts of all quotable texts of the message, separated by line feeds.
      */
     get position(): number {
         return this.raw.position;
@@ -6627,8 +6826,239 @@ export class TextQuote {
     } {
         return this.raw.entities != null && this.raw.entities.length > 0;
     }
+    /**
+     * true if `rich_texts` has at least one item
+     */
+    hasRichTexts(): this is this & {
+        richTexts: TelegramRichText[];
+    } {
+        return this.raw.rich_texts != null && this.raw.rich_texts.length > 0;
+    }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("TextQuote", this, depth, options, inspect);
+    }
+}
+
+/**
+ * This object represents an NFT in the TON blockchain.
+ */
+export class TonNft {
+    private _attributes?: TonNftAttribute[] | undefined;
+    constructor(public raw: TelegramTonNft) { }
+    static fromPayload(raw: TelegramTonNft): TonNft {
+        return new TonNft(raw);
+    }
+    /**
+     * Address of the NFT
+     */
+    get address(): string {
+        return this.raw.address;
+    }
+    /**
+     * Optional. Address of the collection to which the NFT belongs; omitted if unknown
+     */
+    get collectionAddress(): string | undefined {
+        return this.raw.collection_address;
+    }
+    /**
+     * Index of the NFT among all NFTs from the collection as a decimal number
+     */
+    get index(): string {
+        return this.raw.index;
+    }
+    /**
+     * Name of the NFT
+     */
+    get name(): string {
+        return this.raw.name;
+    }
+    /**
+     * Description of the NFT
+     */
+    get description(): string {
+        return this.raw.description;
+    }
+    /**
+     * Optional. Attributes of the NFT
+     */
+    get attributes(): TonNftAttribute[] | undefined {
+        return this.raw.attributes ? (this._attributes ??= this.raw.attributes.map(x => new TonNftAttribute(x))) : undefined;
+    }
+    /**
+     * Optional. The unique gift corresponding to the NFT
+     */
+    get gift(): TelegramUniqueGift | undefined {
+        return this.raw.gift;
+    }
+    /**
+     * true if `collection_address` is set
+     */
+    hasCollectionAddress(): this is this & {
+        collectionAddress: string;
+    } {
+        return this.raw.collection_address != null;
+    }
+    /**
+     * true if `attributes` has at least one item
+     */
+    hasAttributes(): this is this & {
+        attributes: TonNftAttribute[];
+    } {
+        return this.raw.attributes != null && this.raw.attributes.length > 0;
+    }
+    /**
+     * true if `gift` is set
+     */
+    hasGift(): this is this & {
+        gift: TelegramUniqueGift;
+    } {
+        return this.raw.gift != null;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("TonNft", this, depth, options, inspect);
+    }
+}
+
+/**
+ * This object represents an attribute of an NFT in the TON blockchain.
+ */
+export class TonNftAttribute {
+    constructor(public raw: TelegramTonNftAttribute) { }
+    static fromPayload(raw: TelegramTonNftAttribute): TonNftAttribute {
+        return new TonNftAttribute(raw);
+    }
+    /**
+     * Trait type of the attribute
+     */
+    get traitType(): string {
+        return this.raw.trait_type;
+    }
+    /**
+     * Value of the attribute
+     */
+    get value(): string {
+        return this.raw.value;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("TonNftAttribute", this, depth, options, inspect);
+    }
+}
+
+/**
+ * This object describes a TON wallet card, which is shown on the profile page of a user to everyone.
+ */
+export class TonWalletCard {
+    private _stickers?: TonWalletCardSticker[];
+    constructor(public raw: TelegramTonWalletCard) { }
+    static fromPayload(raw: TelegramTonWalletCard): TonWalletCard {
+        return new TonWalletCard(raw);
+    }
+    /**
+     * Address of the wallet
+     */
+    get address(): string {
+        return this.raw.address;
+    }
+    /**
+     * Balance of the wallet, in the smallest units of the cryptocurrency, as a decimal number
+     */
+    get amount(): string {
+        return this.raw.amount;
+    }
+    /**
+     * Stickers placed on the card
+     */
+    get stickers(): TonWalletCardSticker[] {
+        return this._stickers ??= this.raw.stickers.map(x => new TonWalletCardSticker(x));
+    }
+    /**
+     * Optional. Address of the NFT of one of the stickers, whose colors must be used for the card background; omitted if the default background must be used
+     */
+    get backgroundNftAddress(): string | undefined {
+        return this.raw.background_nft_address;
+    }
+    /**
+     * true if `background_nft_address` is set
+     */
+    hasBackgroundNftAddress(): this is this & {
+        backgroundNftAddress: string;
+    } {
+        return this.raw.background_nft_address != null;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("TonWalletCard", this, depth, options, inspect);
+    }
+}
+
+/**
+ * This object describes a sticker on a TON wallet card.
+ */
+export class TonWalletCardSticker {
+    private _position?: AreaPosition;
+    private _nft?: TonNft;
+    constructor(public raw: TelegramTonWalletCardSticker) { }
+    static fromPayload(raw: TelegramTonWalletCardSticker): TonWalletCardSticker {
+        return new TonWalletCardSticker(raw);
+    }
+    /**
+     * Position of the sticker on the card
+     */
+    get position(): AreaPosition {
+        return this._position ??= new AreaPosition(this.raw.position);
+    }
+    /**
+     * The NFT shown as the sticker
+     */
+    get nft(): TonNft {
+        return this._nft ??= new TonNft(this.raw.nft);
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("TonWalletCardSticker", this, depth, options, inspect);
+    }
+}
+
+/**
+ * Describes a service message about a transfer with a TON wallet.
+ */
+export class TonWalletTransfer {
+    constructor(public raw: TelegramTonWalletTransfer) { }
+    static fromPayload(raw: TelegramTonWalletTransfer): TonWalletTransfer {
+        return new TonWalletTransfer(raw);
+    }
+    /**
+     * Unique identifier of the transaction; may be empty if the transfer hasn't been sent yet
+     */
+    get transactionId(): string {
+        return this.raw.transaction_id;
+    }
+    /**
+     * Address of the transfer peer in the TON blockchain
+     */
+    get peerAddress(): string {
+        return this.raw.peer_address;
+    }
+    /**
+     * The amount of transferred cryptocurrency, in the smallest units of the cryptocurrency, as a decimal number; negative for outgoing transfers
+     */
+    get amount(): string {
+        return this.raw.amount;
+    }
+    /**
+     * Optional. Comment added to the transfer; omitted if the comment is encrypted
+     */
+    get comment(): string | undefined {
+        return this.raw.comment;
+    }
+    /**
+     * true if `comment` is set
+     */
+    hasComment(): this is this & {
+        comment: string;
+    } {
+        return this.raw.comment != null;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("TonWalletTransfer", this, depth, options, inspect);
     }
 }
 
@@ -7451,6 +7881,148 @@ export class WebAppInfo {
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("WebAppInfo", this, depth, options, inspect);
+    }
+}
+
+/**
+ * This object describes an HTML widget.
+ */
+export class Widget {
+    constructor(public raw: TelegramWidget) { }
+    static fromPayload(raw: TelegramWidget): Widget {
+        return new Widget(raw);
+    }
+    /**
+     * Optional. Unique identifier of the shared widget, which can be used to send the widget again using the method sendSharedWidget; omitted if the widget isn't shared
+     */
+    get id(): string | undefined {
+        return this.raw.id;
+    }
+    /**
+     * Optional. Width of the widget in logical pixels; omitted if the widget must occupy the whole width of the message bubble
+     */
+    get width(): number | undefined {
+        return this.raw.width;
+    }
+    /**
+     * Optional. Height of the widget in logical pixels; omitted if the height of the widget isn't fixed
+     */
+    get height(): number | undefined {
+        return this.raw.height;
+    }
+    /**
+     * HTML code of the widget
+     */
+    get html(): string {
+        return this.raw.html;
+    }
+    /**
+     * Optional. Public data of the widget, which is available wherever the widget is shown. All messages with a shared widget have the same public data.
+     */
+    get publicData(): string | undefined {
+        return this.raw.public_data;
+    }
+    /**
+     * Optional. Data of the widget, which is specific to the message
+     */
+    get chatData(): string | undefined {
+        return this.raw.chat_data;
+    }
+    /**
+     * true if `id` is set
+     */
+    hasId(): this is this & {
+        id: string;
+    } {
+        return this.raw.id != null;
+    }
+    /**
+     * true if `width` is set
+     */
+    hasWidth(): this is this & {
+        width: number;
+    } {
+        return this.raw.width != null;
+    }
+    /**
+     * true if `height` is set
+     */
+    hasHeight(): this is this & {
+        height: number;
+    } {
+        return this.raw.height != null;
+    }
+    /**
+     * true if `public_data` is set
+     */
+    hasPublicData(): this is this & {
+        publicData: string;
+    } {
+        return this.raw.public_data != null;
+    }
+    /**
+     * true if `chat_data` is set
+     */
+    hasChatData(): this is this & {
+        chatData: string;
+    } {
+        return this.raw.chat_data != null;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("Widget", this, depth, options, inspect);
+    }
+}
+
+/**
+ * This object describes a TON wallet of the user, which is used in a query from a widget.
+ */
+export class WidgetQueryWallet {
+    constructor(public raw: TelegramWidgetQueryWallet) { }
+    static fromPayload(raw: TelegramWidgetQueryWallet): WidgetQueryWallet {
+        return new WidgetQueryWallet(raw);
+    }
+    /**
+     * Address of the wallet
+     */
+    get address(): string {
+        return this.raw.address;
+    }
+    /**
+     * Balance of the wallet, in the smallest units of the cryptocurrency, as a decimal number
+     */
+    get amount(): string {
+        return this.raw.amount;
+    }
+    /**
+     * Optional. Hex-encoded public key of the wallet; omitted if unknown
+     */
+    get publicKey(): string | undefined {
+        return this.raw.public_key;
+    }
+    /**
+     * Optional. Base64-encoded serialized StateInit of the wallet contract; omitted if and only if public_key is omitted
+     */
+    get stateInit(): string | undefined {
+        return this.raw.state_init;
+    }
+    /**
+     * true if `public_key` is set
+     */
+    hasPublicKey(): this is this & {
+        publicKey: string;
+    } {
+        return this.raw.public_key != null;
+    }
+    /**
+     * true if `state_init` is set
+     */
+    hasStateInit(): this is this & {
+        stateInit: string;
+    } {
+        return this.raw.state_init != null;
+    }
+    [INSPECT](depth: any, options: any, inspect: any) {
+        return makeInspect("WidgetQueryWallet", this, depth, options, inspect);
     }
 }
 

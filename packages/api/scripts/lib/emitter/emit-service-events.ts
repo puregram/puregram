@@ -60,7 +60,7 @@ export function emitServiceEvents (schema: Schema) {
   return formatModule({
     nodes: [mapDecl, orderDecl],
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }

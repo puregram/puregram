@@ -46,7 +46,7 @@ export function emitDispatch (schema: Schema) {
     nodes: [dispatchersInterface],
     imports,
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }

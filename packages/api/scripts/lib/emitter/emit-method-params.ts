@@ -44,7 +44,7 @@ export function emitMethodParams (schema: Schema) {
   return formatModule({
     nodes: [decl],
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }

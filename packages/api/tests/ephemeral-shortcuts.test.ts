@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { callbackEphemeralParams } from '../src/ephemeral'
 import { MessageUpdate, CallbackQueryUpdate } from '../src/generated/updates'
 import type { TelegramLike } from '../src/telegram-like'
 
@@ -233,5 +234,39 @@ describe('callback-query opt-in injection', () => {
       replace_callback_query_message: true,
       callback_query_id: 'q1'
     })
+  })
+})
+
+describe('callback-only ephemeral parameters', () => {
+  it('opts in without a receiver and strips the local flag', () => {
+    expect(callbackEphemeralParams('inline_q', { ephemeral: true })).toEqual({
+      ephemeral: undefined,
+      ephemeral_message_parameters: { callback_query_id: 'inline_q' }
+    })
+  })
+
+  it('accepts an empty parameters bag without inferring a receiver', () => {
+    expect(callbackEphemeralParams('q', { ephemeral_message_parameters: {} })).toEqual({
+      ephemeral_message_parameters: { callback_query_id: 'q' }
+    })
+  })
+
+  it('preserves explicit query ids and replacement options', () => {
+    expect(callbackEphemeralParams('q', {
+      ephemeral_message_parameters: { callback_query_id: 'other', replace_callback_query_message: true }
+    })).toEqual({
+      ephemeral_message_parameters: { callback_query_id: 'other', replace_callback_query_message: true }
+    })
+  })
+
+  it('fills an explicitly undefined query id', () => {
+    expect(callbackEphemeralParams('q', { ephemeral_message_parameters: { callback_query_id: undefined } })).toEqual({
+      ephemeral_message_parameters: { callback_query_id: 'q' }
+    })
+  })
+
+  it('leaves public sends public and consumes an explicit opt-out', () => {
+    expect(callbackEphemeralParams('q', {})).toEqual({})
+    expect(callbackEphemeralParams('q', { ephemeral: false })).toEqual({ ephemeral: undefined })
   })
 })

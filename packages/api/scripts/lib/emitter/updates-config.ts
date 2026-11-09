@@ -44,7 +44,9 @@ export const SHORTCUT_RENAMES: Record<string, string> = {
   answerShippingQuery: 'answer',
   answerPreCheckoutQuery: 'answer',
   answerGuestQuery: 'answer',
-  answerChatJoinRequestQuery: 'answer'
+  answerChatJoinRequestQuery: 'answer',
+  answerWidgetQuery: 'answer',
+  editMessageWidgetData: 'editWidgetData'
 }
 
 export function shortcutNameFor (method: string) {
@@ -117,7 +119,7 @@ const MESSAGE_EXTRAS: UpdateExtra[] = [
   { kind: 'method', name: 'isSupergroup', body: "return this.raw.chat.type === 'supergroup'", returnType: 'boolean', jsdoc: 'true if `chat.type === "supergroup"`' },
   { kind: 'method', name: 'isChannel', body: "return this.raw.chat.type === 'channel'", returnType: 'boolean', jsdoc: 'true if `chat.type === "channel"`' },
 
-  { kind: 'method', name: 'download', body: PICK_DOWNLOAD + 'return t == null ? Promise.resolve(null) : this.tg.download(t)', returnType: 'Promise<Buffer | null>', jsdoc: 'download the message attachment as a `Buffer`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`' },
+  { kind: 'method', name: 'download', body: PICK_DOWNLOAD + 'return t == null ? Promise.resolve(null) : this.tg.download(t)', returnType: 'Promise<Uint8Array | null>', jsdoc: 'download the message attachment as a `Uint8Array`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`' },
   { kind: 'method', name: 'downloadStream', body: PICK_DOWNLOAD + 'return t == null ? Promise.resolve(null) : this.tg.downloadStream(t)', returnType: 'Promise<Readable | null>', jsdoc: 'download the message attachment as a node `Readable`. returns `null` if no media' },
   { kind: 'method', name: 'downloadIterable', body: PICK_DOWNLOAD + 'return t == null ? Promise.resolve(null) : this.tg.downloadIterable(t)', returnType: 'Promise<AsyncIterable<Uint8Array> | null>', jsdoc: 'download the message attachment as an async-iterable byte stream. returns `null` if no media' },
   { kind: 'method', name: 'downloadToFile', params: 'path: string', body: PICK_DOWNLOAD + 'return t == null ? Promise.resolve(null) : this.tg.downloadToFile(path, t).then(() => undefined as void | null)', returnType: 'Promise<void | null>', jsdoc: 'download the message attachment to disk. returns `null` if no media; otherwise resolves once the file is fully written' },
@@ -151,6 +153,9 @@ const CALLBACK_QUERY_EXTRAS: UpdateExtra[] = [
   { kind: 'method', name: 'editReplyMarkup', params: 'params?: Omit<EditMessageReplyMarkupParams, "chat_id" | "message_id" | "inline_message_id">', body: CBQ_MESSAGE_REF + 'return this.tg.api.editMessageReplyMarkup({ ...ref, ...params })', returnType: 'Promise<TelegramMessage | true>', jsdoc: 'shortcut for `tg.api.editMessageReplyMarkup` on the message this callback query came from — the pager pattern: swap the keyboard in place. inline-mode edits resolve `true`' },
   { kind: 'method', name: 'editRich', params: 'richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "inline_message_id" | "rich_message" | "text">', body: CBQ_MESSAGE_REF + 'return this.tg.api.editMessageText({ ...ref, rich_message: richMessage, ...params })', returnType: 'Promise<TelegramMessage | true>', jsdoc: 'edit the message this callback query came from to rich content (build it with @puregram/rich) — inline-mode edits resolve `true`' },
   { kind: 'method', name: 'delete', params: 'params?: Omit<DeleteMessageParams, "chat_id" | "message_id">', body: 'const m = this.raw.message; if (m == null) { throw new TypeError("cannot delete an inline-mode message — deleteMessage needs chat_id + message_id"); } return this.tg.api.deleteMessage({ chat_id: m.chat.id, message_id: m.message_id, ...params })', returnType: 'Promise<true>', jsdoc: 'shortcut for `tg.api.deleteMessage` on the message this callback query came from. throws for inline-mode messages — there is nothing to delete' }
+]
+const WIDGET_QUERY_EXTRAS: UpdateExtra[] = [
+  { kind: 'method', name: 'editWidgetData', params: 'params?: Omit<EditMessageWidgetDataParams, "chat_id" | "message_id" | "inline_message_id">', body: 'const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : this.raw.chat != null && this.raw.message_id != null ? { chat_id: this.raw.chat.id, message_id: this.raw.message_id } : undefined; if (ref == null) { throw new TypeError("widget query carries neither message nor inline_message_id"); } return this.tg.api.editMessageWidgetData({ ...ref, ...params })', returnType: 'Promise<true>' }
 ]
 
 const POLL_ANSWER_EXTRAS: UpdateExtra[] = [
@@ -194,7 +199,12 @@ const TOP_LEVEL_ANCHOR_OVERRIDES: Record<string, ShortcutAnchor[]> = {
   message_reaction: [],
   message_reaction_count: [],
   chat_boost: [],
-  removed_chat_boost: []
+  removed_chat_boost: [],
+  widget_query: [{ schemaArg: 'widget_query_id', accessPath: ['raw', 'id'] }],
+  shared_widget_query: [
+    { schemaArg: 'widget_query_id', accessPath: ['raw', 'id'] },
+    { schemaArg: 'widget_id', accessPath: ['raw', 'widget_id'] }
+  ]
 }
 
 // service-event derivations from a TelegramMessage payload — schema descriptions
@@ -233,7 +243,9 @@ const DERIVED_KINDS: readonly UpdateKindSpec[] = [
   { kindName: 'proximity_alert_triggered', className: 'ProximityAlertTriggeredUpdate', payloadType: 'TelegramMessage', source: { kind: 'derived', messageField: 'proximity_alert_triggered' }, anchors: MESSAGE_ANCHORS },
   { kindName: 'write_access_allowed', className: 'WriteAccessAllowedUpdate', payloadType: 'TelegramMessage', source: { kind: 'derived', messageField: 'write_access_allowed' }, anchors: MESSAGE_ANCHORS },
   { kindName: 'community_chat_added', className: 'CommunityChatAddedUpdate', payloadType: 'TelegramMessage', source: { kind: 'derived', messageField: 'community_chat_added' }, anchors: MESSAGE_ANCHORS },
-  { kindName: 'community_chat_removed', className: 'CommunityChatRemovedUpdate', payloadType: 'TelegramMessage', source: { kind: 'derived', messageField: 'community_chat_removed' }, anchors: MESSAGE_ANCHORS }
+  { kindName: 'community_chat_removed', className: 'CommunityChatRemovedUpdate', payloadType: 'TelegramMessage', source: { kind: 'derived', messageField: 'community_chat_removed' }, anchors: MESSAGE_ANCHORS },
+  { kindName: 'paid_messages_waived', className: 'PaidMessagesWaivedUpdate', payloadType: 'TelegramMessage', source: { kind: 'derived', messageField: 'paid_messages_waived' }, anchors: MESSAGE_ANCHORS },
+  { kindName: 'ton_wallet_transfer', className: 'TonWalletTransferUpdate', payloadType: 'TelegramMessage', source: { kind: 'derived', messageField: 'ton_wallet_transfer' }, anchors: MESSAGE_ANCHORS }
 ]
 
 const UNIVERSAL_EXTRAS: UpdateExtra[] = [
@@ -247,6 +259,7 @@ const CHAT_JOIN_REQUEST_EXTRAS: UpdateExtra[] = [
 
 const KIND_EXTRAS: Record<string, UpdateExtra[]> = {
   callback_query: CALLBACK_QUERY_EXTRAS,
+  widget_query: WIDGET_QUERY_EXTRAS,
   chat_member: CHAT_MEMBER_EXTRAS,
   my_chat_member: CHAT_MEMBER_EXTRAS,
   message_reaction: MESSAGE_REACTION_EXTRAS,
@@ -270,7 +283,7 @@ export function buildUpdateKinds (schema: Schema) {
     }
 
     if (f.type.kind !== 'reference') {
-      continue
+      throw new Error(`unsupported Update.${f.name} type: ${f.type.kind}`)
     }
 
     const refName = f.type.name

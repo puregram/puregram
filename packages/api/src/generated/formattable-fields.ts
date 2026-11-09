@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.3
-/// source: https://corefork.telegram.org/bots/api
-/// generated at: 2026-08-25T14:25:05.655Z
+/// Bot API 10.4
+/// source: https://core.telegram.org/bots/api
+/// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
 export const FORMATTABLE_FIELDS = {
@@ -43,6 +43,16 @@ export const FORMATTABLE_FIELDS = {
         },
         {
             path: ["result", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
         }
@@ -87,6 +97,16 @@ export const FORMATTABLE_FIELDS = {
             path: ["results", "*", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["results", "*", "input_message_content", "rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["results", "*", "input_message_content", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
         }
     ],
     "answerWebAppQuery": [
@@ -127,6 +147,16 @@ export const FORMATTABLE_FIELDS = {
         },
         {
             path: ["result", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
         }
@@ -192,6 +222,11 @@ export const FORMATTABLE_FIELDS = {
             path: ["rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
         }
     ],
     "editMessageCaption": [
@@ -255,6 +290,11 @@ export const FORMATTABLE_FIELDS = {
             path: ["rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
         }
     ],
     "editStory": [
@@ -316,6 +356,16 @@ export const FORMATTABLE_FIELDS = {
         },
         {
             path: ["result", "input_message_content", "rich_message", "blocks", "*", "voice_note", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["result", "input_message_content", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
         }
@@ -428,6 +478,11 @@ export const FORMATTABLE_FIELDS = {
         }
     ],
     "sendMediaGroup": [
+        {
+            path: ["media", "*", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
         {
             path: ["reply_parameters", "quote"],
             textKey: "quote",
@@ -551,6 +606,11 @@ export const FORMATTABLE_FIELDS = {
             entitiesKey: "caption_entities"
         },
         {
+            path: ["rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
             path: ["reply_parameters", "quote"],
             textKey: "quote",
             entitiesKey: "quote_entities"
@@ -586,6 +646,23 @@ export const FORMATTABLE_FIELDS = {
             path: ["rich_message", "blocks", "*", "voice_note", "caption"],
             textKey: "caption",
             entitiesKey: "caption_entities"
+        },
+        {
+            path: ["rich_message", "media", "*", "media", "caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        }
+    ],
+    "sendSharedWidget": [
+        {
+            path: ["caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["reply_parameters", "quote"],
+            textKey: "quote",
+            entitiesKey: "quote_entities"
         }
     ],
     "sendSticker": [
@@ -631,6 +708,32 @@ export const FORMATTABLE_FIELDS = {
             path: ["reply_parameters", "quote"],
             textKey: "quote",
             entitiesKey: "quote_entities"
+        }
+    ],
+    "sendWidget": [
+        {
+            path: ["caption"],
+            textKey: "caption",
+            entitiesKey: "caption_entities"
+        },
+        {
+            path: ["reply_parameters", "quote"],
+            textKey: "quote",
+            entitiesKey: "quote_entities"
+        }
+    ],
+    "verifyChat": [
+        {
+            path: ["custom_description"],
+            textKey: "custom_description",
+            entitiesKey: "custom_description_entities"
+        }
+    ],
+    "verifyUser": [
+        {
+            path: ["custom_description"],
+            textKey: "custom_description",
+            entitiesKey: "custom_description_entities"
         }
     ]
 } as const;

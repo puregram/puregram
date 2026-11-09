@@ -4,6 +4,7 @@ import type { SchemaObject, SchemaTypeRef } from '../schema-types'
 // return values. keep alphabetical for clean diffs
 export const WRAPPED_STRUCTURES = [
   'Animation',
+  'AreaPosition',
   'Audio',
   'Chat',
   'ChatBoost',
@@ -18,6 +19,8 @@ export const WRAPPED_STRUCTURES = [
   'ChatPermissions',
   'ChatPhoto',
   'ChatShared',
+  'ChatShareThemeBackdrop',
+  'ChatShareThemeBackdrops',
   'ChosenInlineResult',
   'Contact',
   'Dice',
@@ -46,6 +49,7 @@ export const WRAPPED_STRUCTURES = [
   'MessageReactionCountUpdated',
   'MessageReactionUpdated',
   'OrderInfo',
+  'PaidMessagesWaived',
   'PassportData',
   'PhotoSize',
   'Poll',
@@ -62,6 +66,11 @@ export const WRAPPED_STRUCTURES = [
   'Story',
   'SuccessfulPayment',
   'TextQuote',
+  'TonNft',
+  'TonNftAttribute',
+  'TonWalletCard',
+  'TonWalletCardSticker',
+  'TonWalletTransfer',
   'User',
   'UserProfilePhotos',
   'UsersShared',
@@ -75,6 +84,8 @@ export const WRAPPED_STRUCTURES = [
   'Voice',
   'WebAppData',
   'WebAppInfo',
+  'Widget',
+  'WidgetQueryWallet',
   'WriteAccessAllowed'
 ] as const
 

@@ -86,15 +86,14 @@ export function ephemeralTarget (raw: EphemeralMessageLike) {
   }
 }
 
-/**
- * callback-query sends opt into ephemeral by passing `ephemeral_message_parameters` — only then
- * does the query id auto-fill as the authorization token (a blanket fill would make every send
- * ephemeral)
- */
 export function callbackEphemeralParams (queryId: string, params: EphemeralSendOverrides) {
-  const parameters = params.ephemeral_message_parameters
+  const scrub = 'ephemeral' in params ? { ephemeral: undefined } : {}
+  const parameters = params.ephemeral_message_parameters ?? (params.ephemeral === true ? {} : undefined)
 
-  return parameters !== undefined && parameters.callback_query_id === undefined
-    ? { ephemeral_message_parameters: { ...parameters, callback_query_id: queryId } }
-    : {}
+  return parameters !== undefined
+    ? {
+        ...scrub,
+        ephemeral_message_parameters: { ...parameters, callback_query_id: parameters.callback_query_id ?? queryId }
+      }
+    : scrub
 }

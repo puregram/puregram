@@ -17,7 +17,7 @@ describe('formatModule', () => {
     const out = formatModule({
       nodes,
       botApiVersion: '8.0.0',
-      sourceUrl: 'https://corefork.telegram.org/bots/api',
+      sourceUrl: 'https://core.telegram.org/bots/api',
       generatedAt: '2026-04-26T00:00:00.000Z'
     })
 

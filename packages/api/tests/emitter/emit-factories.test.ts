@@ -25,7 +25,7 @@ describe('emitFactories', () => {
     const schema: Schema = {
       version: { major: 8, minor: 0, patch: 0 },
       recentChanges: { year: 2026, month: 4, day: 1 },
-      source: { corefork: '', core: '', fetchedAt: '2026-04-26T00:00:00.000Z' },
+      source: { core: '', fetchedAt: '2026-04-26T00:00:00.000Z' },
       methods: [],
       objects: [
         {

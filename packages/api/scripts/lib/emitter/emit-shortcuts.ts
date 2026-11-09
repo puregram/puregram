@@ -41,12 +41,13 @@ export function emitShortcuts (schema: Schema) {
   )
 
   const paramsImports = SHORTCUTS
-    .filter(s => methodsByName.has(s.method))
+    .filter(s => s.method !== 'sendWidget' && methodsByName.has(s.method))
     .map(s => `${pascal(s.method)}Params`)
 
   const imports = [
     ...(referencedTypes.size > 0 ? [importTypeNamed([...referencedTypes].sort(), './types')] : []),
     ...(paramsImports.length > 0 ? [importTypeNamed([...new Set(paramsImports)].sort(), './methods')] : []),
+    ...(methodsByName.has('sendWidget') ? [importTypeNamed(['WidgetInput', 'WidgetSendOptions'], '../widget-like')] : []),
     ...(usesFormattable ? [importTypeNamed(['Formattable'], '../formattable')] : [])
   ]
 
@@ -54,7 +55,7 @@ export function emitShortcuts (schema: Schema) {
     nodes: [iface],
     imports,
     botApiVersion: versionString(schema),
-    sourceUrl: schema.source.corefork,
+    sourceUrl: schema.source.core,
     generatedAt: schema.source.fetchedAt
   })
 }
@@ -66,6 +67,7 @@ function buildShortcutSignature (
   widened: ReadonlySet<string>
 ) {
   const positionals = METHOD_POSITIONALS[sc.method] ?? []
+  const isWidget = sc.method === 'sendWidget'
 
   const positionalParams: ts.ParameterDeclaration[] = positionals.map((p) => {
     const schemaArg = method.arguments.find(a => a.name === p.schemaArg)
@@ -78,7 +80,9 @@ function buildShortcutSignature (
 
     let type = typeRefToTs(schemaArg.type)
 
-    if (widened.has(p.schemaArg)) {
+    if (isWidget && p.schemaArg === 'html') {
+      type = ts.factory.createTypeReferenceNode('W')
+    } else if (widened.has(p.schemaArg)) {
       type = ts.factory.createUnionTypeNode([
         type,
         ts.factory.createTypeReferenceNode('Formattable')
@@ -106,7 +110,9 @@ function buildShortcutSignature (
     undefined, undefined,
     ts.factory.createIdentifier('params'),
     ts.factory.createToken(ts.SyntaxKind.QuestionToken),
-    omitType,
+    isWidget
+      ? ts.factory.createTypeReferenceNode('WidgetSendOptions', [ts.factory.createTypeReferenceNode('W')])
+      : omitType,
     undefined
   )
 
@@ -119,7 +125,11 @@ function buildShortcutSignature (
       undefined,
       ts.factory.createIdentifier(sc.verb),
       undefined,
-      undefined,
+      isWidget
+        ? [ts.factory.createTypeParameterDeclaration(
+            undefined, 'W', ts.factory.createTypeReferenceNode('WidgetInput')
+          )]
+        : undefined,
       [...positionalParams, optionalParam],
       returnType
     )
