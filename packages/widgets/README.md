@@ -163,7 +163,7 @@ html`<p title="${name}">hi, ${name}</p>`.source
 
 - strings are escaped for text and attribute context (`& < > " '`), numbers and booleans are stringified, `null` / `undefined` render nothing, arrays are joined
 - a nested `html\`...\`` or `raw(string)` is inserted as is: use `raw` for markup you trust (a file you ship, a prebuilt svg)
-- the tag tracks whether an interpolation sits inside a `<script>` or `<style>` element (case-insensitive, until its closing tag). browsers don't decode entities there, so escaping would corrupt the value:
+- the tag incrementally tokenizes html to track `<script>` and `<style>` context, respecting quoted attributes, comments, raw text elements and script escaped states; only a genuine closing tag ends the element. browsers don't decode entities there, so escaping would corrupt the value:
   - inside `<script>`, wrap data in `js(value)`: `JSON.stringify` with `<`, `>`, `&`, U+2028 and U+2029 written as `\u003c`-style escapes, so it round-trips any json value and a `</script>` in it can't close the element
   - inside `<style>`, only `raw()` is accepted
   - anything else there (a plain value, a nested `html`) throws `WidgetHtmlContextError`, and so does `js()` outside a `<script>`

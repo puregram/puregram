@@ -1,4 +1,5 @@
 import { deflate } from 'pako'
+import { Tokenizer, TokenizerMode } from 'parse5'
 
 import { WidgetHtmlContextError, WidgetTooLargeError } from './errors'
 import { utf8Length, WIDGET_LIMITS } from './limits'
@@ -140,13 +141,10 @@ export type HtmlContext = 'markup' | 'script' | 'style'
 
 interface ScanState {
   context: HtmlContext
-  cursor: number
+  tokenizer: Tokenizer
 }
 
 const TRUSTED = new WeakSet<WidgetHtml>()
-
-const OPENER = /<(script|style)\b[^>]*>/gi
-const CLOSERS = { script: /<\/script/gi, style: /<\/style/gi }
 
 const JS_ESCAPES: Readonly<Record<string, string>> = {
   '<': '\\u003c',
@@ -156,29 +154,53 @@ const JS_ESCAPES: Readonly<Record<string, string>> = {
   '\u2029': '\\u2029'
 }
 
-function advance (source: string, state: ScanState) {
-  for (;;) {
-    const pattern = state.context === 'markup' ? OPENER : CLOSERS[state.context]
-
-    pattern.lastIndex = state.cursor
-
-    const match = pattern.exec(source)
-
-    if (match === null) {
-      return
-    }
-
-    state.cursor = pattern.lastIndex
-
-    if (state.context !== 'markup') {
-      state.context = 'markup'
-    } else {
-      state.context = match[1]?.toLowerCase() === 'style' ? 'style' : 'script'
-    }
+function createScanState (): ScanState {
+  const ignore = () => {}
+  const state: ScanState = {
+    context: 'markup',
+    tokenizer: new Tokenizer({}, {
+      onStartTag ({ tagName }) {
+        switch (tagName) {
+          case 'script':
+            state.context = 'script'
+            state.tokenizer.state = TokenizerMode.SCRIPT_DATA
+            break
+          case 'style':
+            state.context = 'style'
+            state.tokenizer.state = TokenizerMode.RAWTEXT
+            break
+          case 'title':
+          case 'textarea':
+            state.tokenizer.state = TokenizerMode.RCDATA
+            break
+          case 'xmp':
+          case 'iframe':
+          case 'noembed':
+          case 'noframes':
+          case 'noscript':
+            state.tokenizer.state = TokenizerMode.RAWTEXT
+            break
+          case 'plaintext':
+            state.tokenizer.state = TokenizerMode.PLAINTEXT
+            break
+        }
+      },
+      onEndTag () {
+        state.context = 'markup'
+      },
+      onComment: ignore,
+      onDoctype: ignore,
+      onEof: ignore,
+      onCharacter: ignore,
+      onNullCharacter: ignore,
+      onWhitespaceCharacter: ignore
+    })
   }
+
+  return state
 }
 
-function render (value: HtmlValue, context: HtmlContext): string {
+function renderValue (value: HtmlValue, context: HtmlContext): string {
   if (value instanceof WidgetJs) {
     if (context !== 'script') {
       throw new WidgetHtmlContextError(context, 'js() values only belong inside <script>')
@@ -189,10 +211,6 @@ function render (value: HtmlValue, context: HtmlContext): string {
 
   if (value instanceof WidgetHtml && TRUSTED.has(value)) {
     return value.source
-  }
-
-  if (Array.isArray(value)) {
-    return (value as readonly HtmlValue[]).map(item => render(item, context)).join('')
   }
 
   if (context === 'script') {
@@ -219,6 +237,18 @@ function render (value: HtmlValue, context: HtmlContext): string {
   return escapeHtml(String(value))
 }
 
+function render (value: HtmlValue, state: ScanState): string {
+  if (Array.isArray(value)) {
+    return (value as readonly HtmlValue[]).map(item => render(item, state)).join('')
+  }
+
+  const source = renderValue(value, state.context)
+
+  state.tokenizer.write(source, false)
+
+  return source
+}
+
 export function js (value: unknown) {
   const json = JSON.stringify(value) as string | undefined
 
@@ -238,12 +268,21 @@ export function raw (source: string) {
 }
 
 export function html (strings: TemplateStringsArray, ...values: HtmlValue[]) {
-  const state: ScanState = { context: 'markup', cursor: 0 }
   let source = strings[0] ?? ''
 
+  if (values.length === 0) {
+    return new WidgetHtml(source)
+  }
+
+  const state = createScanState()
+
+  state.tokenizer.write(source, false)
+
   for (let index = 0; index < values.length; index += 1) {
-    advance(source, state)
-    source += render(values[index], state.context) + (strings[index + 1] ?? '')
+    const next = strings[index + 1] ?? ''
+
+    source += render(values[index], state) + next
+    state.tokenizer.write(next, false)
   }
 
   return new WidgetHtml(source)

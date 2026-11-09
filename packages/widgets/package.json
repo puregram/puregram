@@ -26,6 +26,7 @@
   "dependencies": {
     "@puregram/api": "workspace:~",
     "pako": "^2.1.0",
+    "parse5": "^8.0.0",
     "puregram": "workspace:^"
   },
   "devDependencies": {

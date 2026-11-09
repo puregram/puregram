@@ -172,6 +172,96 @@ const b = ${js(2)}
     expect(html`<scripts>${'<'}</scripts><styled>${'<'}</styled>`.source).toBe('<scripts>&lt;</scripts><styled>&lt;</styled>')
   })
 
+  it('ignores apparent tags inside quoted attributes', () => {
+    expect(html`<div title="<script>">${'safe'}</div>`.source).toBe('<div title="<script>">safe</div>')
+    expect(html`<div title='<style>'>${'safe'}</div>`.source).toBe("<div title='<style>'>safe</div>")
+    expect(html`<script title="> <style>">${js(1)}</script>`.source).toBe('<script title="> <style>">1</script>')
+    expect(() => html`<div title="<script>">${js(1)}</div>`).toThrow(WidgetHtmlContextError)
+  })
+
+  it('ignores apparent tags in comments and bogus comments', () => {
+    expect(html`<!-- <script> -->${'safe'}`.source).toBe('<!-- <script> -->safe')
+    expect(html`<!-- <style> ${'<'} -->${'safe'}`.source).toBe('<!-- <style> &lt; -->safe')
+    expect(html`<!bogus <script>>${'safe'}`.source).toBe('<!bogus <script>>safe')
+    expect(html`<?bogus <style>>${'safe'}`.source).toBe('<?bogus <style>>safe')
+    expect(() => html`<!-- <script> ${js(1)} -->`).toThrow(WidgetHtmlContextError)
+  })
+
+  it.each(['<!-->', '<!--->', '<!-- x --!>'])('honors the malformed comment ending in %s', (comment) => {
+    expect(html`${raw(comment)}<script>${js(1)}</script>${'<'}`.source).toBe(`${comment}<script>1</script>&lt;`)
+    expect(() => html`${raw(comment)}<script>${'unsafe'}</script>`).toThrow(WidgetHtmlContextError)
+    expect(() => html`${raw(comment)}${js(1)}`).toThrow(WidgetHtmlContextError)
+  })
+
+  it.each(['textarea', 'title', 'xmp', 'iframe', 'noembed', 'noframes', 'noscript'])(
+    'does not recognize script or style tags in <%s> text',
+    (tag) => {
+      const prefix = `<${tag}><script><style>`
+      const suffix = `</style></script></${tag}>`
+
+      expect(html`${raw(prefix)}${'<safe>'}${raw(suffix)}`.source).toBe(`${prefix}&lt;safe&gt;${suffix}`)
+      expect(() => html`${raw(prefix)}${js(1)}${raw(suffix)}`).toThrow(WidgetHtmlContextError)
+      expect(html`${raw(prefix + suffix)}<script>${js(1)}</script>`.source).toBe(`${prefix}${suffix}<script>1</script>`)
+    }
+  )
+
+  it('keeps plaintext mode through apparent closing tags', () => {
+    expect(html`<plaintext></plaintext><script>${'<safe>'}`.source).toBe('<plaintext></plaintext><script>&lt;safe&gt;')
+    expect(() => html`<plaintext></plaintext><script>${js(1)}`).toThrow(WidgetHtmlContextError)
+  })
+
+  it('keeps script context after an end tag with a different name', () => {
+    expect(html`<script>/* </scripture> */ const n = ${js(1)}</script>`.source)
+      .toBe('<script>/* </scripture> */ const n = 1</script>')
+    expect(() => html`<script>/* </scripture> */ const n = ${'globalThis.compromised = true'}</script>`)
+      .toThrow(WidgetHtmlContextError)
+    expect(() => html`<script>/* </script!> */ ${'unsafe'}</script>`).toThrow(WidgetHtmlContextError)
+    expect(() => html`<style>/* </stylesheet> */ ${'unsafe'}</style>`).toThrow(WidgetHtmlContextError)
+  })
+
+  it.each(['</script>', '</ScRiPt >', '</script/>', '</script data-x=">">'])(
+    'leaves script context after the genuine end tag %s',
+    (endTag) => {
+      expect(html`<script>${js(1)}${raw(endTag)}${'<'}`.source).toBe(`<script>1${endTag}&lt;`)
+      expect(() => html`<script>${raw(endTag)}${js(1)}`).toThrow(WidgetHtmlContextError)
+    }
+  )
+
+  it('leaves style context only after a genuine end tag', () => {
+    expect(html`<style>${raw('b{}')}</style >${'<'}`.source).toBe('<style>b{}</style >&lt;')
+    expect(() => html`<style>${raw('b{}')}</style >${js(1)}`).toThrow(WidgetHtmlContextError)
+  })
+
+  it('tracks incomplete tags, quotes and comments across interpolations', () => {
+    expect(html`<scr${raw('ipt')} title="${'<style>'}">${js(1)}</scr${raw('ipt')}>${'<'}`.source)
+      .toBe('<script title="&lt;style&gt;">1</script>&lt;')
+    expect(html`<div title="<scr${'ipt'}>">${'safe'}</div>`.source).toBe('<div title="<script>">safe</div>')
+    expect(html`<!${raw('--')} <script> --${raw('>')}${'safe'}`.source).toBe('<!-- <script> -->safe')
+    expect(() => html`<script></scr${raw('ip')}${'unsafe'}t>`).toThrow(WidgetHtmlContextError)
+  })
+
+  it('tracks trusted markup and each array member before rendering the next value', () => {
+    expect(html`${[raw('<script>'), js(1), raw('</script>'), '<']}`.source).toBe('<script>1</script>&lt;')
+    expect(html`${raw('<style>')}${raw('b{}')}</style>${'<'}`.source).toBe('<style>b{}</style>&lt;')
+    expect(() => html`${[raw('<script>'), 'unsafe', raw('</script>')]}`).toThrow(WidgetHtmlContextError)
+    expect(() => html`${[html`<script>`, ['unsafe']]}`).toThrow(WidgetHtmlContextError)
+  })
+
+  it('recognizes genuine end tags in escaped script data', () => {
+    expect(html`<script><!-- ${js(1)}</script>${'<'}`.source).toBe('<script><!-- 1</script>&lt;')
+    expect(html`<script><!--<scripture></script>${'<'}`.source).toBe('<script><!--<scripture></script>&lt;')
+    expect(() => html`<script><!-- ${'unsafe'} --></script>`).toThrow(WidgetHtmlContextError)
+  })
+
+  it('keeps script context after a double-escaped end tag', () => {
+    expect(html`<script><!--<script></script>${js(1)}</script>${'<'}`.source)
+      .toBe('<script><!--<script></script>1</script>&lt;')
+    expect(() => html`<script><!--<script></script>${'unsafe'}</script>`).toThrow(WidgetHtmlContextError)
+    expect(() => html`<script><!--<scr${raw('ipt>')}</script>${'unsafe'}</script>`).toThrow(WidgetHtmlContextError)
+    expect(html`<script><!--<script>${raw('</scr')}${raw('ipt>')}${js(1)}</script>${'<'}`.source)
+      .toBe('<script><!--<script></script>1</script>&lt;')
+  })
+
   it('refuses values JSON cannot represent', () => {
     expect(() => js(undefined)).toThrow(TypeError)
     expect(() => js(() => 1)).toThrow(TypeError)
