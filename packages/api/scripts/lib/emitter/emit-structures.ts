@@ -49,7 +49,7 @@ export function emitStructures (schema: Schema) {
   }
 
   const usesHas = wrappedObjects.some(o =>
-    o.fields.some(f => !f.required && !/^(has|is)[A-Z]/.test(getterNameFor(f.name)))
+    o.fields.some(f => !f.required && !/^(has|is)[A-Z]/.test(getterNameFor(f.name, o.fields)))
   )
 
   const usedArrayWrappers = collectUsedArrayWrappers(wrappedObjects)
@@ -177,7 +177,7 @@ function emitClass (obj: Extract<SchemaObject, { kind: 'object' }>, wrappedClass
   ))
 
   for (const f of obj.fields) {
-    members.push(emitGetter(f, wrappedClassNames))
+    members.push(emitGetter(f, wrappedClassNames, obj.fields))
   }
 
   for (const f of obj.fields) {
@@ -185,7 +185,7 @@ function emitClass (obj: Extract<SchemaObject, { kind: 'object' }>, wrappedClass
       continue
     }
 
-    const getterName = getterNameFor(f.name)
+    const getterName = getterNameFor(f.name, obj.fields)
 
     if (/^(has|is)[A-Z]/.test(getterName)) {
       continue
@@ -283,8 +283,8 @@ function collectUsedArrayWrappers (
   return ARRAY_WRAPPER_NAMES.filter(n => used.has(n))
 }
 
-function emitGetter (f: SchemaField, wrappedClassNames: Set<string>) {
-  const camelName = getterNameFor(f.name)
+function emitGetter (f: SchemaField, wrappedClassNames: Set<string>, fields: readonly SchemaField[]) {
+  const camelName = getterNameFor(f.name, fields)
   const info = wrapperInfoFor(f.type, wrappedClassNames)
 
   const returnType = info

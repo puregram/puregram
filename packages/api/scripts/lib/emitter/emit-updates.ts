@@ -199,7 +199,7 @@ export function emitUpdates (schema: Schema) {
       return false
     }
 
-    return obj.fields.some(f => !f.required && !/^(has|is)[A-Z]/.test(getterNameFor(f.name)))
+    return obj.fields.some(f => !f.required && !/^(has|is)[A-Z]/.test(getterNameFor(f.name, obj.fields)))
   })
   // shortcuts now inline their params type, so `Formattable` is needed iff any inlined
   // arg references it (i.e. the method has a widened arg AND that arg is among `userArgs`)
@@ -443,7 +443,7 @@ function buildGetterMembers (
   }
 
   for (const f of payloadObject.fields) {
-    const camelName = getterNameFor(f.name)
+    const camelName = getterNameFor(f.name, payloadObject.fields)
 
     if (reservedNames.has(camelName)) {
       continue
@@ -481,7 +481,7 @@ function buildAutoHasMembers (
       continue
     }
 
-    const camelName = getterNameFor(f.name)
+    const camelName = getterNameFor(f.name, payloadObject.fields)
 
     if (/^(has|is)[A-Z]/.test(camelName)) {
       continue
@@ -828,7 +828,7 @@ function emitUpdateClass (
 
   if (payloadObject?.kind === 'object') {
     for (const f of payloadObject.fields) {
-      const camelName = getterNameFor(f.name)
+      const camelName = getterNameFor(f.name, payloadObject.fields)
 
       if (reservedNames.has(camelName)) {
         continue
@@ -853,7 +853,7 @@ function emitUpdateClass (
         continue
       }
 
-      const camelName = getterNameFor(f.name)
+      const camelName = getterNameFor(f.name, payloadObject.fields)
 
       if (/^(has|is)[A-Z]/.test(camelName)) {
         continue

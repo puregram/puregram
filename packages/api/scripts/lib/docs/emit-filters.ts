@@ -29,7 +29,7 @@ function collectPresenceFilters (schema: Schema) {
         continue
       }
 
-      const camelName = getterNameFor(f.name)
+      const camelName = getterNameFor(f.name, obj.fields)
 
       if (/^(has|is)[A-Z]/.test(camelName)) {
         continue
