@@ -203,6 +203,8 @@ shapes its way through the same `update_id` dedup, the same dispatch chain, the 
 
 when you want to feed a raw payload into `env.inject(...)` without typing out every required field, the fixture builders give you minimal-but-realistic shapes you can override field-by-field. each builder takes an optional `overrides` partial and applies it on top of the defaults — sequential ids, current unix time, `'private'` chats, `'test-user'` username, and so on
 
+bot api 10.4 widgets are covered by `buildWidgetQuery(overrides?)` and `buildSharedWidgetQuery(overrides?)`. the inline fixture omits chat/message ids when `inline_message_id` is provided; shared queries never invent a chat. actors expose `user.sendWidgetQuery(data, message, options?)`, `user.on(message).sendWidgetQuery(data, options?)`, and `user.sendSharedWidgetQuery(widgetId, data, options?)`. `options.type` accepts every official widget query type. `answerWidgetQuery` has a `true` auto-stub.
+
 ```ts
 import {
   buildCallbackQuery,

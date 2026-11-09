@@ -36,6 +36,20 @@ describe('deepLink.start', () => {
   })
 })
 
+describe('deepLink.topic', () => {
+  it('opens a private bot topic by its message thread id', () => {
+    expect(deepLink.topic({ bot: 'my_bot', messageThreadId: 42 })).toBe('https://t.me/my_bot/42')
+  })
+
+  it('validates the bot username', () => {
+    expect(() => deepLink.topic({ bot: 'no', messageThreadId: 42 })).toThrow(/username/)
+  })
+
+  it.each([0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1])('rejects invalid thread id %s', messageThreadId => {
+    expect(() => deepLink.topic({ bot: 'my_bot', messageThreadId })).toThrow(/messageThreadId/)
+  })
+})
+
 describe('deepLink.startGroup', () => {
   it('renders without payload or admin', () => {
     expect(deepLink.startGroup({ bot: 'my_bot' })).toBe('https://t.me/my_bot?startgroup')

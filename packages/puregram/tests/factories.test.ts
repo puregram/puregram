@@ -426,3 +426,53 @@ describe('Invoice', () => {
     })
   })
 })
+
+describe('Bot API 10.4 content factories', () => {
+  it('builds widget content with official camelCase extras', () => {
+    expect(InputMessageContent.widget('<b>hello</b>', {
+      width: 240,
+      height: 120,
+      publicData: '{"count":1}',
+      chatData: '{}',
+      allowQueries: true,
+      isShared: true,
+      showCaptionAboveMedia: true
+    })).toEqual({
+      html: '<b>hello</b>',
+      width: 240,
+      height: 120,
+      public_data: '{"count":1}',
+      chat_data: '{}',
+      allow_queries: true,
+      is_shared: true,
+      show_caption_above_media: true
+    })
+  })
+
+  it('builds shared widget content with string identifiers', () => {
+    expect(InputMessageContent.sharedWidget('9007199254740993', {
+      chatData: '{}',
+      caption: 'hello',
+      parseMode: 'HTML'
+    })).toEqual({
+      widget_id: '9007199254740993',
+      chat_data: '{}',
+      caption: 'hello',
+      parse_mode: 'HTML'
+    })
+  })
+
+  it('preserves rich quote text in all reply factories', () => {
+    const quoteRichTexts = [{ type: 'bold' as const, text: 'hello' }]
+
+    expect(ReplyParameters.quote(1, 'hello', { quoteRichTexts })).toEqual({
+      message_id: 1, quote: 'hello', quote_rich_texts: quoteRichTexts
+    })
+    expect(ReplyParameters.to(1, { quoteRichTexts })).toEqual({
+      message_id: 1, quote_rich_texts: quoteRichTexts
+    })
+    expect(ReplyParameters.cross(2, 1, { quoteRichTexts })).toEqual({
+      chat_id: 2, message_id: 1, quote_rich_texts: quoteRichTexts
+    })
+  })
+})

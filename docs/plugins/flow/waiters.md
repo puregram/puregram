@@ -37,6 +37,7 @@ by default `waitFor` throws `WaitForTimeout` when the timeout elapses. pass `nul
 |---|---|---|
 | `'chat+from'` | when both chat and sender are extractable (e.g. `message`, `callback_query`) | wait for an update from the same chat AND the same sender |
 | `'chat'` | when only chat is extractable (e.g. `channel_post`) | wait for any update in the same chat |
+| `'from'` | when only sender is extractable (e.g. shared widget queries) | wait for an update from the same user, across chats |
 | `'none'` | when neither is extractable | no auto-scope — only your `filter` runs |
 
 ```ts
@@ -73,7 +74,7 @@ const wait = await tg.flow.waitFor('message', {
 | `validate` | `(update) => boolean \| string` | none | post-filter check — return `false` to silently re-wait, return a string to send it as feedback and re-wait |
 | `transform` | `(update) => T` | identity | shape the matched update before resolving. the promise type follows what you return |
 | `signal` | `AbortSignal` | none | external cancellation. when fired, rejects with `WaiterAbortedError` and unregisters listeners. compose with `AbortSignal.timeout(...)` / `AbortSignal.any([...])` for shared deadlines |
-| `match` | `'chat+from' \| 'chat' \| 'none'` | auto-derived | `update.flow.waitFor` only — override the auto-scope strategy |
+| `match` | `'chat+from' \| 'chat' \| 'from' \| 'none'` | auto-derived | `update.flow.waitFor` only — override the auto-scope strategy |
 
 ### multiple waiters on the same update
 

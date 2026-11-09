@@ -90,6 +90,8 @@ $ npm i -S @puregram/flow
 
 `update.flow` is auto-attached on every update kind that has a chat in the payload — `message`, `edited_message`, `channel_post`, `edited_channel_post`, `business_message`, `edited_business_message`, `callback_query`, `chat_member`, `my_chat_member`, `chat_join_request`, plus all the message-derived service events (`new_chat_members`, `pinned_message`, `boost_added`, …)
 
+bot api 10.4 widget queries also carry `flow`: `widget_query` uses its optional chat and sender, while `shared_widget_query` has only a sender. chatless queries default to sender-only matching; `prompt` still needs a chat override when no chat is available.
+
 every section below leads with the `update.flow` form. the `telegram.flow` equivalent is shown next to it
 
 ---
@@ -125,6 +127,7 @@ telegram.command('echo', async (message) => {
 |---|---|
 | `'chat+from'` (default when both extracted) | wait for an update from the same chat AND the same sender |
 | `'chat'` (default when only chat extracted, e.g. channel posts) | wait for any update in the same chat |
+| `'from'` (default when only sender extracted, e.g. shared widget queries) | wait for an update from the same user, across chats |
 | `'none'` | no auto-scoping — only your `filter` runs |
 
 ```ts

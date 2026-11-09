@@ -126,7 +126,7 @@ mediaCacher({
 })
 ```
 
-throws `TypeError` at request time if no `chat_id` can be found and you haven't supplied a custom `getStorageKey`
+requests without a usable chat scope bypass caching. bot api 10.4 callback-only ephemeral replies also bypass the default cache because telegram ignores `chat_id` when `receiver_user_id` is omitted. return a stable application-specific scope from `getStorageKey` to cache these requests explicitly, or `undefined` to skip caching.
 
 ### content-hash key strategy
 
@@ -214,7 +214,7 @@ mediaCacher({
 | option | type | default | description |
 |---|---|---|---|
 | `storage` | `KVStorage<string>` | fresh `MemoryStorage<string>` | backing store |
-| `getStorageKey` | `(ctx: RequestContext) => string` | `String(ctx.params.chat_id)` | derive the cache scope key from an outgoing request |
+| `getStorageKey` | `(ctx: RequestContext) => string \| undefined` | usable `String(ctx.params.chat_id)` | derive the cache scope key; `undefined` bypasses caching |
 | `keyStrategy` | `'sourceValue' \| 'hash'` | `'sourceValue'` | second half of the cache key — raw path/url or sha-256 of bytes (also caches byte uploads) |
 | `fetch` | `(url) => Promise<{ ok, status, body }>` | global `fetch` | used to hash url sources under `'hash'` |
 | `staleFileIdPatterns` | `readonly string[]` | three built-in patterns | substrings that trigger auto-evict + retry on a 400 response |

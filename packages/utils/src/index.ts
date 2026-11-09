@@ -12,6 +12,7 @@ export {
   type StartChannelOpts,
   type StartGroupOpts,
   type StartOpts,
+  type TopicOpts,
   type VideoChatOpts,
   type WebAppMode
 } from './deep-link'

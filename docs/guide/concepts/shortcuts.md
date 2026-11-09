@@ -195,7 +195,7 @@ tg.onBusinessMessage(message =>
 
 ## ephemeral messages
 
-an ephemeral message is visible to a single member of a group. an incoming one carries an `ephemeral_message_id` and can only be answered ephemerally, so send shortcuts on such an update auto-fill `ephemeral_message_parameters.receiver_user_id` (the non-bot party) plus the `reply_parameters.ephemeral_message_id` that authorizes the reply:
+an ephemeral message is visible to one user. an incoming ephemeral command carries an `ephemeral_message_id`; send shortcuts on that update auto-fill `ephemeral_message_parameters.receiver_user_id` (the non-bot party) plus the `reply_parameters.ephemeral_message_id` that authorizes the reply:
 
 ```ts
 tg.onMessage(message => message.send('only the sender sees this'))
@@ -203,29 +203,33 @@ tg.onMessage(message => message.send('only the sender sees this'))
 
 pass `ephemeral: false` to answer with a regular message instead — the flag is consumed by the shortcut and never reaches telegram. `edit` / `editCaption` / `editMedia` / `editReplyMarkup` / `delete` on an ephemeral message route to the `editEphemeralMessage*` / `deleteEphemeralMessage` twins, which address it by `receiver_user_id` rather than `message_id`
 
-callback queries are the opt-in case — filling the target unconditionally would make every `query.send(...)` ephemeral, so you pass `ephemeral_message_parameters` yourself and only `callback_query_id` is anchored:
+bot api 10.4 also supports ephemeral replies identified **only by a callback query**. omit `receiver_user_id`; `chat_id` is then unnecessary and ignored if supplied. this works for private, group, channel, inline and non-member chats, except channel direct messages. the callback must still be answered separately:
 
 ```ts
-tg.onCallbackQuery(query =>
-  query.send(query.chatId!, 'just for you', {
-    ephemeral_message_parameters: { receiver_user_id: query.userId }
-  })
-)
+tg.onCallbackQuery(async (query) => {
+  await tg.ephemeral({ callbackQueryId: query.id })
+    .sendMessage({ text: 'just for you' })
+  await query.answer()
+})
 ```
 
-outside a handler, `tg.ephemeral(userId)` binds the same target to a scoped `tg.api` — see [the three-layer api](/guide/concepts/three-layer-api#sending-an-ephemeral-message)
+the existing positional shortcut is unchanged: `query.send(chatId, text, params)` is public by default. passing `ephemeral_message_parameters: {}` opts in and auto-fills the query id without inventing a receiver. when you explicitly supply `receiver_user_id`, telegram requires it to be the user who pressed the button.
 
-`replaceCallbackQueryMessage: true` shows the ephemeral **in place of** the message the button
-belonged to, for that one user. it is group-only in practice: the same call in a private chat is
-rejected with `Bad Request: MESSAGE_ID_INVALID`, which fits the feature — there is nobody to hide
-the original from in a 1:1 chat. measured against bot api 10.3
+the chatless shortcut is `query.send(text, { ephemeral: true })`, or the equivalent `query.send(text, { ephemeral_message_parameters: {} })`. media shortcuts use the same opt-in shape, e.g. `query.sendPhoto(photo, { ephemeral: true })`. omitting the opt-in options is a type error, not an implicit public send.
+
+outside a handler, `tg.ephemeral(userId)` still binds a receiver for administrator-initiated group messages and incoming ephemeral replies — see [the three-layer api](/guide/concepts/three-layer-api#sending-an-ephemeral-message).
+
+`replaceCallbackQueryMessage: true` shows the ephemeral **in place of** the message the button belonged to, for that user:
 
 ```ts
-tg.onCallbackQuery(query =>
-  tg.ephemeral(query.userId!, { callbackQueryId: query.id, replaceCallbackQueryMessage: true })
-    .sendMessage({ chat_id: query.chatId!, text: 'this takes the place of the original' })
-)
+tg.onCallbackQuery(async (query) => {
+  await tg.ephemeral({ callbackQueryId: query.id, replaceCallbackQueryMessage: true })
+    .sendMessage({ text: 'this takes the place of the original' })
+  await query.answer()
+})
 ```
+
+the old bot api 10.3 measurements that rejected receiver-targeted ephemeral sends in private chats do not describe this new callback-only path.
 
 ::: warning the flag must be off for buttons on an ephemeral message
 the spec says `replace_callback_query_message` must be `False` for callback queries that came

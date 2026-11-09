@@ -61,6 +61,8 @@ await telegram.startPolling()
 
 methods in `excludeMethods` skip the whole pipeline. the default set covers control-plane calls that don't count toward send budgets: `getMe`, `getUpdates`, `getWebhookInfo`, `logOut`, `close`
 
+bot api 10.4 callback-only ephemeral replies still use the global bucket, but the default extractor skips per-chat/per-group buckets because telegram ignores `chat_id` when the ephemeral receiver is omitted.
+
 ## pair with auto-retry
 
 `@puregram/throttler` is the **proactive** half of flood management — prevent the 429 in the first place. `retryOnFloodWait` is the **reactive** half — handle the rare 429 that still gets through. they compose cleanly:

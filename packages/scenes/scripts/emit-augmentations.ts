@@ -28,6 +28,8 @@ const SCENES_AUGMENTED_KINDS = new Set<string>([
   'deleted_business_messages',
   'message_reaction',
   'callback_query',
+  'widget_query',
+  'shared_widget_query',
   'inline_query',
   'chosen_inline_result',
   'shipping_query',
@@ -69,7 +71,9 @@ const SCENES_AUGMENTED_KINDS = new Set<string>([
   'migrate_from_chat_id',
   'passport_data',
   'proximity_alert_triggered',
-  'write_access_allowed'
+  'write_access_allowed',
+  'paid_messages_waived',
+  'ton_wallet_transfer'
 ])
 
 const text = await readFile(UPDATES_PATH, 'utf8')

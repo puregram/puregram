@@ -1,3 +1,5 @@
+import type { TelegramWidgetQueryType } from '@puregram/api'
+
 import type { TestChat } from './chat'
 import type { ActorMediaInput } from './media-input'
 import type { TestMessage } from './message'
@@ -122,6 +124,10 @@ export class TestUserInChat {
 
 export class TestUserOnMessage {
   constructor (private readonly user: TestUser, private readonly message: TestMessage) {}
+
+  sendWidgetQuery (data: string, options?: { type?: TelegramWidgetQueryType, widget_id?: string }) {
+    return this.user.sendWidgetQuery(data, this.message, options)
+  }
 
   react (emojis: string | readonly string[]) {
     return this.user.react(emojis, this.message)

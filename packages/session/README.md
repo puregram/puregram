@@ -197,7 +197,7 @@ every plugin that augments `SessionData` (e.g. `@puregram/scenes` adds `__scene`
 | option | type | description |
 |---|---|---|
 | `storage` | `KVStorage<unknown>` | backing store. default: a fresh `MemoryStorage<unknown>` (in-process, lost on restart). pass any [`KVStorage`](../storage) — including [`LruMemoryStorage`](../storage), redis adapter, sqlite, custom. `TtlStorage` (slide-window expiry) is auto-detected via `isTtlStorage` |
-| `getStorageKey` | `(update) => string \| undefined` | how to derive the per-update storage key. default: `from.id ?? senderChat.id ?? chat.id`. return `undefined` to skip session attachment for that update — unkeyable updates pass through with no `update.session` set |
+| `getStorageKey` | `(update) => string \| StorageKeyDescriptor \| undefined` | derives a composite key from the available chat and sender. return `undefined` to skip session attachment for an unkeyable update |
 | `initial` | `(update) => SessionData` | initial value when the storage entry is missing. default: `() => ({})` |
 
 ### scoping by chat instead of by user
@@ -307,6 +307,8 @@ session({
 returning a raw `string` keeps the legacy behavior — used verbatim. returning `undefined` skips session attachment for that update
 
 the default keyer is now `(u) => ({ chat: u.chatId, user: u.from?.id })`. when both segments are present, the storage key reads `user:<id>:chat:<id>` so the same user gets independent sessions across chats — pass a custom `getStorageKey` if you want the v2-style "session-per-user, regardless of chat" semantics
+
+bot api 10.4 `widget_query` and `shared_widget_query` receive sessions too. a message widget query uses `user:<id>:chat:<id>`; inline and shared-widget queries have no chat, so their default key is `user:<id>`.
 
 ---
 

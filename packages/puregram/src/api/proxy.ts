@@ -36,21 +36,21 @@ export type TelegramApi = SuppressableApi & ApiCallEscape
 
 type EphemeralTargetKey = 'receiver_user_id' | 'ephemeral_message_parameters'
 
-type EphemeralBound<P> = Omit<P, EphemeralTargetKey> & {
-  [K in Extract<keyof P, EphemeralTargetKey>]?: K extends 'ephemeral_message_parameters'
-    ? Partial<TelegramEphemeralMessageParameters>
-    : P[K]
-}
+type EphemeralBound<P, ReceiverBound extends boolean> =
+  Omit<P, ReceiverBound extends true ? EphemeralTargetKey : 'ephemeral_message_parameters'> & {
+    [K in Extract<keyof P, ReceiverBound extends true ? EphemeralTargetKey : 'ephemeral_message_parameters'>]?:
+      K extends 'ephemeral_message_parameters' ? Partial<TelegramEphemeralMessageParameters> : P[K]
+  }
 
 /** `tg.ephemeral(…)` binds the ephemeral target, so those params become optional at the call site */
-export type EphemeralScopedApi = {
+export type EphemeralScopedApi<ReceiverBound extends boolean = true> = {
   [K in keyof ApiMethods]: ApiMethods[K] extends (params: infer P) => Promise<infer R>
     ? true extends IsNullableParams<P>
       ? <B extends boolean | undefined = undefined>(
-          params?: EphemeralBound<P> & SuppressAddition<B>
+          params?: EphemeralBound<P, ReceiverBound> & SuppressAddition<B>
         ) => Promise<SuppressedReturn<R, B>>
       : <B extends boolean | undefined = undefined>(
-          params: EphemeralBound<P> & SuppressAddition<B>
+          params: EphemeralBound<P, ReceiverBound> & SuppressAddition<B>
         ) => Promise<SuppressedReturn<R, B>>
     : never
 } & ApiCallEscape

@@ -256,6 +256,8 @@ deepLink.videoChat({ username: 'mychannel', hash: 'abc123', live: true })
 // → 'https://t.me/mychannel?livestream=abc123'
 ```
 
+`deepLink.topic({ bot: 'my_bot', messageThreadId: 42 })` builds `https://t.me/my_bot/42`, opening a topic in the bot's private chat (bot api 10.4). `messageThreadId` must be a positive safe integer. `parseDeepLink` keeps the structural `message` result for this URL shape because a URL alone cannot distinguish a bot topic from a public chat message.
+
 #### validation rules
 
 - **bot username** — `[A-Za-z][A-Za-z0-9_]{4,31}` (telegram's 5-32 char rule)

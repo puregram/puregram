@@ -24,6 +24,8 @@ your bot ships, hits the front page, and ten seconds later one user is sending `
 
 it's a **fixed-window counter**: each user has a bucket that allows `limit` hits within `window` seconds. one bucket per `(userId, bucketName)` pair, so the same user can have independent limits for `/buy`, `/sell`, etc
 
+bot api 10.4 widget and shared-widget queries use `from.id`, so their checks share the same user's bucket even when a query has no chat. limits remain opt-in; installing the plugin alone does not gate widget queries.
+
 unlike many rate-limit plugins, `@puregram/rate-limit` registers **no global middleware on install**. instead it attaches `telegram.rateLimit` and gives you three opt-in ways to gate: a filter, a middleware, or a direct imperative `check`. you decide where the gate lives — what gets rate-limited and what doesn't is your call
 
 ### example

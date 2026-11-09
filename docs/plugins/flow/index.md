@@ -92,6 +92,8 @@ await tg.flow.prompt(chatId, "what's your name?", { from: userId })
 
 `update.flow` is attached to every update kind that carries a chat id in its payload: `message`, `edited_message`, `channel_post`, `edited_channel_post`, `business_message`, `edited_business_message`, `callback_query`, `chat_member`, `my_chat_member`, `chat_join_request`, and all message-derived service events (`new_chat_members`, `pinned_message`, `boost_added`, and many more)
 
+`widget_query` and `shared_widget_query` also receive `flow`. message widget queries default to chat + sender; inline and shared-widget queries have no chat and default to sender-only matching. `prompt` on a chatless query requires an explicit `chat` override.
+
 ::: tip quick summary
 every section below shows `update.flow` first, then the `tg.flow` equivalent. for handler code, always reach for `update.flow`
 :::

@@ -237,6 +237,8 @@ session({
 
 the default keyer produces `user:<id>:chat:<id>` — same user gets independent sessions in different chats. pass a custom `getStorageKey` to revert to v2-style per-user-regardless-of-chat behavior
 
+bot api 10.4 message widget queries use the same composite key. inline and shared-widget queries have a sender but no chat, so their default session key is `user:<id>`.
+
 ## typescript
 
 `@puregram/session` attaches `session: SessionContext` to every update kind via codegen — no setup needed if `Record<string, unknown>` is fine:

@@ -148,6 +148,8 @@ const waitSell = await telegram.rateLimit.check(message, { limit: 5, window: 60,
 
 `bucket` defaults to `'default'`. omit it for "one budget per user across everything"
 
+widget and shared-widget queries (bot api 10.4) resolve the authoring user from `from.id`, including chatless inline/shared queries. they share that user's bucket across update kinds.
+
 ## raw key counters — `tg.rateLimit.hit(key, limit, window)`
 
 for gates that aren't per-user — per-app, per-resource, per-anything:

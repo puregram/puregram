@@ -74,7 +74,9 @@ const SERVICE_EVENT_KINDS = [
   'migrate_from_chat_id',
   'passport_data',
   'proximity_alert_triggered',
-  'write_access_allowed'
+  'write_access_allowed',
+  'paid_messages_waived',
+  'ton_wallet_transfer'
 ] as const
 
 const serviceEventEntries: [string, Extractor][] = SERVICE_EVENT_KINDS.map(
@@ -89,6 +91,8 @@ export const EXTRACTORS: Partial<Record<string, Extractor>> = {
   business_message: messageShapedExtractor,
   edited_business_message: messageShapedExtractor,
   callback_query: callbackQueryExtractor,
+  widget_query: messageShapedExtractor,
+  shared_widget_query: messageShapedExtractor,
   chat_member: messageShapedExtractor,
   my_chat_member: messageShapedExtractor,
   chat_join_request: messageShapedExtractor,

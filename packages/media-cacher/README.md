@@ -112,7 +112,7 @@ mediaCacher({
 })
 ```
 
-throws `TypeError` at request time if the default derivation can't find a `chat_id` and you haven't supplied a custom `getStorageKey` — methods that don't carry a `chat_id` (none in the cached-method list above) won't hit this, but if you ever extend the list, supply `getStorageKey` defensively
+requests without a usable chat scope bypass caching. this includes bot api 10.4 callback-only ephemeral replies: telegram ignores `chat_id` when `receiver_user_id` is omitted. a custom `getStorageKey` may return `undefined` to bypass caching, or supply a stable application-specific scope.
 
 ---
 
@@ -147,7 +147,7 @@ await telegram.mediaCacher.storage.set('whatever:key', 'AgADAQA…')
 | option | type | description |
 |---|---|---|
 | `storage` | `KVStorage<string>` | backing store. default: a fresh `MemoryStorage<string>`. swap for redis/sqlite/`LruMemoryStorage`/etc to persist or bound the cache |
-| `getStorageKey` | `(ctx: RequestContext) => string` | how to derive the cache scope key from each outgoing request. default: `String(ctx.params.chat_id)`. throws if `chat_id` is absent and you haven't overridden |
+| `getStorageKey` | `(ctx: RequestContext) => string \| undefined` | derive the cache scope key. defaults to `String(ctx.params.chat_id)` when the chat is usable; `undefined` bypasses caching |
 | `keyStrategy` | `'sourceValue' \| 'hash'` | how the second half of the cache key is derived. default `'sourceValue'` (raw path/url). `'hash'` keys by sha-256 of the bytes so distinct sources with identical content share one entry, and caches in-memory byte uploads too |
 | `fetch` | `(url) => Promise<{ ok, status, body }>` | fetch used to hash url sources under `'hash'`. default: the global `fetch`. pass the platform's `fetch` on telegram serverless |
 | `staleFileIdPatterns` | `readonly string[]` | substrings that trigger the auto-evict + retry path on a 400 response, matched case-insensitively against `description`. defaults cover the three known telegram messages |

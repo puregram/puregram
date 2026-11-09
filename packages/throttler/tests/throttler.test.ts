@@ -36,6 +36,24 @@ function setup (opts: Parameters<typeof throttler>[0] = {}) {
   return { ...fixture, ext }
 }
 
+describe('callback-only ephemeral replies', () => {
+  it.each([undefined, -100])('does not allocate a bucket for ignored chat id %s', async (chatId) => {
+    const env = setup({ globalPerSec: 100 })
+
+    await env.run({
+      method: 'sendMessage',
+      params: {
+        ...(chatId === undefined ? {} : { chat_id: chatId }),
+        text: 'private reply',
+        ephemeral_message_parameters: { callback_query_id: 'inline_q' }
+      }
+    })
+
+    expect(env.ext.chatWindows).toBe(0)
+    expect(env.ext.groupWindows).toBe(0)
+  })
+})
+
 const ctx = (method: string, params: Record<string, unknown> | undefined = undefined) =>
   ({ method, params } satisfies RequestContext)
 

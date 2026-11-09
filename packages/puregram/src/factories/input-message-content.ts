@@ -6,8 +6,10 @@ import type {
   TelegramInputLocationMessageContent,
   TelegramInputRichMessage,
   TelegramInputRichMessageContent,
+  TelegramInputSharedWidgetMessageContent,
   TelegramInputTextMessageContent,
-  TelegramInputVenueMessageContent
+  TelegramInputVenueMessageContent,
+  TelegramInputWidgetMessageContent
 } from '@puregram/api'
 
 import { type Camelize, unCamelize } from './camelize'
@@ -18,6 +20,8 @@ type VenueExtras = Camelize<Omit<TelegramInputVenueMessageContent, 'latitude' | 
 type ContactExtras = Camelize<Omit<TelegramInputContactMessageContent, 'phone_number' | 'first_name'>>
 type InvoiceParams = Camelize<TelegramInputInvoiceMessageContent>
 type RichExtras = Camelize<Omit<TelegramInputRichMessage, 'html' | 'markdown'>>
+type WidgetExtras = Camelize<Omit<TelegramInputWidgetMessageContent, 'html'>>
+type SharedWidgetExtras = Camelize<Omit<TelegramInputSharedWidgetMessageContent, 'widget_id'>>
 
 function richBody (body: { html: string } | { markdown: string }, extras: RichExtras) {
   return { rich_message: { ...body, ...unCamelize(extras) } } as unknown as TelegramInputRichMessageContent
@@ -90,5 +94,13 @@ export class InputMessageContent {
   /** invoice message body — too many required fields for a positional form, takes the full param object */
   static invoice (params: InvoiceParams) {
     return unCamelize(params) as unknown as TelegramInputInvoiceMessageContent
+  }
+
+  static widget (html: string, params: WidgetExtras = {} as WidgetExtras) {
+    return { html, ...unCamelize(params) }
+  }
+
+  static sharedWidget (widgetId: string, params: SharedWidgetExtras = {} as SharedWidgetExtras) {
+    return { widget_id: widgetId, ...unCamelize(params) }
   }
 }

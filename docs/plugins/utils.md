@@ -217,6 +217,7 @@ deepLink.videoChat({ username: 'mychannel', live: true })
 | method | link pattern |
 |---|---|
 | `deepLink.start(opts)` | `t.me/<bot>?start=<payload>` |
+| `deepLink.topic({ bot, messageThreadId })` | `t.me/<bot>/<message_thread_id>` — a private bot topic (10.4) |
 | `deepLink.startGroup(opts)` | `t.me/<bot>?startgroup[=<payload>][&admin=<rights>]` |
 | `deepLink.startChannel(opts)` | `t.me/<bot>?startchannel&admin=<rights>` |
 | `deepLink.startApp(opts)` | `t.me/<bot>[/<app>]?startapp[=<payload>][&mode=<mode>]` |
@@ -235,6 +236,8 @@ deepLink.videoChat({ username: 'mychannel', live: true })
 - **choose targets** — subset of `'users'`, `'bots'`, `'groups'`, `'channels'`
 - **phone** (for `attachInChat`) — digits only, no `+` prefix
 - **share url / text** — free-form; these are `encodeURIComponent`-escaped
+
+`messageThreadId` in `deepLink.topic` must be a positive safe integer. a bot topic link shares its URL shape with a public chat message link, so `parseDeepLink` keeps returning the structural `message` descriptor without guessing the peer type.
 
 ## `parseDeepLink(url)` — parse `t.me` links
 

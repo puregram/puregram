@@ -284,6 +284,8 @@ await env.inject({
 
 when you want to feed a raw payload into `env.inject(...)` without typing every required field, the fixture builders give you minimal-but-realistic shapes you can override field-by-field:
 
+bot api 10.4 adds `buildWidgetQuery(overrides?)` and `buildSharedWidgetQuery(overrides?)`, plus actor methods `user.sendWidgetQuery(data, message, options?)`, `user.on(message).sendWidgetQuery(data, options?)`, and `user.sendSharedWidgetQuery(widgetId, data, options?)`. `options.type` accepts any official widget query type. inline/shared queries do not fabricate a chat; `answerWidgetQuery` auto-stubs to `true`.
+
 ```ts
 import {
   buildCallbackQuery,

@@ -68,6 +68,8 @@ $ npm i -S @puregram/throttler
 
 methods in `excludeMethods` skip the whole pipeline. by default that's `getMe`, `getUpdates`, `getWebhookInfo`, `logOut`, `close` — control-plane calls that don't count toward send budgets
 
+bot api 10.4 callback-only ephemeral replies still acquire the global bucket, but skip per-chat/per-group buckets: telegram ignores `chat_id` when the ephemeral receiver is omitted. a custom `extractChatId` can apply application-specific pacing.
+
 ---
 
 <a name='combine-with-auto-retry'></a>

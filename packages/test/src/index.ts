@@ -24,8 +24,10 @@ export {
   buildChat,
   buildInlineQuery,
   buildMessage,
+  buildSharedWidgetQuery,
   buildUpdate,
   buildUser,
+  buildWidgetQuery,
   resetFixtureCounters
 } from './fixtures'
 export type { UpdateKind } from './fixtures'

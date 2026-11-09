@@ -14,7 +14,7 @@ import type {
 } from '../wait-for/any'
 import type { WaitForOptions } from '../wait-for/types'
 
-export type AugmentedWaitForMatch = 'none' | 'chat' | 'chat+from'
+export type AugmentedWaitForMatch = 'none' | 'chat' | 'from' | 'chat+from'
 
 export interface AugmentedPromptOptions extends Omit<PromptOptions, 'from'> {
   /** override the auto-derived chat (defaults to extractor's output) */
@@ -26,7 +26,7 @@ export interface AugmentedPromptOptions extends Omit<PromptOptions, 'from'> {
 export interface AugmentedWaitForOptions<K extends keyof UpdateKindMap> extends WaitForOptions<K> {
   /**
    * how strictly the next update is matched against the source — default
-   * `'chat+from'` when both extracted, `'chat'` when only chat extracted, `'none'` otherwise
+   * `'chat+from'` when both extracted, `'chat'` or `'from'` when only one extracted, `'none'` otherwise
    */
   match?: AugmentedWaitForMatch
 }

@@ -5,8 +5,10 @@ import {
   buildChat,
   buildInlineQuery,
   buildMessage,
+  buildSharedWidgetQuery,
   buildUpdate,
-  buildUser
+  buildUser,
+  buildWidgetQuery
 } from '../src/fixtures'
 
 describe('fixtures', () => {
@@ -87,5 +89,22 @@ describe('fixtures', () => {
     const cbUpdate = buildUpdate('callback_query', cb)
 
     expect(cbUpdate.callback_query).toBe(cb)
+  })
+
+  it('builds widget query variants without fabricating a shared query chat', () => {
+    const regular = buildWidgetQuery({ from: buildUser({ id: 7 }) })
+    const inline = buildWidgetQuery({ inline_message_id: 'inline-id' })
+    const shared = buildSharedWidgetQuery({ widget_id: '9007199254740993' })
+
+    expect(regular.chat).toBeDefined()
+    expect(regular.message_id).toEqual(expect.any(Number))
+    expect(regular.from.id).toBe(7)
+    expect(inline.chat).toBeUndefined()
+    expect(inline.message_id).toBeUndefined()
+    expect(inline.inline_message_id).toBe('inline-id')
+    expect(shared).toMatchObject({ widget_id: '9007199254740993', type: { type: 'data' } })
+    expect(shared).not.toHaveProperty('chat')
+    expect(buildUpdate('widget_query', regular).widget_query).toBe(regular)
+    expect(buildUpdate('shared_widget_query', shared).shared_widget_query).toBe(shared)
   })
 })

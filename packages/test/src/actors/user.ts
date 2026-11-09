@@ -1,3 +1,4 @@
+import type { TelegramWidgetQueryType } from '@puregram/api'
 import type { Telegram } from 'puregram'
 
 import { MembershipRequired } from '../errors'
@@ -475,6 +476,43 @@ export class TestUser {
     }
 
     throw new Error(`clickByText: no button with text "${buttonText}" on message ${msg.message_id}`)
+  }
+
+  async sendWidgetQuery (
+    data: string,
+    message: TestMessage,
+    options: { type?: TelegramWidgetQueryType, widget_id?: string } = {}
+  ) {
+    await this.inject({
+      update_id: this.world.nextUpdateId(),
+      widget_query: {
+        id: 'wq_' + this.world.nextUpdateId(),
+        from: this.toRaw(),
+        chat: message.chat.toRaw(),
+        message_id: message.message_id,
+        chat_instance: 'inst_' + message.chat.id,
+        type: options.type ?? { type: 'data' },
+        data,
+        ...(options.widget_id === undefined ? {} : { widget_id: options.widget_id })
+      }
+    })
+  }
+
+  async sendSharedWidgetQuery (
+    widgetId: string,
+    data: string,
+    options: { type?: TelegramWidgetQueryType } = {}
+  ) {
+    await this.inject({
+      update_id: this.world.nextUpdateId(),
+      shared_widget_query: {
+        id: 'swq_' + this.world.nextUpdateId(),
+        from: this.toRaw(),
+        widget_id: widgetId,
+        type: options.type ?? { type: 'data' },
+        data
+      }
+    })
   }
 
   async sendInlineQuery (query: string, opts?: { offset?: string }): Promise<void>

@@ -90,6 +90,13 @@ const defaultExtractChatId = (
   _method: string,
   params: Record<string, unknown> | undefined
 ) => {
+  const ephemeral = params?.ephemeral_message_parameters as
+    { receiver_user_id?: number, callback_query_id?: string } | undefined
+
+  if (ephemeral?.callback_query_id !== undefined && ephemeral.receiver_user_id === undefined) {
+    return undefined
+  }
+
   const raw = params?.chat_id
 
   if (typeof raw === 'number' && Number.isFinite(raw)) {

@@ -145,6 +145,43 @@ describe('mediaCacher plugin', () => {
 
     expect(await env.storage.has('1:/tmp/x.jpg')).toBe(false)
   })
+
+  it.each([undefined, 42])('skips callback-only replies with ignored chat id %s', async (chatId) => {
+    await env.storage.set('42:/tmp/a.jpg', 'cached_id')
+
+    const ctx: RequestContext = {
+      method: 'sendPhoto',
+      params: {
+        ...(chatId === undefined ? {} : { chat_id: chatId }),
+        photo: MediaSource.path('/tmp/a.jpg'),
+        ephemeral_message_parameters: { callback_query_id: 'inline_q' }
+      }
+    }
+
+    await env.run('onBeforeRequest', ctx)
+    expect(ctx.params!.photo).toMatchObject({ type: MediaSourceType.Path })
+
+    ctx.json = { ok: true, result: { photo: [{ file_id: 'new_id' }] } }
+    await env.run('onResponseIntercept', ctx)
+    expect(await env.storage.get('42:/tmp/a.jpg')).toBe('cached_id')
+    expect(await env.storage.get('undefined:/tmp/a.jpg')).toBeUndefined()
+  })
+
+  it('still caches receiver-targeted ephemeral media by chat', async () => {
+    await env.storage.set('42:/tmp/a.jpg', 'cached_id')
+
+    const ctx: RequestContext = {
+      method: 'sendPhoto',
+      params: {
+        chat_id: 42,
+        photo: MediaSource.path('/tmp/a.jpg'),
+        ephemeral_message_parameters: { receiver_user_id: 5, callback_query_id: 'q' }
+      }
+    }
+
+    await env.run('onBeforeRequest', ctx)
+    expect(ctx.params!.photo).toMatchObject({ type: MediaSourceType.FileId, value: 'cached_id' })
+  })
 })
 
 describe('mediaCacher extension', () => {

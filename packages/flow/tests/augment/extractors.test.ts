@@ -81,7 +81,21 @@ describe('EXTRACTORS', () => {
     expect(EXTRACTORS.poll).toBeUndefined()
   })
 
-  it('whitelist contains the §0.2 entries (10 base + 32 service-events)', () => {
+  it.each(['widget_query', 'shared_widget_query'])('%s extracts its optional chat and sender', (kind) => {
+    const extract = EXTRACTORS[kind]!
+
+    expect(extract({ kind, raw: { chat: { id: 100 }, from: { id: 7 } } }))
+      .toEqual({ chat: 100, from: 7 })
+    expect(extract({ kind, raw: { from: { id: 7 } } }))
+      .toEqual({ chat: undefined, from: 7 })
+  })
+
+  it.each(['paid_messages_waived', 'ton_wallet_transfer'])('%s uses its message envelope scope', (kind) => {
+    expect(EXTRACTORS[kind]!({ kind, raw: { chat: { id: 100 }, from: { id: 7 } } }))
+      .toEqual({ chat: 100, from: 7 })
+  })
+
+  it('contains every scoped base and service update kind', () => {
     const keys = Object.keys(EXTRACTORS).sort()
 
     expect(keys).toContain('message')
@@ -97,6 +111,6 @@ describe('EXTRACTORS', () => {
     expect(keys).not.toContain('shipping_query')
     expect(keys).not.toContain('poll')
 
-    expect(keys.length).toBe(42)
+    expect(keys.length).toBe(46)
   })
 })

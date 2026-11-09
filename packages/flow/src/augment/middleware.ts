@@ -147,7 +147,7 @@ function createUpdateFlowExtension (flow: FlowApi, scope: ExtractedScope, source
 
 function defaultMatch (scope: ExtractedScope) {
   if (scope.chat === undefined) {
-    return 'none' as const
+    return scope.from === undefined ? 'none' as const : 'from' as const
   }
 
   if (scope.from === undefined) {
@@ -176,11 +176,11 @@ function wrapFilter<K extends keyof UpdateKindMap> (
 
     const candScope = ext(candKindRaw)
 
-    if (candScope.chat !== scope.chat) {
+    if (match !== 'from' && candScope.chat !== scope.chat) {
       return false
     }
 
-    if (match === 'chat+from' && candScope.from !== scope.from) {
+    if ((match === 'chat+from' || match === 'from') && candScope.from !== scope.from) {
       return false
     }
 

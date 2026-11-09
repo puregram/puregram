@@ -99,6 +99,8 @@ three pieces:
 
 active-scene dispatch is **opt-out**: any update from a user with an active scene goes to that scene by default. provide `passthrough` to whitelist updates that should escape (e.g. global `/help` and `/cancel`)
 
+bot api 10.4 `widget_query` and `shared_widget_query` also receive `scene`. inline/shared queries are keyed by their sender; session defaults keep these chatless conversations separate from the same user's chat-scoped sessions.
+
 ---
 
 <a name='typescript-usage'></a>

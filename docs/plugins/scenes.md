@@ -253,6 +253,8 @@ new StepScene<MyState, MessageUpdate>('wizard', {
 
 `@puregram/scenes` attaches `scene: SceneContext<SceneState>` to every update kind via codegen. `update.scene.state` is the empty `SceneState` interface by default
 
+bot api 10.4 widget queries support scenes. message widget queries keep the user's chat-scoped session, while inline/shared-widget queries use a sender-only session because no chat is available.
+
 scope a step scene to a specific update kind by passing it as the second generic:
 
 ```ts

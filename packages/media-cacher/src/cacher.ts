@@ -6,16 +6,20 @@ import {
 import { type HashFetch, hashMediaInput } from './hash'
 import { type AllowedMediaMethod, MEDIA_METHOD_TO_KEY_MAP } from './method-map'
 
-type GetStorageKey = (ctx: RequestContext) => string
+type GetStorageKey = (ctx: RequestContext) => string | undefined
 
 const defaultGetStorageKey = (ctx: RequestContext) => {
-  const chatId = ctx.params?.chat_id
+  const params = ctx.params
+  const ephemeral = params?.ephemeral_message_parameters as
+    { receiver_user_id?: number, callback_query_id?: string } | undefined
 
-  if (chatId === undefined) {
-    throw new TypeError('mediaCacher: request has no chat_id; supply getStorageKey to derive a key from a different field')
+  if (ephemeral?.callback_query_id !== undefined && ephemeral.receiver_user_id === undefined) {
+    return undefined
   }
 
-  return String(chatId)
+  const chatId = params?.chat_id
+
+  return chatId === undefined ? undefined : String(chatId)
 }
 
 /** strategy for deriving the second half of the cache key */
@@ -187,6 +191,13 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
         }
 
         const storageKey = getStorageKey(ctx)
+
+        if (storageKey === undefined) {
+          await next()
+
+          return
+        }
+
         const secondHalf = await deriveSecondHalf(media)
 
         if (secondHalf === undefined) {

@@ -5,6 +5,7 @@ let nextMessageId = 0
 let nextUpdateId = 0
 let nextCallbackQueryId = 0
 let nextInlineQueryId = 0
+let nextWidgetQueryId = 0
 
 export function nextFixtureUserId () {
   nextUserId += 1
@@ -42,6 +43,12 @@ export function nextFixtureInlineQueryId () {
   return 'iq_fx_' + nextInlineQueryId
 }
 
+export function nextFixtureWidgetQueryId () {
+  nextWidgetQueryId += 1
+
+  return 'wq_fx_' + nextWidgetQueryId
+}
+
 export function resetFixtureCounters () {
   nextUserId = 1_000_000
   nextChatId = 2_000_000
@@ -49,4 +56,5 @@ export function resetFixtureCounters () {
   nextUpdateId = 0
   nextCallbackQueryId = 0
   nextInlineQueryId = 0
+  nextWidgetQueryId = 0
 }

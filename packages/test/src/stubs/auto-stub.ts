@@ -98,6 +98,7 @@ const TABLE: Record<string, AutoStubFn> = {
   getChatAdministrators,
 
   answerCallbackQuery: answerTrue,
+  answerWidgetQuery: answerTrue,
   answerInlineQuery: answerTrue,
   answerWebAppQuery: answerTrue,
   answerShippingQuery: answerTrue,

@@ -466,13 +466,20 @@ export abstract class TelegramCore<Ext = unknown> {
    * await eph.sendMessage({ chat_id, text: 'only you can see this' })
    * ```
    */
-  ephemeral (receiverUserId: number, options: EphemeralScopeOptions = {}) {
+  ephemeral (options: EphemeralScopeOptions & { callbackQueryId: string }): EphemeralScopedApi<false>
+  ephemeral (receiverUserId: number, options?: EphemeralScopeOptions): EphemeralScopedApi
+  ephemeral (
+    receiverOrOptions: number | (EphemeralScopeOptions & { callbackQueryId: string }),
+    options: EphemeralScopeOptions = {}
+  ) {
+    const receiverUserId = typeof receiverOrOptions === 'number' ? receiverOrOptions : undefined
+    const scope = typeof receiverOrOptions === 'number' ? options : receiverOrOptions
     const bound: TelegramEphemeralMessageParameters = {
-      receiver_user_id: receiverUserId,
-      ...(options.callbackQueryId === undefined ? {} : { callback_query_id: options.callbackQueryId }),
-      ...(options.replaceCallbackQueryMessage === undefined
+      ...(receiverUserId === undefined ? {} : { receiver_user_id: receiverUserId }),
+      ...(scope.callbackQueryId === undefined ? {} : { callback_query_id: scope.callbackQueryId }),
+      ...(scope.replaceCallbackQueryMessage === undefined
         ? {}
-        : { replace_callback_query_message: options.replaceCallbackQueryMessage })
+        : { replace_callback_query_message: scope.replaceCallbackQueryMessage })
     }
 
     return createApiProxy((method, params) => {
@@ -484,7 +491,7 @@ export abstract class TelegramCore<Ext = unknown> {
         return this.apiCaller(method, { ...params, ephemeral_message_parameters: { ...bound, ...callSite } })
       }
 
-      if (accepted?.includes('receiver_user_id')) {
+      if (receiverUserId !== undefined && accepted?.includes('receiver_user_id')) {
         return this.apiCaller(method, { receiver_user_id: receiverUserId, ...params })
       }
 

@@ -1,6 +1,8 @@
+import { CallbackQueryUpdate } from '@puregram/api'
 import { describe, it, expect, vi } from 'vitest'
 
 import type { HttpRequestInput } from '../../src/http/client'
+import { MediaSource } from '../../src/media-source'
 import { Telegram } from '../../src/telegram'
 
 const recordingClient = () => {
@@ -44,6 +46,59 @@ describe('tg.ephemeral', () => {
       callback_query_id: 'cbq_42',
       replace_callback_query_message: true
     })
+  })
+
+  it('sends a callback-only reply without a receiver or chat id', async () => {
+    const { urls, httpClient } = recordingClient()
+    const tg = new Telegram({ token: 'X', httpClient })
+
+    await tg.ephemeral({ callbackQueryId: 'inline_q', replaceCallbackQueryMessage: true })
+      .sendMessage({ text: 'only the person who pressed the button sees this' })
+
+    const params = new URL(urls[0]!).searchParams
+
+    expect(params.has('chat_id')).toBe(false)
+    expect(ephemeralParams(urls[0]!)).toEqual({
+      callback_query_id: 'inline_q',
+      replace_callback_query_message: true
+    })
+  })
+
+  it('does not invent an edit receiver for a callback-only scope', async () => {
+    const { urls, httpClient } = recordingClient()
+    const tg = new Telegram({ token: 'X', httpClient })
+
+    await tg.ephemeral({ callbackQueryId: 'q' }).editEphemeralMessageText({
+      chat_id: 1, receiver_user_id: 5, ephemeral_message_id: 2, text: 'updated'
+    })
+
+    expect(new URL(urls[0]!).searchParams.get('receiver_user_id')).toBe('5')
+    expect(urls[0]).not.toContain('ephemeral_message_parameters')
+  })
+
+  it('sends callback-only text and media shortcuts without a chat', async () => {
+    const { urls, httpClient } = recordingClient()
+    const tg = new Telegram({ token: 'X', httpClient })
+    const query = new CallbackQueryUpdate({
+      id: 'inline_q',
+      from: { id: 5, first_name: 'user', is_bot: false },
+      inline_message_id: 'inline-message',
+      chat_instance: 'instance'
+    }, tg)
+
+    await query.send('private text', { ephemeral: true })
+    await query.sendPhoto(MediaSource.fileId('photo'), { ephemeral_message_parameters: {} })
+
+    for (const url of urls) {
+      const params = new URL(url).searchParams
+
+      expect(params.has('chat_id')).toBe(false)
+      expect(params.has('ephemeral')).toBe(false)
+      expect(ephemeralParams(url)).toEqual({ callback_query_id: 'inline_q' })
+    }
+
+    expect(new URL(urls[0]!).searchParams.get('text')).toBe('private text')
+    expect(new URL(urls[1]!).searchParams.get('photo')).toBe('photo')
   })
 
   it('merges call-site ephemeral parameters field by field', async () => {

@@ -34,6 +34,11 @@ export interface StartOpts {
   payload?: string
 }
 
+export interface TopicOpts {
+  bot: string
+  messageThreadId: number
+}
+
 /** options for {@link deepLink.startGroup} */
 export interface StartGroupOpts {
   bot: string
@@ -218,6 +223,16 @@ export const deepLink = {
     ensurePayload(payload, 'start payload')
 
     return `https://t.me/${bot}?start=${payload}`
+  },
+
+  topic ({ bot, messageThreadId }: TopicOpts) {
+    ensureUsername(bot)
+
+    if (!Number.isSafeInteger(messageThreadId) || messageThreadId <= 0) {
+      throw new Error('messageThreadId must be a positive safe integer')
+    }
+
+    return `https://t.me/${bot}/${messageThreadId}`
   },
 
   /** `t.me/<bot>?startgroup[=<payload>][&admin=<rights>]` — add the bot to a group, optionally as admin */
