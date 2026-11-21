@@ -285,7 +285,12 @@ describe('ShippingOption', () => {
 describe('BotCommands', () => {
   it('command builds a single entry', () => {
     expect(BotCommands.command('start', 'start the bot'))
-      .toEqual({ command: 'start', description: 'start the bot' })
+      .toStrictEqual({ command: 'start', description: 'start the bot' })
+  })
+
+  it.each([true, false])('passes isEphemeral: %s as is_ephemeral', (isEphemeral) => {
+    expect(BotCommands.command('secret', 'ask privately', { isEphemeral }))
+      .toStrictEqual({ command: 'secret', description: 'ask privately', is_ephemeral: isEphemeral })
   })
 
   it('scope.default returns default type', () => {

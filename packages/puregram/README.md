@@ -574,7 +574,7 @@ the result carries only the invoice-definition fields (no `chat_id`, no delivery
 <a name='bot-commands'></a>
 ### `BotCommands` (+ `.scope`) — `setMyCommands`
 
-`BotCommands.command(name, description)` for one entry. `BotCommands.scope.X(...)` for the discriminated `BotCommandScope` family (default / private chats / groups / chat / chat admin / specific user):
+`BotCommands.command(name, description, options?)` builds one entry. Pass `{ isEphemeral: true }` to mark a group command as visible only to the sender and the bot. `BotCommands.scope.X(...)` builds a command scope (default / private chats / groups / chat / chat admin / specific user):
 
 ```ts
 import { BotCommands } from 'puregram'

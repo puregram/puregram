@@ -67,7 +67,11 @@ export class BotCommands {
   static scope = BotCommandScope
 
   /** single bot command entry */
-  static command (command: string, description: string): TelegramBotCommand {
-    return { command, description }
+  static command (command: string, description: string, options?: { isEphemeral?: boolean }): TelegramBotCommand {
+    const isEphemeral = options?.isEphemeral
+
+    return isEphemeral === undefined
+      ? { command, description }
+      : { command, description, is_ephemeral: isEphemeral }
   }
 }
