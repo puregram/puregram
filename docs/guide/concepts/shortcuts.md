@@ -79,7 +79,7 @@ await tg.delete(chatId, messageId)
 
 ## per-kind shortcuts on update classes
 
-these live on the generated update classes and are only available inside an update handler. they auto-fill the anchor from the update's payload:
+these live on the generated update classes. they fill anchors from the update's payload:
 
 ```ts
 tg.onMessage(async (message) => {
@@ -94,6 +94,9 @@ tg.onMessage(async (message) => {
 
   // pin this message in the chat
   await message.pin()
+
+  await message.forward(destinationChatId)
+  await message.copy(destinationChatId)
 })
 
 tg.onCallbackQuery(async (callbackQuery) => {
@@ -101,7 +104,7 @@ tg.onCallbackQuery(async (callbackQuery) => {
   await callbackQuery.answer({ text: 'done!' })
 
   // edit the message the button was on
-  await callbackQuery.editText('updated text')
+  await callbackQuery.edit('updated text')
 })
 
 tg.onInlineQuery(async (inlineQuery) => {
@@ -109,6 +112,25 @@ tg.onInlineQuery(async (inlineQuery) => {
   await inlineQuery.answer([])
 })
 ```
+
+**breaking change — transfer direction:** `message.forward(destination)` and `message.copy(destination)` now take the **destination** chat, not the source. the current message supplies the source chat and message id. bulk variants take `message.forwardMany(destination, messageIds)` and `message.copyMany(destination, messageIds)`. to import a message from elsewhere into the current chat, pass both chats explicitly, e.g. `tg.forward(source, message.chat.id, sourceMessageId)`.
+
+## migrating shortcut results
+
+**breaking change — return type:** a client, update, reply or thread shortcut that used to return a raw `TelegramMessage` now returns a `MessageUpdate`. use `sent.id` instead of `sent.message_id`, or call `edit` on the returned message instead of reconstructing its target:
+
+```ts
+tg.onMessage(async (message) => {
+  const sent = await message.reply('working...')
+  await sent.edit('done')
+})
+```
+
+for the raw bot-api shape, use `sent.raw` (including `sent.raw.message_id`), or call `tg.api.sendMessage({ chat_id, text })` directly. `tg.api.*` parameters and return values have not changed.
+
+album sends return `MessageUpdate[]`. single-message copies still return `{ message_id }`; bulk copies and forwards return arrays of those id objects. inline-message edits still return `true`.
+
+the wrapper also exposes [entity queries](/guide/concepts/updates#collection-wrappers), e.g. `sent.entities?.where({ type: 'bold' })`. the raw array remains available as `sent.raw.entities`.
 
 ## reply variants
 
@@ -134,7 +156,7 @@ import { ReplyParameters } from 'puregram'
 
 tg.onMessage(message =>
   message.reply('with a quote', {
-    reply_parameters: ReplyParameters.quote(message.messageId, 'why?')
+    reply_parameters: ReplyParameters.quote(message.id, 'why?')
   })
 )
 ```
@@ -167,9 +189,9 @@ tg.onMessage(async (message) => {
 })
 ```
 
-the namespace covers everything that accepts a `message_thread_id` — the `send` / `reply` families, `copy` / `forward`, and even forum-topic management like `editForumTopic` / `closeForumTopic` — all with the ids pre-filled
+the namespace covers the `send` / `reply` families and forum-topic management. `copy` / `forward` also anchor the source chat and message, but take an explicit destination; their options may specify a destination `message_thread_id`. the source topic id is never reused for another chat.
 
-plain `update.send(...)` never threads on its own; it's deliberately hands-off. and because `thread` pins you to the *current* topic it doesn't take a `message_thread_id` of its own — to target a **different** thread, use the top-level shortcut where `message_thread_id` is just a param:
+plain `update.send(...)` never threads on its own; it's deliberately hands-off. for sends and replies to a **different** thread in the current chat, use the top-level shortcut where `message_thread_id` is just a param:
 
 ```ts
 tg.onMessage(message =>
@@ -264,9 +286,9 @@ tg.onMessage(async (message) => {
 | --- | --- | --- | --- |
 | argument style | named params object | positional `chat` + `text` | positional `text`, no `chat` |
 | `chat_id` | you provide it | you provide it (as first arg) | auto-filled from update |
-| available | everywhere | everywhere | only inside a handler |
+| available | everywhere | everywhere | on an update or returned message |
 | coverage | every method | common send methods | per-kind set |
-| return type | raw `TelegramX` | raw `TelegramMessage` | raw `TelegramMessage` |
+| return type | raw `TelegramX` | `MessageUpdate` | `MessageUpdate` |
 
 ::: tip all roads lead to tg.api
 every shortcut is ultimately a thin wrapper over `tg.api.X`. there is no magic — if a shortcut doesn't cover a parameter you need, you can always drop down to `tg.api.X` or pass the extra field via the trailing `params` object

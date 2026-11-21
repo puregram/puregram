@@ -12,7 +12,7 @@ the api reference is auto-generated from the pinned telegram bot api schema that
 puregram exposes the bot api at three levels of abstraction (see [the three-layer api](/guide/concepts/three-layer-api)):
 
 - **`tg.api.X(params)`** — raw layer. calls the bot api directly and returns the raw bot-api type. use this when you need full control or the method isn't covered by a curated shortcut
-- **`tg.send(args)`** — curated layer. friendlier, hand-picked helpers for the most common methods; like `tg.api.X`, they return the raw `Telegram*` result (no wrapper)
+- **`tg.send(args)`** — curated layer. message-returning helpers wrap the result as a `MessageUpdate` (or `MessageUpdate[]` for an album). access the bot-api payload through each wrapper's `.raw`
 - **`update.send(args)` / `update.reply(args)`** — per-kind shortcuts. the same curated helpers, but with "anchors" pre-filled from the current update's payload (e.g. `chat_id` is taken from `update.raw.chat.id`). this is what you reach for in most handlers
 
 ## reference pages

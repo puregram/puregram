@@ -28,6 +28,11 @@ const schema: Schema = {
         { name: 'message_id', description: 'id', required: true, type: { kind: 'integer' } },
         { name: 'chat', description: 'chat', required: true, type: { kind: 'reference', name: 'Chat' } },
         { name: 'text', description: 'text', required: false, type: { kind: 'string' } },
+        { name: 'message_thread_id', description: 'thread', required: false, type: { kind: 'integer' } },
+        { name: 'entities', description: 'entities', required: false, type: { kind: 'array', of: { kind: 'reference', name: 'MessageEntity' } } },
+        { name: 'from', description: 'sender', required: false, type: { kind: 'reference', name: 'User' } },
+        { name: 'forward_origin', description: 'origin', required: false, type: { kind: 'reference', name: 'MessageOrigin' } },
+        { name: 'value', description: 'numeric value', required: false, type: { kind: 'integer' } },
         { name: 'photo', description: 'photo', required: false, type: { kind: 'array', of: { kind: 'reference', name: 'PhotoSize' } } }
       ]
     },
@@ -37,9 +42,13 @@ const schema: Schema = {
       description: 'a callback query',
       fields: [
         { name: 'id', description: 'id', required: true, type: { kind: 'string' } },
+        { name: 'message', description: 'message', required: false, type: { kind: 'reference', name: 'MaybeInaccessibleMessage' } },
+        { name: 'value', description: 'text value', required: false, type: { kind: 'string' } },
         { name: 'data', description: 'data', required: false, type: { kind: 'string' } }
       ]
-    }
+    },
+    { kind: 'object', name: 'User', description: 'user', fields: [] },
+    { kind: 'union', name: 'MessageOrigin', description: 'origin', members: [] }
   ]
 }
 
@@ -52,7 +61,16 @@ describe('emitFiltersPage', () => {
     const page = emitFiltersPage(schema)
 
     expect(page).toContain('| `filters.hasText` | `text`: string |')
-    expect(page).toContain('| `filters.hasPhoto` | `photo`: [PhotoSize](/api/objects#photosize)[] |')
+    expect(page).toContain('| `filters.hasMessageThreadId` | `messageThreadId`: number |')
+    expect(page).toContain('| `filters.hasPhoto` | `photo`: `Photo` |')
+    expect(page).toContain('| `filters.hasEntities` | `entities`: `MessageEntities` |')
+    expect(page).toContain('| `filters.hasFrom` | `from`: [User](/api/objects#user) |')
+    expect(page).toContain('| `filters.hasForwardOrigin` | `forwardOrigin`: [TelegramMessageOrigin](/api/objects#messageorigin) |')
+    expect(page).toContain('| `filters.hasMessage` | `message`: [MessageUpdate](/api/updates#message) \\| [TelegramInaccessibleMessage](/api/objects#inaccessiblemessage) |')
+  })
+
+  it('includes every distinct narrowed type when payloads share a getter name', () => {
+    expect(emitFiltersPage(schema)).toContain('| `filters.hasValue` | `value`: number \\| string |')
   })
 
   it('collapses the full message family to a single token', () => {

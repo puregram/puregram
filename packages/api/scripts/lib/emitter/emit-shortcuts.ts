@@ -5,6 +5,7 @@ import type { Schema, SchemaMethod, SchemaTypeRef } from '../schema-types'
 import { formatModule } from './format'
 import { detectWidenedMethodArgs } from './formattable-detect'
 import { versionString } from './load-schema'
+import { hasMessageResult, shortcutResultType } from './shortcut-results'
 import { METHOD_POSITIONALS, SHORTCUTS, type ShortcutSpec } from './shortcuts-config'
 import { typeRefToTs, jsDoc, importTypeNamed } from './ts-factory'
 
@@ -15,6 +16,13 @@ export function emitShortcuts (schema: Schema) {
   let usesFormattable = false
 
   const memberSigs: ts.TypeElement[] = []
+
+  const messageShortcuts = SHORTCUTS.filter((sc) => {
+    const method = methodsByName.get(sc.method)
+
+    return method !== undefined && hasMessageResult(method.returnType)
+  })
+  const runtimeShortcuts = SHORTCUTS.filter(sc => sc.method !== 'sendWidget' && methodsByName.has(sc.method))
 
   for (const sc of SHORTCUTS) {
     const method = methodsByName.get(sc.method)
@@ -40,19 +48,44 @@ export function emitShortcuts (schema: Schema) {
     memberSigs
   )
 
-  const paramsImports = SHORTCUTS
-    .filter(s => s.method !== 'sendWidget' && methodsByName.has(s.method))
-    .map(s => `${pascal(s.method)}Params`)
+  const paramsImports = runtimeShortcuts.map(s => `${pascal(s.method)}Params`)
 
   const imports = [
     ...(referencedTypes.size > 0 ? [importTypeNamed([...referencedTypes].sort(), './types')] : []),
     ...(paramsImports.length > 0 ? [importTypeNamed([...new Set(paramsImports)].sort(), './methods')] : []),
     ...(methodsByName.has('sendWidget') ? [importTypeNamed(['WidgetInput', 'WidgetSendOptions'], '../widget-like')] : []),
-    ...(usesFormattable ? [importTypeNamed(['Formattable'], '../formattable')] : [])
+    ...(usesFormattable ? [importTypeNamed(['Formattable'], '../formattable')] : []),
+    ...(messageShortcuts.length > 0 ? [importTypeNamed(['MessageUpdate'], './updates')] : [])
   ]
 
   return formatModule({
-    nodes: [iface],
+    nodes: [iface, ts.factory.createVariableStatement(
+      [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      ts.factory.createVariableDeclarationList([
+        ts.factory.createVariableDeclaration(
+          'TELEGRAM_SHORTCUTS',
+          undefined,
+          undefined,
+          ts.factory.createAsExpression(
+            ts.factory.createArrayLiteralExpression(
+              runtimeShortcuts.map(sc => ts.factory.createObjectLiteralExpression([
+                ts.factory.createPropertyAssignment('verb', ts.factory.createStringLiteral(sc.verb)),
+                ts.factory.createPropertyAssignment('method', ts.factory.createStringLiteral(sc.method)),
+                ts.factory.createPropertyAssignment(
+                  'wrapsMessage',
+                  messageShortcuts.includes(sc) ? ts.factory.createTrue() : ts.factory.createFalse()
+                ),
+                ts.factory.createPropertyAssignment('args', ts.factory.createArrayLiteralExpression(
+                  (METHOD_POSITIONALS[sc.method] ?? []).map(p => ts.factory.createStringLiteral(p.schemaArg))
+                ))
+              ], false)),
+              true
+            ),
+            ts.factory.createTypeReferenceNode('const')
+          )
+        )
+      ], ts.NodeFlags.Const)
+    )],
     imports,
     botApiVersion: versionString(schema),
     sourceUrl: schema.source.core,
@@ -116,8 +149,8 @@ function buildShortcutSignature (
     undefined
   )
 
-  collectRefs(method.returnType, referencedTypes)
-  const returnType = ts.factory.createTypeReferenceNode('Promise', [typeRefToTs(method.returnType)])
+  collectRefs(method.returnType, referencedTypes, true)
+  const returnType = ts.factory.createTypeReferenceNode('Promise', [shortcutResultType(method.returnType)])
 
   return jsDoc(
     `Shortcut for \`tg.api.${method.name}\`. ${method.description}`,
@@ -140,12 +173,14 @@ function pascal (s: string) {
   return s[0]!.toUpperCase() + s.slice(1)
 }
 
-function collectRefs (ref: SchemaTypeRef, into: Set<string>): void {
+function collectRefs (ref: SchemaTypeRef, into: Set<string>, wrapped = false): void {
   if (ref.kind === 'reference') {
-    into.add(`Telegram${ref.name}`)
+    if (!wrapped || ref.name !== 'Message') {
+      into.add(`Telegram${ref.name}`)
+    }
   } else if (ref.kind === 'array') {
-    collectRefs(ref.of, into)
+    collectRefs(ref.of, into, wrapped)
   } else if (ref.kind === 'union') {
-    ref.of.forEach(t => collectRefs(t, into))
+    ref.of.forEach(t => collectRefs(t, into, wrapped))
   }
 }

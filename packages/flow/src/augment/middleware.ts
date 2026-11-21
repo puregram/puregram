@@ -1,25 +1,20 @@
-import type { CallbackQueryUpdate, MessageUpdate, UpdateKindMap } from '@puregram/api'
+import type { UpdateKindMap } from '@puregram/api'
 import { attach, type Middleware } from 'puregram/runtime'
 
 import type {
-  CollectMediaGroupOptions,
+  FlowExtension,
   WaitForCallbackQueryOptions,
   WaitForCommandOptions
 } from '../flow'
-import type {
-  AnyWaiterSpec,
-  WaitForAnyOptions,
-  WaitForAnyResult,
-  WaitForAnyValueOf
-} from '../wait-for/any'
 import type { Filter, WaitForOptions } from '../wait-for/types'
 
-import { EXTRACTORS, type ExtractedScope } from './extractors'
+import { EXTRACTORS, isMediaGroupKind, type ExtractedScope, type MediaGroupMessage } from './extractors'
 import type {
   AugmentedWaitForCallbackQueryOptions,
   AugmentedWaitForCommandOptions,
   AugmentedWaitForMatch,
   AugmentedWaitForOptions,
+  MessageFlowExtension,
   UpdateFlowExtension
 } from './types'
 
@@ -28,23 +23,7 @@ interface KindRaw {
   raw: unknown
 }
 
-interface FlowApi {
-  prompt: (chat: number | string, text: string, options?: { from?: number, timeout?: number, nullOnTimeout?: boolean }) => Promise<UpdateKindMap['message'] | null>
-  waitFor: <K extends keyof UpdateKindMap> (kind: K, options?: WaitForOptions<K>) => Promise<UpdateKindMap[K] | null>
-  waitForCallbackQuery: (
-    predicate?: (q: CallbackQueryUpdate) => boolean,
-    options?: WaitForCallbackQueryOptions
-  ) => Promise<CallbackQueryUpdate | null>
-  waitForCommand: (
-    name: string | RegExp,
-    options?: WaitForCommandOptions
-  ) => Promise<MessageUpdate | null>
-  waitForAny: <S extends readonly AnyWaiterSpec[]> (
-    specs: S,
-    options?: WaitForAnyOptions
-  ) => Promise<WaitForAnyResult<WaitForAnyValueOf<S[number]>>>
-  collectMediaGroup: (message: MessageUpdate, options?: CollectMediaGroupOptions) => Promise<MessageUpdate[]>
-}
+type FlowApi = Pick<FlowExtension, keyof MessageFlowExtension>
 
 // auto-fills chat (and default sender filter) from the source so handlers don't have
 // to thread chat/user ids through prompt/waitFor calls
@@ -75,7 +54,13 @@ export function createAugmentMiddleware (flow: FlowApi) {
 
     const scope = extractor(candidate as KindRaw)
 
-    attach(update, 'flow', createUpdateFlowExtension(flow, scope, update as MessageUpdate))
+    const ext: Partial<MessageFlowExtension> = createUpdateFlowExtension(flow, scope)
+
+    if (isMediaGroupKind(kind)) {
+      ext.collectMediaGroup = options => flow.collectMediaGroup(update as MediaGroupMessage, options)
+    }
+
+    attach(update, 'flow', ext)
 
     await next()
   }
@@ -83,8 +68,8 @@ export function createAugmentMiddleware (flow: FlowApi) {
   return middleware
 }
 
-function createUpdateFlowExtension (flow: FlowApi, scope: ExtractedScope, source: MessageUpdate) {
-  const ext: UpdateFlowExtension = {
+function createUpdateFlowExtension (flow: FlowApi, scope: ExtractedScope) {
+  return {
     prompt: (text, options = {}) => {
       const { chat, from, ...rest } = options
       const chatId = chat ?? scope.chat
@@ -106,7 +91,7 @@ function createUpdateFlowExtension (flow: FlowApi, scope: ExtractedScope, source
       const { match: explicit, filter, ...rest } = options
       const match: AugmentedWaitForMatch = explicit ?? defaultMatch(scope)
 
-      const scoped = wrapFilter(match, scope, filter)
+      const scoped = wrapFilter<K>(match, scope, filter)
 
       const passthrough: WaitForOptions<K> = scoped !== undefined
         ? { ...rest, filter: scoped }
@@ -137,12 +122,8 @@ function createUpdateFlowExtension (flow: FlowApi, scope: ExtractedScope, source
       return flow.waitForCommand(name, passthrough)
     },
 
-    waitForAny: (specs, options) => flow.waitForAny(specs, options),
-
-    collectMediaGroup: options => flow.collectMediaGroup(source, options)
-  }
-
-  return ext
+    waitForAny: flow.waitForAny
+  } satisfies UpdateFlowExtension
 }
 
 function defaultMatch (scope: ExtractedScope) {

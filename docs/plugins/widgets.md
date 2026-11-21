@@ -52,7 +52,7 @@ tg.command('counter', async (message) => {
   const sent = await message.sendWidget(Counter, {
     chat: { count: 0 }, allowQueries: true, caption: 'interactive counter'
   })
-  counts.set(`${message.chat.id}:${sent.message_id}`, 0)
+  counts.set(`${sent.chat.id}:${sent.id}`, 0)
 })
 
 tg.onWidgetQuery(Increment.filter, async (query) => {
@@ -125,8 +125,8 @@ use a template for content fixed at send time. changing a layout requires a new 
 
 | helper | result |
 |---|---|
-| `message.sendWidget(Widget, options?)` / `tg.sendWidget(chatId, Widget, options?)` | sends HTML, typed `chat` / `public` state, `allowQueries`, `shared`, and ordinary `sendWidget` options |
-| `Widget.sendShared(tg, chatId, widgetId, options?)` | reuses an existing shared widget, with this message's chat state and caption |
+| `message.sendWidget(Widget, options?)` / `tg.sendWidget(chatId, Widget, options?)` | sends HTML, typed `chat` / `public` state, `allowQueries`, `shared`, and ordinary `sendWidget` options; returns the carrier `MessageUpdate` |
+| `Widget.sendShared(tg, chatId, widgetId, options?)` | reuses an existing shared widget with this message's chat state and caption; returns the raw `TelegramMessage` |
 | `Widget.content(options?)` | new inline widget content; **test server only** |
 | `Widget.sharedContent(widgetId, options?)` | existing shared widget inline content; **test server only** |
 | `Widget.editState(tg, target, state)` | edits by `{ chat_id, message_id }`, `{ inline_message_id }` or `WidgetQueryUpdate`; returns `false` on “message is not modified” |

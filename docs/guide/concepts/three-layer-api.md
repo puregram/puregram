@@ -56,7 +56,7 @@ await tg.sendDocument(100, MediaSource.url('https://example.com/file.pdf'))
 
 **when to use:** when you have the chat id in hand and want clean call sites without repeating `chat_id:` everywhere
 
-**return type:** raw `TelegramMessage` (same as `tg.api.sendMessage`)
+**return type:** `tg.send` resolves to a `MessageUpdate`. use `sent.id` and `sent.edit(text)` on the result, or `sent.raw` for the underlying `TelegramMessage`.
 
 ## layer 3 — `update.send(text, params?)` (per-kind shortcut)
 
@@ -76,7 +76,7 @@ tg.onCallbackQuery((callbackQuery) => {
 
 **when to use:** inside an update handler when you're responding to the current update. this is the most common path
 
-**return type:** raw `TelegramMessage` (same underlying `tg.api.sendMessage` call)
+**return type:** `message.send` and `message.reply` also resolve to a `MessageUpdate`, targeting the newly sent message.
 
 the per-kind shortcuts also include **reply twins** — `message.reply(text)` and `message.replyWith<Media>(src)` — that auto-fill `reply_parameters.message_id` so the response threads under the incoming message; see [shortcuts](/guide/concepts/shortcuts) for the full list
 
@@ -102,7 +102,7 @@ tg.onMessage(async (message) => {
 })
 ```
 
-all three send the same message. the only difference is how much you type
+all three send the same message. the raw method returns the bot-api payload; the shortcuts return a wrapper you can act on.
 
 ## the escape hatch
 

@@ -40,7 +40,10 @@ tg.useHook('onRequestIntercept', async (ctx, next) => {
 
 tg.useHook('onResponseIntercept', async (ctx, next) => {
   if (ctx.params.text === 'intercept') {
-    ctx.json = { ok: true, result: { message_id: 99 } }
+    ctx.json = {
+      ok: true,
+      result: { message_id: 99, date: 1, chat: { id: ctx.params.chat_id, type: 'private' }, text: 'intercept' }
+    }
   }
 
   await next()
@@ -90,7 +93,7 @@ tg.onMessage(async (message) => {
   if (message.text === 'intercept') {
     const result = await message.send('intercept')
 
-    if (result.message_id !== 99) {
+    if (result.id !== 99) {
       throw new Error('response interceptor replacement was ignored')
     }
 

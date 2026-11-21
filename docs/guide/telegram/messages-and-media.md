@@ -81,10 +81,13 @@ message.sendVideoNote(MediaSource.path('./note.mp4'))
 message.sendSticker(MediaSource.fileId(stickerId))
 
 // on tg (chat_id passed explicitly)
+tg.sendPhoto(CHAT_ID, MediaSource.path('./cat.png'), { caption: 'cat' })
+
+// raw bot-api call (all fields explicit)
 tg.api.sendPhoto({ chat_id: CHAT_ID, photo: MediaSource.path('./cat.png'), caption: 'cat' })
 ```
 
-the `message.sendX` forms fill `chat_id` from the incoming message's chat. they return the raw `TelegramMessage` from the api
+the `message.sendX` forms fill `chat_id` from the incoming message's chat. individual media sends resolve to a `MessageUpdate`; use `sent.raw` or call `tg.api.sendPhoto` directly for the raw `TelegramMessage`.
 
 ## reply twins — `replyWith<Media>`
 

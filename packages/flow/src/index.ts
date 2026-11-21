@@ -17,6 +17,7 @@ export {
   type WaitForCallbackQueryOptions,
   type WaitForCommandOptions
 } from './flow'
+export { CollectedMediaGroup } from './media-group/collected-media-group'
 export type {
   PersistentPromptOptions,
   PersistentWaitForOptions

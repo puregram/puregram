@@ -1,7 +1,7 @@
 import { MemoryStorage } from '@puregram/storage'
 import { describe, expect, it, vi } from 'vitest'
 
-import { flow } from '../../src'
+import { CollectedMediaGroup, flow } from '../../src'
 import type { PersistedFlow } from '../../src/persistent/types'
 import { makeTg } from '../helpers/make-tg'
 import { makeUpdate } from '../helpers/make-update'
@@ -138,7 +138,13 @@ describe('@puregram/flow — e2e', () => {
       return { ok: true, result: [] }
     })
 
-    let assembled: any[] | null = null
+    const state: { assembled?: CollectedMediaGroup, copied?: Record<string, unknown> } = {}
+
+    mock.expect('copyMessages', (params) => {
+      state.copied = params
+
+      return { ok: true, result: [{ message_id: 40 }, { message_id: 41 }, { message_id: 42 }] }
+    })
     const seenMessageIds: number[] = []
 
     // every album message reaches `tg.on('message')` (no suppression). only the
@@ -153,33 +159,41 @@ describe('@puregram/flow — e2e', () => {
 
       const group = await message.flow.collectMediaGroup()
 
-      if (group[0]?.raw.message_id !== message.raw.message_id) {
+      if (group[0] !== message) {
         return
       }
 
-      assembled = group
+      await group.copy(200)
+      state.assembled = group
     })
 
     await tg.start()
 
-    tg.startPolling().catch(() => {})
+    const polling = tg.startPolling()
 
-    await waitUntil(() => assembled !== null)
+    await waitUntil(() => state.assembled !== undefined)
 
     tg.stopPolling()
+    await polling
+    await tg.shutdown()
 
     expect(seenMessageIds).toEqual([1, 2, 3])
-    expect(assembled).not.toBeNull()
-    expect(assembled).toHaveLength(3)
-    expect(assembled?.map((m: any) => m.raw.message_id)).toEqual([1, 2, 3])
+    expect(state.assembled).toBeInstanceOf(CollectedMediaGroup)
+    expect(state.assembled?.map(message => message.id)).toEqual([1, 2, 3])
+    expect(state.copied).toEqual({ chat_id: 200, from_chat_id: 100, message_ids: [1, 2, 3] })
 
     await mock.stop()
   })
 
   it('collectMediaGroup resolves immediately with [message] when no media_group_id is set', async () => {
     const { tg, mock } = await makeTg(t => t.extend(flow()))
+    let pulls = 0
 
     mock.expect('getUpdates', () => {
+      if (pulls++ > 0) {
+        return { ok: true, result: [] }
+      }
+
       return {
         ok: true,
         result: [
@@ -188,22 +202,34 @@ describe('@puregram/flow — e2e', () => {
       }
     })
 
-    let resolved: any[] | null = null
+    const state: { resolved?: CollectedMediaGroup, deleted?: Record<string, unknown> } = {}
+
+    mock.expect('deleteMessages', (params) => {
+      state.deleted = params
+
+      return { ok: true, result: true }
+    })
 
     tg.on('message', async (message) => {
-      resolved = await message.flow.collectMediaGroup()
+      const group = await message.flow.collectMediaGroup()
+
+      await group.delete()
+      state.resolved = group
     })
 
     await tg.start()
 
-    tg.startPolling().catch(() => {})
+    const polling = tg.startPolling()
 
-    await waitUntil(() => resolved !== null)
+    await waitUntil(() => state.resolved !== undefined)
 
     tg.stopPolling()
+    await polling
+    await tg.shutdown()
 
-    expect(resolved).toHaveLength(1)
-    expect(resolved?.[0]?.raw.text).toBe('plain')
+    expect(state.resolved).toBeInstanceOf(CollectedMediaGroup)
+    expect(state.resolved?.map(message => message.text)).toEqual(['plain'])
+    expect(state.deleted).toEqual({ chat_id: 100, message_ids: [1] })
 
     await mock.stop()
   })

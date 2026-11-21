@@ -1,5 +1,6 @@
 import type { Schema, SchemaField, SchemaMethod } from '../schema-types'
 
+import { hasMessageResult } from './shortcut-results'
 import { buildUpdateKinds, shortcutNameFor, replyVerbForSendName, SHORTCUT_ALIASES, BUSINESS_ANCHOR, EPHEMERAL_METHOD_TWINS, THREAD_ANCHOR, type ShortcutAnchor, type UpdateKindSpec } from './updates-config'
 
 export interface ReplyBinding {
@@ -11,6 +12,7 @@ export interface BoundShortcut {
   method: string
   filledArgs: ShortcutAnchor[]
   userArgs: SchemaField[]
+  wrapsMessage: boolean
   // present on the reply twin of a send* shortcut — fills `reply_parameters.message_id`
   reply?: ReplyBinding
   // forces the emitted name, bypassing the canonical rename — used for alias twins
@@ -135,15 +137,29 @@ function isCallbackEphemeralSend (kind: UpdateKindSpec, method: SchemaMethod) {
     method.arguments.some(a => a.name === 'ephemeral_message_parameters')
 }
 
+const MESSAGE_TRANSFERS: Record<string, true> = {
+  copyMessage: true,
+  copyMessages: true,
+  forwardMessage: true,
+  forwardMessages: true
+}
+
 function bindMethod (kind: UpdateKindSpec, method: SchemaMethod) {
   const filledArgs: ShortcutAnchor[] = []
   const userArgs: SchemaField[] = []
+  const transfer = MESSAGE_TRANSFERS[method.name] === true
 
   for (const arg of method.arguments) {
-    const anchor = kind.anchors.find(a => a.schemaArg === arg.name)
+    const anchor = kind.anchors.find((a) => {
+      if (transfer && a.schemaArg === 'message_thread_id') {
+        return false
+      }
+
+      return (transfer && a.schemaArg === 'chat_id' ? 'from_chat_id' : a.schemaArg) === arg.name
+    })
 
     if (anchor) {
-      filledArgs.push(anchor)
+      filledArgs.push(transfer && anchor.schemaArg === 'chat_id' ? { ...anchor, schemaArg: 'from_chat_id' } : anchor)
     } else {
       userArgs.push(arg)
     }
@@ -153,7 +169,7 @@ function bindMethod (kind: UpdateKindSpec, method: SchemaMethod) {
     return null
   }
 
-  return { method: method.name, filledArgs, userArgs }
+  return { method: method.name, filledArgs, userArgs, wrapsMessage: hasMessageResult(method.returnType) }
 }
 
 // thread-scoped twin of analyzeShortcuts. same binding, but every method additionally fills

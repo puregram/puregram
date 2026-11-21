@@ -5,6 +5,7 @@ import type {
   WaitForCallbackQueryOptions,
   WaitForCommandOptions
 } from '../flow'
+import type { CollectedMediaGroup } from '../media-group/collected-media-group'
 import type { PromptOptions } from '../prompt'
 import type {
   AnyWaiterSpec,
@@ -67,10 +68,8 @@ export interface UpdateFlowExtension {
     specs: S,
     options?: WaitForAnyOptions
   ) => Promise<WaitForAnyResult<WaitForAnyValueOf<S[number]>>>
-  /**
-   * collect every message sharing a `media_group_id` with this update into one array.
-   * meaningful on message-payload updates; non-message updates resolve immediately with
-   * `[source]` cast as MessageUpdate
-   */
-  collectMediaGroup: (options?: CollectMediaGroupOptions) => Promise<MessageUpdate[]>
+}
+
+export interface MessageFlowExtension extends UpdateFlowExtension {
+  collectMediaGroup: (options?: CollectMediaGroupOptions) => Promise<CollectedMediaGroup>
 }

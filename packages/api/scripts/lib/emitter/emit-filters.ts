@@ -1,12 +1,11 @@
 import ts from 'typescript'
 
-import type { Schema, SchemaField, SchemaObject, SchemaTypeRef } from '../schema-types'
+import type { Schema, SchemaObject } from '../schema-types'
 
 import { getterNameFor } from './field-names'
 import { formatModule } from './format'
 import { versionString } from './load-schema'
-import { hasWrapperClass } from './structures-config'
-import { importNamed, importTypeNamed, jsDoc, typeRefToTs } from './ts-factory'
+import { importNamed, importTypeNamed, jsDoc } from './ts-factory'
 import { buildUpdateKinds, type UpdateKindSpec } from './updates-config'
 
 export function emitFilters (schema: Schema) {
@@ -15,7 +14,7 @@ export function emitFilters (schema: Schema) {
 
   // accumulate (camelGetter -> kinds where the optional field exists). skip required fields,
   // skip already-`has`/`is` named getters, skip names that would collide with `extras`
-  const presence = new Map<string, { kinds: string[], cls: string[], field: SchemaField }>()
+  const presence = new Map<string, { kinds: string[], kindByPayload: Map<string, string> }>()
 
   for (const k of kinds) {
     const obj = objectsByName.get(k.payloadType.replace(/^Telegram/, ''))
@@ -46,12 +45,15 @@ export function emitFilters (schema: Schema) {
       let entry = presence.get(camelName)
 
       if (!entry) {
-        entry = { kinds: [], cls: [], field: f }
+        entry = { kinds: [], kindByPayload: new Map() }
         presence.set(camelName, entry)
       }
 
       entry.kinds.push(k.kindName)
-      entry.cls.push(k.className)
+
+      if (!entry.kindByPayload.has(k.payloadType)) {
+        entry.kindByPayload.set(k.payloadType, k.kindName)
+      }
     }
   }
 
@@ -68,7 +70,7 @@ export function emitFilters (schema: Schema) {
 
     const hasName = `has${camelName[0]!.toUpperCase()}${camelName.slice(1)}`
 
-    nodes.push(emitPresenceFilter(hasName, camelName, entry.kinds, entry.field, objectsByName))
+    nodes.push(emitPresenceFilter(hasName, camelName, entry.kinds, [...entry.kindByPayload.values()]))
   }
 
   nodes.push(emitKindCallable())
@@ -80,21 +82,11 @@ export function emitFilters (schema: Schema) {
 
   nodes.push(emitActionShorthand(kinds))
 
-  // wrapper-class refs go through `./structures`, raw `Telegram*` refs through `./types`
-  const wrapperRefs = new Set<string>()
-  const rawRefs = new Set<string>()
-
-  for (const entry of presence.values()) {
-    collectRefs(entry.field.type, objectsByName, wrapperRefs, rawRefs)
-  }
-
   const imports = [
     importNamed(['defineFilter'], '../filter-runtime'),
     importTypeNamed(['Filter'], '../filter-runtime'),
     importTypeNamed(['AnyUpdate'], '../custom-update'),
-    importTypeNamed(['UpdateKind', 'UpdateKindMap'], './updates'),
-    ...(wrapperRefs.size > 0 ? [importTypeNamed([...wrapperRefs].sort(), './structures')] : []),
-    ...(rawRefs.size > 0 ? [importTypeNamed([...rawRefs].sort(), './types')] : [])
+    importTypeNamed(['UpdateKind', 'UpdateKindMap'], './updates')
   ]
 
   return formatModule({
@@ -106,57 +98,26 @@ export function emitFilters (schema: Schema) {
   })
 }
 
-// type ref → wrapper-getter return type, non-nullable (presence filters narrow via `field != null`)
-function wrapperType (ref: SchemaTypeRef, objectsByName: Map<string, SchemaObject>): ts.TypeNode {
-  if (ref.kind === 'reference' && isObjectWrapper(ref.name, objectsByName)) {
-    return ts.factory.createTypeReferenceNode(ref.name)
-  }
-
-  if (ref.kind === 'array') {
-    return ts.factory.createArrayTypeNode(wrapperType(ref.of, objectsByName))
-  }
-
-  return typeRefToTs(ref)
-}
-
-function isObjectWrapper (name: string, objectsByName: Map<string, SchemaObject>) {
-  return hasWrapperClass(name, objectsByName.get(name)?.kind)
-}
-
-function collectRefs (
-  ref: SchemaTypeRef,
-  objectsByName: Map<string, SchemaObject>,
-  wrapperRefs: Set<string>,
-  rawRefs: Set<string>
-): void {
-  if (ref.kind === 'reference') {
-    if (isObjectWrapper(ref.name, objectsByName)) {
-      wrapperRefs.add(ref.name)
-    } else {
-      rawRefs.add(`Telegram${ref.name}`)
-    }
-
-    return
-  }
-
-  if (ref.kind === 'array') {
-    collectRefs(ref.of, objectsByName, wrapperRefs, rawRefs)
-  } else if (ref.kind === 'union') {
-    ref.of.forEach(t => collectRefs(t, objectsByName, wrapperRefs, rawRefs))
-  }
-}
-
 function emitPresenceFilter (
   hasName: string,
   camelName: string,
   kinds: string[],
-  field: SchemaField,
-  objectsByName: Map<string, SchemaObject>
+  payloadKinds: string[]
 ) {
   // Base = `unknown` so `kind.X.and(hasField)` resolves to `kind.X`'s narrow Base
   // (`MessageUpdate & unknown` = `MessageUpdate`) without union distribution. Mod stamps
   // the field with its wrapper-getter type, so `Modify` collapses `text: string | undefined` to `string`
-  const presentMarker = wrapperType(field.type, objectsByName)
+  const presentMarker = ts.factory.createTypeReferenceNode('NonNullable', [
+    ts.factory.createIndexedAccessTypeNode(
+      ts.factory.createIndexedAccessTypeNode(
+        ts.factory.createTypeReferenceNode('UpdateKindMap'),
+        ts.factory.createUnionTypeNode(payloadKinds.map(k =>
+          ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(k))
+        ))
+      ),
+      ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(camelName))
+    )
+  ])
 
   const filterType = ts.factory.createTypeReferenceNode('Filter', [
     ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),

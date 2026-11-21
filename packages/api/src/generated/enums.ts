@@ -9,6 +9,7 @@ export enum AttachmentType {
     Audio = "audio",
     Contact = "contact",
     Document = "document",
+    LivePhoto = "live_photo",
     Location = "location",
     Photo = "photo",
     Poll = "poll",

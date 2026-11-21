@@ -179,6 +179,21 @@ telegram.onMessage(message => message.send('hi'))
 await telegram.api.call('someBetaMethod', { foo: 'bar' })
 ```
 
+message-returning shortcuts (`send`, `reply`, `sendPhoto`, `forward`, edits, and their
+media variants) return `MessageUpdate` wrappers, so you can edit or delete the
+returned message directly:
+
+```ts
+telegram.onMessage(async (context) => {
+  const message = await context.reply('Секунду, обрабатываю запрос...')
+  await message.edit('Запрос обработан!')
+})
+```
+
+`sendMediaGroup` returns an array of these wrappers. use `.id` for the message id
+or `.raw.message_id` for the original field. `telegram.api.*` still returns raw
+bot-api objects; inline-message edits still return `true`.
+
 every wrapped accessor keeps `.raw` available — when you want the bare bot-api payload, just reach in:
 
 ```ts
@@ -218,6 +233,9 @@ if (Telegram.isErrorResponse(result)) {
   console.log(result.message_id) // typed as Message
 }
 ```
+
+`telegram.sendMedia(chat, media, { suppress: true })` returns `MessageUpdate | ApiResponseError`.
+without suppression, it returns the editable `MessageUpdate` or throws.
 
 **note**: `telegram.api.call('method', params)` always throws — there's no `suppress` on the string escape hatch
 
@@ -687,7 +705,7 @@ const force = new ForceReply().setPlaceholder('your answer here')
 an **update** is anything telegram pushes at your bot — a new message, an edited message, a callback-query press, an inline query, a poll-vote, a chat-member change, etc. there are about 30 different kinds, each one a discriminated subclass of the `Update` union
 
 every update class is **codegen'd** from the bot api schema, so:
-- primitive fields are direct getters: `message.text`, `message.messageId`, `callbackQuery.data`
+- primitive fields are direct getters: `message.text`, `message.id`, `callbackQuery.data`
 - nested-object fields are lazy + memoized wrappers: `message.from` (a `User`), `message.chat` (a `Chat`)
 - per-kind shortcuts are attached as methods: `message.send(...)`, `message.edit(...)`, `message.delete()`, `callbackQuery.answer(...)`
 - `update.kind` is a literal-typed discriminant, `update.is('message')` narrows the type, `update.raw` is always the bot-api payload as-is
@@ -715,6 +733,9 @@ a few accessors keep the same name across kinds, so cross-kind code never juggle
 - `update.senderId` — the acting user's id on every kind whose payload identifies one (`callback_query`, `inline_query`, `pre_checkout_query`, `chat_member`, `business_connection`, …). messages fall back `from.id` → `sender_chat.id` → `chat.id`; `poll_answer` / `message_reaction` fall back to their anonymous-chat actor and may be `undefined`
 - `update.tg` — the client that dispatched the update; `update.tg.bot` is the bot's own identity (the `getMe` result, resolved before dispatch starts) — handy for mention-stripping, deep links, and self-detection
 - shared update download helpers are typed as `Uint8Array` (or `null` where media can be absent), including on Node. the concrete Node client's `telegram.download(target)` still returns `Buffer`; use it or `Buffer.from(bytes)` when you need Buffer-only methods. portable wrappers do not claim a Node Buffer contract
+- native telegram contexts retain the original envelope as `update.update` and its id as `update.updateId`. these are absent on sent-message wrappers that did not come from an update
+- `message.attachment` selects a typed attachment without a media-field cascade. `hasAttachmentType('photo')` narrows it to `Photo`; the discriminator is `attachment.attachmentType`
+- text and caption entities are array-compatible `MessageEntities` collections, with chainable `.only('pre').where({ language: 'js' })`, `.except(...)`, `.without(...)`, `.atOffset(...)`, and `.has(...)` queries
 - `message.startPayload` — the deep-link payload after `/start` (`t.me/<bot>?start=ref-42` → `'ref-42'`), grounded in the `bot_command` entity telegram parsed — plain text that merely looks like a command never matches, and a `/start@other_bot` addressed to a different bot yields `undefined`. `filters.start` gates handlers on /start too, but is regex-based and mention-agnostic by design
 
 callback queries also carry the message-scoped edit family — `edit`, `editCaption`, `editMedia`, `editReplyMarkup`, `editRich`, `delete` — auto-filling `chat_id` + `message_id` from the originating message, or `inline_message_id` for inline-mode messages (those resolve `true` instead of the edited message; `delete` throws for them). the pager pattern in one call:
@@ -723,6 +744,18 @@ callback queries also carry the message-scoped edit family — `edit`, `editCapt
 telegram.onCallbackQuery(async (query) => {
   await query.edit(`page ${page + 1}`, { reply_markup: pagerKeyboard(page + 1) })
   await query.answer()
+})
+```
+
+accessible callback messages are actionable wrappers too. use
+`query.hasAccessibleMessage()` before calling their message methods; inaccessible
+messages remain raw and inline callbacks have no chat message:
+
+```ts
+telegram.onCallbackQuery(async (query) => {
+  if (query.hasAccessibleMessage()) {
+    await query.message.reply('replying to the message with the button')
+  }
 })
 ```
 

@@ -1,18 +1,17 @@
+import { wrapperInfoFor } from '../emitter/emit-updates'
 import { getterNameFor } from '../emitter/field-names'
-import { buildUpdateKinds } from '../emitter/updates-config'
-import type { Schema, SchemaField, SchemaObject } from '../schema-types'
+import { buildUpdateKinds, type UpdateKindSpec } from '../emitter/updates-config'
+import type { Schema, SchemaObject, SchemaTypeRef } from '../schema-types'
 
 import { renderType } from './render-type'
 import { cell, GENERATED_BANNER } from './shared'
 
 interface PresenceEntry {
   kinds: string[]
-  field: SchemaField
+  types: Set<SchemaTypeRef>
 }
 
-function collectPresenceFilters (schema: Schema) {
-  const kinds = buildUpdateKinds(schema)
-  const objectsByName = new Map<string, SchemaObject>(schema.objects.map(o => [o.name, o]))
+function collectPresenceFilters (kinds: UpdateKindSpec[], objectsByName: Map<string, SchemaObject>) {
   const presence = new Map<string, PresenceEntry>()
 
   for (const k of kinds) {
@@ -44,15 +43,53 @@ function collectPresenceFilters (schema: Schema) {
       let entry = presence.get(camelName)
 
       if (!entry) {
-        entry = { kinds: [], field: f }
+        entry = { kinds: [], types: new Set() }
         presence.set(camelName, entry)
       }
 
       entry.kinds.push(k.kindName)
+      entry.types.add(f.type)
     }
   }
 
   return presence
+}
+
+function renderRawType (ref: SchemaTypeRef): string {
+  switch (ref.kind) {
+    case 'integer':
+    case 'float':
+      return 'number'
+    case 'reference':
+      return `[Telegram${ref.name}](/api/objects#${ref.name.toLowerCase()})`
+    case 'union':
+      return ref.of.map(renderRawType).join(' | ')
+    case 'array': {
+      const item = renderRawType(ref.of)
+
+      return ref.of.kind === 'union' ? `(${item})[]` : `${item}[]`
+    }
+    default:
+      return renderType(ref)
+  }
+}
+
+function renderGetterType (ref: SchemaTypeRef, objectsByName: Map<string, SchemaObject>) {
+  const wrapper = wrapperInfoFor(ref, objectsByName)
+
+  if (!wrapper) {
+    return renderRawType(ref)
+  }
+
+  if (wrapper.inaccessible) {
+    return '[MessageUpdate](/api/updates#message) | [TelegramInaccessibleMessage](/api/objects#inaccessiblemessage)'
+  }
+
+  const name = objectsByName.has(wrapper.name)
+    ? `[${wrapper.name}](/api/objects#${wrapper.name.toLowerCase()})`
+    : `\`${wrapper.name}\``
+
+  return wrapper.isArray ? `${name}[]` : name
 }
 
 function sameSet (a: Set<string>, b: string[]) {
@@ -62,7 +99,8 @@ function sameSet (a: Set<string>, b: string[]) {
 export function emitFiltersPage (schema: Schema) {
   const kinds = buildUpdateKinds(schema)
   const messageFamily = new Set(kinds.filter(k => k.payloadType === 'TelegramMessage').map(k => k.kindName))
-  const presence = collectPresenceFilters(schema)
+  const objectsByName = new Map(schema.objects.map(o => [o.name, o]))
+  const presence = collectPresenceFilters(kinds, objectsByName)
 
   const head = [
     GENERATED_BANNER,
@@ -99,7 +137,9 @@ export function emitFiltersPage (schema: Schema) {
       ? '`message-family`'
       : entry.kinds.map(k => `\`${k}\``).join(', ')
 
-    rows.push(`| \`filters.${hasName}\` | \`${camelName}\`: ${cell(renderType(entry.field.type))} | ${kindsCell} |`)
+    const types = new Set([...entry.types].map(ref => renderGetterType(ref, objectsByName)))
+
+    rows.push(`| \`filters.${hasName}\` | \`${camelName}\`: ${cell([...types].join(' | '))} | ${kindsCell} |`)
   }
 
   const tail = [

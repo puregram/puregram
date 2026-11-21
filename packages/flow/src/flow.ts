@@ -3,9 +3,11 @@ import type { KVStorage } from '@puregram/storage'
 import type { Telegram } from 'puregram'
 import { createPlugin } from 'puregram/runtime'
 
+import { isMediaGroupKind, type MediaGroupMessage } from './augment/extractors'
 import { createAugmentMiddleware } from './augment/middleware'
 import { FlowPersistenceUnconfigured } from './errors'
 import { MediaGroupBuffer } from './media-group/buffer'
+import { CollectedMediaGroup } from './media-group/collected-media-group'
 import {
   persistentPrompt,
   persistentWaitFor,
@@ -106,9 +108,9 @@ export interface FlowExtension {
    * `media_group_id` is absent
    */
   collectMediaGroup: (
-    message: MessageUpdate,
+    message: MediaGroupMessage,
     options?: CollectMediaGroupOptions
-  ) => Promise<MessageUpdate[]>
+  ) => Promise<CollectedMediaGroup>
   /** register a persistent flow handler — matched by `id` against persisted records on incoming updates */
   handle: <K extends keyof UpdateKindMap = 'message', T = UpdateKindMap[K]> (
     id: string,
@@ -251,10 +253,14 @@ export function flow (options: FlowOptions = {}) {
           return inMemoryPrompt<K, T>(chat, text, opts)
         },
         collectMediaGroup: (message, opts = {}) => {
+          if (!isMediaGroupKind(message.kind)) {
+            throw new TypeError('collectMediaGroup requires a message update')
+          }
+
           const id = message.raw.media_group_id
 
           if (id === undefined) {
-            return Promise.resolve([message])
+            return Promise.resolve(new CollectedMediaGroup(message))
           }
 
           return buffer.collect(id, message, opts.window ?? defaultWindow)

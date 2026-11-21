@@ -5,7 +5,7 @@ import type { Schema, SchemaField, SchemaObject, SchemaTypeRef } from '../schema
 import { camelCase, getterNameFor } from './field-names'
 import { formatModule } from './format'
 import { versionString } from './load-schema'
-import { ARRAY_WRAPPER_NAMES, arrayWrapperFor, hasWrapperClass } from './structures-config'
+import { ARRAY_WRAPPER_NAMES, ATTACHMENT_TYPES, arrayWrapperFor, hasWrapperClass } from './structures-config'
 import { renderStructureExtras } from './structures-extras'
 import { jsDoc, importTypeNamed, importNamed, typeRefToTs } from './ts-factory'
 
@@ -122,6 +122,17 @@ function emitClass (obj: Extract<SchemaObject, { kind: 'object' }>, wrappedClass
   const rawTypeName = `Telegram${obj.name}`
 
   const members: ts.ClassElement[] = []
+  const attachmentType = ATTACHMENT_TYPES[obj.name]
+
+  if (attachmentType !== undefined) {
+    members.push(ts.factory.createPropertyDeclaration(
+      [ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)],
+      'attachmentType',
+      undefined,
+      undefined,
+      ts.factory.createStringLiteral(attachmentType)
+    ))
+  }
 
   for (const f of obj.fields) {
     const info = wrapperInfoFor(f.type, wrappedClassNames)

@@ -1,3 +1,4 @@
+import { SERVICE_EVENT_ORDER } from '@puregram/api'
 import { describe, expect, it } from 'vitest'
 
 import { EXTRACTORS } from '../../src/augment/extractors'
@@ -111,6 +112,6 @@ describe('EXTRACTORS', () => {
     expect(keys).not.toContain('shipping_query')
     expect(keys).not.toContain('poll')
 
-    expect(keys.length).toBe(46)
+    expect(keys).toEqual(expect.arrayContaining([...SERVICE_EVENT_ORDER]))
   })
 })

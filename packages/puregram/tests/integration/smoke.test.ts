@@ -57,7 +57,7 @@ describe('integration smoke', () => {
     }
   })
 
-  it('end-to-end: tg.send goes through the lifecycle', async () => {
+  it('end-to-end: tg.send returns an editable message through the lifecycle', async () => {
     const mock = new MockTelegram()
     const baseUrl = await mock.start()
 
@@ -66,11 +66,25 @@ describe('integration smoke', () => {
         ok: true,
         result: { message_id: 42, date: 0, chat: { id: params.chat_id, type: 'private' }, text: params.text }
       }))
+      mock.expect('editMessageText', params => ({
+        ok: true,
+        result: { message_id: 42, date: 0, chat: { id: params.chat_id, type: 'private' }, text: params.text }
+      }))
 
       const tg = new Telegram({ token: 'TEST', apiBaseUrl: baseUrl })
       const sent = await tg.send(100, 'hello')
 
-      expect((sent as any).message_id).toBe(42)
+      expect(sent.id).toBe(42)
+      expect(sent.raw.message_id).toBe(42)
+
+      const edited = await sent.edit('done')
+
+      expect(edited).toMatchObject({ id: 42, text: 'done' })
+
+      const raw = await tg.api.sendMessage({ chat_id: 100, text: 'raw' })
+
+      expect(raw.message_id).toBe(42)
+      expect(raw).not.toHaveProperty('edit')
     } finally {
       await mock.stop()
     }

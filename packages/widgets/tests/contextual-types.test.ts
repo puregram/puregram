@@ -8,7 +8,7 @@ it('infers widget state types and rejects invalid state across client, message a
   const root = await mkdtemp(join(resolve('tests'), '.widget-types-'))
   const file = join(root, 'consumer.ts')
   const prelude = `
-import type { MessageUpdate } from '@puregram/api'
+import type { MessageUpdate, TelegramMessage } from '@puregram/api'
 import type { Telegram } from 'puregram'
 import { defineWidget, html, json, text } from '../../src'
 declare const tg: Telegram
@@ -18,10 +18,11 @@ const Counter = defineWidget({ html: html\`<b>counter</b>\`, chat: json<{ count:
 const Template = defineWidget({ html: (title: string) => html\`<b>\${title}</b>\`, chat: json<{ count: number }>() })
 `
   const valid = [
-    "tg.sendWidget(42, Counter, { chat: { count: 1 }, public: 'hello' })",
-    "message.sendWidget(Counter, { chat: { count: 1 }, public: null, caption: 'counter' })",
-    'message.replyWithWidget(Counter, { chat: { count: 1 } })',
-    'thread.sendWidget(Counter, { chat: { count: 1 } })',
+    "const clientSent: Promise<MessageUpdate> = tg.sendWidget(42, Counter, { chat: { count: 1 }, public: 'hello' })",
+    "const sent: Promise<MessageUpdate> = message.sendWidget(Counter, { chat: { count: 1 }, public: null, caption: 'counter' })",
+    'const reply: Promise<MessageUpdate> = message.replyWithWidget(Counter, { chat: { count: 1 } })',
+    'const threaded: Promise<MessageUpdate> = thread.sendWidget(Counter, { chat: { count: 1 } })',
+    "const shared: Promise<TelegramMessage> = Counter.sendShared(tg, 42, '123', { chat: { count: 1 } })",
     "message.sendWidget(Template.render('hello'), { chat: { count: 1 } })",
     "message.sendWidget('<b>raw</b>', { public_data: 'raw' })"
   ]

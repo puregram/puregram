@@ -1,64 +1,78 @@
-import type { MessageUpdate } from '@puregram/api'
+import type { MediaGroupMessage } from '../augment/extractors'
+
+import { CollectedMediaGroup } from './collected-media-group'
 
 interface Bucket {
-  messages: MessageUpdate[]
-  promise: Promise<MessageUpdate[]>
-  resolve: (messages: MessageUpdate[]) => void
+  messages: CollectedMediaGroup
+  seen: Set<number>
+  promise: Promise<CollectedMediaGroup>
+  resolve: (messages: CollectedMediaGroup) => void
   timer: ReturnType<typeof setTimeout>
 }
 
-// promise-based aggregator keyed by `media_group_id`. each `collect(message, window)` adds
-// to the bucket, resets the sliding timer, and returns the same promise — handlers seeing the
-// same group_id converge on one assembled album without external sync
 export class MediaGroupBuffer {
-  private readonly buckets = new Map<string, Bucket>()
+  private readonly clients = new Map<MediaGroupMessage['tg'], Map<string, Bucket>>()
 
-  collect (id: string, message: MessageUpdate, window: number) {
-    let bucket = this.buckets.get(id)
+  collect (id: string, message: MediaGroupMessage, window: number) {
+    const { tg, raw } = message
+    const key = JSON.stringify([raw.business_connection_id, raw.chat.id, id])
+    let buckets = this.clients.get(tg)
+
+    if (!buckets) {
+      buckets = new Map()
+      this.clients.set(tg, buckets)
+    }
+
+    let bucket = buckets.get(key)
 
     if (!bucket) {
-      let resolveBucket!: (messages: MessageUpdate[]) => void
-      const promise = new Promise<MessageUpdate[]>((resolve) => {
+      let resolveBucket!: (messages: CollectedMediaGroup) => void
+      const promise = new Promise<CollectedMediaGroup>((resolve) => {
         resolveBucket = resolve
       })
 
       bucket = {
-        messages: [],
+        messages: new CollectedMediaGroup(message),
+        seen: new Set([raw.message_id]),
         promise,
         resolve: resolveBucket,
-        timer: setTimeout(() => this.flush(id), window)
+        timer: setTimeout(() => this.flush(tg, key), window)
       }
 
-      this.buckets.set(id, bucket)
-    } else {
-      clearTimeout(bucket.timer)
-      bucket.timer = setTimeout(() => this.flush(id), window)
-    }
-
-    // dedupe — the same message object can be passed via both the global tg.flow handler
-    // and a per-update message.flow.collectMediaGroup() in the same tick
-    if (!bucket.messages.includes(message)) {
+      buckets.set(key, bucket)
+    } else if (!bucket.seen.has(raw.message_id)) {
+      bucket.seen.add(raw.message_id)
       bucket.messages.push(message)
+      clearTimeout(bucket.timer)
+      bucket.timer = setTimeout(() => this.flush(tg, key), window)
     }
 
     return bucket.promise
   }
 
   flushAll () {
-    for (const id of [...this.buckets.keys()]) {
-      this.flush(id)
+    for (const [tg, buckets] of this.clients) {
+      for (const key of buckets.keys()) {
+        this.flush(tg, key)
+      }
     }
   }
 
-  private flush (id: string) {
-    const bucket = this.buckets.get(id)
+  private flush (tg: MediaGroupMessage['tg'], key: string) {
+    const buckets = this.clients.get(tg)
+    const bucket = buckets?.get(key)
 
-    if (!bucket) {
+    if (!buckets || !bucket) {
       return
     }
 
     clearTimeout(bucket.timer)
-    this.buckets.delete(id)
+    buckets.delete(key)
+
+    if (buckets.size === 0) {
+      this.clients.delete(tg)
+    }
+
     bucket.resolve(bucket.messages)
   }
 }

@@ -406,15 +406,41 @@ telegram.onMessage(async (message) => {
 
   const all = await message.flow.collectMediaGroup()
 
-  await message.send(`got ${all.length} items in this album`)
+  if (all[0] === message) {
+    await message.send(`got ${all.length} items in this album`)
+  }
 })
 ```
 
-resolves immediately with `[message]` if `media_group_id` is absent — safe to call defensively
+the result is an array-compatible `CollectedMediaGroup`: indexing, iteration and
+`length` work as before, and `.contexts` refers to the same collection. `map` and
+`filter` return ordinary arrays. without `media_group_id`, the result contains
+just the source message. within the sliding window, each caller for the same
+client, business connection, chat and album receives the same collection. it
+keeps the first update for each `message_id`, in arrival order.
+
+`collectMediaGroup` is available on message, edited message, channel post,
+business message and message-derived service updates, including edited channel
+posts and edited business messages. callback and widget queries cannot collect
+albums, even when they refer to a message. guest messages are not supported:
+their chat and message ids do not address the guest chat through bulk methods.
+
+| operation | target | result |
+|---|---|---|
+| `await all.forward(chatId, options?)` | forwards the album to another chat | `TelegramMessageId[]` |
+| `await all.copy(chatId, options?)` | copies the album to another chat | `TelegramMessageId[]` |
+| `await all.delete()` | deletes the original album | `true` |
+
+these methods send unique message ids in ascending order without reordering the
+collection. `delete()` uses `deleteMessages` for bot chats and
+`deleteBusinessMessages` for a business connection. business albums cannot be
+copied or forwarded: neither bulk transfer method accepts a source connection.
+empty collections and collections mixing clients, chats or business connections
+are rejected before any request.
 
 ### the lower-level form
 
-`telegram.flow.collectMediaGroup(message, options?)` takes the source message explicitly — useful when you're handling a `MessageUpdate` you got from somewhere other than the dispatcher (e.g. injected via `tg.flow` from a worker)
+`telegram.flow.collectMediaGroup(message, options?)` takes an eligible source update explicitly and returns the same `CollectedMediaGroup` as the handler form.
 
 ### tuning the window
 
@@ -758,11 +784,11 @@ interface FlowExtension {
     options?: PromptOptions<K, T> & { id?: string, payload?, ttl? }
   ) => Promise<T | null>
 
-  /** gather every message that shares a `media_group_id` with `message` */
+  /** collect one album within the source client, chat and business connection */
   collectMediaGroup: (
-    message: MessageUpdate,
+    message: CollectedMediaGroup[number],
     options?: CollectMediaGroupOptions
-  ) => Promise<MessageUpdate[]>
+  ) => Promise<CollectedMediaGroup>
 
   /** register a persistent flow handler — required before opening any persistent prompt */
   handle: <K extends keyof UpdateKindMap = 'message', T = UpdateKindMap[K]> (

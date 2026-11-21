@@ -1,3 +1,5 @@
+import type { UpdateKindMap } from '@puregram/api'
+
 export interface ExtractedScope {
   chat: number | string | undefined
   from: number | undefined
@@ -39,10 +41,13 @@ const callbackQueryExtractor: Extractor = (u) => {
   return { chat: raw.message?.chat?.id, from: raw.from?.id }
 }
 
-// service-event kinds — mirror `SERVICE_FIELD_TO_CLASS` in
-// `packages/puregram/src/dispatch/update-builder.ts`. all wrap TelegramMessage payloads;
-// channel_post-derived events naturally yield undefined `from` via `fromFromRaw`
-const SERVICE_EVENT_KINDS = [
+const MESSAGE_KINDS = [
+  'message',
+  'edited_message',
+  'channel_post',
+  'edited_channel_post',
+  'business_message',
+  'edited_business_message',
   'new_chat_members',
   'left_chat_member',
   'new_chat_title',
@@ -75,26 +80,29 @@ const SERVICE_EVENT_KINDS = [
   'passport_data',
   'proximity_alert_triggered',
   'write_access_allowed',
+  'community_chat_added',
+  'community_chat_removed',
   'paid_messages_waived',
   'ton_wallet_transfer'
-] as const
+] as const satisfies readonly (keyof UpdateKindMap)[]
 
-const serviceEventEntries: [string, Extractor][] = SERVICE_EVENT_KINDS.map(
-  kind => [kind, messageShapedExtractor]
-)
+type MediaGroupKind = typeof MESSAGE_KINDS[number]
+export type MediaGroupMessage = UpdateKindMap[MediaGroupKind]
+
+const messageExtractors = Object.fromEntries(MESSAGE_KINDS.map(kind => [kind, messageShapedExtractor] as const))
+
+export function isMediaGroupKind (kind: string): kind is MediaGroupKind {
+  return Object.hasOwn(messageExtractors, kind)
+}
 
 export const EXTRACTORS: Partial<Record<string, Extractor>> = {
-  message: messageShapedExtractor,
-  edited_message: messageShapedExtractor,
+  ...messageExtractors,
   channel_post: channelPostExtractor,
   edited_channel_post: channelPostExtractor,
-  business_message: messageShapedExtractor,
-  edited_business_message: messageShapedExtractor,
   callback_query: callbackQueryExtractor,
   widget_query: messageShapedExtractor,
   shared_widget_query: messageShapedExtractor,
   chat_member: messageShapedExtractor,
   my_chat_member: messageShapedExtractor,
-  chat_join_request: messageShapedExtractor,
-  ...Object.fromEntries(serviceEventEntries)
+  chat_join_request: messageShapedExtractor
 }

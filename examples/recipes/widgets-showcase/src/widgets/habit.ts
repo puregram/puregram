@@ -164,7 +164,7 @@ export function registerHabit (tg: Telegram) {
     const habit = { r: 0, d: 0, m: '0' }
     const sent = await message.sendWidget(Habit.render(name), { allowQueries: true, chat: habit })
 
-    habits.set(chatMessageKey(message.chat.id, sent.message_id), habit)
+    habits.set(chatMessageKey(sent.chat.id, sent.id), habit)
   })
 
   tg.onWidgetQuery(Done.filter, async (query) => {

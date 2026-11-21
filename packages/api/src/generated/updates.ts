@@ -5,7 +5,7 @@
 /// see scripts/emit.ts in @puregram/api
 
 import type { Readable } from "node:stream";
-import type { TelegramBotSubscriptionUpdated, TelegramBusinessBotRights, TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramCallbackQuery, TelegramChatBackground, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramEphemeralMessageParameters, TelegramForceReply, TelegramForumTopicClosed, TelegramForumTopicReopened, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveawayCreated, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInlineQueryResult, TelegramInlineQueryResultsButton, TelegramInputChecklist, TelegramInputFile, TelegramInputMedia, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPaidMedia, TelegramInputPollMedia, TelegramInputPollOption, TelegramInputRichMessage, TelegramLabeledPrice, TelegramLinkPreviewOptions, TelegramManagedBotCreated, TelegramManagedBotUpdated, TelegramMaybeInaccessibleMessage, TelegramMenuButton, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageGenerationStopped, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPaidMediaInfo, TelegramPaidMediaPurchased, TelegramPaidMessagePriceChanged, TelegramPoll, TelegramPollAnswer, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramReactionType, TelegramRefundedPayment, TelegramReplyKeyboardMarkup, TelegramReplyKeyboardRemove, TelegramReplyParameters, TelegramRichMessage, TelegramSharedWidgetQuery, TelegramShippingOption, TelegramShippingQuery, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostParameters, TelegramSuggestedPostRefunded, TelegramUniqueGiftInfo, TelegramVideoChatStarted, TelegramWidgetQuery, TelegramWidgetQueryType } from "./types";
+import type { TelegramBotSubscriptionUpdated, TelegramBusinessBotRights, TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramCallbackQuery, TelegramChatBackground, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramEphemeralMessageParameters, TelegramForceReply, TelegramForumTopicClosed, TelegramForumTopicReopened, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveawayCreated, TelegramInaccessibleMessage, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInlineQueryResult, TelegramInlineQueryResultsButton, TelegramInputChecklist, TelegramInputFile, TelegramInputMedia, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPaidMedia, TelegramInputPollMedia, TelegramInputPollOption, TelegramInputRichMessage, TelegramLabeledPrice, TelegramLinkPreviewOptions, TelegramManagedBotCreated, TelegramManagedBotUpdated, TelegramMenuButton, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageGenerationStopped, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPaidMediaInfo, TelegramPaidMediaPurchased, TelegramPaidMessagePriceChanged, TelegramPoll, TelegramPollAnswer, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramReactionType, TelegramRefundedPayment, TelegramReplyKeyboardMarkup, TelegramReplyKeyboardRemove, TelegramReplyParameters, TelegramRichMessage, TelegramSharedWidgetQuery, TelegramShippingOption, TelegramShippingQuery, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostParameters, TelegramSuggestedPostRefunded, TelegramUniqueGiftInfo, TelegramUpdate, TelegramVideoChatStarted, TelegramWidgetQuery, TelegramWidgetQueryType } from "./types";
 import type { DeleteMessageParams, EditMessageCaptionParams, EditMessageMediaParams, EditMessageReplyMarkupParams, EditMessageTextParams, EditMessageWidgetDataParams, SetMessageReactionParams } from "./methods";
 import type { ActionControllerLike, ActionControllerParams, TelegramLike } from "../telegram-like";
 import type { Has } from "../util-types";
@@ -13,15 +13,16 @@ import type { Formattable } from "../formattable";
 import type { RichLike } from "../rich-like";
 import type { WidgetInput, WidgetSendOptions } from "../widget-like";
 import { widgetSendParams } from "../widget-like";
+import type { MessageAttachment, MessageAttachmentOf } from "../structures-handcrafted";
 import { Animation, Audio, Chat, ChatBoost, ChatInviteLink, ChatMember, ChatShared, Contact, Dice, Document, ExternalReplyInfo, ForumTopicCreated, ForumTopicEdited, Game, Giveaway, GiveawayCompleted, GiveawayWinners, InlineKeyboardMarkup, Invoice, LinkPreviewOptions, LivePhoto, Location, Message, MessageEntity, OrderInfo, PaidMessagesWaived, PassportData, PhotoSize, Poll, PollMedia, PollOption, ProximityAlertTriggered, ReactionCount, ShippingAddress, Sticker, Story, SuccessfulPayment, TextQuote, TonWalletTransfer, User, UsersShared, Venue, Video, VideoChatEnded, VideoChatParticipantsInvited, VideoChatScheduled, VideoNote, Voice, WebAppData, Widget, WriteAccessAllowed } from "./structures";
-import { Photo, PollOptions, ReactionCounts, Reactions } from "../structures-handcrafted";
+import { Photo, MessageEntities, PollOptions, ReactionCounts, Reactions } from "../structures-handcrafted";
 import { callbackEphemeralParams, ephemeralSendParams, ephemeralTarget } from "../ephemeral";
 import { INSPECT, makeInspect } from "./inspect";
 /**
  * thread-scoped shortcuts for `TelegramMessage` — every call auto-fills `message_thread_id`. returned by `update.thread`
  */
 export class MessageThreadShortcuts {
-    constructor(public raw: TelegramMessage, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramMessage, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * shortcut for `tg.api.closeForumTopic`
      */
@@ -35,7 +36,8 @@ export class MessageThreadShortcuts {
     /**
      * shortcut for `tg.api.copyMessage`
      */
-    copy(from: number | string, params: {
+    copy(to: number | string, params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
         caption?: string | Formattable;
@@ -53,26 +55,25 @@ export class MessageThreadShortcuts {
         };
     } = {}) {
         return this.tg.api.copyMessage({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
+            from_chat_id: this.raw.chat.id,
             message_id: this.raw.message_id,
-            from_chat_id: from,
+            chat_id: to,
             ...params
         });
     }
     /**
      * shortcut for `tg.api.copyMessages`
      */
-    copyMany(from: number | string, messageIds: number[], params: {
+    copyMany(to: number | string, messageIds: number[], params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
         remove_caption?: boolean;
     } = {}) {
         return this.tg.api.copyMessages({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -103,7 +104,8 @@ export class MessageThreadShortcuts {
     /**
      * shortcut for `tg.api.forwardMessage`
      */
-    forward(from: number | string, params: {
+    forward(to: number | string, params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
         disable_notification?: boolean;
@@ -112,25 +114,24 @@ export class MessageThreadShortcuts {
         suggested_post_parameters?: TelegramSuggestedPostParameters;
     } = {}) {
         return this.tg.api.forwardMessage({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
+            from_chat_id: this.raw.chat.id,
             message_id: this.raw.message_id,
-            from_chat_id: from,
+            chat_id: to,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.forwardMessages`
      */
-    forwardMany(from: number | string, messageIds: number[], params: {
+    forwardMany(to: number | string, messageIds: number[], params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
     } = {}) {
         return this.tg.api.forwardMessages({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -176,7 +177,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             animation: animation,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendAnimation` — sets `reply_parameters` to this message
@@ -210,7 +211,7 @@ export class MessageThreadShortcuts {
             animation: animation,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendAudio`
@@ -241,7 +242,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             audio: audio,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendAudio` — sets `reply_parameters` to this message
@@ -273,7 +274,7 @@ export class MessageThreadShortcuts {
             audio: audio,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendChatAction`
@@ -312,7 +313,7 @@ export class MessageThreadShortcuts {
             phone_number: phoneNumber,
             first_name: firstName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendContact` — sets `reply_parameters` to this message
@@ -340,7 +341,7 @@ export class MessageThreadShortcuts {
             first_name: firstName,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDice`
@@ -363,7 +364,7 @@ export class MessageThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendDice` — sets `reply_parameters` to this message
@@ -387,7 +388,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDocument`
@@ -416,7 +417,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             document: document,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendDocument` — sets `reply_parameters` to this message
@@ -446,7 +447,7 @@ export class MessageThreadShortcuts {
             document: document,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGame`
@@ -467,7 +468,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             game_short_name: gameShortName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendGame` — sets `reply_parameters` to this message
@@ -489,7 +490,7 @@ export class MessageThreadShortcuts {
             game_short_name: gameShortName,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendInvoice`
@@ -531,7 +532,7 @@ export class MessageThreadShortcuts {
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendInvoice` — sets `reply_parameters` to this message
@@ -574,7 +575,7 @@ export class MessageThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLivePhoto`
@@ -604,7 +605,7 @@ export class MessageThreadShortcuts {
             live_photo: livePhoto,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendLivePhoto` — sets `reply_parameters` to this message
@@ -635,7 +636,7 @@ export class MessageThreadShortcuts {
             photo: photo,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLocation`
@@ -664,7 +665,7 @@ export class MessageThreadShortcuts {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendLocation` — sets `reply_parameters` to this message
@@ -694,7 +695,7 @@ export class MessageThreadShortcuts {
             longitude: longitude,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMediaGroup`
@@ -713,7 +714,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendMediaGroup` — sets `reply_parameters` to this message
@@ -733,7 +734,7 @@ export class MessageThreadShortcuts {
             media: media,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessage`
@@ -760,7 +761,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendMessage` — sets `reply_parameters` to this message
@@ -788,7 +789,7 @@ export class MessageThreadShortcuts {
             text: text,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessageDraft`
@@ -833,7 +834,7 @@ export class MessageThreadShortcuts {
             star_count: starCount,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendPaidMedia` — sets `reply_parameters` to this message
@@ -862,7 +863,7 @@ export class MessageThreadShortcuts {
             media: media,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPhoto`
@@ -891,7 +892,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendPhoto` — sets `reply_parameters` to this message
@@ -921,7 +922,7 @@ export class MessageThreadShortcuts {
             photo: photo,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPoll`
@@ -966,7 +967,7 @@ export class MessageThreadShortcuts {
             question: question,
             options: options,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendPoll` — sets `reply_parameters` to this message
@@ -1012,7 +1013,7 @@ export class MessageThreadShortcuts {
             options: options,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage`
@@ -1036,7 +1037,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendRichMessage` — sets `reply_parameters` to this message
@@ -1061,7 +1062,7 @@ export class MessageThreadShortcuts {
             rich_message: richMessage,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -1101,7 +1102,7 @@ export class MessageThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             widget_id: widgetId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendSharedWidget` — sets `reply_parameters` to this message
@@ -1127,7 +1128,7 @@ export class MessageThreadShortcuts {
             widget_id: widgetId,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendSticker`
@@ -1152,7 +1153,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             sticker: sticker,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendSticker` — sets `reply_parameters` to this message
@@ -1178,7 +1179,7 @@ export class MessageThreadShortcuts {
             sticker: sticker,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVenue`
@@ -1209,7 +1210,7 @@ export class MessageThreadShortcuts {
             title: title,
             address: address,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVenue` — sets `reply_parameters` to this message
@@ -1241,7 +1242,7 @@ export class MessageThreadShortcuts {
             address: address,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideo`
@@ -1277,7 +1278,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             video: video,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVideo` — sets `reply_parameters` to this message
@@ -1314,7 +1315,7 @@ export class MessageThreadShortcuts {
             video: video,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideoNote`
@@ -1341,7 +1342,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             video_note: videoNote,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVideoNote` — sets `reply_parameters` to this message
@@ -1369,7 +1370,7 @@ export class MessageThreadShortcuts {
             video_note: videoNote,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVoice`
@@ -1397,7 +1398,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             voice: voice,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVoice` — sets `reply_parameters` to this message
@@ -1426,7 +1427,7 @@ export class MessageThreadShortcuts {
             voice: voice,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendWidget`
@@ -1436,7 +1437,7 @@ export class MessageThreadShortcuts {
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...widgetSendParams(widget, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendWidget` — sets `reply_parameters` to this message
@@ -1447,7 +1448,7 @@ export class MessageThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...widgetSendParams(widget, params),
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.unpinAllForumTopicMessages`
@@ -1498,7 +1499,7 @@ export class MessageThreadShortcuts {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendRichMessage` — sets `reply_parameters` to this message
@@ -1523,7 +1524,7 @@ export class MessageThreadShortcuts {
             rich_message: richMessage,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -1546,7 +1547,7 @@ export class MessageThreadShortcuts {
  * thread-scoped shortcuts for `TelegramMessageGenerationStopped` — every call auto-fills `message_thread_id`. returned by `update.thread`
  */
 export class MessageGenerationStoppedThreadShortcuts {
-    constructor(public raw: TelegramMessageGenerationStopped, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramMessageGenerationStopped, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * shortcut for `tg.api.closeForumTopic`
      */
@@ -1560,7 +1561,8 @@ export class MessageGenerationStoppedThreadShortcuts {
     /**
      * shortcut for `tg.api.copyMessage`
      */
-    copy(from: number | string, messageId: number, params: {
+    copy(to: number | string, messageId: number, params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
         caption?: string | Formattable;
@@ -1578,9 +1580,8 @@ export class MessageGenerationStoppedThreadShortcuts {
         };
     } = {}) {
         return this.tg.api.copyMessage({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
         });
@@ -1588,16 +1589,16 @@ export class MessageGenerationStoppedThreadShortcuts {
     /**
      * shortcut for `tg.api.copyMessages`
      */
-    copyMany(from: number | string, messageIds: number[], params: {
+    copyMany(to: number | string, messageIds: number[], params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
         remove_caption?: boolean;
     } = {}) {
         return this.tg.api.copyMessages({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -1628,7 +1629,8 @@ export class MessageGenerationStoppedThreadShortcuts {
     /**
      * shortcut for `tg.api.forwardMessage`
      */
-    forward(from: number | string, messageId: number, params: {
+    forward(to: number | string, messageId: number, params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
         disable_notification?: boolean;
@@ -1637,25 +1639,24 @@ export class MessageGenerationStoppedThreadShortcuts {
         suggested_post_parameters?: TelegramSuggestedPostParameters;
     } = {}) {
         return this.tg.api.forwardMessage({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.forwardMessages`
      */
-    forwardMany(from: number | string, messageIds: number[], params: {
+    forwardMany(to: number | string, messageIds: number[], params: {
+        message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
     } = {}) {
         return this.tg.api.forwardMessages({
-            chat_id: this.raw.chat.id,
-            message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -1701,7 +1702,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             animation: animation,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendAudio`
@@ -1732,7 +1733,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             audio: audio,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendChatAction`
@@ -1772,7 +1773,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             phone_number: phoneNumber,
             first_name: firstName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDice`
@@ -1795,7 +1796,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDocument`
@@ -1824,7 +1825,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             document: document,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGame`
@@ -1845,7 +1846,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             game_short_name: gameShortName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendInvoice`
@@ -1887,7 +1888,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLivePhoto`
@@ -1917,7 +1918,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             live_photo: livePhoto,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLocation`
@@ -1946,7 +1947,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMediaGroup`
@@ -1965,7 +1966,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessage`
@@ -1992,7 +1993,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessageDraft`
@@ -2037,7 +2038,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             star_count: starCount,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPhoto`
@@ -2066,7 +2067,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPoll`
@@ -2111,7 +2112,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             question: question,
             options: options,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage`
@@ -2135,7 +2136,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -2175,7 +2176,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             widget_id: widgetId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendSticker`
@@ -2200,7 +2201,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             sticker: sticker,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVenue`
@@ -2231,7 +2232,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             title: title,
             address: address,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideo`
@@ -2267,7 +2268,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             video: video,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideoNote`
@@ -2294,7 +2295,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             video_note: videoNote,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVoice`
@@ -2322,7 +2323,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             voice: voice,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendWidget`
@@ -2332,7 +2333,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             chat_id: this.raw.chat.id,
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             ...widgetSendParams(widget, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.unpinAllForumTopicMessages`
@@ -2383,7 +2384,7 @@ export class MessageGenerationStoppedThreadShortcuts {
             message_thread_id: this.raw.message_thread_id as NonNullable<typeof this.raw.message_thread_id>,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -2419,7 +2420,7 @@ class MessageShared {
     private _viaBot?: User;
     private _guestBotCallerUser?: User;
     private _guestBotCallerChat?: Chat;
-    private _entities?: MessageEntity[];
+    private _entities?: MessageEntities;
     private _linkPreviewOptions?: LinkPreviewOptions;
     private _animation?: Animation;
     private _audio?: Audio;
@@ -2432,7 +2433,7 @@ class MessageShared {
     private _videoNote?: VideoNote;
     private _voice?: Voice;
     private _widget?: Widget;
-    private _captionEntities?: MessageEntity[];
+    private _captionEntities?: MessageEntities;
     private _contact?: Contact;
     private _dice?: Dice;
     private _game?: Game;
@@ -2442,6 +2443,7 @@ class MessageShared {
     private _newChatMembers?: User[];
     private _leftChatMember?: User;
     private _newChatPhoto?: Photo;
+    private _pinnedMessage?: MessageUpdate | TelegramInaccessibleMessage;
     private _invoice?: Invoice;
     private _successfulPayment?: SuccessfulPayment;
     private _usersShared?: UsersShared;
@@ -2461,7 +2463,7 @@ class MessageShared {
     private _videoChatParticipantsInvited?: VideoChatParticipantsInvited;
     private _webAppData?: WebAppData;
     private _replyMarkup?: InlineKeyboardMarkup;
-    constructor(public raw: TelegramMessage, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramMessage, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique message identifier inside this chat; 0 for ephemeral messages. In specific instances (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
      */
@@ -2669,8 +2671,8 @@ class MessageShared {
     /**
      * Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
      */
-    get entities(): MessageEntity[] | undefined {
-        return this.raw.entities ? (this._entities ??= this.raw.entities.map(x => new MessageEntity(x))) : undefined;
+    get entities(): MessageEntities | undefined {
+        return this.raw.entities ? (this._entities ??= new MessageEntities(this.raw.entities)) : undefined;
     }
     /**
      * Optional. Options used for link preview generation for the message, if it is a text message and link preview options were changed
@@ -2777,8 +2779,8 @@ class MessageShared {
     /**
      * Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
      */
-    get captionEntities(): MessageEntity[] | undefined {
-        return this.raw.caption_entities ? (this._captionEntities ??= this.raw.caption_entities.map(x => new MessageEntity(x))) : undefined;
+    get captionEntities(): MessageEntities | undefined {
+        return this.raw.caption_entities ? (this._captionEntities ??= new MessageEntities(this.raw.caption_entities)) : undefined;
     }
     /**
      * Optional. True, if the caption must be shown above the message media or the widget
@@ -2909,8 +2911,8 @@ class MessageShared {
     /**
      * Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
      */
-    get pinnedMessage(): TelegramMaybeInaccessibleMessage | undefined {
-        return this.raw.pinned_message;
+    get pinnedMessage(): (MessageUpdate | TelegramInaccessibleMessage) | undefined {
+        return this.raw.pinned_message ? (this._pinnedMessage ??= this.raw.pinned_message.date === 0 ? this.raw.pinned_message : new MessageUpdate(this.raw.pinned_message, this.tg, this.update)) : undefined;
     }
     /**
      * Optional. Message is an invoice for a payment, information about the invoice. More about payments »
@@ -3399,7 +3401,7 @@ class MessageShared {
      * true if `entities` has at least one item
      */
     hasEntities(): this is this & {
-        entities: MessageEntity[];
+        entities: MessageEntities;
     } {
         return this.raw.entities != null && this.raw.entities.length > 0;
     }
@@ -3543,7 +3545,7 @@ class MessageShared {
      * true if `caption_entities` has at least one item
      */
     hasCaptionEntities(): this is this & {
-        captionEntities: MessageEntity[];
+        captionEntities: MessageEntities;
     } {
         return this.raw.caption_entities != null && this.raw.caption_entities.length > 0;
     }
@@ -3719,7 +3721,7 @@ class MessageShared {
      * true if `pinned_message` is set
      */
     hasPinnedMessage(): this is this & {
-        pinnedMessage: TelegramMaybeInaccessibleMessage;
+        pinnedMessage: MessageUpdate | TelegramInaccessibleMessage;
     } {
         return this.raw.pinned_message != null;
     }
@@ -4105,11 +4107,25 @@ class MessageShared {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `chat.id`
      */
     get chatId(): number {
         return this.raw.chat.id;
+    }
+    get attachment(): MessageAttachment | undefined {
+        return this.livePhoto ?? this.photo ?? this.contact ?? this.poll ?? this.venue ?? this.location ?? this.sticker ?? this.story ?? this.animation ?? this.audio ?? this.document ?? this.video ?? this.videoNote ?? this.voice;
+    }
+    hasAttachment(): this is Has<this, "attachment"> {
+        return this.attachment !== undefined;
+    }
+    hasAttachmentType<T extends MessageAttachment["attachmentType"]>(type: T): this is this & {
+        attachment: MessageAttachmentOf<T>;
+    } {
+        return this.attachment?.attachmentType === type;
     }
     /**
      * best-effort sender id: `from.id` → `sender_chat.id` → `chat.id`
@@ -4219,31 +4235,31 @@ class MessageShared {
         return this.raw.chat.type === "channel";
     }
     /**
-     * download the message attachment as a `Uint8Array`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`
+     * download the message attachment as a `Uint8Array`. returns `null` if the message has no media. auto-picks with priority `animation > document > video > audio > voice > video_note > live_photo > photo[largest] > sticker`
      */
     download(): Promise<Uint8Array | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.download(t);
     }
     /**
      * download the message attachment as a node `Readable`. returns `null` if no media
      */
     downloadStream(): Promise<Readable | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.downloadStream(t);
     }
     /**
      * download the message attachment as an async-iterable byte stream. returns `null` if no media
      */
     downloadIterable(): Promise<AsyncIterable<Uint8Array> | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.downloadIterable(t);
     }
     /**
      * download the message attachment to disk. returns `null` if no media; otherwise resolves once the file is fully written
      */
     downloadToFile(path: string): Promise<void | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.downloadToFile(path, t).then(() => undefined as void | null);
     }
     /**
@@ -4267,8 +4283,8 @@ class MessageShared {
     /**
      * edit this message to rich content (build it with @puregram/rich)
      */
-    editRich(richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "rich_message" | "text">): Promise<TelegramMessage> {
-        return this.tg.api.editMessageText({ chat_id: this.raw.chat.id, message_id: this.raw.message_id, rich_message: richMessage, ...params });
+    editRich(richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "rich_message" | "text">): Promise<MessageUpdate | true> {
+        return this.tg.api.editMessageText({ chat_id: this.raw.chat.id, message_id: this.raw.message_id, rich_message: richMessage, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
@@ -4340,7 +4356,7 @@ class MessageShared {
     /**
      * shortcut for `tg.api.copyMessage`
      */
-    copy(from: number | string, params: {
+    copy(to: number | string, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -4359,16 +4375,16 @@ class MessageShared {
         };
     } = {}) {
         return this.tg.api.copyMessage({
-            chat_id: this.raw.chat.id,
+            from_chat_id: this.raw.chat.id,
             message_id: this.raw.message_id,
-            from_chat_id: from,
+            chat_id: to,
             ...params
         });
     }
     /**
      * shortcut for `tg.api.copyMessages`
      */
-    copyMany(from: number | string, messageIds: number[], params: {
+    copyMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
@@ -4376,8 +4392,8 @@ class MessageShared {
         remove_caption?: boolean;
     } = {}) {
         return this.tg.api.copyMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -4681,7 +4697,7 @@ class MessageShared {
             message_id: this.raw.message_id,
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageChecklist`
@@ -4697,7 +4713,7 @@ class MessageShared {
             business_connection_id: this.raw.business_connection_id as NonNullable<typeof this.raw.business_connection_id>,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageLiveLocation`
@@ -4719,7 +4735,7 @@ class MessageShared {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageMedia` — routes to `tg.api.editEphemeralMessageMedia` when this message is ephemeral
@@ -4744,7 +4760,7 @@ class MessageShared {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageReplyMarkup` — routes to `tg.api.editEphemeralMessageReplyMarkup` when this message is ephemeral
@@ -4767,7 +4783,7 @@ class MessageShared {
             message_id: this.raw.message_id,
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageText` — routes to `tg.api.editEphemeralMessageText` when this message is ephemeral
@@ -4796,7 +4812,7 @@ class MessageShared {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageWidgetData`
@@ -4824,7 +4840,7 @@ class MessageShared {
     /**
      * shortcut for `tg.api.forwardMessage`
      */
-    forward(from: number | string, params: {
+    forward(to: number | string, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -4834,24 +4850,24 @@ class MessageShared {
         suggested_post_parameters?: TelegramSuggestedPostParameters;
     } = {}) {
         return this.tg.api.forwardMessage({
-            chat_id: this.raw.chat.id,
+            from_chat_id: this.raw.chat.id,
             message_id: this.raw.message_id,
-            from_chat_id: from,
+            chat_id: to,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.forwardMessages`
      */
-    forwardMany(from: number | string, messageIds: number[], params: {
+    forwardMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
     } = {}) {
         return this.tg.api.forwardMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -5103,7 +5119,7 @@ class MessageShared {
             animation: animation,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendAnimation` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5139,7 +5155,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendAudio` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5172,7 +5188,7 @@ class MessageShared {
             audio: audio,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendAudio` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5206,7 +5222,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendChatAction`
@@ -5238,7 +5254,7 @@ class MessageShared {
             business_connection_id: this.raw.business_connection_id as NonNullable<typeof this.raw.business_connection_id>,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendChecklist` — sets `reply_parameters` to this message
@@ -5258,7 +5274,7 @@ class MessageShared {
             checklist: checklist,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendContact` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5287,7 +5303,7 @@ class MessageShared {
             first_name: firstName,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendContact` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5317,7 +5333,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDice`
@@ -5340,7 +5356,7 @@ class MessageShared {
             chat_id: this.raw.chat.id,
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendDice` — sets `reply_parameters` to this message
@@ -5364,7 +5380,7 @@ class MessageShared {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDocument` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5395,7 +5411,7 @@ class MessageShared {
             document: document,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendDocument` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5427,7 +5443,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGame`
@@ -5448,7 +5464,7 @@ class MessageShared {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             game_short_name: gameShortName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendGame` — sets `reply_parameters` to this message
@@ -5470,7 +5486,7 @@ class MessageShared {
             game_short_name: gameShortName,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGift`
@@ -5528,7 +5544,7 @@ class MessageShared {
         return this.tg.api.sendInvoice({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendInvoice` — sets `reply_parameters` to this message
@@ -5571,7 +5587,7 @@ class MessageShared {
             chat_id: this.raw.chat.id,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLivePhoto` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5603,7 +5619,7 @@ class MessageShared {
             photo: photo,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendLivePhoto` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5636,7 +5652,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLocation` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5667,7 +5683,7 @@ class MessageShared {
             longitude: longitude,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendLocation` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5699,7 +5715,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMediaGroup`
@@ -5718,7 +5734,7 @@ class MessageShared {
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendMediaGroup` — sets `reply_parameters` to this message
@@ -5738,7 +5754,7 @@ class MessageShared {
             media: media,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessage` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5767,7 +5783,7 @@ class MessageShared {
             text: text,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendMessage` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5797,7 +5813,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessageDraft`
@@ -5842,7 +5858,7 @@ class MessageShared {
             star_count: starCount,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendPaidMedia` — sets `reply_parameters` to this message
@@ -5871,7 +5887,7 @@ class MessageShared {
             media: media,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPhoto` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5902,7 +5918,7 @@ class MessageShared {
             photo: photo,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendPhoto` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -5934,7 +5950,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPoll`
@@ -5979,7 +5995,7 @@ class MessageShared {
             question: question,
             options: options,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendPoll` — sets `reply_parameters` to this message
@@ -6025,7 +6041,7 @@ class MessageShared {
             options: options,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6051,7 +6067,7 @@ class MessageShared {
             rich_message: richMessage,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendRichMessage` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6078,7 +6094,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -6118,7 +6134,7 @@ class MessageShared {
             chat_id: this.raw.chat.id,
             widget_id: widgetId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendSharedWidget` — sets `reply_parameters` to this message
@@ -6144,7 +6160,7 @@ class MessageShared {
             widget_id: widgetId,
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendSticker` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6171,7 +6187,7 @@ class MessageShared {
             sticker: sticker,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendSticker` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6199,7 +6215,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVenue` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6232,7 +6248,7 @@ class MessageShared {
             address: address,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVenue` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6266,7 +6282,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideo` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6304,7 +6320,7 @@ class MessageShared {
             video: video,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVideo` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6343,7 +6359,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideoNote` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6372,7 +6388,7 @@ class MessageShared {
             video_note: videoNote,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVideoNote` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6402,7 +6418,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVoice` — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6432,7 +6448,7 @@ class MessageShared {
             voice: voice,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendVoice` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6463,7 +6479,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendWidget`
@@ -6472,7 +6488,7 @@ class MessageShared {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
             ...widgetSendParams(widget, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendWidget` — sets `reply_parameters` to this message
@@ -6482,7 +6498,7 @@ class MessageShared {
             chat_id: this.raw.chat.id,
             ...widgetSendParams(widget, params),
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters }
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setChatAdministratorCustomTitle`
@@ -6585,7 +6601,7 @@ class MessageShared {
             user_id: user,
             score: score,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setMessageReaction`
@@ -6614,7 +6630,7 @@ class MessageShared {
             message_id: this.raw.message_id,
             ...(this.raw.business_connection_id != null && { business_connection_id: this.raw.business_connection_id }),
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.stopPoll`
@@ -6755,7 +6771,7 @@ class MessageShared {
             rich_message: richMessage,
             ...params,
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * reply shortcut for `tg.api.sendRichMessage` — sets `reply_parameters` to this message — replying to an ephemeral message auto-fills `ephemeral_message_parameters.receiver_user_id` + `reply_parameters.ephemeral_message_id` (ephemeral responses only reach the receiver)
@@ -6782,7 +6798,7 @@ class MessageShared {
             ...params,
             reply_parameters: { message_id: this.raw.message_id, ...params.reply_parameters },
             ...ephemeralSendParams(this.raw, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -6803,7 +6819,7 @@ class MessageShared {
      * thread-scoped shortcuts — auto-fill `message_thread_id` on every call. `undefined` when this message is not in a thread / forum topic
      */
     get thread(): MessageThreadShortcuts | undefined {
-        return this.raw.message_thread_id == null ? undefined : new MessageThreadShortcuts(this.raw, this.tg);
+        return this.raw.message_thread_id == null ? undefined : new MessageThreadShortcuts(this.raw, this.tg, this.update);
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect(this.constructor.name, this, depth, options, inspect);
@@ -6848,7 +6864,7 @@ export class EditedChannelPostUpdate extends MessageShared {
 export class BusinessConnectionUpdate {
     readonly kind = "business_connection" as const;
     private _user?: User;
-    constructor(public raw: TelegramBusinessConnection, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramBusinessConnection, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique identifier of the business connection
      */
@@ -6899,6 +6915,9 @@ export class BusinessConnectionUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `user.id` — uniform sender id across update kinds
      */
@@ -6935,7 +6954,7 @@ export class EditedBusinessMessageUpdate extends MessageShared {
 export class DeletedBusinessMessagesUpdate {
     readonly kind = "deleted_business_messages" as const;
     private _chat?: Chat;
-    constructor(public raw: TelegramBusinessMessagesDeleted, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramBusinessMessagesDeleted, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique identifier of the business connection
      */
@@ -6959,6 +6978,9 @@ export class DeletedBusinessMessagesUpdate {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
@@ -6985,7 +7007,7 @@ export class GuestMessageUpdate {
     private _viaBot?: User;
     private _guestBotCallerUser?: User;
     private _guestBotCallerChat?: Chat;
-    private _entities?: MessageEntity[];
+    private _entities?: MessageEntities;
     private _linkPreviewOptions?: LinkPreviewOptions;
     private _animation?: Animation;
     private _audio?: Audio;
@@ -6998,7 +7020,7 @@ export class GuestMessageUpdate {
     private _videoNote?: VideoNote;
     private _voice?: Voice;
     private _widget?: Widget;
-    private _captionEntities?: MessageEntity[];
+    private _captionEntities?: MessageEntities;
     private _contact?: Contact;
     private _dice?: Dice;
     private _game?: Game;
@@ -7008,6 +7030,7 @@ export class GuestMessageUpdate {
     private _newChatMembers?: User[];
     private _leftChatMember?: User;
     private _newChatPhoto?: Photo;
+    private _pinnedMessage?: MessageUpdate | TelegramInaccessibleMessage;
     private _invoice?: Invoice;
     private _successfulPayment?: SuccessfulPayment;
     private _usersShared?: UsersShared;
@@ -7027,7 +7050,7 @@ export class GuestMessageUpdate {
     private _videoChatParticipantsInvited?: VideoChatParticipantsInvited;
     private _webAppData?: WebAppData;
     private _replyMarkup?: InlineKeyboardMarkup;
-    constructor(public raw: TelegramMessage, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramMessage, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique message identifier inside this chat; 0 for ephemeral messages. In specific instances (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
      */
@@ -7235,8 +7258,8 @@ export class GuestMessageUpdate {
     /**
      * Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
      */
-    get entities(): MessageEntity[] | undefined {
-        return this.raw.entities ? (this._entities ??= this.raw.entities.map(x => new MessageEntity(x))) : undefined;
+    get entities(): MessageEntities | undefined {
+        return this.raw.entities ? (this._entities ??= new MessageEntities(this.raw.entities)) : undefined;
     }
     /**
      * Optional. Options used for link preview generation for the message, if it is a text message and link preview options were changed
@@ -7343,8 +7366,8 @@ export class GuestMessageUpdate {
     /**
      * Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
      */
-    get captionEntities(): MessageEntity[] | undefined {
-        return this.raw.caption_entities ? (this._captionEntities ??= this.raw.caption_entities.map(x => new MessageEntity(x))) : undefined;
+    get captionEntities(): MessageEntities | undefined {
+        return this.raw.caption_entities ? (this._captionEntities ??= new MessageEntities(this.raw.caption_entities)) : undefined;
     }
     /**
      * Optional. True, if the caption must be shown above the message media or the widget
@@ -7481,8 +7504,8 @@ export class GuestMessageUpdate {
     /**
      * Optional. Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
      */
-    get pinnedMessage(): TelegramMaybeInaccessibleMessage | undefined {
-        return this.raw.pinned_message;
+    get pinnedMessage(): (MessageUpdate | TelegramInaccessibleMessage) | undefined {
+        return this.raw.pinned_message ? (this._pinnedMessage ??= this.raw.pinned_message.date === 0 ? this.raw.pinned_message : new MessageUpdate(this.raw.pinned_message, this.tg, this.update)) : undefined;
     }
     /**
      * Optional. Message is an invoice for a payment, information about the invoice. More about payments »
@@ -7971,7 +7994,7 @@ export class GuestMessageUpdate {
      * true if `entities` has at least one item
      */
     hasEntities(): this is this & {
-        entities: MessageEntity[];
+        entities: MessageEntities;
     } {
         return this.raw.entities != null && this.raw.entities.length > 0;
     }
@@ -8115,7 +8138,7 @@ export class GuestMessageUpdate {
      * true if `caption_entities` has at least one item
      */
     hasCaptionEntities(): this is this & {
-        captionEntities: MessageEntity[];
+        captionEntities: MessageEntities;
     } {
         return this.raw.caption_entities != null && this.raw.caption_entities.length > 0;
     }
@@ -8291,7 +8314,7 @@ export class GuestMessageUpdate {
      * true if `pinned_message` is set
      */
     hasPinnedMessage(): this is this & {
-        pinnedMessage: TelegramMaybeInaccessibleMessage;
+        pinnedMessage: MessageUpdate | TelegramInaccessibleMessage;
     } {
         return this.raw.pinned_message != null;
     }
@@ -8677,11 +8700,25 @@ export class GuestMessageUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `chat.id`
      */
     get chatId(): number {
         return this.raw.chat.id;
+    }
+    get attachment(): MessageAttachment | undefined {
+        return this.livePhoto ?? this.photo ?? this.contact ?? this.poll ?? this.venue ?? this.location ?? this.sticker ?? this.story ?? this.animation ?? this.audio ?? this.document ?? this.video ?? this.videoNote ?? this.voice;
+    }
+    hasAttachment(): this is Has<this, "attachment"> {
+        return this.attachment !== undefined;
+    }
+    hasAttachmentType<T extends MessageAttachment["attachmentType"]>(type: T): this is this & {
+        attachment: MessageAttachmentOf<T>;
+    } {
+        return this.attachment?.attachmentType === type;
     }
     /**
      * best-effort sender id: `from.id` → `sender_chat.id` → `chat.id`
@@ -8791,31 +8828,31 @@ export class GuestMessageUpdate {
         return this.raw.chat.type === "channel";
     }
     /**
-     * download the message attachment as a `Uint8Array`. returns `null` if the message has no media. auto-picks with priority `document > video > audio > voice > video_note > animation > live_photo > photo[largest] > sticker`
+     * download the message attachment as a `Uint8Array`. returns `null` if the message has no media. auto-picks with priority `animation > document > video > audio > voice > video_note > live_photo > photo[largest] > sticker`
      */
     download(): Promise<Uint8Array | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.download(t);
     }
     /**
      * download the message attachment as a node `Readable`. returns `null` if no media
      */
     downloadStream(): Promise<Readable | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.downloadStream(t);
     }
     /**
      * download the message attachment as an async-iterable byte stream. returns `null` if no media
      */
     downloadIterable(): Promise<AsyncIterable<Uint8Array> | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.downloadIterable(t);
     }
     /**
      * download the message attachment to disk. returns `null` if no media; otherwise resolves once the file is fully written
      */
     downloadToFile(path: string): Promise<void | null> {
-        const t = this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.animation ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
+        const t = this.raw.animation ?? this.raw.document ?? this.raw.video ?? this.raw.audio ?? this.raw.voice ?? this.raw.video_note ?? this.raw.live_photo ?? this.raw.photo ?? this.raw.sticker;
         return t == null ? Promise.resolve(null) : this.tg.downloadToFile(path, t).then(() => undefined as void | null);
     }
     /**
@@ -8839,8 +8876,8 @@ export class GuestMessageUpdate {
     /**
      * edit this message to rich content (build it with @puregram/rich)
      */
-    editRich(richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "rich_message" | "text">): Promise<TelegramMessage> {
-        return this.tg.api.editMessageText({ chat_id: this.raw.chat.id, message_id: this.raw.message_id, rich_message: richMessage, ...params });
+    editRich(richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "rich_message" | "text">): Promise<MessageUpdate | true> {
+        return this.tg.api.editMessageText({ chat_id: this.raw.chat.id, message_id: this.raw.message_id, rich_message: richMessage, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
@@ -8859,7 +8896,7 @@ export class GuestMessageUpdate {
      * thread-scoped shortcuts — auto-fill `message_thread_id` on every call. `undefined` when this message is not in a thread / forum topic
      */
     get thread(): MessageThreadShortcuts | undefined {
-        return this.raw.message_thread_id == null ? undefined : new MessageThreadShortcuts(this.raw, this.tg);
+        return this.raw.message_thread_id == null ? undefined : new MessageThreadShortcuts(this.raw, this.tg, this.update);
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("GuestMessageUpdate", this, depth, options, inspect);
@@ -8876,7 +8913,7 @@ export class MessageReactionUpdate {
     private _actorChat?: Chat;
     private _oldReaction?: Reactions;
     private _newReaction?: Reactions;
-    constructor(public raw: TelegramMessageReactionUpdated, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramMessageReactionUpdated, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * The chat containing the message the user reacted to
      */
@@ -8941,6 +8978,9 @@ export class MessageReactionUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * reactions present in `newReaction` but not in `oldReaction`
      */
@@ -8974,7 +9014,7 @@ export class MessageReactionCountUpdate {
     readonly kind = "message_reaction_count" as const;
     private _chat?: Chat;
     private _reactions?: ReactionCounts;
-    constructor(public raw: TelegramMessageReactionCountUpdated, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramMessageReactionCountUpdated, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * The chat containing the message
      */
@@ -9005,6 +9045,9 @@ export class MessageReactionCountUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
     }
@@ -9020,7 +9063,7 @@ export class InlineQueryUpdate {
     readonly kind = "inline_query" as const;
     private _from?: User;
     private _location?: Location;
-    constructor(public raw: TelegramInlineQuery, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramInlineQuery, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique identifier for this query
      */
@@ -9079,6 +9122,9 @@ export class InlineQueryUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `from.id` — uniform sender id across update kinds
      */
@@ -9115,7 +9161,7 @@ export class ChosenInlineResultUpdate {
     readonly kind = "chosen_inline_result" as const;
     private _from?: User;
     private _location?: Location;
-    constructor(public raw: TelegramChosenInlineResult, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramChosenInlineResult, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * The unique identifier for the result that was chosen
      */
@@ -9168,6 +9214,9 @@ export class ChosenInlineResultUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `from.id` — uniform sender id across update kinds
      */
@@ -9188,7 +9237,8 @@ export class ChosenInlineResultUpdate {
 export class CallbackQueryUpdate {
     readonly kind = "callback_query" as const;
     private _from?: User;
-    constructor(public raw: TelegramCallbackQuery, public readonly tg: TelegramLike) { }
+    private _message?: MessageUpdate | TelegramInaccessibleMessage;
+    constructor(public raw: TelegramCallbackQuery, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique identifier for this query
      */
@@ -9204,8 +9254,8 @@ export class CallbackQueryUpdate {
     /**
      * Optional. Message sent by the bot with the callback button that originated the query
      */
-    get message(): TelegramMaybeInaccessibleMessage | undefined {
-        return this.raw.message;
+    get message(): (MessageUpdate | TelegramInaccessibleMessage) | undefined {
+        return this.raw.message ? (this._message ??= this.raw.message.date === 0 ? this.raw.message : new MessageUpdate(this.raw.message, this.tg, this.update)) : undefined;
     }
     /**
      * Optional. Identifier of the message sent via the bot in inline mode, that originated the query
@@ -9235,7 +9285,7 @@ export class CallbackQueryUpdate {
      * true if `message` is set
      */
     hasMessage(): this is this & {
-        message: TelegramMaybeInaccessibleMessage;
+        message: MessageUpdate | TelegramInaccessibleMessage;
     } {
         return this.raw.message != null;
     }
@@ -9269,6 +9319,9 @@ export class CallbackQueryUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `message?.chat.id`
      */
@@ -9287,60 +9340,65 @@ export class CallbackQueryUpdate {
     get userId(): number {
         return this.raw.from.id;
     }
+    hasAccessibleMessage(): this is this & {
+        message: MessageUpdate;
+    } {
+        return this.raw.message != null && this.raw.message.date !== 0;
+    }
     /**
      * shortcut for `tg.api.editMessageText` on the message this callback query came from — auto-fills `chat_id` + `message_id`, or `inline_message_id` for inline-mode messages (those resolve `true` instead of the edited message)
      */
-    edit(text: string | Formattable, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "inline_message_id" | "text">): Promise<TelegramMessage | true> {
+    edit(text: string | Formattable, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "inline_message_id" | "text">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
         const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : m != null ? { chat_id: m.chat.id, message_id: m.message_id } : undefined;
         if (ref == null) {
             throw new TypeError("callback query carries neither message nor inline_message_id");
         }
-        return this.tg.api.editMessageText({ ...ref, text, ...params });
+        return this.tg.api.editMessageText({ ...ref, text, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageCaption` on the message this callback query came from — inline-mode edits resolve `true`
      */
-    editCaption(params?: Omit<EditMessageCaptionParams, "chat_id" | "message_id" | "inline_message_id">): Promise<TelegramMessage | true> {
+    editCaption(params?: Omit<EditMessageCaptionParams, "chat_id" | "message_id" | "inline_message_id">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
         const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : m != null ? { chat_id: m.chat.id, message_id: m.message_id } : undefined;
         if (ref == null) {
             throw new TypeError("callback query carries neither message nor inline_message_id");
         }
-        return this.tg.api.editMessageCaption({ ...ref, ...params });
+        return this.tg.api.editMessageCaption({ ...ref, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageMedia` on the message this callback query came from — inline-mode edits resolve `true`
      */
-    editMedia(media: EditMessageMediaParams["media"], params?: Omit<EditMessageMediaParams, "chat_id" | "message_id" | "inline_message_id" | "media">): Promise<TelegramMessage | true> {
+    editMedia(media: EditMessageMediaParams["media"], params?: Omit<EditMessageMediaParams, "chat_id" | "message_id" | "inline_message_id" | "media">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
         const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : m != null ? { chat_id: m.chat.id, message_id: m.message_id } : undefined;
         if (ref == null) {
             throw new TypeError("callback query carries neither message nor inline_message_id");
         }
-        return this.tg.api.editMessageMedia({ ...ref, media, ...params });
+        return this.tg.api.editMessageMedia({ ...ref, media, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageReplyMarkup` on the message this callback query came from — the pager pattern: swap the keyboard in place. inline-mode edits resolve `true`
      */
-    editReplyMarkup(params?: Omit<EditMessageReplyMarkupParams, "chat_id" | "message_id" | "inline_message_id">): Promise<TelegramMessage | true> {
+    editReplyMarkup(params?: Omit<EditMessageReplyMarkupParams, "chat_id" | "message_id" | "inline_message_id">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
         const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : m != null ? { chat_id: m.chat.id, message_id: m.message_id } : undefined;
         if (ref == null) {
             throw new TypeError("callback query carries neither message nor inline_message_id");
         }
-        return this.tg.api.editMessageReplyMarkup({ ...ref, ...params });
+        return this.tg.api.editMessageReplyMarkup({ ...ref, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * edit the message this callback query came from to rich content (build it with @puregram/rich) — inline-mode edits resolve `true`
      */
-    editRich(richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "inline_message_id" | "rich_message" | "text">): Promise<TelegramMessage | true> {
+    editRich(richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "inline_message_id" | "rich_message" | "text">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
         const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : m != null ? { chat_id: m.chat.id, message_id: m.message_id } : undefined;
         if (ref == null) {
             throw new TypeError("callback query carries neither message nor inline_message_id");
         }
-        return this.tg.api.editMessageText({ ...ref, rich_message: richMessage, ...params });
+        return this.tg.api.editMessageText({ ...ref, rich_message: richMessage, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.deleteMessage` on the message this callback query came from. throws for inline-mode messages — there is nothing to delete
@@ -9474,7 +9532,7 @@ export class CallbackQueryUpdate {
             animation: animation,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendAudio` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -9569,7 +9627,7 @@ export class CallbackQueryUpdate {
             audio: audio,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendContact` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -9653,7 +9711,7 @@ export class CallbackQueryUpdate {
             first_name: firstName,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDocument` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -9742,7 +9800,7 @@ export class CallbackQueryUpdate {
             document: document,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLivePhoto` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -9835,7 +9893,7 @@ export class CallbackQueryUpdate {
             photo: photo,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLocation` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -9925,7 +9983,7 @@ export class CallbackQueryUpdate {
             longitude: longitude,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessage` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10008,7 +10066,7 @@ export class CallbackQueryUpdate {
             text: text,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPhoto` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10097,7 +10155,7 @@ export class CallbackQueryUpdate {
             photo: photo,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10171,7 +10229,7 @@ export class CallbackQueryUpdate {
             rich_message: richMessage,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendSticker` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10248,7 +10306,7 @@ export class CallbackQueryUpdate {
             sticker: sticker,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVenue` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10346,7 +10404,7 @@ export class CallbackQueryUpdate {
             address: address,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideo` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10456,7 +10514,7 @@ export class CallbackQueryUpdate {
             video: video,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideoNote` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10539,7 +10597,7 @@ export class CallbackQueryUpdate {
             video_note: videoNote,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVoice` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10625,7 +10683,7 @@ export class CallbackQueryUpdate {
             voice: voice,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage` — pass `ephemeral: true` or `ephemeral_message_parameters` to send an ephemeral response; callback-only sends may omit the chat argument
@@ -10699,7 +10757,7 @@ export class CallbackQueryUpdate {
             rich_message: richMessage,
             ...params,
             ...callbackEphemeralParams(this.raw.id, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("CallbackQueryUpdate", this, depth, options, inspect);
@@ -10713,7 +10771,7 @@ export class WidgetQueryUpdate {
     readonly kind = "widget_query" as const;
     private _from?: User;
     private _chat?: Chat;
-    constructor(public raw: TelegramWidgetQuery, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramWidgetQuery, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique identifier for this query
      */
@@ -10820,6 +10878,9 @@ export class WidgetQueryUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     editWidgetData(params?: Omit<EditMessageWidgetDataParams, "chat_id" | "message_id" | "inline_message_id">): Promise<true> {
         const ref = this.raw.inline_message_id != null ? { inline_message_id: this.raw.inline_message_id } : this.raw.chat != null && this.raw.message_id != null ? { chat_id: this.raw.chat.id, message_id: this.raw.message_id } : undefined;
         if (ref == null) {
@@ -10858,7 +10919,7 @@ export class WidgetQueryUpdate {
 export class SharedWidgetQueryUpdate {
     readonly kind = "shared_widget_query" as const;
     private _from?: User;
-    constructor(public raw: TelegramSharedWidgetQuery, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramSharedWidgetQuery, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique identifier for this query
      */
@@ -10894,6 +10955,9 @@ export class SharedWidgetQueryUpdate {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     /**
      * shortcut for `from.id` — uniform sender id across update kinds
@@ -10950,7 +11014,7 @@ export class SharedWidgetQueryUpdate {
             widget_id: this.raw.widget_id,
             chat_id: chat,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("SharedWidgetQueryUpdate", this, depth, options, inspect);
@@ -10964,7 +11028,7 @@ export class ShippingQueryUpdate {
     readonly kind = "shipping_query" as const;
     private _from?: User;
     private _shippingAddress?: ShippingAddress;
-    constructor(public raw: TelegramShippingQuery, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramShippingQuery, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique query identifier
      */
@@ -10994,6 +11058,9 @@ export class ShippingQueryUpdate {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     /**
      * shortcut for `from.id` — uniform sender id across update kinds
@@ -11029,7 +11096,7 @@ export class PreCheckoutQueryUpdate {
     readonly kind = "pre_checkout_query" as const;
     private _from?: User;
     private _orderInfo?: OrderInfo;
-    constructor(public raw: TelegramPreCheckoutQuery, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramPreCheckoutQuery, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique query identifier
      */
@@ -11094,6 +11161,9 @@ export class PreCheckoutQueryUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `from.id` — uniform sender id across update kinds
      */
@@ -11126,7 +11196,7 @@ export class PreCheckoutQueryUpdate {
 export class PurchasedPaidMediaUpdate {
     readonly kind = "purchased_paid_media" as const;
     private _from?: User;
-    constructor(public raw: TelegramPaidMediaPurchased, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramPaidMediaPurchased, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * User who purchased the media
      */
@@ -11144,6 +11214,9 @@ export class PurchasedPaidMediaUpdate {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     /**
      * shortcut for `from.id` — uniform sender id across update kinds
@@ -11164,13 +11237,13 @@ export class PurchasedPaidMediaUpdate {
  */
 export class PollUpdate {
     readonly kind = "poll" as const;
-    private _questionEntities?: MessageEntity[];
+    private _questionEntities?: MessageEntities;
     private _options?: PollOptions;
-    private _explanationEntities?: MessageEntity[];
+    private _explanationEntities?: MessageEntities;
     private _explanationMedia?: PollMedia;
-    private _descriptionEntities?: MessageEntity[];
+    private _descriptionEntities?: MessageEntities;
     private _media?: PollMedia;
-    constructor(public raw: TelegramPoll, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramPoll, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique poll identifier
      */
@@ -11186,8 +11259,8 @@ export class PollUpdate {
     /**
      * Optional. Special entities that appear in the question. Currently, only custom emoji entities are allowed in poll questions
      */
-    get questionEntities(): MessageEntity[] | undefined {
-        return this.raw.question_entities ? (this._questionEntities ??= this.raw.question_entities.map(x => new MessageEntity(x))) : undefined;
+    get questionEntities(): MessageEntities | undefined {
+        return this.raw.question_entities ? (this._questionEntities ??= new MessageEntities(this.raw.question_entities)) : undefined;
     }
     /**
      * List of poll options
@@ -11258,8 +11331,8 @@ export class PollUpdate {
     /**
      * Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the explanation
      */
-    get explanationEntities(): MessageEntity[] | undefined {
-        return this.raw.explanation_entities ? (this._explanationEntities ??= this.raw.explanation_entities.map(x => new MessageEntity(x))) : undefined;
+    get explanationEntities(): MessageEntities | undefined {
+        return this.raw.explanation_entities ? (this._explanationEntities ??= new MessageEntities(this.raw.explanation_entities)) : undefined;
     }
     /**
      * Optional. Media added to the quiz explanation
@@ -11288,8 +11361,8 @@ export class PollUpdate {
     /**
      * Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the description
      */
-    get descriptionEntities(): MessageEntity[] | undefined {
-        return this.raw.description_entities ? (this._descriptionEntities ??= this.raw.description_entities.map(x => new MessageEntity(x))) : undefined;
+    get descriptionEntities(): MessageEntities | undefined {
+        return this.raw.description_entities ? (this._descriptionEntities ??= new MessageEntities(this.raw.description_entities)) : undefined;
     }
     /**
      * Optional. Media added to the poll description; for polls inside the Message object only
@@ -11301,7 +11374,7 @@ export class PollUpdate {
      * true if `question_entities` has at least one item
      */
     hasQuestionEntities(): this is this & {
-        questionEntities: MessageEntity[];
+        questionEntities: MessageEntities;
     } {
         return this.raw.question_entities != null && this.raw.question_entities.length > 0;
     }
@@ -11333,7 +11406,7 @@ export class PollUpdate {
      * true if `explanation_entities` has at least one item
      */
     hasExplanationEntities(): this is this & {
-        explanationEntities: MessageEntity[];
+        explanationEntities: MessageEntities;
     } {
         return this.raw.explanation_entities != null && this.raw.explanation_entities.length > 0;
     }
@@ -11373,7 +11446,7 @@ export class PollUpdate {
      * true if `description_entities` has at least one item
      */
     hasDescriptionEntities(): this is this & {
-        descriptionEntities: MessageEntity[];
+        descriptionEntities: MessageEntities;
     } {
         return this.raw.description_entities != null && this.raw.description_entities.length > 0;
     }
@@ -11391,6 +11464,9 @@ export class PollUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
     }
@@ -11406,7 +11482,7 @@ export class PollAnswerUpdate {
     readonly kind = "poll_answer" as const;
     private _voterChat?: Chat;
     private _user?: User;
-    constructor(public raw: TelegramPollAnswer, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramPollAnswer, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Unique poll identifier
      */
@@ -11459,6 +11535,9 @@ export class PollAnswerUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * best-effort sender id: `user.id` → `voter_chat.id`
      */
@@ -11483,7 +11562,7 @@ class ChatMemberUpdatedShared {
     private _oldChatMember?: ChatMember;
     private _newChatMember?: ChatMember;
     private _inviteLink?: ChatInviteLink;
-    constructor(public raw: TelegramChatMemberUpdated, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramChatMemberUpdated, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Chat the user belongs to
      */
@@ -11561,6 +11640,9 @@ class ChatMemberUpdatedShared {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     /**
      * shortcut for `old_chat_member.status`
@@ -11818,7 +11900,7 @@ class ChatMemberUpdatedShared {
     /**
      * shortcut for `tg.api.copyMessage`
      */
-    copy(from: number | string, messageId: number, params: {
+    copy(to: number | string, messageId: number, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -11837,8 +11919,8 @@ class ChatMemberUpdatedShared {
         };
     } = {}) {
         return this.tg.api.copyMessage({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
         });
@@ -11846,7 +11928,7 @@ class ChatMemberUpdatedShared {
     /**
      * shortcut for `tg.api.copyMessages`
      */
-    copyMany(from: number | string, messageIds: number[], params: {
+    copyMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
@@ -11854,8 +11936,8 @@ class ChatMemberUpdatedShared {
         remove_caption?: boolean;
     } = {}) {
         return this.tg.api.copyMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -12145,7 +12227,7 @@ class ChatMemberUpdatedShared {
         return this.tg.api.editMessageCaption({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageChecklist`
@@ -12161,7 +12243,7 @@ class ChatMemberUpdatedShared {
             message_id: messageId,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageLiveLocation`
@@ -12183,7 +12265,7 @@ class ChatMemberUpdatedShared {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageMedia`
@@ -12200,7 +12282,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageReplyMarkup`
@@ -12216,7 +12298,7 @@ class ChatMemberUpdatedShared {
         return this.tg.api.editMessageReplyMarkup({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageText`
@@ -12237,7 +12319,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageWidgetData`
@@ -12265,7 +12347,7 @@ class ChatMemberUpdatedShared {
     /**
      * shortcut for `tg.api.forwardMessage`
      */
-    forward(from: number | string, messageId: number, params: {
+    forward(to: number | string, messageId: number, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -12275,24 +12357,24 @@ class ChatMemberUpdatedShared {
         suggested_post_parameters?: TelegramSuggestedPostParameters;
     } = {}) {
         return this.tg.api.forwardMessage({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.forwardMessages`
      */
-    forwardMany(from: number | string, messageIds: number[], params: {
+    forwardMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
     } = {}) {
         return this.tg.api.forwardMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -12543,7 +12625,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             animation: animation,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendAudio`
@@ -12574,7 +12656,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             audio: audio,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendChatAction`
@@ -12606,7 +12688,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendContact`
@@ -12633,7 +12715,7 @@ class ChatMemberUpdatedShared {
             phone_number: phoneNumber,
             first_name: firstName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDice`
@@ -12656,7 +12738,7 @@ class ChatMemberUpdatedShared {
         return this.tg.api.sendDice({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDocument`
@@ -12685,7 +12767,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             document: document,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGame`
@@ -12706,7 +12788,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             game_short_name: gameShortName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGift`
@@ -12764,7 +12846,7 @@ class ChatMemberUpdatedShared {
         return this.tg.api.sendInvoice({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLivePhoto`
@@ -12794,7 +12876,7 @@ class ChatMemberUpdatedShared {
             live_photo: livePhoto,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLocation`
@@ -12823,7 +12905,7 @@ class ChatMemberUpdatedShared {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMediaGroup`
@@ -12842,7 +12924,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessage`
@@ -12869,7 +12951,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessageDraft`
@@ -12914,7 +12996,7 @@ class ChatMemberUpdatedShared {
             star_count: starCount,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPhoto`
@@ -12943,7 +13025,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPoll`
@@ -12988,7 +13070,7 @@ class ChatMemberUpdatedShared {
             question: question,
             options: options,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage`
@@ -13012,7 +13094,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -13052,7 +13134,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             widget_id: widgetId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendSticker`
@@ -13077,7 +13159,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             sticker: sticker,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVenue`
@@ -13108,7 +13190,7 @@ class ChatMemberUpdatedShared {
             title: title,
             address: address,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideo`
@@ -13144,7 +13226,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             video: video,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideoNote`
@@ -13171,7 +13253,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             video_note: videoNote,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVoice`
@@ -13199,7 +13281,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             voice: voice,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendWidget`
@@ -13208,7 +13290,7 @@ class ChatMemberUpdatedShared {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
             ...widgetSendParams(widget, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setChatAdministratorCustomTitle`
@@ -13311,7 +13393,7 @@ class ChatMemberUpdatedShared {
             user_id: user,
             score: score,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setMessageReaction`
@@ -13340,7 +13422,7 @@ class ChatMemberUpdatedShared {
         return this.tg.api.stopMessageLiveLocation({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.stopPoll`
@@ -13480,7 +13562,7 @@ class ChatMemberUpdatedShared {
             chat_id: this.raw.chat.id,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -13526,7 +13608,7 @@ export class ChatJoinRequestUpdate {
     private _chat?: Chat;
     private _from?: User;
     private _inviteLink?: ChatInviteLink;
-    constructor(public raw: TelegramChatJoinRequest, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramChatJoinRequest, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Chat to which the request was sent
      */
@@ -13598,6 +13680,9 @@ export class ChatJoinRequestUpdate {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     /**
      * approve this join request
@@ -13697,7 +13782,7 @@ export class ChatJoinRequestUpdate {
     /**
      * shortcut for `tg.api.copyMessage`
      */
-    copy(from: number | string, messageId: number, params: {
+    copy(to: number | string, messageId: number, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -13716,8 +13801,8 @@ export class ChatJoinRequestUpdate {
         };
     } = {}) {
         return this.tg.api.copyMessage({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
         });
@@ -13725,7 +13810,7 @@ export class ChatJoinRequestUpdate {
     /**
      * shortcut for `tg.api.copyMessages`
      */
-    copyMany(from: number | string, messageIds: number[], params: {
+    copyMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
@@ -13733,8 +13818,8 @@ export class ChatJoinRequestUpdate {
         remove_caption?: boolean;
     } = {}) {
         return this.tg.api.copyMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -14024,7 +14109,7 @@ export class ChatJoinRequestUpdate {
         return this.tg.api.editMessageCaption({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageChecklist`
@@ -14040,7 +14125,7 @@ export class ChatJoinRequestUpdate {
             message_id: messageId,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageLiveLocation`
@@ -14062,7 +14147,7 @@ export class ChatJoinRequestUpdate {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageMedia`
@@ -14079,7 +14164,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageReplyMarkup`
@@ -14095,7 +14180,7 @@ export class ChatJoinRequestUpdate {
         return this.tg.api.editMessageReplyMarkup({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageText`
@@ -14116,7 +14201,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageWidgetData`
@@ -14144,7 +14229,7 @@ export class ChatJoinRequestUpdate {
     /**
      * shortcut for `tg.api.forwardMessage`
      */
-    forward(from: number | string, messageId: number, params: {
+    forward(to: number | string, messageId: number, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -14154,24 +14239,24 @@ export class ChatJoinRequestUpdate {
         suggested_post_parameters?: TelegramSuggestedPostParameters;
     } = {}) {
         return this.tg.api.forwardMessage({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.forwardMessages`
      */
-    forwardMany(from: number | string, messageIds: number[], params: {
+    forwardMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
     } = {}) {
         return this.tg.api.forwardMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -14422,7 +14507,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             animation: animation,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendAudio`
@@ -14453,7 +14538,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             audio: audio,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendChatAction`
@@ -14495,7 +14580,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendContact`
@@ -14522,7 +14607,7 @@ export class ChatJoinRequestUpdate {
             phone_number: phoneNumber,
             first_name: firstName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDice`
@@ -14545,7 +14630,7 @@ export class ChatJoinRequestUpdate {
         return this.tg.api.sendDice({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDocument`
@@ -14574,7 +14659,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             document: document,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGame`
@@ -14595,7 +14680,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             game_short_name: gameShortName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGift`
@@ -14653,7 +14738,7 @@ export class ChatJoinRequestUpdate {
         return this.tg.api.sendInvoice({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLivePhoto`
@@ -14683,7 +14768,7 @@ export class ChatJoinRequestUpdate {
             live_photo: livePhoto,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLocation`
@@ -14712,7 +14797,7 @@ export class ChatJoinRequestUpdate {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMediaGroup`
@@ -14731,7 +14816,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessage`
@@ -14758,7 +14843,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessageDraft`
@@ -14803,7 +14888,7 @@ export class ChatJoinRequestUpdate {
             star_count: starCount,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPhoto`
@@ -14832,7 +14917,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPoll`
@@ -14877,7 +14962,7 @@ export class ChatJoinRequestUpdate {
             question: question,
             options: options,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage`
@@ -14901,7 +14986,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -14941,7 +15026,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             widget_id: widgetId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendSticker`
@@ -14966,7 +15051,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             sticker: sticker,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVenue`
@@ -14997,7 +15082,7 @@ export class ChatJoinRequestUpdate {
             title: title,
             address: address,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideo`
@@ -15033,7 +15118,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             video: video,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideoNote`
@@ -15060,7 +15145,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             video_note: videoNote,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVoice`
@@ -15088,7 +15173,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             voice: voice,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendWidget`
@@ -15097,7 +15182,7 @@ export class ChatJoinRequestUpdate {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
             ...widgetSendParams(widget, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setChatAdministratorCustomTitle`
@@ -15200,7 +15285,7 @@ export class ChatJoinRequestUpdate {
             user_id: user,
             score: score,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setMessageReaction`
@@ -15229,7 +15314,7 @@ export class ChatJoinRequestUpdate {
         return this.tg.api.stopMessageLiveLocation({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.stopPoll`
@@ -15369,7 +15454,7 @@ export class ChatJoinRequestUpdate {
             chat_id: this.raw.chat.id,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -15398,7 +15483,7 @@ export class ChatBoostUpdate {
     readonly kind = "chat_boost" as const;
     private _chat?: Chat;
     private _boost?: ChatBoost;
-    constructor(public raw: TelegramChatBoostUpdated, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramChatBoostUpdated, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Chat which was boosted
      */
@@ -15417,6 +15502,9 @@ export class ChatBoostUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
     }
@@ -15431,7 +15519,7 @@ export class ChatBoostUpdate {
 export class RemovedChatBoostUpdate {
     readonly kind = "removed_chat_boost" as const;
     private _chat?: Chat;
-    constructor(public raw: TelegramChatBoostRemoved, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramChatBoostRemoved, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Chat which was boosted
      */
@@ -15462,6 +15550,9 @@ export class RemovedChatBoostUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
     }
@@ -15477,7 +15568,7 @@ export class ManagedBotUpdate {
     readonly kind = "managed_bot" as const;
     private _user?: User;
     private _bot?: User;
-    constructor(public raw: TelegramManagedBotUpdated, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramManagedBotUpdated, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * User that created the bot
      */
@@ -15495,6 +15586,9 @@ export class ManagedBotUpdate {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     /**
      * shortcut for `user.id` — uniform sender id across update kinds
@@ -15516,7 +15610,7 @@ export class ManagedBotUpdate {
 export class SubscriptionUpdate {
     readonly kind = "subscription" as const;
     private _user?: User;
-    constructor(public raw: TelegramBotSubscriptionUpdated, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramBotSubscriptionUpdated, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * User who subscribed for payments toward the bot
      */
@@ -15541,6 +15635,9 @@ export class SubscriptionUpdate {
     get api(): TelegramLike["api"] {
         return this.tg.api;
     }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
+    }
     /**
      * shortcut for `user.id` — uniform sender id across update kinds
      */
@@ -15561,7 +15658,7 @@ export class SubscriptionUpdate {
 export class StoppedMessageGenerationUpdate {
     readonly kind = "stopped_message_generation" as const;
     private _chat?: Chat;
-    constructor(public raw: TelegramMessageGenerationStopped, public readonly tg: TelegramLike) { }
+    constructor(public raw: TelegramMessageGenerationStopped, public readonly tg: TelegramLike, public readonly update?: TelegramUpdate) { }
     /**
      * Chat in which the message is generated
      */
@@ -15594,6 +15691,9 @@ export class StoppedMessageGenerationUpdate {
      */
     get api(): TelegramLike["api"] {
         return this.tg.api;
+    }
+    get updateId(): number | undefined {
+        return this.update?.update_id;
     }
     is<K extends UpdateKind>(kind: K): this is UpdateKindMap[K] {
         return this.kind === kind as unknown;
@@ -15665,7 +15765,7 @@ export class StoppedMessageGenerationUpdate {
     /**
      * shortcut for `tg.api.copyMessage`
      */
-    copy(from: number | string, messageId: number, params: {
+    copy(to: number | string, messageId: number, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -15684,8 +15784,8 @@ export class StoppedMessageGenerationUpdate {
         };
     } = {}) {
         return this.tg.api.copyMessage({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
         });
@@ -15693,7 +15793,7 @@ export class StoppedMessageGenerationUpdate {
     /**
      * shortcut for `tg.api.copyMessages`
      */
-    copyMany(from: number | string, messageIds: number[], params: {
+    copyMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
@@ -15701,8 +15801,8 @@ export class StoppedMessageGenerationUpdate {
         remove_caption?: boolean;
     } = {}) {
         return this.tg.api.copyMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -15992,7 +16092,7 @@ export class StoppedMessageGenerationUpdate {
         return this.tg.api.editMessageCaption({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageChecklist`
@@ -16008,7 +16108,7 @@ export class StoppedMessageGenerationUpdate {
             message_id: messageId,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageLiveLocation`
@@ -16030,7 +16130,7 @@ export class StoppedMessageGenerationUpdate {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageMedia`
@@ -16047,7 +16147,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageReplyMarkup`
@@ -16063,7 +16163,7 @@ export class StoppedMessageGenerationUpdate {
         return this.tg.api.editMessageReplyMarkup({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageText`
@@ -16084,7 +16184,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.editMessageWidgetData`
@@ -16112,7 +16212,7 @@ export class StoppedMessageGenerationUpdate {
     /**
      * shortcut for `tg.api.forwardMessage`
      */
-    forward(from: number | string, messageId: number, params: {
+    forward(to: number | string, messageId: number, params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         video_start_timestamp?: number;
@@ -16122,24 +16222,24 @@ export class StoppedMessageGenerationUpdate {
         suggested_post_parameters?: TelegramSuggestedPostParameters;
     } = {}) {
         return this.tg.api.forwardMessage({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_id: messageId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.forwardMessages`
      */
-    forwardMany(from: number | string, messageIds: number[], params: {
+    forwardMany(to: number | string, messageIds: number[], params: {
         message_thread_id?: number;
         direct_messages_topic_id?: number;
         disable_notification?: boolean;
         protect_content?: boolean;
     } = {}) {
         return this.tg.api.forwardMessages({
-            chat_id: this.raw.chat.id,
-            from_chat_id: from,
+            from_chat_id: this.raw.chat.id,
+            chat_id: to,
             message_ids: messageIds,
             ...params
         });
@@ -16390,7 +16490,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             animation: animation,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendAudio`
@@ -16421,7 +16521,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             audio: audio,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendChatAction`
@@ -16453,7 +16553,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             checklist: checklist,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendContact`
@@ -16480,7 +16580,7 @@ export class StoppedMessageGenerationUpdate {
             phone_number: phoneNumber,
             first_name: firstName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDice`
@@ -16503,7 +16603,7 @@ export class StoppedMessageGenerationUpdate {
         return this.tg.api.sendDice({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendDocument`
@@ -16532,7 +16632,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             document: document,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGame`
@@ -16553,7 +16653,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             game_short_name: gameShortName,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendGift`
@@ -16611,7 +16711,7 @@ export class StoppedMessageGenerationUpdate {
         return this.tg.api.sendInvoice({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLivePhoto`
@@ -16641,7 +16741,7 @@ export class StoppedMessageGenerationUpdate {
             live_photo: livePhoto,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendLocation`
@@ -16670,7 +16770,7 @@ export class StoppedMessageGenerationUpdate {
             latitude: latitude,
             longitude: longitude,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMediaGroup`
@@ -16689,7 +16789,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessage`
@@ -16716,7 +16816,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             text: text,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendMessageDraft`
@@ -16761,7 +16861,7 @@ export class StoppedMessageGenerationUpdate {
             star_count: starCount,
             media: media,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPhoto`
@@ -16790,7 +16890,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             photo: photo,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendPoll`
@@ -16835,7 +16935,7 @@ export class StoppedMessageGenerationUpdate {
             question: question,
             options: options,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessage`
@@ -16859,7 +16959,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -16899,7 +16999,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             widget_id: widgetId,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendSticker`
@@ -16924,7 +17024,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             sticker: sticker,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVenue`
@@ -16955,7 +17055,7 @@ export class StoppedMessageGenerationUpdate {
             title: title,
             address: address,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideo`
@@ -16991,7 +17091,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             video: video,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVideoNote`
@@ -17018,7 +17118,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             video_note: videoNote,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendVoice`
@@ -17046,7 +17146,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             voice: voice,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendWidget`
@@ -17055,7 +17155,7 @@ export class StoppedMessageGenerationUpdate {
         return this.tg.api.sendWidget({
             chat_id: this.raw.chat.id,
             ...widgetSendParams(widget, params)
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setChatAdministratorCustomTitle`
@@ -17158,7 +17258,7 @@ export class StoppedMessageGenerationUpdate {
             user_id: user,
             score: score,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.setMessageReaction`
@@ -17187,7 +17287,7 @@ export class StoppedMessageGenerationUpdate {
         return this.tg.api.stopMessageLiveLocation({
             chat_id: this.raw.chat.id,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.stopPoll`
@@ -17327,7 +17427,7 @@ export class StoppedMessageGenerationUpdate {
             chat_id: this.raw.chat.id,
             rich_message: richMessage,
             ...params
-        });
+        }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
      * shortcut for `tg.api.sendRichMessageDraft`
@@ -17348,7 +17448,7 @@ export class StoppedMessageGenerationUpdate {
      * thread-scoped shortcuts — auto-fill `message_thread_id` on every call. `undefined` when this message is not in a thread / forum topic
      */
     get thread(): MessageGenerationStoppedThreadShortcuts | undefined {
-        return this.raw.message_thread_id == null ? undefined : new MessageGenerationStoppedThreadShortcuts(this.raw, this.tg);
+        return this.raw.message_thread_id == null ? undefined : new MessageGenerationStoppedThreadShortcuts(this.raw, this.tg, this.update);
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("StoppedMessageGenerationUpdate", this, depth, options, inspect);
@@ -17641,6 +17741,21 @@ export class PaidMessagesWaivedUpdate extends MessageShared {
 export class TonWalletTransferUpdate extends MessageShared {
     readonly kind = "ton_wallet_transfer" as const;
     private __brand!: never;
+}
+
+export type WrappedMessageResult<T> = T extends TelegramMessage[] ? MessageUpdate[] : T extends TelegramMessage ? MessageUpdate : T;
+
+function isRawMessage(result: unknown): result is TelegramMessage {
+    return result != null && typeof result === "object" && "message_id" in result && typeof result.message_id === "number" && "date" in result && typeof result.date === "number" && "chat" in result && result.chat != null && typeof result.chat === "object" && "id" in result.chat && typeof result.chat.id === "number";
+}
+
+export function wrapMessageResult<T>(result: T, tg: TelegramLike): WrappedMessageResult<T>;
+
+export function wrapMessageResult(result: unknown, tg: TelegramLike): unknown {
+    if (Array.isArray(result)) {
+        return result.length > 0 && result.every(isRawMessage) ? result.map(message => new MessageUpdate(message, tg)) : result;
+    }
+    return isRawMessage(result) ? new MessageUpdate(result, tg) : result;
 }
 
 export type UpdateKind = keyof UpdateKindMap;

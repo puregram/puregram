@@ -62,6 +62,10 @@ tg.onMessage((message) => {
 })
 ```
 
+`update.raw` is the payload for that kind. when telegram delivers an update, `update.update` is the full bot-api envelope and `update.updateId` reads its `update_id`. a `MessageUpdate` returned by a send shortcut has no incoming envelope or update id.
+
+`query.hasAccessibleMessage()` narrows a callback's `query.message` to a `MessageUpdate` you can reply to. an inaccessible message (`date === 0`) carries only its raw coordinates; an inline callback has no `message`.
+
 ## collection wrappers
 
 most `T[]` fields stay plain arrays. a handful surface as a **collection wrapper** instead — an object that iterates like the array it replaced, keeps the array on `.raw`, and adds the query you actually wanted:
@@ -88,6 +92,10 @@ tg.onMessageReaction((update) => {
 ```
 
 the wrapped element type is unchanged — iterating `Photo` yields `PhotoSize` instances, and `.raw` is still `TelegramPhotoSize[]`. `Reactions` is the exception: `ReactionType` is a bare union with no wrapper class, so iterating yields the raw entries
+
+`message.entities` and `message.captionEntities`, when present, are `MessageEntities` arrays of wrapped entities. use `.only(type)` to filter by entity type, or `.where(properties)` to match raw bot-api properties. for example, `message.entities?.only('pre').where({ language: 'ts' }).first` finds the first TypeScript code block. `.with(index, value)` is the native array replacement method, not a filter.
+
+`message.attachment` selects one wrapped attachment. use `message.hasAttachmentType('animation')` to narrow it; an animation takes precedence over its backwards-compatible `document` field.
 
 ## the class-per-kind model
 

@@ -5,9 +5,9 @@ description: buffer every message in a Telegram album and resolve with the full 
 
 # `collectMediaGroup`
 
-when a user sends an album, telegram delivers each photo/video as a separate `message` update that shares the same `media_group_id`. without buffering, your handler fires once per item — you'd have to manage the sliding-window logic yourself
+telegram delivers each album item as a separate update with the same `media_group_id`. `collectMediaGroup` buffers items for that id within one client, chat and business connection (if any). it resolves after a window of inactivity.
 
-`collectMediaGroup` handles that for you: it buffers incoming messages by `media_group_id` and resolves once a window of inactivity passes
+use it on messages, channel posts, business messages, their edited variants, or message-derived service updates. queries (including callback and widget queries) cannot collect albums, even if they refer to a message. guest messages are also excluded: their ids cannot address the guest chat through the bulk methods.
 
 ```ts
 tg.onMessage(async (message) => {
@@ -17,15 +17,22 @@ tg.onMessage(async (message) => {
 
   const all = await message.flow.collectMediaGroup()
 
-  await message.send(`got ${all.length} items in this album`)
+  if (all[0] === message) {
+    await message.send(`got ${all.length} items in this album`)
+  }
 })
 ```
 
-resolves immediately with `[message]` when `media_group_id` is absent — safe to call defensively without the `hasMediaGroupId()` guard
+each caller in the same window receives the same `CollectedMediaGroup`. it keeps the first update for each `message_id` in arrival order, so `all[0] === message` lets only the first item's handler act on the album. `.contexts` is the collection itself. without `media_group_id`, collection resolves immediately with just the source message.
+
+bulk operations send unique message ids in ascending order without reordering the collection. empty collections and collections mixing clients, chats or business connections are rejected before any request.
+
+- `await all.forward(destination)` and `await all.copy(destination)` return `TelegramMessageId[]`, not editable messages. both reject business albums because the bulk methods cannot specify a source business connection.
+- `await all.delete()` deletes the originals with `deleteMessages` for bot chats or `deleteBusinessMessages` for a business connection.
 
 ## the lower-level form
 
-`tg.flow.collectMediaGroup(message, options?)` takes the source message explicitly. use it when you have a `MessageUpdate` from somewhere other than the dispatcher:
+`tg.flow.collectMediaGroup(message, options?)` takes an eligible source update explicitly:
 
 ```ts
 const all = await tg.flow.collectMediaGroup(sourceMessage, { window: 500 })
@@ -33,7 +40,7 @@ const all = await tg.flow.collectMediaGroup(sourceMessage, { window: 500 })
 
 ## tuning the window
 
-the window is **sliding** — every newly-arriving album item resets the timer. the default is `1000` ms
+the window is **sliding**: each new `message_id` resets the timer; a duplicate does not. the default is `1000` ms
 
 you can change it at two levels:
 

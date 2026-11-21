@@ -219,7 +219,7 @@ interface FlowExtension {
   collectMediaGroup: (
     message: MessageUpdate,
     options?: CollectMediaGroupOptions
-  ) => Promise<MessageUpdate[]>
+  ) => Promise<CollectedMediaGroup>
 
   // register a persistent flow handler — required before opening any persistent prompt
   handle: <K extends keyof UpdateKindMap = 'message', T = UpdateKindMap[K]> (
@@ -236,6 +236,7 @@ interface FlowExtension {
 
 ```ts
 import type {
+  CollectedMediaGroup,           // array of messages with bulk forward, copy and delete
   CollectMediaGroupOptions,      // options for collectMediaGroup
   FlowExtension,                 // shape of tg.flow
   FlowHandleConfig,              // arg to flow.handle()

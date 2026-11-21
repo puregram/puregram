@@ -165,7 +165,7 @@ m.raw             // the raw TelegramMessage payload
 
 every structure has a `static fromPayload(raw)` factory and exposes `.raw` as escape hatch. nested-object getters are `??=`-cached so wrapper allocation is one-shot per access path. **the same classes are re-exported from `puregram`** — for most consumers, the `puregram` re-export is the right entry point
 
-a few `T[]` fields are handcrafted **collection wrappers** rather than plain arrays — iterable, array on `.raw`, plus the query the array made awkward:
+a few `T[]` fields have handcrafted **collection wrappers**. for example:
 
 ```ts
 message.photo?.biggest          // Photo    — also .smallest, .byMin(width)
@@ -175,16 +175,21 @@ update.reactions.total          // ReactionCounts — also .top, .countOf(emoji)
 poll.options.winner             // PollOptions — also .totalVotes, .byId(id)
 ```
 
+text, caption and poll entity arrays are `MessageEntities`. use `message.entities?.only('pre').where({ language: 'ts' })` to query by type and raw properties; `.toJSON()` returns the raw entities. indexing and native array methods, including `.with(index, replacement)`, still work.
+
 ### update classes ✦
 
 one class per bot-api update kind plus per derived service-event. `MessageUpdate`, `CallbackQueryUpdate`, `EditedMessageUpdate`, `InlineQueryUpdate`, `ChatMemberUpdate`, `NewChatMembersUpdate` (service event), …. every class is a discriminated subclass of the `AnyUpdate` union, with:
 
 - `kind` — literal-typed string discriminant (`'message'`, `'callback_query'`, …)
 - `raw` — the bot-api payload as-is
+- `update` / `updateId` — the original telegram update and its id, when supplied by the dispatcher
 - `is(kind)` — type predicate (`update.is('message')` narrows to `MessageUpdate`)
 - `hasX()` — codegen'd type predicates for optional fields (`update.hasText()`, `update.hasPhoto()`, …)
 - shortcut methods — `update.send(...)`, `update.edit(...)`, `update.delete()`, `update.answer(...)` etc, with `chat_id`/`message_id`/`callback_query_id` auto-filled from the payload
 - a custom `Symbol.for('nodejs.util.inspect.custom')` for readable `console.log` output
+
+`update.attachment` selects the primary attachment (live photo before its static photo; animation before its compatibility document). `hasAttachmentType('live_photo')` narrows it to `LivePhoto`. `callback.hasMessage()` only checks presence; use `callback.hasAccessibleMessage()` before calling `callback.message.reply(...)`.
 
 ```ts
 import type { MessageUpdate } from '@puregram/api'
@@ -217,6 +222,10 @@ function dispatch (update: AnyUpdate) {
 ### `tg.X` shortcut method types ✦
 
 `TelegramShortcuts` — the interface `puregram` core implements for the `tg.send(chat, text)` / `tg.sendPhoto(chat, photo)` / `tg.forward(...)` / etc convenience layer. one entry per shortcut, each with positional first args + optional params object
+
+`TELEGRAM_SHORTCUTS` is the generated runtime registration table, including chat actions and bulk forward/copy/delete methods. `sendWidget` is installed separately to encode widget state.
+
+message-returning shortcuts now resolve to `MessageUpdate` instead of a raw `TelegramMessage`: use `sent.id` and `sent.edit(...)`, or `sent.raw` for the original payload. raw methods such as `tg.api.sendMessage(...)` still return Bot API objects.
 
 ### service-event derivation map ✦
 

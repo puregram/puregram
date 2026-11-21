@@ -14,6 +14,7 @@ type InspectFn = (value: unknown, options: InspectOptionsStylized) => string
  * `PhotoSize` wrappers in payload order
  */
 export class Photo {
+  readonly attachmentType = 'photo'
   raw: TelegramPhotoSize[]
   // memo-cache convention shared with codegen'd structures
   // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -7,11 +7,12 @@
 import type { TelegramAnimation, TelegramAreaPosition, TelegramAudio, TelegramCallbackGame, TelegramChat, TelegramChatBackground, TelegramChatBoost, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatInviteLink, TelegramChatJoinRequest, TelegramChatLocation, TelegramChatMember, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChatPhoto, TelegramChatShareThemeBackdrop, TelegramChatShareThemeBackdrops, TelegramChatShared, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramContact, TelegramCopyTextButton, TelegramDice, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramDisabledButton, TelegramDocument, TelegramEncryptedCredentials, TelegramEncryptedPassportElement, TelegramExternalReplyInfo, TelegramFile, TelegramForumTopicClosed, TelegramForumTopicCreated, TelegramForumTopicEdited, TelegramForumTopicReopened, TelegramGame, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveaway, TelegramGiveawayCompleted, TelegramGiveawayCreated, TelegramGiveawayWinners, TelegramInlineKeyboardButton, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInvoice, TelegramLink, TelegramLinkPreviewOptions, TelegramLivePhoto, TelegramLocation, TelegramLoginUrl, TelegramManagedBotCreated, TelegramMaskPosition, TelegramMaybeInaccessibleMessage, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageId, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramOrderInfo, TelegramPaidMediaInfo, TelegramPaidMessagePriceChanged, TelegramPaidMessagesWaived, TelegramPassportData, TelegramPhotoSize, TelegramPoll, TelegramPollAnswer, TelegramPollMedia, TelegramPollOption, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramProximityAlertTriggered, TelegramReactionCount, TelegramReactionType, TelegramRefundedPayment, TelegramRichMessage, TelegramRichText, TelegramSharedUser, TelegramShippingAddress, TelegramShippingQuery, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramSuccessfulPayment, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostRefunded, TelegramSwitchInlineQueryChosenChat, TelegramTextQuote, TelegramTonNft, TelegramTonNftAttribute, TelegramTonWalletCard, TelegramTonWalletCardSticker, TelegramTonWalletTransfer, TelegramUniqueGift, TelegramUniqueGiftBackdropColors, TelegramUniqueGiftInfo, TelegramUser, TelegramUserProfilePhotos, TelegramUsersShared, TelegramVenue, TelegramVideo, TelegramVideoChatEnded, TelegramVideoChatParticipantsInvited, TelegramVideoChatScheduled, TelegramVideoChatStarted, TelegramVideoNote, TelegramVideoQuality, TelegramVoice, TelegramWebAppData, TelegramWebAppInfo, TelegramWidget, TelegramWidgetQueryWallet, TelegramWriteAccessAllowed } from "./types";
 import type { Has } from "../util-types";
 import { INSPECT, makeInspect } from "./inspect";
-import { Photo, PollOptions, ReactionCounts, Reactions, VideoQualities } from "../structures-handcrafted";
+import { Photo, MessageEntities, PollOptions, ReactionCounts, Reactions, VideoQualities } from "../structures-handcrafted";
 /**
  * This object represents an animation file (GIF or H.264/MPEG-4 AVC video without sound).
  */
 export class Animation {
+    readonly attachmentType = "animation";
     private _thumbnail?: PhotoSize | undefined;
     constructor(public raw: TelegramAnimation) { }
     static fromPayload(raw: TelegramAnimation): Animation {
@@ -164,6 +165,7 @@ export class AreaPosition {
  * This object represents an audio file to be treated as music by the Telegram clients.
  */
 export class Audio {
+    readonly attachmentType = "audio";
     private _thumbnail?: PhotoSize | undefined;
     constructor(public raw: TelegramAudio) { }
     static fromPayload(raw: TelegramAudio): Audio {
@@ -1317,6 +1319,7 @@ export class ChosenInlineResult {
  * This object represents a phone contact.
  */
 export class Contact {
+    readonly attachmentType = "contact";
     constructor(public raw: TelegramContact) { }
     static fromPayload(raw: TelegramContact): Contact {
         return new Contact(raw);
@@ -1415,6 +1418,7 @@ export class Dice {
  * This object represents a general file (as opposed to photos, voice messages and audio files).
  */
 export class Document {
+    readonly attachmentType = "document";
     private _thumbnail?: PhotoSize | undefined;
     constructor(public raw: TelegramDocument) { }
     static fromPayload(raw: TelegramDocument): Document {
@@ -2109,7 +2113,7 @@ export class ForumTopicEdited {
  */
 export class Game {
     private _photo?: Photo;
-    private _textEntities?: MessageEntity[] | undefined;
+    private _textEntities?: MessageEntities | undefined;
     private _animation?: Animation | undefined;
     constructor(public raw: TelegramGame) { }
     static fromPayload(raw: TelegramGame): Game {
@@ -2142,8 +2146,11 @@ export class Game {
     /**
      * Optional. Special entities that appear in text, such as usernames, URLs, bot commands, etc.
      */
-    get textEntities(): MessageEntity[] | undefined {
-        return this.raw.text_entities ? (this._textEntities ??= this.raw.text_entities.map(x => new MessageEntity(x))) : undefined;
+    get textEntities(): MessageEntities | undefined {
+        if (this._textEntities === undefined) {
+            this._textEntities = this.raw.text_entities ? new MessageEntities(this.raw.text_entities) : undefined;
+        }
+        return this._textEntities;
     }
     /**
      * Optional. Animation that will be displayed in the game message in chats. Upload via BotFather.
@@ -2166,7 +2173,7 @@ export class Game {
      * true if `text_entities` has at least one item
      */
     hasTextEntities(): this is this & {
-        textEntities: MessageEntity[];
+        textEntities: MessageEntities;
     } {
         return this.raw.text_entities != null && this.raw.text_entities.length > 0;
     }
@@ -2953,6 +2960,7 @@ export class LinkPreviewOptions {
  * This object represents a live photo.
  */
 export class LivePhoto {
+    readonly attachmentType = "live_photo";
     private _photo?: Photo | undefined;
     constructor(public raw: TelegramLivePhoto) { }
     static fromPayload(raw: TelegramLivePhoto): LivePhoto {
@@ -3042,6 +3050,7 @@ export class LivePhoto {
  * This object represents a point on the map.
  */
 export class Location {
+    readonly attachmentType = "location";
     constructor(public raw: TelegramLocation) { }
     static fromPayload(raw: TelegramLocation): Location {
         return new Location(raw);
@@ -3194,7 +3203,7 @@ export class Message {
     private _viaBot?: User | undefined;
     private _guestBotCallerUser?: User | undefined;
     private _guestBotCallerChat?: Chat | undefined;
-    private _entities?: MessageEntity[] | undefined;
+    private _entities?: MessageEntities | undefined;
     private _linkPreviewOptions?: LinkPreviewOptions | undefined;
     private _animation?: Animation | undefined;
     private _audio?: Audio | undefined;
@@ -3207,7 +3216,7 @@ export class Message {
     private _videoNote?: VideoNote | undefined;
     private _voice?: Voice | undefined;
     private _widget?: Widget | undefined;
-    private _captionEntities?: MessageEntity[] | undefined;
+    private _captionEntities?: MessageEntities | undefined;
     private _contact?: Contact | undefined;
     private _dice?: Dice | undefined;
     private _game?: Game | undefined;
@@ -3480,8 +3489,11 @@ export class Message {
     /**
      * Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
      */
-    get entities(): MessageEntity[] | undefined {
-        return this.raw.entities ? (this._entities ??= this.raw.entities.map(x => new MessageEntity(x))) : undefined;
+    get entities(): MessageEntities | undefined {
+        if (this._entities === undefined) {
+            this._entities = this.raw.entities ? new MessageEntities(this.raw.entities) : undefined;
+        }
+        return this._entities;
     }
     /**
      * Optional. Options used for link preview generation for the message, if it is a text message and link preview options were changed
@@ -3624,8 +3636,11 @@ export class Message {
     /**
      * Optional. For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
      */
-    get captionEntities(): MessageEntity[] | undefined {
-        return this.raw.caption_entities ? (this._captionEntities ??= this.raw.caption_entities.map(x => new MessageEntity(x))) : undefined;
+    get captionEntities(): MessageEntities | undefined {
+        if (this._captionEntities === undefined) {
+            this._captionEntities = this.raw.caption_entities ? new MessageEntities(this.raw.caption_entities) : undefined;
+        }
+        return this._captionEntities;
     }
     /**
      * Optional. True, if the caption must be shown above the message media or the widget
@@ -4340,7 +4355,7 @@ export class Message {
      * true if `entities` has at least one item
      */
     hasEntities(): this is this & {
-        entities: MessageEntity[];
+        entities: MessageEntities;
     } {
         return this.raw.entities != null && this.raw.entities.length > 0;
     }
@@ -4484,7 +4499,7 @@ export class Message {
      * true if `caption_entities` has at least one item
      */
     hasCaptionEntities(): this is this & {
-        captionEntities: MessageEntity[];
+        captionEntities: MessageEntities;
     } {
         return this.raw.caption_entities != null && this.raw.caption_entities.length > 0;
     }
@@ -5558,11 +5573,12 @@ export class PhotoSize {
  * This object contains information about a poll.
  */
 export class Poll {
-    private _questionEntities?: MessageEntity[] | undefined;
+    readonly attachmentType = "poll";
+    private _questionEntities?: MessageEntities | undefined;
     private _options?: PollOptions;
-    private _explanationEntities?: MessageEntity[] | undefined;
+    private _explanationEntities?: MessageEntities | undefined;
     private _explanationMedia?: PollMedia | undefined;
-    private _descriptionEntities?: MessageEntity[] | undefined;
+    private _descriptionEntities?: MessageEntities | undefined;
     private _media?: PollMedia | undefined;
     constructor(public raw: TelegramPoll) { }
     static fromPayload(raw: TelegramPoll): Poll {
@@ -5583,8 +5599,11 @@ export class Poll {
     /**
      * Optional. Special entities that appear in the question. Currently, only custom emoji entities are allowed in poll questions
      */
-    get questionEntities(): MessageEntity[] | undefined {
-        return this.raw.question_entities ? (this._questionEntities ??= this.raw.question_entities.map(x => new MessageEntity(x))) : undefined;
+    get questionEntities(): MessageEntities | undefined {
+        if (this._questionEntities === undefined) {
+            this._questionEntities = this.raw.question_entities ? new MessageEntities(this.raw.question_entities) : undefined;
+        }
+        return this._questionEntities;
     }
     /**
      * List of poll options
@@ -5655,8 +5674,11 @@ export class Poll {
     /**
      * Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the explanation
      */
-    get explanationEntities(): MessageEntity[] | undefined {
-        return this.raw.explanation_entities ? (this._explanationEntities ??= this.raw.explanation_entities.map(x => new MessageEntity(x))) : undefined;
+    get explanationEntities(): MessageEntities | undefined {
+        if (this._explanationEntities === undefined) {
+            this._explanationEntities = this.raw.explanation_entities ? new MessageEntities(this.raw.explanation_entities) : undefined;
+        }
+        return this._explanationEntities;
     }
     /**
      * Optional. Media added to the quiz explanation
@@ -5688,8 +5710,11 @@ export class Poll {
     /**
      * Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the description
      */
-    get descriptionEntities(): MessageEntity[] | undefined {
-        return this.raw.description_entities ? (this._descriptionEntities ??= this.raw.description_entities.map(x => new MessageEntity(x))) : undefined;
+    get descriptionEntities(): MessageEntities | undefined {
+        if (this._descriptionEntities === undefined) {
+            this._descriptionEntities = this.raw.description_entities ? new MessageEntities(this.raw.description_entities) : undefined;
+        }
+        return this._descriptionEntities;
     }
     /**
      * Optional. Media added to the poll description; for polls inside the Message object only
@@ -5704,7 +5729,7 @@ export class Poll {
      * true if `question_entities` has at least one item
      */
     hasQuestionEntities(): this is this & {
-        questionEntities: MessageEntity[];
+        questionEntities: MessageEntities;
     } {
         return this.raw.question_entities != null && this.raw.question_entities.length > 0;
     }
@@ -5736,7 +5761,7 @@ export class Poll {
      * true if `explanation_entities` has at least one item
      */
     hasExplanationEntities(): this is this & {
-        explanationEntities: MessageEntity[];
+        explanationEntities: MessageEntities;
     } {
         return this.raw.explanation_entities != null && this.raw.explanation_entities.length > 0;
     }
@@ -5776,7 +5801,7 @@ export class Poll {
      * true if `description_entities` has at least one item
      */
     hasDescriptionEntities(): this is this & {
-        descriptionEntities: MessageEntity[];
+        descriptionEntities: MessageEntities;
     } {
         return this.raw.description_entities != null && this.raw.description_entities.length > 0;
     }
@@ -6061,7 +6086,7 @@ export class PollMedia {
  * This object contains information about one answer option in a poll.
  */
 export class PollOption {
-    private _textEntities?: MessageEntity[] | undefined;
+    private _textEntities?: MessageEntities | undefined;
     private _media?: PollMedia | undefined;
     private _addedByUser?: User | undefined;
     private _addedByChat?: Chat | undefined;
@@ -6084,8 +6109,11 @@ export class PollOption {
     /**
      * Optional. Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts
      */
-    get textEntities(): MessageEntity[] | undefined {
-        return this.raw.text_entities ? (this._textEntities ??= this.raw.text_entities.map(x => new MessageEntity(x))) : undefined;
+    get textEntities(): MessageEntities | undefined {
+        if (this._textEntities === undefined) {
+            this._textEntities = this.raw.text_entities ? new MessageEntities(this.raw.text_entities) : undefined;
+        }
+        return this._textEntities;
     }
     /**
      * Optional. Media added to the poll option
@@ -6130,7 +6158,7 @@ export class PollOption {
      * true if `text_entities` has at least one item
      */
     hasTextEntities(): this is this & {
-        textEntities: MessageEntity[];
+        textEntities: MessageEntities;
     } {
         return this.raw.text_entities != null && this.raw.text_entities.length > 0;
     }
@@ -6397,6 +6425,7 @@ export class ShippingQuery {
  * This object represents a sticker.
  */
 export class Sticker {
+    readonly attachmentType = "sticker";
     private _thumbnail?: PhotoSize | undefined;
     private _premiumAnimation?: File | undefined;
     private _maskPosition?: MaskPosition | undefined;
@@ -6656,6 +6685,7 @@ export type CustomEmojiStickerSet = Omit<StickerSet, "stickerType"> & {
  * This object represents a story.
  */
 export class Story {
+    readonly attachmentType = "story";
     private _chat?: Chat;
     constructor(public raw: TelegramStory) { }
     static fromPayload(raw: TelegramStory): Story {
@@ -6783,7 +6813,7 @@ export class SuccessfulPayment {
  * This object contains information about the quoted part of a message that is replied to by the given message.
  */
 export class TextQuote {
-    private _entities?: MessageEntity[] | undefined;
+    private _entities?: MessageEntities | undefined;
     constructor(public raw: TelegramTextQuote) { }
     static fromPayload(raw: TelegramTextQuote): TextQuote {
         return new TextQuote(raw);
@@ -6797,8 +6827,11 @@ export class TextQuote {
     /**
      * Optional. Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities are kept in quotes.
      */
-    get entities(): MessageEntity[] | undefined {
-        return this.raw.entities ? (this._entities ??= this.raw.entities.map(x => new MessageEntity(x))) : undefined;
+    get entities(): MessageEntities | undefined {
+        if (this._entities === undefined) {
+            this._entities = this.raw.entities ? new MessageEntities(this.raw.entities) : undefined;
+        }
+        return this._entities;
     }
     /**
      * Optional. Rich text of the quote if it was chosen from a rich message. May contain only plain text, RichTextBold, RichTextItalic, RichTextUnderline, RichTextStrikethrough, RichTextSpoiler, RichTextSubscript, RichTextSuperscript, RichTextDateTime, RichTextCustomEmoji, RichTextMathematicalExpression, and arrays of them.
@@ -6822,7 +6855,7 @@ export class TextQuote {
      * true if `entities` has at least one item
      */
     hasEntities(): this is this & {
-        entities: MessageEntity[];
+        entities: MessageEntities;
     } {
         return this.raw.entities != null && this.raw.entities.length > 0;
     }
@@ -7360,6 +7393,7 @@ export class UsersShared {
  * This object represents a venue.
  */
 export class Venue {
+    readonly attachmentType = "venue";
     private _location?: Location;
     constructor(public raw: TelegramVenue) { }
     static fromPayload(raw: TelegramVenue): Venue {
@@ -7448,6 +7482,7 @@ export class Venue {
  * This object represents a video file.
  */
 export class Video {
+    readonly attachmentType = "video";
     private _thumbnail?: PhotoSize | undefined;
     private _cover?: Photo | undefined;
     private _qualities?: VideoQualities | undefined;
@@ -7659,6 +7694,7 @@ export class VideoChatScheduled {
  * This object represents a video message.
  */
 export class VideoNote {
+    readonly attachmentType = "video_note";
     private _thumbnail?: PhotoSize | undefined;
     constructor(public raw: TelegramVideoNote) { }
     static fromPayload(raw: TelegramVideoNote): VideoNote {
@@ -7785,6 +7821,7 @@ export class VideoQuality {
  * This object represents a voice note.
  */
 export class Voice {
+    readonly attachmentType = "voice";
     constructor(public raw: TelegramVoice) { }
     static fromPayload(raw: TelegramVoice): Voice {
         return new Voice(raw);

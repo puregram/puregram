@@ -102,7 +102,7 @@ async function handleBroadcast (
       try {
         await telegram.api.editMessageText({
           chat_id: progressMessage.chat.id,
-          message_id: progressMessage.message_id,
+          message_id: progressMessage.id,
           text: `broadcasting... ${done}/${total} (sent ${sent}, pruned ${removed}, failed ${failed})`
         })
       } catch {
@@ -112,7 +112,7 @@ async function handleBroadcast (
   }).then((final) => {
     return telegram.api.editMessageText({
       chat_id: progressMessage.chat.id,
-      message_id: progressMessage.message_id,
+      message_id: progressMessage.id,
       text:
         `✓ broadcast complete\n\n`
         + `sent: ${final.sent}/${final.total}\n`

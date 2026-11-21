@@ -4,76 +4,77 @@
 /// generated at: 2026-11-09T13:32:34.299Z
 /// see scripts/emit.ts in @puregram/api
 
-import type { TelegramInputFile, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPollOption, TelegramMessage, TelegramMessageId, TelegramReactionType } from "./types";
+import type { TelegramInputFile, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPollOption, TelegramMessageId, TelegramReactionType } from "./types";
 import type { BanChatMemberParams, CopyMessageParams, CopyMessagesParams, DeleteMessageParams, DeleteMessagesParams, ForwardMessageParams, ForwardMessagesParams, PinChatMessageParams, SendAnimationParams, SendAudioParams, SendChatActionParams, SendContactParams, SendDiceParams, SendDocumentParams, SendLivePhotoParams, SendLocationParams, SendMediaGroupParams, SendMessageParams, SendPhotoParams, SendPollParams, SendSharedWidgetParams, SendStickerParams, SendVenueParams, SendVideoNoteParams, SendVideoParams, SendVoiceParams, SetMessageReactionParams, UnbanChatMemberParams, UnpinChatMessageParams } from "./methods";
 import type { WidgetInput, WidgetSendOptions } from "../widget-like";
 import type { Formattable } from "../formattable";
+import type { MessageUpdate } from "./updates";
 export interface TelegramShortcuts {
     /**
      * Shortcut for `tg.api.sendMessage`. Use this method to send text messages. On success, the sent Message is returned.
      */
-    send(chat: number | string, text: string | Formattable, params?: Omit<SendMessageParams, "chat_id" | "text">): Promise<TelegramMessage>;
+    send(chat: number | string, text: string | Formattable, params?: Omit<SendMessageParams, "chat_id" | "text">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendPhoto`. Use this method to send photos. On success, the sent Message is returned.
      */
-    sendPhoto(chat: number | string, photo: TelegramInputFile | string, params?: Omit<SendPhotoParams, "chat_id" | "photo">): Promise<TelegramMessage>;
+    sendPhoto(chat: number | string, photo: TelegramInputFile | string, params?: Omit<SendPhotoParams, "chat_id" | "photo">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendAudio`. Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
      * For sending voice messages, use the sendVoice method instead.
      */
-    sendAudio(chat: number | string, audio: TelegramInputFile | string, params?: Omit<SendAudioParams, "chat_id" | "audio">): Promise<TelegramMessage>;
+    sendAudio(chat: number | string, audio: TelegramInputFile | string, params?: Omit<SendAudioParams, "chat_id" | "audio">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendDocument`. Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
      */
-    sendDocument(chat: number | string, document: TelegramInputFile | string, params?: Omit<SendDocumentParams, "chat_id" | "document">): Promise<TelegramMessage>;
+    sendDocument(chat: number | string, document: TelegramInputFile | string, params?: Omit<SendDocumentParams, "chat_id" | "document">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendVideo`. Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
      */
-    sendVideo(chat: number | string, video: TelegramInputFile | string, params?: Omit<SendVideoParams, "chat_id" | "video">): Promise<TelegramMessage>;
+    sendVideo(chat: number | string, video: TelegramInputFile | string, params?: Omit<SendVideoParams, "chat_id" | "video">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendAnimation`. Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
      */
-    sendAnimation(chat: number | string, animation: TelegramInputFile | string, params?: Omit<SendAnimationParams, "chat_id" | "animation">): Promise<TelegramMessage>;
+    sendAnimation(chat: number | string, animation: TelegramInputFile | string, params?: Omit<SendAnimationParams, "chat_id" | "animation">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendVoice`. Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
      */
-    sendVoice(chat: number | string, voice: TelegramInputFile | string, params?: Omit<SendVoiceParams, "chat_id" | "voice">): Promise<TelegramMessage>;
+    sendVoice(chat: number | string, voice: TelegramInputFile | string, params?: Omit<SendVoiceParams, "chat_id" | "voice">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendVideoNote`. Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success, the sent Message is returned.
      */
-    sendVideoNote(chat: number | string, videoNote: TelegramInputFile | string, params?: Omit<SendVideoNoteParams, "chat_id" | "video_note">): Promise<TelegramMessage>;
+    sendVideoNote(chat: number | string, videoNote: TelegramInputFile | string, params?: Omit<SendVideoNoteParams, "chat_id" | "video_note">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendLivePhoto`. Use this method to send live photos. On success, the sent Message is returned.
      */
-    sendLivePhoto(chat: number | string, livePhoto: TelegramInputFile | string, photo: TelegramInputFile | string, params?: Omit<SendLivePhotoParams, "chat_id" | "live_photo" | "photo">): Promise<TelegramMessage>;
+    sendLivePhoto(chat: number | string, livePhoto: TelegramInputFile | string, photo: TelegramInputFile | string, params?: Omit<SendLivePhotoParams, "chat_id" | "live_photo" | "photo">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendSticker`. Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
      */
-    sendSticker(chat: number | string, sticker: TelegramInputFile | string, params?: Omit<SendStickerParams, "chat_id" | "sticker">): Promise<TelegramMessage>;
+    sendSticker(chat: number | string, sticker: TelegramInputFile | string, params?: Omit<SendStickerParams, "chat_id" | "sticker">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendWidget`. Use this method to send a message with an HTML widget. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
      */
-    sendWidget<W extends WidgetInput>(chat: number | string, widget: W, params?: WidgetSendOptions<W>): Promise<TelegramMessage>;
+    sendWidget<W extends WidgetInput>(chat: number | string, widget: W, params?: WidgetSendOptions<W>): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendSharedWidget`. Use this method to send again a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
      */
-    sendSharedWidget(chat: number | string, widgetId: string, params?: Omit<SendSharedWidgetParams, "chat_id" | "widget_id">): Promise<TelegramMessage>;
+    sendSharedWidget(chat: number | string, widgetId: string, params?: Omit<SendSharedWidgetParams, "chat_id" | "widget_id">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendLocation`. Use this method to send point on the map. On success, the sent Message is returned.
      */
-    sendLocation(chat: number | string, latitude: number, longitude: number, params?: Omit<SendLocationParams, "chat_id" | "latitude" | "longitude">): Promise<TelegramMessage>;
+    sendLocation(chat: number | string, latitude: number, longitude: number, params?: Omit<SendLocationParams, "chat_id" | "latitude" | "longitude">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendVenue`. Use this method to send information about a venue. On success, the sent Message is returned.
      */
-    sendVenue(chat: number | string, latitude: number, longitude: number, title: string, address: string, params?: Omit<SendVenueParams, "chat_id" | "latitude" | "longitude" | "title" | "address">): Promise<TelegramMessage>;
+    sendVenue(chat: number | string, latitude: number, longitude: number, title: string, address: string, params?: Omit<SendVenueParams, "chat_id" | "latitude" | "longitude" | "title" | "address">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendContact`. Use this method to send phone contacts. On success, the sent Message is returned.
      */
-    sendContact(chat: number | string, phoneNumber: string, firstName: string, params?: Omit<SendContactParams, "chat_id" | "phone_number" | "first_name">): Promise<TelegramMessage>;
+    sendContact(chat: number | string, phoneNumber: string, firstName: string, params?: Omit<SendContactParams, "chat_id" | "phone_number" | "first_name">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendDice`. Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
      */
-    sendDice(chat: number | string, params?: Omit<SendDiceParams, "chat_id">): Promise<TelegramMessage>;
+    sendDice(chat: number | string, params?: Omit<SendDiceParams, "chat_id">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendChatAction`. Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
      * We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive.
@@ -82,15 +83,15 @@ export interface TelegramShortcuts {
     /**
      * Shortcut for `tg.api.sendPoll`. Use this method to send a native poll. On success, the sent Message is returned.
      */
-    sendPoll(chat: number | string, question: string | Formattable, options: TelegramInputPollOption[], params?: Omit<SendPollParams, "chat_id" | "question" | "options">): Promise<TelegramMessage>;
+    sendPoll(chat: number | string, question: string | Formattable, options: TelegramInputPollOption[], params?: Omit<SendPollParams, "chat_id" | "question" | "options">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.sendMediaGroup`. Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
      */
-    sendMediaGroup(chat: number | string, media: (TelegramInputMediaAudio | TelegramInputMediaDocument | TelegramInputMediaLivePhoto | TelegramInputMediaPhoto | TelegramInputMediaVideo)[], params?: Omit<SendMediaGroupParams, "chat_id" | "media">): Promise<TelegramMessage[]>;
+    sendMediaGroup(chat: number | string, media: (TelegramInputMediaAudio | TelegramInputMediaDocument | TelegramInputMediaLivePhoto | TelegramInputMediaPhoto | TelegramInputMediaVideo)[], params?: Omit<SendMediaGroupParams, "chat_id" | "media">): Promise<MessageUpdate[]>;
     /**
      * Shortcut for `tg.api.forwardMessage`. Use this method to forward messages of any kind. Service messages and messages with protected content can't be forwarded. On success, the sent Message is returned.
      */
-    forward(from: number | string, to: number | string, messageId: number, params?: Omit<ForwardMessageParams, "from_chat_id" | "chat_id" | "message_id">): Promise<TelegramMessage>;
+    forward(from: number | string, to: number | string, messageId: number, params?: Omit<ForwardMessageParams, "from_chat_id" | "chat_id" | "message_id">): Promise<MessageUpdate>;
     /**
      * Shortcut for `tg.api.forwardMessages`. Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an Array of MessageId of the sent messages is returned.
      */
@@ -136,3 +137,36 @@ export interface TelegramShortcuts {
      */
     react(chat: number | string, messageId: number, reactions: TelegramReactionType[], params?: Omit<SetMessageReactionParams, "chat_id" | "message_id" | "reaction">): Promise<true>;
 }
+
+export const TELEGRAM_SHORTCUTS = [
+    { verb: "send", method: "sendMessage", wrapsMessage: true, args: ["chat_id", "text"] },
+    { verb: "sendPhoto", method: "sendPhoto", wrapsMessage: true, args: ["chat_id", "photo"] },
+    { verb: "sendAudio", method: "sendAudio", wrapsMessage: true, args: ["chat_id", "audio"] },
+    { verb: "sendDocument", method: "sendDocument", wrapsMessage: true, args: ["chat_id", "document"] },
+    { verb: "sendVideo", method: "sendVideo", wrapsMessage: true, args: ["chat_id", "video"] },
+    { verb: "sendAnimation", method: "sendAnimation", wrapsMessage: true, args: ["chat_id", "animation"] },
+    { verb: "sendVoice", method: "sendVoice", wrapsMessage: true, args: ["chat_id", "voice"] },
+    { verb: "sendVideoNote", method: "sendVideoNote", wrapsMessage: true, args: ["chat_id", "video_note"] },
+    { verb: "sendLivePhoto", method: "sendLivePhoto", wrapsMessage: true, args: ["chat_id", "live_photo", "photo"] },
+    { verb: "sendSticker", method: "sendSticker", wrapsMessage: true, args: ["chat_id", "sticker"] },
+    { verb: "sendSharedWidget", method: "sendSharedWidget", wrapsMessage: true, args: ["chat_id", "widget_id"] },
+    { verb: "sendLocation", method: "sendLocation", wrapsMessage: true, args: ["chat_id", "latitude", "longitude"] },
+    { verb: "sendVenue", method: "sendVenue", wrapsMessage: true, args: ["chat_id", "latitude", "longitude", "title", "address"] },
+    { verb: "sendContact", method: "sendContact", wrapsMessage: true, args: ["chat_id", "phone_number", "first_name"] },
+    { verb: "sendDice", method: "sendDice", wrapsMessage: true, args: ["chat_id"] },
+    { verb: "sendChatAction", method: "sendChatAction", wrapsMessage: false, args: ["chat_id", "action"] },
+    { verb: "sendPoll", method: "sendPoll", wrapsMessage: true, args: ["chat_id", "question", "options"] },
+    { verb: "sendMediaGroup", method: "sendMediaGroup", wrapsMessage: true, args: ["chat_id", "media"] },
+    { verb: "forward", method: "forwardMessage", wrapsMessage: true, args: ["from_chat_id", "chat_id", "message_id"] },
+    { verb: "forwardMany", method: "forwardMessages", wrapsMessage: false, args: ["from_chat_id", "chat_id", "message_ids"] },
+    { verb: "copy", method: "copyMessage", wrapsMessage: false, args: ["from_chat_id", "chat_id", "message_id"] },
+    { verb: "copyMany", method: "copyMessages", wrapsMessage: false, args: ["from_chat_id", "chat_id", "message_ids"] },
+    { verb: "delete", method: "deleteMessage", wrapsMessage: false, args: ["chat_id", "message_id"] },
+    { verb: "deleteMany", method: "deleteMessages", wrapsMessage: false, args: ["chat_id", "message_ids"] },
+    { verb: "pin", method: "pinChatMessage", wrapsMessage: false, args: ["chat_id", "message_id"] },
+    { verb: "unpin", method: "unpinChatMessage", wrapsMessage: false, args: ["chat_id", "message_id"] },
+    { verb: "kick", method: "banChatMember", wrapsMessage: false, args: ["chat_id", "user_id"] },
+    { verb: "ban", method: "banChatMember", wrapsMessage: false, args: ["chat_id", "user_id"] },
+    { verb: "unban", method: "unbanChatMember", wrapsMessage: false, args: ["chat_id", "user_id"] },
+    { verb: "react", method: "setMessageReaction", wrapsMessage: false, args: ["chat_id", "message_id", "reaction"] }
+] as const;

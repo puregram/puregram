@@ -61,7 +61,7 @@ tg.command('counter', async (message) => {
   const sent = await message.sendWidget(Counter, {
     chat: { count: 0 }, allowQueries: true, caption: 'interactive counter'
   })
-  counts.set(`${message.chat.id}:${sent.message_id}`, 0)
+  counts.set(`${sent.chat.id}:${sent.id}`, 0)
 })
 
 tg.onWidgetQuery(Inc.filter, async (query) => {
@@ -212,8 +212,8 @@ send through the current message or client; `chat` and `public` are inferred fro
 
 | method | |
 |---|---|
-| `message.sendWidget(Counter, options?)` / `tg.sendWidget(chatId, Counter, options?)` | sends the widget with typed `chat` / `public` state, `allowQueries`, `shared`, and ordinary `sendWidget` parameters |
-| `sendShared(tg, chatId, widgetId, { chat?, ...sendSharedWidget params })` | another message of an existing shared widget, with its own chat state |
+| `message.sendWidget(Counter, options?)` / `tg.sendWidget(chatId, Counter, options?)` | sends the widget with typed `chat` / `public` state, `allowQueries`, `shared`, and ordinary `sendWidget` parameters; returns a `MessageUpdate` |
+| `sendShared(tg, chatId, widgetId, { chat?, ...sendSharedWidget params })` | sends another message of an existing shared widget with its own chat state; returns the raw `TelegramMessage` |
 | `content({ chat?, public?, allowQueries?, shared?, ...InputWidgetMessageContent fields })` | an `InputWidgetMessageContent` (`width`, `height`, `caption`, `parse_mode`, …) for an inline `article` result (refused on prod for now, see above) |
 | `sharedContent(widgetId, { chat?, ...InputSharedWidgetMessageContent fields })` | reuse an existing shared widget in an inline `article` (test server only) |
 | `editState(tg, target, { chat?, public? })` | `editMessageWidgetData`. `target` is `{ chat_id, message_id }`, `{ inline_message_id }` or a `WidgetQueryUpdate`. returns the API's `true` on success and `false` on `message is not modified`; every other error is rethrown. an empty edit can succeed without changing state |

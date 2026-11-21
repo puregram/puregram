@@ -110,10 +110,27 @@ export function hasWrapperClass (name: string, kind: SchemaObject['kind'] | unde
   return kind === 'object' || (kind === 'union' && UNION_WRAPPERS.has(name))
 }
 
+export const ATTACHMENT_TYPES: Record<string, string> = {
+  Animation: 'animation',
+  Audio: 'audio',
+  Contact: 'contact',
+  Document: 'document',
+  LivePhoto: 'live_photo',
+  Location: 'location',
+  Poll: 'poll',
+  Sticker: 'sticker',
+  Story: 'story',
+  Venue: 'venue',
+  Video: 'video',
+  VideoNote: 'video_note',
+  Voice: 'voice'
+}
+
 // synthetic collection wrappers — `T[]` fields emit as a handcrafted wrapper class
 // (e.g. `Photo` for `PhotoSize[]`). sources live in `packages/api/src/structures-handcrafted/`
 export const ARRAY_WRAPPER_FOR: Record<string, string> = {
   PhotoSize: 'Photo',
+  MessageEntity: 'MessageEntities',
   PollOption: 'PollOptions',
   ReactionCount: 'ReactionCounts',
   ReactionType: 'Reactions',

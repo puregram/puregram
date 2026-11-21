@@ -7,6 +7,7 @@ import { formatModule } from './format'
 import { detectWidenedMethodArgs, isRichMessageRef } from './formattable-detect'
 import { versionString } from './load-schema'
 import { analyzeShortcuts, analyzeThreadShortcuts, type BoundShortcut } from './shortcut-analyzer'
+import { wrapShortcutResult } from './shortcut-results'
 import { METHOD_POSITIONALS } from './shortcuts-config'
 import { ARRAY_WRAPPER_NAMES, arrayWrapperFor, hasWrapperClass, isWrappedStructure } from './structures-config'
 import { jsDoc, importTypeNamed, importNamed, typeRefToTs } from './ts-factory'
@@ -15,6 +16,7 @@ import { buildUpdateKinds, shortcutNameFor, type UpdateExtra, type UpdateKindSpe
 interface WrapperInfo {
   name: string
   isArray: boolean
+  inaccessible: boolean
 }
 
 export function verbFor (sc: BoundShortcut) {
@@ -128,13 +130,39 @@ export function emitUpdates (schema: Schema) {
     nodes.push(emitVariantSubclass(kind, baseName))
   }
 
+  if (kinds.some(kind => kind.className === 'MessageUpdate')) {
+    nodes.push(...parseStatements(`
+      export type WrappedMessageResult<T> =
+        T extends TelegramMessage[] ? MessageUpdate[] :
+        T extends TelegramMessage ? MessageUpdate : T;
+
+      function isRawMessage(result: unknown): result is TelegramMessage {
+        return result != null && typeof result === "object" &&
+          "message_id" in result && typeof result.message_id === "number" &&
+          "date" in result && typeof result.date === "number" &&
+          "chat" in result && result.chat != null && typeof result.chat === "object" &&
+          "id" in result.chat && typeof result.chat.id === "number";
+      }
+
+      export function wrapMessageResult<T>(result: T, tg: TelegramLike): WrappedMessageResult<T>;
+      export function wrapMessageResult(result: unknown, tg: TelegramLike): unknown {
+        if (Array.isArray(result)) {
+          return result.length > 0 && result.every(isRawMessage)
+            ? result.map(message => new MessageUpdate(message, tg))
+            : result;
+        }
+        return isRawMessage(result) ? new MessageUpdate(result, tg) : result;
+      }
+    `))
+  }
+
   nodes.push(emitUpdateKindUnion())
   nodes.push(emitUpdateKindMap(kinds))
   nodes.push(emitUpdateUnion(kinds))
   nodes.push(emitUpdateKindsConst(kinds))
   nodes.push(emitUpdateClassesConst(kinds))
 
-  const referencedTypes = new Set<string>()
+  const referencedTypes = new Set<string>(['TelegramUpdate'])
 
   for (const k of kinds) {
     referencedTypes.add(k.payloadType)
@@ -147,7 +175,13 @@ export function emitUpdates (schema: Schema) {
 
     if (obj?.kind === 'object') {
       for (const f of obj.fields) {
-        if (refToObjectClassName(f.type, objectsByName) !== undefined) {
+        const info = wrapperInfoFor(f.type, objectsByName)
+
+        if (info !== undefined) {
+          if (info.inaccessible) {
+            referencedTypes.add('TelegramInaccessibleMessage')
+          }
+
           continue
         }
 
@@ -258,6 +292,9 @@ export function emitUpdates (schema: Schema) {
     ...(usesRichLike ? [importTypeNamed(['RichLike'], '../rich-like')] : []),
     ...(usesWidget ? [importTypeNamed(['WidgetInput', 'WidgetSendOptions'], '../widget-like')] : []),
     ...(usesWidget ? [importNamed(['widgetSendParams'], '../widget-like')] : []),
+    ...(/\bMessageAttachment\b/.test(extrasText)
+      ? [importTypeNamed(['MessageAttachment', 'MessageAttachmentOf'], '../structures-handcrafted')]
+      : []),
     ...(wrappedNames.size > 0 ? [importNamed([...wrappedNames].sort(), './structures')] : []),
     ...(usedArrayWrappers.length > 0
       ? [importNamed(usedArrayWrappers, '../structures-handcrafted')]
@@ -303,44 +340,36 @@ function isWrappedObjectClass (objectsByName: Map<string, SchemaObject>, name: s
   return hasWrapperClass(name, objectsByName.get(name)?.kind)
 }
 
-function refToObjectClassName (ref: SchemaTypeRef, objectsByName: Map<string, SchemaObject>) {
-  if (ref.kind === 'reference' && isWrappedObjectClass(objectsByName, ref.name)) {
-    return ref.name
-  }
-
-  if (ref.kind === 'array' && ref.of.kind === 'reference' && isWrappedObjectClass(objectsByName, ref.of.name)) {
-    return ref.of.name
-  }
-
-  return undefined
-}
-
 // field type → wrapper-class output shape. handles synthetic collection wrappers
 // (PhotoSize[] → Photo, PhotoSize[][] → Photo[]); undefined for primitives and unwrapped refs
-function wrapperInfoFor (
+export function wrapperInfoFor (
   ref: SchemaTypeRef,
   objectsByName: Map<string, SchemaObject>
 ) {
+  if (ref.kind === 'reference' && ref.name === 'MaybeInaccessibleMessage') {
+    return { name: 'MessageUpdate', isArray: false, inaccessible: true }
+  }
+
   const directSynth = arrayWrapperFor(ref)
 
   if (directSynth) {
-    return { name: directSynth, isArray: false }
+    return { name: directSynth, isArray: false, inaccessible: false }
   }
 
   if (ref.kind === 'array') {
     const innerSynth = arrayWrapperFor(ref.of)
 
     if (innerSynth) {
-      return { name: innerSynth, isArray: true }
+      return { name: innerSynth, isArray: true, inaccessible: false }
     }
   }
 
   if (ref.kind === 'reference' && isWrappedObjectClass(objectsByName, ref.name)) {
-    return { name: ref.name, isArray: false }
+    return { name: ref.name, isArray: false, inaccessible: false }
   }
 
   if (ref.kind === 'array' && ref.of.kind === 'reference' && isWrappedObjectClass(objectsByName, ref.of.name)) {
-    return { name: ref.of.name, isArray: true }
+    return { name: ref.of.name, isArray: true, inaccessible: false }
   }
 
   return undefined
@@ -409,9 +438,7 @@ function buildPayloadMembers (
       const info = wrapperInfoFor(f.type, objectsByName)
 
       if (info) {
-        const memoType: ts.TypeNode = info.isArray
-          ? ts.factory.createArrayTypeNode(ts.factory.createTypeReferenceNode(info.name))
-          : ts.factory.createTypeReferenceNode(info.name)
+        const memoType = buildWrapperReturnType(info, false)
 
         members.push(ts.factory.createPropertyDeclaration(
           [ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)],
@@ -526,6 +553,17 @@ function emitConstructor (payloadType: string) {
         undefined,
         ts.factory.createTypeReferenceNode('TelegramLike'),
         undefined
+      ),
+      ts.factory.createParameterDeclaration(
+        [
+          ts.factory.createModifier(ts.SyntaxKind.PublicKeyword),
+          ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)
+        ],
+        undefined,
+        ts.factory.createIdentifier('update'),
+        ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+        ts.factory.createTypeReferenceNode('TelegramUpdate'),
+        undefined
       )
     ],
     ts.factory.createBlock([], false)
@@ -629,7 +667,7 @@ function emitSharedBase (
   const payloadObjectName = kind.payloadType.replace(/^Telegram/, '')
   const payloadObject = objectsByName.get(payloadObjectName)
 
-  const reservedNames = new Set<string>(['kind', 'raw', 'tg', 'is'])
+  const reservedNames = new Set<string>(['kind', 'raw', 'tg', 'update', 'is'])
 
   for (const sc of shortcuts) {
     reservedNames.add(verbFor(sc))
@@ -766,9 +804,7 @@ function emitUpdateClass (
       const info = wrapperInfoFor(f.type, objectsByName)
 
       if (info) {
-        const memoType: ts.TypeNode = info.isArray
-          ? ts.factory.createArrayTypeNode(ts.factory.createTypeReferenceNode(info.name))
-          : ts.factory.createTypeReferenceNode(info.name)
+        const memoType = buildWrapperReturnType(info, false)
 
         members.push(ts.factory.createPropertyDeclaration(
           [ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)],
@@ -781,39 +817,10 @@ function emitUpdateClass (
     }
   }
 
-  // `tg` stays `private` so each update class carries a TS class brand. without it,
-  // `AnyUpdate & MessageUpdate` structurally distributes across all 50 union members
-  // and `update.is('message')` blows up LSP (measured ~9s on one deferred check).
-  // tradeoff: `Modify<…>` drops the brand (Omit can't see private fields), so a modded
-  // handler arg passed into a function wanting the raw class needs an `AnyUpdate` cast
-  members.push(ts.factory.createConstructorDeclaration(
-    undefined,
-    [
-      ts.factory.createParameterDeclaration(
-        [ts.factory.createModifier(ts.SyntaxKind.PublicKeyword)],
-        undefined,
-        ts.factory.createIdentifier('raw'),
-        undefined,
-        ts.factory.createTypeReferenceNode(kind.payloadType),
-        undefined
-      ),
-      ts.factory.createParameterDeclaration(
-        [
-          ts.factory.createModifier(ts.SyntaxKind.PublicKeyword),
-          ts.factory.createModifier(ts.SyntaxKind.ReadonlyKeyword)
-        ],
-        undefined,
-        ts.factory.createIdentifier('tg'),
-        undefined,
-        ts.factory.createTypeReferenceNode('TelegramLike'),
-        undefined
-      )
-    ],
-    ts.factory.createBlock([], false)
-  ))
+  members.push(emitConstructor(kind.payloadType))
 
   // names already taken — suppresses schema-driven getters that would collide
-  const reservedNames = new Set<string>(['kind', 'raw', 'tg', 'is'])
+  const reservedNames = new Set<string>(['kind', 'raw', 'tg', 'update', 'is'])
 
   for (const sc of shortcuts) {
     reservedNames.add(verbFor(sc))
@@ -1065,9 +1072,12 @@ function parseParams (src: string) {
 }
 
 function buildWrapperReturnType (info: WrapperInfo, optional: boolean) {
-  const baseReturn: ts.TypeNode = info.isArray
-    ? ts.factory.createArrayTypeNode(ts.factory.createTypeReferenceNode(info.name))
-    : ts.factory.createTypeReferenceNode(info.name)
+  const wrapperType = ts.factory.createTypeReferenceNode(info.name)
+  const baseReturn: ts.TypeNode = info.inaccessible
+    ? ts.factory.createUnionTypeNode([wrapperType, ts.factory.createTypeReferenceNode('TelegramInaccessibleMessage')])
+    : info.isArray
+      ? ts.factory.createArrayTypeNode(wrapperType)
+      : wrapperType
 
   return optional
     ? ts.factory.createUnionTypeNode([
@@ -1160,9 +1170,7 @@ function emitAutoHasMethod (
 }
 
 function emitWrapperGetter (f: SchemaField, camelName: string, info: WrapperInfo) {
-  const baseReturn: ts.TypeNode = info.isArray
-    ? ts.factory.createArrayTypeNode(ts.factory.createTypeReferenceNode(info.name))
-    : ts.factory.createTypeReferenceNode(info.name)
+  const baseReturn = buildWrapperReturnType(info, false)
 
   const returnType: ts.TypeNode = f.required
     ? baseReturn
@@ -1176,7 +1184,7 @@ function emitWrapperGetter (f: SchemaField, camelName: string, info: WrapperInfo
     f.name
   )
 
-  const wrapExpr: ts.Expression = info.isArray
+  let wrapExpr: ts.Expression = info.isArray
     ? ts.factory.createCallExpression(
       ts.factory.createPropertyAccessExpression(rawAccess, 'map'),
       undefined,
@@ -1201,6 +1209,24 @@ function emitWrapperGetter (f: SchemaField, camelName: string, info: WrapperInfo
       undefined,
       [rawAccess]
     )
+
+  if (info.inaccessible) {
+    wrapExpr = ts.factory.createConditionalExpression(
+      ts.factory.createBinaryExpression(
+        ts.factory.createPropertyAccessExpression(rawAccess, 'date'),
+        ts.SyntaxKind.EqualsEqualsEqualsToken,
+        ts.factory.createNumericLiteral(0)
+      ),
+      undefined,
+      rawAccess,
+      undefined,
+      ts.factory.createNewExpression(ts.factory.createIdentifier('MessageUpdate'), undefined, [
+        rawAccess,
+        ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'tg'),
+        ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'update')
+      ])
+    )
+  }
 
   const memoAssign = ts.factory.createBinaryExpression(
     ts.factory.createPropertyAccessExpression(ts.factory.createThis(), `_${camelName}`),
@@ -1453,29 +1479,28 @@ function emitShortcutMethod (sc: BoundShortcut, widenedArgs: Map<string, Set<str
         )
       ]
 
+  const call = ts.factory.createCallExpression(
+    ts.factory.createPropertyAccessExpression(
+      ts.factory.createPropertyAccessExpression(
+        ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'tg'),
+        'api'
+      ),
+      sc.method
+    ),
+    undefined,
+    [
+      ts.factory.createObjectLiteralExpression([
+        ...filledProps,
+        ...positionalProps,
+        ...(!isWidget ? [ts.factory.createSpreadAssignment(ts.factory.createIdentifier('params'))] : []),
+        ...replyProps,
+        ...ephemeralProps
+      ], true)
+    ]
+  )
   const body = ts.factory.createBlock([
     ...twinStatements,
-    ts.factory.createReturnStatement(
-      ts.factory.createCallExpression(
-        ts.factory.createPropertyAccessExpression(
-          ts.factory.createPropertyAccessExpression(
-            ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'tg'),
-            'api'
-          ),
-          sc.method
-        ),
-        undefined,
-        [
-          ts.factory.createObjectLiteralExpression([
-            ...filledProps,
-            ...positionalProps,
-            ...(!isWidget ? [ts.factory.createSpreadAssignment(ts.factory.createIdentifier('params'))] : []),
-            ...replyProps,
-            ...ephemeralProps
-          ], true)
-        ]
-      )
-    )
+    ts.factory.createReturnStatement(wrapShortcutResult(call, sc.wrapsMessage))
   ], true)
 
   const positionalArgs = new Set(positionals.map(p => p.schemaArg))
@@ -1684,7 +1709,8 @@ function emitThreadGetter (companionName: string) {
           undefined,
           [
             ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'raw'),
-            ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'tg')
+            ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'tg'),
+            ts.factory.createPropertyAccessExpression(ts.factory.createThis(), 'update')
           ]
         )
       )

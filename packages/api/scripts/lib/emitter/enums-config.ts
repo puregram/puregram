@@ -11,7 +11,7 @@ export const ENUMS: EnumSpec[] = [
     source: {
       kind: 'literal',
       values: [
-        'animation', 'audio', 'contact', 'document', 'location', 'photo', 'poll',
+        'animation', 'audio', 'contact', 'document', 'live_photo', 'location', 'photo', 'poll',
         'sticker', 'story', 'venue', 'video_note', 'video', 'voice'
       ]
     }
