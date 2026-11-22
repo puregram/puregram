@@ -22,12 +22,15 @@ describe('interpolation into the 10.3 shapes', () => {
   })
 
   it('expands an expandable blockquote body and credit', () => {
-    const message = rich.html`<blockquote expandable>hi ${bold('world')}<cite>${'sage'}</cite></blockquote>`
+    const message = rich.html`<blockquote expandable>hi ${bold('world')}${rich.h2('heading')}<cite>${'sage'}</cite></blockquote>`
 
     expect(json(message.blocks)).not.toMatch(SENTINEL)
     expect(message.blocks).toEqual([{
       type: 'expandable_blockquote',
-      text: ['hi ', { type: 'bold', text: 'world' }],
+      blocks: [
+        { type: 'paragraph', text: ['hi ', { type: 'bold', text: 'world' }] },
+        { type: 'heading', text: 'heading', size: 2 }
+      ],
       credit: 'sage'
     }])
   })

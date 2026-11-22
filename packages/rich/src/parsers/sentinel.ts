@@ -298,13 +298,6 @@ function expandBlock (block: TelegramInputRichBlock, slots: readonly RichContent
     case 'mathematical_expression':
       return { ...block, expression: expandString(block.expression, slots) }
 
-    case 'expandable_blockquote':
-      return {
-        ...block,
-        text: expandText(block.text, slots),
-        ...(block.credit === undefined ? {} : { credit: expandText(block.credit, slots) })
-      }
-
     case 'buttons':
       return { ...block, buttons: block.buttons.map(button => expandButton(button, slots)) }
 
@@ -315,6 +308,7 @@ function expandBlock (block: TelegramInputRichBlock, slots: readonly RichContent
         ...(block.credit === undefined ? {} : { credit: expandText(block.credit, slots) })
       }
 
+    case 'expandable_blockquote':
     case 'blockquote':
       return {
         ...block,

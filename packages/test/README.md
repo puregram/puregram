@@ -345,7 +345,7 @@ without overrides, `@puregram/test` returns plausible auto-stubs:
 ### `env.onApi(method, reply, opts?)` — override with a happy reply
 
 ```ts
-env.onApi('getMe', { id: 7, is_bot: true, first_name: 'MyBot', username: 'my_bot' })
+env.onApi('getMe', { ...env.bot, id: 7, first_name: 'MyBot', username: 'my_bot' })
 
 env.onApi('getChatMember', { user: { id: 1, is_bot: false, first_name: 'A' }, status: 'member' })
 ```

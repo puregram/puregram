@@ -141,7 +141,7 @@ TON address and bank-card nodes have no dedicated HTML or Markdown syntax in the
 | `rich.paragraph(content)` | plain paragraph |
 | `rich.codeBlock(code, language?)` | preformatted; `code` is a raw string |
 | `rich.blockquote(content, credit?)` | nested blocks, optional credit line |
-| `rich.expandableBlockquote(content, credit?)` | collapsed-by-default quote; inline text, not nested blocks |
+| `rich.expandableBlockquote(content, credit?)` | collapsed-by-default quote containing nested blocks; inline content becomes a paragraph |
 | `rich.divider()` | horizontal rule |
 | `rich.list(items)` | unordered list; each item becomes its own block list |
 | `rich.orderedList(items, { start?, type? })` | `start` seeds numbering; `type` picks the label style: `'a' \| 'A' \| 'i' \| 'I' \| '1'` |

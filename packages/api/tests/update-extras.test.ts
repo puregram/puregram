@@ -178,7 +178,7 @@ describe('callback query edit family', () => {
     })
   })
 
-  it('edit falls back to inline_message_id for inline-mode messages', async () => {
+  it('edit uses inline_message_id when the callback has no message', async () => {
     const editMessageText = vi.fn().mockResolvedValue({})
 
     await inlineQuery({ editMessageText }).edit('next page')
@@ -201,7 +201,7 @@ describe('callback query edit family', () => {
     })
   })
 
-  it('delete targets the originating message and rejects inline-mode messages', async () => {
+  it('delete targets the originating message and rejects callbacks with only an inline id', async () => {
     const deleteMessage = vi.fn().mockResolvedValue(true)
 
     await chatQuery({ deleteMessage }).delete()

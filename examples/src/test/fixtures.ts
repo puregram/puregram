@@ -9,7 +9,7 @@ declare const expect: (value: unknown) => { toBe: (expected: unknown) => void }
 
 describe('fixture builders', () => {
   it('typed payloads with sensible defaults', async () => {
-    const tg = Telegram.fromToken('TEST', { bot: { id: 1, is_bot: true, first_name: 'bot', username: 'bot' } })
+    const tg = Telegram.fromToken('TEST')
     const env = createTestEnv(tg)
 
     // fixture builders return ready-to-inject raw payloads — override only what the test cares about

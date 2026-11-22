@@ -38,6 +38,19 @@ everything in `@puregram/api` is **deterministically codegen'd** from the offici
 
 new bot api versions are picked up by an automated watcher workflow that opens a PR with the regenerated schema + codegen — review the diff before merging, since handcrafted code occasionally needs touch-ups for breaking telegram changes
 
+### bot api 10.5
+
+`getMe()`, `tg.bot`, and the `bot` client option now use `TelegramBotFullInfo`. Settings
+previously returned only by `getMe()` are no longer part of `TelegramUser`. Use
+`tg.api.setMySettings()` to update bot settings, including `callback_query_mode`.
+
+With `auto` or `inline` callback delivery, a message sent directly by the bot can produce
+an `inline_message_id` instead of a `message`. Edit shortcuts handle both forms; guard
+access to `query.message` and other chat-scoped operations.
+
+Expandable rich blockquotes now carry `blocks`, not `text`. `WriteAccessAllowed.inviter`
+identifies the bot owner when they invited the user to the bot's private chat.
+
 ### bot api 10.4
 
 `10.4.0` includes widget methods and query updates, TON wallet and chat-share theme structures,
@@ -313,7 +326,7 @@ structural `{ text: string, entities?: readonly TelegramMessageEntity[] }` shape
 
 ### `TelegramLike`
 
-structural interface every `Telegram` instance satisfies, exposed without a circular dep on `puregram` core. plugins that don't need the full `Telegram<Ext>` type can take `TelegramLike` and stay loose. beyond `api` and the download / chat-action helpers it carries `bot: TelegramUser` — the bot's own identity, resolved via `getMe` (or the `bot` option) before dispatch starts, so `update.tg.bot` is always populated inside handlers
+structural interface every `Telegram` instance satisfies, exposed without a circular dep on `puregram` core. plugins that don't need the full `Telegram<Ext>` type can take `TelegramLike` and stay loose. beyond `api` and the download / chat-action helpers it carries `bot: TelegramBotFullInfo` — the bot's own identity, resolved via `getMe` (or the `bot` option) before dispatch starts, so `update.tg.bot` is always populated inside handlers
 
 shared download contracts return portable `Uint8Array` bytes, with `null` retained on helpers that can have no downloadable media. this includes update-level helpers and `TelegramLike.download`. the concrete Node client's `telegram.download(target)` still returns `Buffer`. Node code that needs Buffer-only methods should call that concrete client method or convert non-null helper results with `Buffer.from(bytes)`; shared wrappers no longer promise Node-only methods
 

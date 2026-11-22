@@ -37,16 +37,13 @@ describe('auto-stubs (no override)', () => {
 
     cleanup = () => env.shutdown()
 
-    const me = await tg.api.getMe() as {
-      id: number
-      is_bot: boolean
-      first_name: string
-      username: string
-    }
+    const me = await tg.api.getMe()
 
     expect(me.is_bot).toBe(true)
     expect(typeof me.id).toBe('number')
     expect(me.first_name).toBeTruthy()
+    expect(me.can_join_groups).toBe(true)
+    expect(me.has_topic_sidebar).toBe(false)
   })
 
   it('answerCallbackQuery returns true', async () => {

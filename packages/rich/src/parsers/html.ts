@@ -1469,23 +1469,10 @@ const buildFragment: (
 
       const { restEnd, credit } = splitCredit(source, span.start, span.innerEnd, host, opts)
 
-      // telegram's object docs spelled this attribute `collapsed` until bot api 10.3.2
-      if ('expandable' in attrs || 'collapsed' in attrs) {
-        return {
-          level: 'block',
-          value: {
-            type: 'expandable_blockquote',
-            text: trimText(host.inline(source.slice(span.start, restEnd))),
-            ...(credit === undefined ? {} : { credit })
-          },
-          end: span.end
-        }
-      }
-
       return {
         level: 'block',
         value: {
-          type: 'blockquote',
+          type: 'expandable' in attrs || 'collapsed' in attrs ? 'expandable_blockquote' : 'blockquote',
           blocks: host.blocks(source.slice(span.start, restEnd)),
           ...(credit === undefined ? {} : { credit })
         },

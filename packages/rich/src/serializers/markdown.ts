@@ -159,9 +159,10 @@ function serializeBlock (block: TelegramInputRichBlock): string {
         .join('\n>\n')
     }
     case 'expandable_blockquote': {
+      const inner = serializeMarkdownBlocks(block.blocks)
       const credit = block.credit === undefined ? '' : `<cite>${serializeMarkdownText(block.credit)}</cite>`
 
-      return `<blockquote expandable>${serializeMarkdownText(block.text)}${credit}</blockquote>`
+      return `<blockquote expandable>${inner}${credit}</blockquote>`
     }
     case 'pullquote': {
       const credit = block.credit === undefined ? '' : `<cite>${serializeMarkdownText(block.credit)}</cite>`

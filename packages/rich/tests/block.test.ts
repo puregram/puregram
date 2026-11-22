@@ -43,11 +43,14 @@ describe('blockquote / pullQuote', () => {
     })
   })
 
-  it('expandableBlockquote keeps inline text and an optional credit', () => {
-    expect(expandableBlockquote('q').emit()).toEqual({ type: 'expandable_blockquote', text: 'q' })
-    expect(expandableBlockquote('q', 'me').emit()).toEqual({
+  it('expandableBlockquote nests blocks and includes an optional credit', () => {
+    expect(expandableBlockquote('q').emit()).toEqual({
       type: 'expandable_blockquote',
-      text: 'q',
+      blocks: [{ type: 'paragraph', text: 'q' }]
+    })
+    expect(expandableBlockquote([h2('q'), paragraph('body')], 'me').emit()).toEqual({
+      type: 'expandable_blockquote',
+      blocks: [{ type: 'heading', text: 'q', size: 2 }, { type: 'paragraph', text: 'body' }],
       credit: 'me'
     })
     expect(expandableQuote).toBe(expandableBlockquote)

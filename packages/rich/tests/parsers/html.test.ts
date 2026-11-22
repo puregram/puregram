@@ -300,10 +300,10 @@ describe('block mappings', () => {
     })
   })
 
-  it('maps <blockquote expandable> to an expandable_blockquote with inline text', () => {
-    expect(firstBlock('<blockquote expandable>long<cite>sage</cite></blockquote>')).toEqual({
+  it('maps <blockquote expandable> to a quote with nested blocks', () => {
+    expect(firstBlock('<blockquote expandable><p>long</p><h2>heading</h2><cite>sage</cite></blockquote>')).toEqual({
       type: 'expandable_blockquote',
-      text: 'long',
+      blocks: [{ type: 'paragraph', text: 'long' }, { type: 'heading', text: 'heading', size: 2 }],
       credit: 'sage'
     })
   })
@@ -311,7 +311,7 @@ describe('block mappings', () => {
   it('accepts the collapsed spelling the object docs used before 10.3.2', () => {
     expect(firstBlock('<blockquote collapsed>long</blockquote>')).toEqual({
       type: 'expandable_blockquote',
-      text: 'long'
+      blocks: [{ type: 'paragraph', text: 'long' }]
     })
   })
 

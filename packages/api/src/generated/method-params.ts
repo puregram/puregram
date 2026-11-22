@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.4
+/// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-09T13:32:34.299Z
+/// generated at: 2026-11-22T09:57:50.115Z
 /// see scripts/emit.ts in @puregram/api
 
 export const METHOD_PARAMS: Record<string, readonly string[]> = {
@@ -173,6 +173,7 @@ export const METHOD_PARAMS: Record<string, readonly string[]> = {
     "setMyDescription": ["description", "language_code"],
     "setMyName": ["name", "language_code"],
     "setMyProfilePhoto": ["photo"],
+    "setMySettings": ["supports_inline_queries", "inline_query_placeholder", "needs_inline_query_location", "inline_feedback_share_denominator", "can_join_groups", "can_read_all_group_messages", "can_connect_to_business", "can_manage_bots", "supports_guest_queries", "supports_join_request_queries", "has_topics_enabled", "allows_users_to_create_topics", "has_topic_sidebar", "can_communicate_with_bots", "callback_query_mode"],
     "setMyShortDescription": ["short_description", "language_code"],
     "setPassportDataErrors": ["user_id", "errors"],
     "setStickerEmojiList": ["sticker", "emoji_list"],

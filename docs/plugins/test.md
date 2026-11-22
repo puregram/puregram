@@ -232,7 +232,7 @@ without overrides the env returns plausible auto-stubs:
 override a method's return value:
 
 ```ts
-env.onApi('getMe', { id: 7, is_bot: true, first_name: 'MyBot', username: 'my_bot' })
+env.onApi('getMe', { ...env.bot, id: 7, first_name: 'MyBot', username: 'my_bot' })
 ```
 
 `opts.times = 1` makes it one-shot — fires once, then falls back:

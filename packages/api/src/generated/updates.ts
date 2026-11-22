@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.4
+/// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-09T13:32:34.299Z
+/// generated at: 2026-11-22T09:57:50.115Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { Readable } from "node:stream";
@@ -2969,7 +2969,7 @@ class MessageShared {
         return this.raw.connected_website;
     }
     /**
-     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
+     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess, or the user was invited to the private chat with the bot by the owner of the bot
      */
     get writeAccessAllowed(): WriteAccessAllowed | undefined {
         return this.raw.write_access_allowed ? (this._writeAccessAllowed ??= new WriteAccessAllowed(this.raw.write_access_allowed)) : undefined;
@@ -7562,7 +7562,7 @@ export class GuestMessageUpdate {
         return this.raw.connected_website;
     }
     /**
-     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
+     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess, or the user was invited to the private chat with the bot by the owner of the bot
      */
     get writeAccessAllowed(): WriteAccessAllowed | undefined {
         return this.raw.write_access_allowed ? (this._writeAccessAllowed ??= new WriteAccessAllowed(this.raw.write_access_allowed)) : undefined;
@@ -9095,7 +9095,7 @@ export class InlineQueryUpdate {
         return this.raw.chat_type;
     }
     /**
-     * Optional. Sender location, only for bots that request user location
+     * Optional. Sender location, only for bots that enabled user location requests via @BotFather or using the parameter needs_inline_query_location of the method setMySettings
      */
     get location(): Location | undefined {
         return this.raw.location ? (this._location ??= new Location(this.raw.location)) : undefined;
@@ -9175,7 +9175,7 @@ export class ChosenInlineResultUpdate {
         return this._from ??= new User(this.raw.from);
     }
     /**
-     * Optional. Sender location, only for bots that require user location
+     * Optional. Sender location, only for bots that enabled user location requests via @BotFather or using the parameter needs_inline_query_location of the method setMySettings
      */
     get location(): Location | undefined {
         return this.raw.location ? (this._location ??= new Location(this.raw.location)) : undefined;
@@ -9258,7 +9258,7 @@ export class CallbackQueryUpdate {
         return this.raw.message ? (this._message ??= this.raw.message.date === 0 ? this.raw.message : new MessageUpdate(this.raw.message, this.tg, this.update)) : undefined;
     }
     /**
-     * Optional. Identifier of the message sent via the bot in inline mode, that originated the query
+     * Optional. Identifier of the message sent via the bot in inline mode, that originated the query. Can also be present for messages sent by the bot, depending on the parameter callback_query_mode of the method setMySettings.
      */
     get inlineMessageId(): string | undefined {
         return this.raw.inline_message_id;
@@ -9346,7 +9346,7 @@ export class CallbackQueryUpdate {
         return this.raw.message != null && this.raw.message.date !== 0;
     }
     /**
-     * shortcut for `tg.api.editMessageText` on the message this callback query came from — auto-fills `chat_id` + `message_id`, or `inline_message_id` for inline-mode messages (those resolve `true` instead of the edited message)
+     * shortcut for `tg.api.editMessageText` on the message this callback query came from — auto-fills `chat_id` + `message_id`, or `inline_message_id` when present (then resolves `true`)
      */
     edit(text: string | Formattable, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "inline_message_id" | "text">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
@@ -9357,7 +9357,7 @@ export class CallbackQueryUpdate {
         return this.tg.api.editMessageText({ ...ref, text, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
-     * shortcut for `tg.api.editMessageCaption` on the message this callback query came from — inline-mode edits resolve `true`
+     * shortcut for `tg.api.editMessageCaption` on the message this callback query came from — edits by `inline_message_id` resolve `true`
      */
     editCaption(params?: Omit<EditMessageCaptionParams, "chat_id" | "message_id" | "inline_message_id">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
@@ -9368,7 +9368,7 @@ export class CallbackQueryUpdate {
         return this.tg.api.editMessageCaption({ ...ref, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
-     * shortcut for `tg.api.editMessageMedia` on the message this callback query came from — inline-mode edits resolve `true`
+     * shortcut for `tg.api.editMessageMedia` on the message this callback query came from — edits by `inline_message_id` resolve `true`
      */
     editMedia(media: EditMessageMediaParams["media"], params?: Omit<EditMessageMediaParams, "chat_id" | "message_id" | "inline_message_id" | "media">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
@@ -9379,7 +9379,7 @@ export class CallbackQueryUpdate {
         return this.tg.api.editMessageMedia({ ...ref, media, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
-     * shortcut for `tg.api.editMessageReplyMarkup` on the message this callback query came from — the pager pattern: swap the keyboard in place. inline-mode edits resolve `true`
+     * shortcut for `tg.api.editMessageReplyMarkup` on the message this callback query came from — the pager pattern: swap the keyboard in place. edits by `inline_message_id` resolve `true`
      */
     editReplyMarkup(params?: Omit<EditMessageReplyMarkupParams, "chat_id" | "message_id" | "inline_message_id">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
@@ -9390,7 +9390,7 @@ export class CallbackQueryUpdate {
         return this.tg.api.editMessageReplyMarkup({ ...ref, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
-     * edit the message this callback query came from to rich content (build it with @puregram/rich) — inline-mode edits resolve `true`
+     * edit the message this callback query came from to rich content (build it with @puregram/rich) — edits by `inline_message_id` resolve `true`
      */
     editRich(richMessage: TelegramInputRichMessage | RichLike, params?: Omit<EditMessageTextParams, "chat_id" | "message_id" | "inline_message_id" | "rich_message" | "text">): Promise<MessageUpdate | true> {
         const m = this.raw.message;
@@ -9401,12 +9401,12 @@ export class CallbackQueryUpdate {
         return this.tg.api.editMessageText({ ...ref, rich_message: richMessage, ...params }).then(result => wrapMessageResult(result, this.tg));
     }
     /**
-     * shortcut for `tg.api.deleteMessage` on the message this callback query came from. throws for inline-mode messages — there is nothing to delete
+     * shortcut for `tg.api.deleteMessage` on the message this callback query came from. throws when the query carries only `inline_message_id`
      */
     delete(params?: Omit<DeleteMessageParams, "chat_id" | "message_id">): Promise<true> {
         const m = this.raw.message;
         if (m == null) {
-            throw new TypeError("cannot delete an inline-mode message \u2014 deleteMessage needs chat_id + message_id");
+            throw new TypeError("cannot delete using inline_message_id \u2014 deleteMessage needs chat_id + message_id");
         }
         return this.tg.api.deleteMessage({ chat_id: m.chat.id, message_id: m.message_id, ...params });
     }

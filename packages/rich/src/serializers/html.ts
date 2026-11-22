@@ -147,9 +147,12 @@ function serializeBlock (block: TelegramInputRichBlock): string {
       return `<blockquote>${inner}${credit}</blockquote>`
     }
     case 'expandable_blockquote': {
+      const inner = block.blocks.length === 1
+        ? block.blocks.map(containedBlock).join('')
+        : serializeHtmlBlocks(block.blocks)
       const credit = block.credit === undefined ? '' : `<cite>${serializeHtmlText(block.credit)}</cite>`
 
-      return `<blockquote expandable>${serializeHtmlText(block.text)}${credit}</blockquote>`
+      return `<blockquote expandable>${inner}${credit}</blockquote>`
     }
     case 'pullquote': {
       const credit = block.credit === undefined ? '' : `<cite>${serializeHtmlText(block.credit)}</cite>`

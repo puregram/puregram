@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.4
+/// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-09T13:32:34.299Z
+/// generated at: 2026-11-22T09:57:50.115Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { Formattable } from "../formattable";
@@ -471,6 +471,84 @@ export interface TelegramBotDescription {
 }
 
 /**
+ * This object contains full information about the bot itself.
+ */
+export interface TelegramBotFullInfo {
+    /**
+     * Unique identifier for this bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     */
+    id: number;
+    /**
+     * Always True
+     */
+    is_bot: true;
+    /**
+     * Bot's first name
+     */
+    first_name: string;
+    /**
+     * Optional. Bot's username
+     */
+    username?: string;
+    /**
+     * Optional. If non-empty, the list of all active usernames of the bot
+     */
+    active_usernames?: string[];
+    /**
+     * True, if the bot can be added to groups
+     */
+    can_join_groups: boolean;
+    /**
+     * True, if privacy mode is disabled for the bot
+     */
+    can_read_all_group_messages: boolean;
+    /**
+     * True, if the bot supports guest queries from chats it is not a member of
+     */
+    supports_guest_queries: boolean;
+    /**
+     * True, if the bot supports inline queries
+     */
+    supports_inline_queries: boolean;
+    /**
+     * Optional. Placeholder for inline queries, which is shown in the input field after the bot's username; omitted if the default placeholder is used
+     */
+    inline_query_placeholder?: string;
+    /**
+     * True, if the bot requests the location of the user with every inline query
+     */
+    needs_inline_query_location: boolean;
+    /**
+     * True, if the bot can be connected to a user account to manage it
+     */
+    can_connect_to_business: boolean;
+    /**
+     * True, if the bot has a main Web App
+     */
+    has_main_web_app: boolean;
+    /**
+     * True, if the bot has forum topic mode enabled in private chats
+     */
+    has_topics_enabled: boolean;
+    /**
+     * True, if the bot allows users to create and delete topics in private chats
+     */
+    allows_users_to_create_topics: boolean;
+    /**
+     * True, if topics in private chats with the bot are shown in a sidebar
+     */
+    has_topic_sidebar: boolean;
+    /**
+     * True, if other bots can be created to be controlled by the bot
+     */
+    can_manage_bots: boolean;
+    /**
+     * True, if the bot supports join request queries and can be assigned to process them
+     */
+    supports_join_request_queries: boolean;
+}
+
+/**
  * This object represents the bot's name.
  */
 export interface TelegramBotName {
@@ -685,7 +763,7 @@ export interface TelegramCallbackGame {
 }
 
 /**
- * This object represents an incoming callback query from a callback button in an inline keyboard. If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
+ * This object represents an incoming callback query from a callback button in an inline keyboard or in a rich message. If the button that originated the query belongs to a message sent by the bot, the field message will be present, unless the field inline_message_id is used instead as specified by the parameter callback_query_mode of the method setMySettings. If the button belongs to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
  */
 export interface TelegramCallbackQuery {
     /**
@@ -701,7 +779,7 @@ export interface TelegramCallbackQuery {
      */
     message?: TelegramMaybeInaccessibleMessage;
     /**
-     * Optional. Identifier of the message sent via the bot in inline mode, that originated the query
+     * Optional. Identifier of the message sent via the bot in inline mode, that originated the query. Can also be present for messages sent by the bot, depending on the parameter callback_query_mode of the method setMySettings.
      */
     inline_message_id?: string;
     /**
@@ -1902,7 +1980,7 @@ export interface TelegramChosenInlineResult {
      */
     from: TelegramUser;
     /**
-     * Optional. Sender location, only for bots that require user location
+     * Optional. Sender location, only for bots that enabled user location requests via @BotFather or using the parameter needs_inline_query_location of the method setMySettings
      */
     location?: TelegramLocation;
     /**
@@ -2848,7 +2926,7 @@ export interface TelegramInlineQuery {
      */
     chat_type?: "sender" | "private" | "group" | "supergroup" | "channel";
     /**
-     * Optional. Sender location, only for bots that request user location
+     * Optional. Sender location, only for bots that enabled user location requests via @BotFather or using the parameter needs_inline_query_location of the method setMySettings
      */
     location?: TelegramLocation;
 }
@@ -4799,7 +4877,7 @@ export interface TelegramInputRichBlockExpandableBlockQuotation {
     /**
      * Content of the block
      */
-    text: TelegramRichText;
+    blocks: TelegramInputRichBlock[];
     /**
      * Optional. Credit of the block
      */
@@ -5404,7 +5482,7 @@ export interface TelegramKeyboardButton {
      */
     request_chat?: TelegramKeyboardButtonRequestChat;
     /**
-     * Optional. If specified, pressing the button will ask the user to create and share a bot that will be managed by the current bot. Available for bots that enabled management of other bots in the @BotFather Mini App. Available in private chats only.
+     * Optional. If specified, pressing the button will ask the user to create and share a bot that will be managed by the current bot. Available for bots that enabled management of other bots in the @BotFather Mini App or using the parameter can_manage_bots of the method setMySettings. Available in private chats only.
      */
     request_managed_bot?: TelegramKeyboardButtonRequestManagedBot;
     /**
@@ -6139,7 +6217,7 @@ export interface TelegramMessage {
      */
     connected_website?: string;
     /**
-     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
+     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess, or the user was invited to the private chat with the bot by the owner of the bot
      */
     write_access_allowed?: TelegramWriteAccessAllowed;
     /**
@@ -7798,7 +7876,7 @@ export interface TelegramRichBlockExpandableBlockQuotation {
     /**
      * Content of the block
      */
-    text: TelegramRichText;
+    blocks: TelegramRichBlock[];
     /**
      * Optional. Credit of the block
      */
@@ -9789,7 +9867,7 @@ export interface TelegramUpdate {
      */
     inline_query?: TelegramInlineQuery;
     /**
-     * Optional. The result of an inline query that was chosen by a user and sent to their chat partner. Please see our documentation on the feedback collecting for details on how to enable these updates for your bot.
+     * Optional. The result of an inline query that was chosen by a user and sent to their chat partner. Please see our documentation on the feedback collecting for details on how to enable these updates for your bot. The updates can also be enabled using the parameter inline_feedback_share_denominator of the method setMySettings.
      */
     chosen_inline_result?: TelegramChosenInlineResult;
     /**
@@ -9894,46 +9972,6 @@ export interface TelegramUser {
      * Optional. True, if this user added the bot to the attachment menu
      */
     added_to_attachment_menu?: true;
-    /**
-     * Optional. True, if the bot can be invited to groups. Returned only in getMe.
-     */
-    can_join_groups?: boolean;
-    /**
-     * Optional. True, if privacy mode is disabled for the bot. Returned only in getMe.
-     */
-    can_read_all_group_messages?: boolean;
-    /**
-     * Optional. True, if the bot supports guest queries from chats it is not a member of. Returned only in getMe.
-     */
-    supports_guest_queries?: boolean;
-    /**
-     * Optional. True, if the bot supports inline queries. Returned only in getMe.
-     */
-    supports_inline_queries?: boolean;
-    /**
-     * Optional. True, if the bot can be connected to a user account to manage it. Returned only in getMe.
-     */
-    can_connect_to_business?: boolean;
-    /**
-     * Optional. True, if the bot has a main Web App. Returned only in getMe.
-     */
-    has_main_web_app?: boolean;
-    /**
-     * Optional. True, if the bot has forum topic mode enabled in private chats. Returned only in getMe.
-     */
-    has_topics_enabled?: boolean;
-    /**
-     * Optional. True, if the bot allows users to create and delete topics in private chats. Returned only in getMe.
-     */
-    allows_users_to_create_topics?: boolean;
-    /**
-     * Optional. True, if other bots can be created to be controlled by the bot. Returned only in getMe.
-     */
-    can_manage_bots?: boolean;
-    /**
-     * Optional. True, if the bot supports join request queries and can be assigned to process them. Returned only in getMe.
-     */
-    supports_join_request_queries?: boolean;
 }
 
 /**
@@ -10440,7 +10478,7 @@ export interface TelegramWidgetQueryWallet {
 }
 
 /**
- * This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.
+ * This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess, or about a user being invited to the private chat with the bot by the owner of the bot.
  */
 export interface TelegramWriteAccessAllowed {
     /**
@@ -10455,4 +10493,8 @@ export interface TelegramWriteAccessAllowed {
      * Optional. True, if the access was granted when the bot was added to the attachment or side menu
      */
     from_attachment_menu?: boolean;
+    /**
+     * Optional. The owner of the bot, if the access was granted when the owner invited the user to the private chat with the bot. Bot owners can invite up to 10 users at once by pressing the link https://t.me/botinvite/<bot_username>.
+     */
+    inviter?: TelegramUser;
 }

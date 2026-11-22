@@ -1,10 +1,10 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.4
+/// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-09T13:32:34.299Z
+/// generated at: 2026-11-22T09:57:50.115Z
 /// see scripts/emit.ts in @puregram/api
 
-import type { TelegramAcceptedGiftTypes, TelegramBotAccessSettings, TelegramBotCommand, TelegramBotCommandScope, TelegramBotDescription, TelegramBotName, TelegramBotShortDescription, TelegramBusinessConnection, TelegramChatAdministratorRights, TelegramChatFullInfo, TelegramChatInviteLink, TelegramChatMember, TelegramChatMemberAdministrator, TelegramChatMemberOwner, TelegramChatPermissions, TelegramChatShareThemeBackdrops, TelegramEphemeralMessageParameters, TelegramFile, TelegramForceReply, TelegramForumTopic, TelegramGameHighScore, TelegramGifts, TelegramInlineKeyboardMarkup, TelegramInlineQueryResult, TelegramInlineQueryResultsButton, TelegramInputChecklist, TelegramInputFile, TelegramInputMedia, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPaidMedia, TelegramInputPollMedia, TelegramInputPollOption, TelegramInputProfilePhoto, TelegramInputRichMessage, TelegramInputSticker, TelegramInputStoryContent, TelegramKeyboardButton, TelegramLabeledPrice, TelegramLinkPreviewOptions, TelegramMaskPosition, TelegramMenuButton, TelegramMessage, TelegramMessageEntity, TelegramMessageId, TelegramOwnedGifts, TelegramPassportElementError, TelegramPoll, TelegramPreparedInlineMessage, TelegramPreparedKeyboardButton, TelegramReactionType, TelegramReplyKeyboardMarkup, TelegramReplyKeyboardRemove, TelegramReplyParameters, TelegramSentGuestMessage, TelegramSentWebAppMessage, TelegramShippingOption, TelegramStarAmount, TelegramStarTransactions, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramStoryArea, TelegramSuggestedPostParameters, TelegramUniqueGift, TelegramUpdate, TelegramUser, TelegramUserChatBoosts, TelegramUserProfileAudios, TelegramUserProfilePhotos, TelegramWebhookInfo } from "./types";
+import type { TelegramAcceptedGiftTypes, TelegramBotAccessSettings, TelegramBotCommand, TelegramBotCommandScope, TelegramBotDescription, TelegramBotFullInfo, TelegramBotName, TelegramBotShortDescription, TelegramBusinessConnection, TelegramChatAdministratorRights, TelegramChatFullInfo, TelegramChatInviteLink, TelegramChatMember, TelegramChatMemberAdministrator, TelegramChatMemberOwner, TelegramChatPermissions, TelegramChatShareThemeBackdrops, TelegramEphemeralMessageParameters, TelegramFile, TelegramForceReply, TelegramForumTopic, TelegramGameHighScore, TelegramGifts, TelegramInlineKeyboardMarkup, TelegramInlineQueryResult, TelegramInlineQueryResultsButton, TelegramInputChecklist, TelegramInputFile, TelegramInputMedia, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPaidMedia, TelegramInputPollMedia, TelegramInputPollOption, TelegramInputProfilePhoto, TelegramInputRichMessage, TelegramInputSticker, TelegramInputStoryContent, TelegramKeyboardButton, TelegramLabeledPrice, TelegramLinkPreviewOptions, TelegramMaskPosition, TelegramMenuButton, TelegramMessage, TelegramMessageEntity, TelegramMessageId, TelegramOwnedGifts, TelegramPassportElementError, TelegramPoll, TelegramPreparedInlineMessage, TelegramPreparedKeyboardButton, TelegramReactionType, TelegramReplyKeyboardMarkup, TelegramReplyKeyboardRemove, TelegramReplyParameters, TelegramSentGuestMessage, TelegramSentWebAppMessage, TelegramShippingOption, TelegramStarAmount, TelegramStarTransactions, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramStoryArea, TelegramSuggestedPostParameters, TelegramUniqueGift, TelegramUpdate, TelegramUserChatBoosts, TelegramUserProfileAudios, TelegramUserProfilePhotos, TelegramWebhookInfo } from "./types";
 import type { Formattable } from "../formattable";
 import type { RichLike } from "../rich-like";
 /**
@@ -31,7 +31,7 @@ export interface AddStickerToSetParams {
 export type addStickerToSet = (params: AddStickerToSetParams) => Promise<true>;
 
 /**
- * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+ * Use this method to send answers to callback queries sent from inline keyboards or rich messages. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
  */
 export interface AnswerCallbackQueryParams {
     /**
@@ -57,7 +57,7 @@ export interface AnswerCallbackQueryParams {
 }
 
 /**
- * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+ * Use this method to send answers to callback queries sent from inline keyboards or rich messages. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
  */
 export type answerCallbackQuery = (params: AnswerCallbackQueryParams) => Promise<true>;
 
@@ -2103,9 +2103,9 @@ export interface GetManagedBotTokenParams {
 export type getManagedBotToken = (params: GetManagedBotTokenParams) => Promise<string>;
 
 /**
- * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
+ * A simple method for testing your bot's authentication token. Requires no parameters. Returns information about the bot in form of a BotFullInfo object.
  */
-export type getMe = () => Promise<TelegramUser>;
+export type getMe = () => Promise<TelegramBotFullInfo>;
 
 /**
  * Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
@@ -5514,6 +5514,77 @@ export interface SetMyProfilePhotoParams {
  * Changes the profile photo of the bot. Returns True on success.
  */
 export type setMyProfilePhoto = (params: SetMyProfilePhotoParams) => Promise<true>;
+
+/**
+ * Use this method to change settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
+ */
+export interface SetMySettingsParams {
+    /**
+     * Pass True to enable inline mode for the bot or False to disable it
+     */
+    supports_inline_queries?: boolean;
+    /**
+     * New placeholder for inline queries, which is shown in the input field after the bot's username. Pass an empty string to use the default placeholder.
+     */
+    inline_query_placeholder?: string;
+    /**
+     * Pass True to request the location of the user with every inline query to the bot or False to stop requesting it
+     */
+    needs_inline_query_location?: boolean;
+    /**
+     * Denominator of the share of chosen inline results received by the bot; the bot receives 1 out of inline_feedback_share_denominator chosen results. Must be one of 1, 10, 100, or 1000. Pass 0 to stop receiving chosen inline results.
+     */
+    inline_feedback_share_denominator?: number;
+    /**
+     * Pass True to allow adding the bot to groups or False to disallow it
+     */
+    can_join_groups?: boolean;
+    /**
+     * Pass True to disable privacy mode for the bot or False to enable it
+     */
+    can_read_all_group_messages?: boolean;
+    /**
+     * Pass True to allow connecting the bot to user accounts to manage them or False to disallow it
+     */
+    can_connect_to_business?: boolean;
+    /**
+     * Pass True to allow creating other bots that will be controlled by the bot or False to disallow it
+     */
+    can_manage_bots?: boolean;
+    /**
+     * Pass True to allow guest queries to the bot from chats it isn't a member of or False to disallow them
+     */
+    supports_guest_queries?: boolean;
+    /**
+     * Pass True to allow assigning the bot to process join request queries or False to disallow it
+     */
+    supports_join_request_queries?: boolean;
+    /**
+     * Pass True to enable forum topic mode in private chats with the bot or False to disable it
+     */
+    has_topics_enabled?: boolean;
+    /**
+     * Pass True to allow users to create and delete topics in private chats with the bot or False to disallow it
+     */
+    allows_users_to_create_topics?: boolean;
+    /**
+     * Pass True to show topics in private chats with the bot in a sidebar or False to stop showing them in a sidebar
+     */
+    has_topic_sidebar?: boolean;
+    /**
+     * Pass True to allow the bot to communicate with other bots in groups, private chats, and through business accounts or False to disallow it
+     */
+    can_communicate_with_bots?: boolean;
+    /**
+     * Mode in which the bot receives callback queries from buttons in messages sent by the bot. Must be one of “default” (the field message is always used and contains an InaccessibleMessage if the message is inaccessible to the bot), “auto” (the field inline_message_id is used instead of the field message if the message is inaccessible to the bot; the field message can still contain an inaccessible message if the message has just been deleted), or “inline” (the field inline_message_id is always used instead of the field message).
+     */
+    callback_query_mode?: "default" | "auto" | "inline";
+}
+
+/**
+ * Use this method to change settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
+ */
+export type setMySettings = (params: SetMySettingsParams) => Promise<true>;
 
 /**
  * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success.

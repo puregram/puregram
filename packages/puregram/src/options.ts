@@ -1,4 +1,4 @@
-import type { AnswerCallbackQueryParams, TelegramUser } from '@puregram/api'
+import type { AnswerCallbackQueryParams, TelegramBotFullInfo } from '@puregram/api'
 
 import type { DefaultParams } from './api/default-params'
 import type { HttpClient } from './http/client'
@@ -27,7 +27,7 @@ export interface TelegramOptions {
   token: string
   httpClient?: HttpClient
   /** pre-populate `tg.bot` and skip the start-time getMe call */
-  bot?: TelegramUser
+  bot?: TelegramBotFullInfo
   /** update kinds to subscribe to, or `'auto'` to derive the minimal set from registered handlers */
   allowedUpdates?: string[] | 'auto'
   apiBaseUrl?: string
@@ -69,7 +69,7 @@ export interface TelegramOptions {
 
 export interface ResolvedTelegramOptions extends Required<Omit<TelegramOptions, 'httpClient' | 'bot' | 'retryOnFloodWait' | 'swallowDispatchErrors'>> {
   httpClient: HttpClient | undefined
-  bot?: TelegramUser
+  bot?: TelegramBotFullInfo
   retryOnFloodWait: boolean | RetryOnFloodWaitOptions
   swallowDispatchErrors: boolean
 }

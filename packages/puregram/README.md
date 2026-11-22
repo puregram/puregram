@@ -738,7 +738,7 @@ a few accessors keep the same name across kinds, so cross-kind code never juggle
 - text and caption entities are array-compatible `MessageEntities` collections, with chainable `.only('pre').where({ language: 'js' })`, `.except(...)`, `.without(...)`, `.atOffset(...)`, and `.has(...)` queries
 - `message.startPayload` — the deep-link payload after `/start` (`t.me/<bot>?start=ref-42` → `'ref-42'`), grounded in the `bot_command` entity telegram parsed — plain text that merely looks like a command never matches, and a `/start@other_bot` addressed to a different bot yields `undefined`. `filters.start` gates handlers on /start too, but is regex-based and mention-agnostic by design
 
-callback queries also carry the message-scoped edit family — `edit`, `editCaption`, `editMedia`, `editReplyMarkup`, `editRich`, `delete` — auto-filling `chat_id` + `message_id` from the originating message, or `inline_message_id` for inline-mode messages (those resolve `true` instead of the edited message; `delete` throws for them). the pager pattern in one call:
+callback queries also carry the message-scoped edit family — `edit`, `editCaption`, `editMedia`, `editReplyMarkup`, `editRich`, `delete`. Edits use `chat_id` + `message_id` from the originating message, or `inline_message_id` when the query carries one. Edits by `inline_message_id` resolve to `true`, and `delete` requires a `message`. Since bot api 10.5, `tg.api.setMySettings({ callback_query_mode: 'inline' })` can request inline IDs even for messages sent directly by the bot. the pager pattern in one call:
 
 ```ts
 telegram.onCallbackQuery(async (query) => {

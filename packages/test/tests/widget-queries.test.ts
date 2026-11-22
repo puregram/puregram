@@ -5,9 +5,10 @@ import { session } from '@puregram/session'
 import { Telegram, type SharedWidgetQueryUpdate, type WidgetQueryUpdate } from 'puregram'
 import { afterEach, describe, expect, it } from 'vitest'
 
+import { defaultBotIdentity } from '../src/actors/identity'
 import { buildSharedWidgetQuery, buildUpdate, buildWidgetQuery, createTestEnv } from '../src'
 
-const BOT = { id: 1, is_bot: true, first_name: 'bot', username: 'testbot' }
+const BOT = defaultBotIdentity()
 
 describe('widget queries', () => {
   let cleanup: (() => Promise<void>) | undefined

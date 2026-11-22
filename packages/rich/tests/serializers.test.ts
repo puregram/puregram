@@ -354,13 +354,19 @@ describe('serializeBlocks', () => {
     expect(serializeBlocks(blocks, 'html')).toBe('<blockquote>one<br>two<cite>sage</cite></blockquote>')
   })
 
-  it('serializes an expandable blockquote through the html tag in both dialects', () => {
-    const blocks: TelegramInputRichBlock[] = [
-      { type: 'expandable_blockquote', text: 'long', credit: 'sage' }
-    ]
+  it('round-trips nested expandable blockquotes in both dialects', () => {
+    const blocks: TelegramInputRichBlock[] = [{
+      type: 'expandable_blockquote',
+      blocks: [
+        { type: 'paragraph', text: 'long' },
+        { type: 'heading', text: 'more', size: 2 },
+        { type: 'paragraph', text: 'end' }
+      ],
+      credit: 'sage'
+    }]
 
-    expect(serializeBlocks(blocks, 'html')).toBe('<blockquote expandable>long<cite>sage</cite></blockquote>')
-    expect(serializeBlocks(blocks, 'markdown')).toBe('<blockquote expandable>long<cite>sage</cite></blockquote>')
+    expect(parseHtml(serializeBlocks(blocks, 'html'))).toEqual(blocks)
+    expect(parseMarkdown(serializeBlocks(blocks, 'markdown'))).toEqual(blocks)
   })
 
   it('serializes a document block and its caption', () => {

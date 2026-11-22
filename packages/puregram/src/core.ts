@@ -1,7 +1,7 @@
 import type {
   Filter, GetBusinessAccountGiftsParams, GetChatGiftsParams, GetUserGiftsParams,
-  MessageUpdate, TelegramDispatchers, TelegramEphemeralMessageParameters,
-  TelegramShortcuts, TelegramUser
+  MessageUpdate, TelegramBotFullInfo, TelegramDispatchers, TelegramEphemeralMessageParameters,
+  TelegramShortcuts
 } from '@puregram/api'
 import { and, CallbackQueryUpdate, defineFilter, isFilter, METHOD_PARAMS } from '@puregram/api'
 
@@ -38,7 +38,7 @@ export interface TelegramCore<Ext = unknown> extends TelegramShortcuts, Telegram
 
 export abstract class TelegramCore<Ext = unknown> {
   readonly api: TelegramApi
-  bot!: TelegramUser
+  bot!: TelegramBotFullInfo
 
   protected readonly hooks = new HookRegistry()
   protected readonly dispatcher = new Dispatcher()

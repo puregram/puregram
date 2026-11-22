@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.4
+/// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-09T13:32:34.299Z
+/// generated at: 2026-11-22T09:57:50.115Z
 /// see scripts/emit.ts in @puregram/api
 
 import * as api from "./methods";
@@ -13,7 +13,7 @@ export interface ApiMethods {
      */
     addStickerToSet: api.addStickerToSet;
     /**
-     * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+     * Use this method to send answers to callback queries sent from inline keyboards or rich messages. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#answercallbackquery)
      */
@@ -481,7 +481,7 @@ export interface ApiMethods {
      */
     getManagedBotToken: api.getManagedBotToken;
     /**
-     * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
+     * A simple method for testing your bot's authentication token. Requires no parameters. Returns information about the bot in form of a BotFullInfo object.
      *
      * [bot api docs](https://core.telegram.org/bots/api#getme)
      */
@@ -1016,6 +1016,12 @@ export interface ApiMethods {
      * [bot api docs](https://core.telegram.org/bots/api#setmyprofilephoto)
      */
     setMyProfilePhoto: api.setMyProfilePhoto;
+    /**
+     * Use this method to change settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
+     *
+     * [bot api docs](https://core.telegram.org/bots/api#setmysettings)
+     */
+    setMySettings: api.setMySettings;
     /**
      * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success.
      *

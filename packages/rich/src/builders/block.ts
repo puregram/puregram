@@ -50,7 +50,7 @@ export function blockquote (content: RichContent, credit?: RichContent) {
 export function expandableBlockquote (content: RichContent, credit?: RichContent) {
   return makeNode('block', () => ({
     type: 'expandable_blockquote',
-    text: emitText(content),
+    blocks: emitBlocks(content),
     ...(credit === undefined ? {} : { credit: emitText(credit) })
   }))
 }

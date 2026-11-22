@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
-/// Bot API 10.4
+/// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-09T13:32:34.299Z
+/// generated at: 2026-11-22T09:57:50.115Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { TelegramAnimation, TelegramAreaPosition, TelegramAudio, TelegramCallbackGame, TelegramChat, TelegramChatBackground, TelegramChatBoost, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatInviteLink, TelegramChatJoinRequest, TelegramChatLocation, TelegramChatMember, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChatPhoto, TelegramChatShareThemeBackdrop, TelegramChatShareThemeBackdrops, TelegramChatShared, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramContact, TelegramCopyTextButton, TelegramDice, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramDisabledButton, TelegramDocument, TelegramEncryptedCredentials, TelegramEncryptedPassportElement, TelegramExternalReplyInfo, TelegramFile, TelegramForumTopicClosed, TelegramForumTopicCreated, TelegramForumTopicEdited, TelegramForumTopicReopened, TelegramGame, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveaway, TelegramGiveawayCompleted, TelegramGiveawayCreated, TelegramGiveawayWinners, TelegramInlineKeyboardButton, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInvoice, TelegramLink, TelegramLinkPreviewOptions, TelegramLivePhoto, TelegramLocation, TelegramLoginUrl, TelegramManagedBotCreated, TelegramMaskPosition, TelegramMaybeInaccessibleMessage, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageId, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramOrderInfo, TelegramPaidMediaInfo, TelegramPaidMessagePriceChanged, TelegramPaidMessagesWaived, TelegramPassportData, TelegramPhotoSize, TelegramPoll, TelegramPollAnswer, TelegramPollMedia, TelegramPollOption, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramProximityAlertTriggered, TelegramReactionCount, TelegramReactionType, TelegramRefundedPayment, TelegramRichMessage, TelegramRichText, TelegramSharedUser, TelegramShippingAddress, TelegramShippingQuery, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramSuccessfulPayment, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostRefunded, TelegramSwitchInlineQueryChosenChat, TelegramTextQuote, TelegramTonNft, TelegramTonNftAttribute, TelegramTonWalletCard, TelegramTonWalletCardSticker, TelegramTonWalletTransfer, TelegramUniqueGift, TelegramUniqueGiftBackdropColors, TelegramUniqueGiftInfo, TelegramUser, TelegramUserProfilePhotos, TelegramUsersShared, TelegramVenue, TelegramVideo, TelegramVideoChatEnded, TelegramVideoChatParticipantsInvited, TelegramVideoChatScheduled, TelegramVideoChatStarted, TelegramVideoNote, TelegramVideoQuality, TelegramVoice, TelegramWebAppData, TelegramWebAppInfo, TelegramWidget, TelegramWidgetQueryWallet, TelegramWriteAccessAllowed } from "./types";
@@ -1274,7 +1274,7 @@ export class ChosenInlineResult {
         return this._from ??= new User(this.raw.from);
     }
     /**
-     * Optional. Sender location, only for bots that require user location
+     * Optional. Sender location, only for bots that enabled user location requests via @BotFather or using the parameter needs_inline_query_location of the method setMySettings
      */
     get location(): Location | undefined {
         if (this._location === undefined) {
@@ -2789,7 +2789,7 @@ export class InlineQuery {
         return this.raw.chat_type;
     }
     /**
-     * Optional. Sender location, only for bots that request user location
+     * Optional. Sender location, only for bots that enabled user location requests via @BotFather or using the parameter needs_inline_query_location of the method setMySettings
      */
     get location(): Location | undefined {
         if (this._location === undefined) {
@@ -3871,7 +3871,7 @@ export class Message {
         return this.raw.connected_website;
     }
     /**
-     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
+     * Optional. Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess, or the user was invited to the private chat with the bot by the owner of the bot
      */
     get writeAccessAllowed(): WriteAccessAllowed | undefined {
         if (this._writeAccessAllowed === undefined) {
@@ -7152,66 +7152,6 @@ export class User {
         return this.raw.added_to_attachment_menu;
     }
     /**
-     * Optional. True, if the bot can be invited to groups. Returned only in getMe.
-     */
-    get canJoinGroups(): boolean | undefined {
-        return this.raw.can_join_groups;
-    }
-    /**
-     * Optional. True, if privacy mode is disabled for the bot. Returned only in getMe.
-     */
-    get canReadAllGroupMessages(): boolean | undefined {
-        return this.raw.can_read_all_group_messages;
-    }
-    /**
-     * Optional. True, if the bot supports guest queries from chats it is not a member of. Returned only in getMe.
-     */
-    get supportsGuestQueries(): boolean | undefined {
-        return this.raw.supports_guest_queries;
-    }
-    /**
-     * Optional. True, if the bot supports inline queries. Returned only in getMe.
-     */
-    get supportsInlineQueries(): boolean | undefined {
-        return this.raw.supports_inline_queries;
-    }
-    /**
-     * Optional. True, if the bot can be connected to a user account to manage it. Returned only in getMe.
-     */
-    get canConnectToBusiness(): boolean | undefined {
-        return this.raw.can_connect_to_business;
-    }
-    /**
-     * Optional. True, if the bot has a main Web App. Returned only in getMe.
-     */
-    get hasMainWebApp(): boolean | undefined {
-        return this.raw.has_main_web_app;
-    }
-    /**
-     * Optional. True, if the bot has forum topic mode enabled in private chats. Returned only in getMe.
-     */
-    get hasTopicsEnabled(): boolean | undefined {
-        return this.raw.has_topics_enabled;
-    }
-    /**
-     * Optional. True, if the bot allows users to create and delete topics in private chats. Returned only in getMe.
-     */
-    get allowsUsersToCreateTopics(): boolean | undefined {
-        return this.raw.allows_users_to_create_topics;
-    }
-    /**
-     * Optional. True, if other bots can be created to be controlled by the bot. Returned only in getMe.
-     */
-    get canManageBots(): boolean | undefined {
-        return this.raw.can_manage_bots;
-    }
-    /**
-     * Optional. True, if the bot supports join request queries and can be assigned to process them. Returned only in getMe.
-     */
-    get supportsJoinRequestQueries(): boolean | undefined {
-        return this.raw.supports_join_request_queries;
-    }
-    /**
      * true if `last_name` is set
      */
     hasLastName(): this is this & {
@@ -7242,70 +7182,6 @@ export class User {
         addedToAttachmentMenu: true;
     } {
         return this.raw.added_to_attachment_menu != null;
-    }
-    /**
-     * true if `can_join_groups` is set
-     */
-    hasCanJoinGroups(): this is this & {
-        canJoinGroups: boolean;
-    } {
-        return this.raw.can_join_groups != null;
-    }
-    /**
-     * true if `can_read_all_group_messages` is set
-     */
-    hasCanReadAllGroupMessages(): this is this & {
-        canReadAllGroupMessages: boolean;
-    } {
-        return this.raw.can_read_all_group_messages != null;
-    }
-    /**
-     * true if `supports_guest_queries` is set
-     */
-    hasSupportsGuestQueries(): this is this & {
-        supportsGuestQueries: boolean;
-    } {
-        return this.raw.supports_guest_queries != null;
-    }
-    /**
-     * true if `supports_inline_queries` is set
-     */
-    hasSupportsInlineQueries(): this is this & {
-        supportsInlineQueries: boolean;
-    } {
-        return this.raw.supports_inline_queries != null;
-    }
-    /**
-     * true if `can_connect_to_business` is set
-     */
-    hasCanConnectToBusiness(): this is this & {
-        canConnectToBusiness: boolean;
-    } {
-        return this.raw.can_connect_to_business != null;
-    }
-    /**
-     * true if `allows_users_to_create_topics` is set
-     */
-    hasAllowsUsersToCreateTopics(): this is this & {
-        allowsUsersToCreateTopics: boolean;
-    } {
-        return this.raw.allows_users_to_create_topics != null;
-    }
-    /**
-     * true if `can_manage_bots` is set
-     */
-    hasCanManageBots(): this is this & {
-        canManageBots: boolean;
-    } {
-        return this.raw.can_manage_bots != null;
-    }
-    /**
-     * true if `supports_join_request_queries` is set
-     */
-    hasSupportsJoinRequestQueries(): this is this & {
-        supportsJoinRequestQueries: boolean;
-    } {
-        return this.raw.supports_join_request_queries != null;
     }
     /**
      * display name; first name plus last name when present, otherwise just first name
@@ -8064,9 +7940,10 @@ export class WidgetQueryWallet {
 }
 
 /**
- * This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.
+ * This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess, or about a user being invited to the private chat with the bot by the owner of the bot.
  */
 export class WriteAccessAllowed {
+    private _inviter?: User | undefined;
     constructor(public raw: TelegramWriteAccessAllowed) { }
     static fromPayload(raw: TelegramWriteAccessAllowed): WriteAccessAllowed {
         return new WriteAccessAllowed(raw);
@@ -8088,6 +7965,15 @@ export class WriteAccessAllowed {
      */
     get fromAttachmentMenu(): boolean | undefined {
         return this.raw.from_attachment_menu;
+    }
+    /**
+     * Optional. The owner of the bot, if the access was granted when the owner invited the user to the private chat with the bot. Bot owners can invite up to 10 users at once by pressing the link https://t.me/botinvite/<bot_username>.
+     */
+    get inviter(): User | undefined {
+        if (this._inviter === undefined) {
+            this._inviter = this.raw.inviter ? new User(this.raw.inviter) : undefined;
+        }
+        return this._inviter;
     }
     /**
      * true if `from_request` is set
@@ -8112,6 +7998,14 @@ export class WriteAccessAllowed {
         fromAttachmentMenu: boolean;
     } {
         return this.raw.from_attachment_menu != null;
+    }
+    /**
+     * true if `inviter` is set
+     */
+    hasInviter(): this is this & {
+        inviter: User;
+    } {
+        return this.raw.inviter != null;
     }
     [INSPECT](depth: any, options: any, inspect: any) {
         return makeInspect("WriteAccessAllowed", this, depth, options, inspect);

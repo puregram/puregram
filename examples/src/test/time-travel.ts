@@ -8,7 +8,7 @@ declare const expect: (value: unknown) => { toBe: (expected: unknown) => void }
 
 describe('virtual clock', () => {
   it('flushes timers without real sleeps', async () => {
-    const tg = Telegram.fromToken('TEST', { bot: { id: 1, is_bot: true, first_name: 'bot', username: 'bot' } })
+    const tg = Telegram.fromToken('TEST')
     const env = createTestEnv(tg)
 
     let fired = false
