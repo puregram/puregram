@@ -68,6 +68,7 @@ describe('telegram serverless builds', () => {
         await bot.link(() => { throw new Error('unexpected dependency'); });
         await bot.evaluate();
         await assert.rejects(bot.namespace.default.handleUpdate(), /node:fs\\/promises" is unavailable/);
+        await assert.rejects(bot.namespace.default.handleUpdate(), /node:fs\\/promises" is unavailable/);
       `, join(root, 'tgcloud')], { timeout: 30_000 })
 
       await writeFile(entry, `export const blob = ${JSON.stringify('x'.repeat(1_100_000))}; export default { async handleUpdate () {} }`)

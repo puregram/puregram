@@ -87,10 +87,11 @@ function dependencies (schema: string | undefined): Plugin {
         return resolved
       })
 
-      builder.onLoad({ filter: /.*/, namespace: unavailableNode }, args => ({
-        contents: `throw new Error(${JSON.stringify(`Node module "${args.path}" is unavailable in Telegram Serverless`)})`,
-        loader: 'js'
-      }))
+      builder.onLoad({ filter: /.*/, namespace: unavailableNode }, (args) => {
+        const message = JSON.stringify(`Node module "${args.path}" is unavailable in Telegram Serverless`)
+
+        return { contents: `export function then(_, reject) { reject(new Error(${message})) }`, loader: 'js' }
+      })
     }
   }
 }
