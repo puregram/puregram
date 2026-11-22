@@ -1,6 +1,6 @@
 {
   "name": "@puregram/widgets",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "HTML widgets for puregram",
   "type": "module",
   "main": "./lib/index.js",

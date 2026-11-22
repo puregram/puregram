@@ -18,6 +18,12 @@ await tg.send(100, 'hi')
 tg.onMessage(message => message.send('hi'))
 ```
 
+## migrating to puregram 3.12.0 / api 10.5.0
+
+- `tg.api.getMe()` and `tg.bot` now use `TelegramBotFullInfo`, not `TelegramUser`. If you prefill the `bot` client option, supply a full `getMe()` result or omit the option and let Puregram fetch it.
+- If you construct or inspect raw expandable blockquotes, replace their `text` field with `blocks`. For inline text, use a paragraph block: `blocks: [{ type: 'paragraph', text: 'quote' }]`. The `rich.expandableBlockquote(content, credit?)` signature is unchanged.
+- If you opt into `callback_query_mode: 'auto'` or `'inline'` via `tg.api.setMySettings()`, callbacks from messages sent directly by your bot can carry `inline_message_id` instead of `message`. `query.edit()` handles both forms. Guard replies through `query.hasAccessibleMessage()`; `query.delete()` requires a chat and message ID.
+
 ## migrating to puregram 3.10.0 / api 10.3.3
 
 **this is a breaking shortcut release within v3.** primary arguments move out of the options object into positional arguments. the raw `tg.api.*` methods keep their existing all-object signatures.
