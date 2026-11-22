@@ -108,7 +108,7 @@ describe('mediaCacher — auto-evict + retry on stale file_id', () => {
   })
 
   it('on stale-id 400, evicts the entry and retries once with the original source', async () => {
-    await env.storage.set('42:/tmp/x.jpg', 'stale_id')
+    await env.storage.set('["sendPhoto","42","/tmp/x.jpg"]', 'stale_id')
 
     const seen: unknown[] = []
 
@@ -132,7 +132,7 @@ describe('mediaCacher — auto-evict + retry on stale file_id', () => {
     })
 
     expect(result).toEqual({ photo: [{ file_id: 'fresh_id' }] })
-    expect(await env.storage.get('42:/tmp/x.jpg')).toBe('fresh_id')
+    expect(await env.storage.get('["sendPhoto","42","/tmp/x.jpg"]')).toBe('fresh_id')
 
     // first attempt used the cached fileId, retry used the original path
     expect(seen[0]).toMatchObject({ type: MediaSourceType.FileId, value: 'stale_id' })
@@ -149,7 +149,7 @@ describe('mediaCacher — auto-evict + retry on stale file_id', () => {
     for (const description of variants) {
       const local = setup()
 
-      await local.storage.set('1:/v.mp4', 'stale')
+      await local.storage.set('["sendVideo","1","/v.mp4"]', 'stale')
 
       local.queue('sendVideo', () => ({ ok: false, error_code: 400, description }))
       local.queue('sendVideo', () => ({ ok: true, result: { video: { file_id: 'new' } } }))
@@ -164,7 +164,7 @@ describe('mediaCacher — auto-evict + retry on stale file_id', () => {
   })
 
   it('non-matching 400s pass through unchanged and the entry stays cached', async () => {
-    await env.storage.set('3:/p.jpg', 'fid')
+    await env.storage.set('["sendPhoto","3","/p.jpg"]', 'fid')
 
     env.queue('sendPhoto', () => ({
       ok: false, error_code: 400, description: 'Bad Request: chat not found'
@@ -176,11 +176,11 @@ describe('mediaCacher — auto-evict + retry on stale file_id', () => {
     })).rejects.toThrow('Bad Request: chat not found')
 
     // unrelated failure — entry must remain
-    expect(await env.storage.get('3:/p.jpg')).toBe('fid')
+    expect(await env.storage.get('["sendPhoto","3","/p.jpg"]')).toBe('fid')
   })
 
   it('if the retry also fails, propagates the original error without looping', async () => {
-    await env.storage.set('7:/g.jpg', 'stale')
+    await env.storage.set('["sendPhoto","7","/g.jpg"]', 'stale')
 
     let calls = 0
 
@@ -207,7 +207,7 @@ describe('mediaCacher — auto-evict + retry on stale file_id', () => {
   })
 
   it('coalesces concurrent stale failures: exactly one re-upload, both callers resolve', async () => {
-    await env.storage.set('9:/c.jpg', 'stale')
+    await env.storage.set('["sendPhoto","9","/c.jpg"]', 'stale')
 
     let reupload = 0
     let cachedSend = 0

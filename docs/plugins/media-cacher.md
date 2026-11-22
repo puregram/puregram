@@ -75,19 +75,20 @@ installs a `tg.extend(...)` plugin that hooks `onBeforeRequest` (before send) an
 ### `tg.mediaCacher` — manual inspection
 
 ```ts
-// look up the cached file_id for (storageKey, sourceValue)
-const fileId = await telegram.mediaCacher.get('100', './cat.png')
+const fileId = await telegram.mediaCacher.get('sendPhoto', '100', './cat.png')
 
 if (fileId !== undefined) {
   console.log('already cached:', fileId)
 }
 
 // drop a single entry — next send re-uploads
-await telegram.mediaCacher.invalidate('100', './cat.png')
+await telegram.mediaCacher.invalidate('sendPhoto', '100', './cat.png')
 
 // direct access to the underlying KVStorage<string>
-await telegram.mediaCacher.storage.set('whatever:key', 'AgADAQA…')
+await telegram.mediaCacher.storage.set(JSON.stringify(['sendPhoto', '100', './cat.png']), 'AgADAQA…')
 ```
+
+the upload method is part of the cache key: a photo ID cannot be reused to send a document. raw keys are serialized JSON arrays `[method, storageKey, sourceValue]`. older keys without the method are ignored; the cache repopulates on demand.
 
 `storageKey` is what `getStorageKey(ctx)` returned (default: `String(ctx.params.chat_id)`). `sourceValue` is the raw string the `MediaSource` carried — `'./cat.png'` for path, `'https://…'` for url
 
@@ -130,7 +131,7 @@ requests without a usable chat scope bypass caching. bot api 10.4 callback-only 
 
 ### content-hash key strategy
 
-flip to `keyStrategy: 'hash'` to key by `sha-256(bytes)` instead of the raw path/url string. distinct sources that resolve to identical content share one cached `file_id`:
+`keyStrategy: 'hash'` uses the content hash instead of the raw path/url string. identical bytes share a cached `file_id` only within the same upload method and storage scope:
 
 ```ts
 telegram.extend(mediaCacher({ keyStrategy: 'hash' }))
@@ -155,7 +156,7 @@ import { hashMediaInput } from '@puregram/media-cacher'
 import { MediaSource } from 'puregram'
 
 const hash = await hashMediaInput(MediaSource.path('./cat.png'))
-const fileId = await telegram.mediaCacher.get(String(chatId), hash)
+const fileId = await telegram.mediaCacher.get('sendPhoto', String(chatId), hash)
 ```
 
 ### telegram serverless

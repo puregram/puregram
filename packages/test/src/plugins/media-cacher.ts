@@ -32,8 +32,6 @@ interface KvStorageLike {
 }
 
 interface MediaCacherRuntime {
-  get: (storageKey: string, sourceValue: string) => Promise<string | undefined>
-  invalidate: (storageKey: string, sourceValue: string) => Promise<void>
   storage: KvStorageLike
 }
 

@@ -139,7 +139,7 @@ describe('mediaCacher — keyStrategy: hash', () => {
     ctx1.json = { ok: true, result: { photo: [{ file_id: 'cached_by_hash' }] } }
     await harness.run('onResponseIntercept', ctx1)
 
-    expect(await storage.get(`1:${hash}`)).toBe('cached_by_hash')
+    expect(await storage.get(JSON.stringify(['sendPhoto', '1', hash]))).toBe('cached_by_hash')
 
     // second send — distinct path, identical bytes — should hit the cache
     const ctx2: RequestContext = {
@@ -168,7 +168,7 @@ describe('mediaCacher — keyStrategy: hash', () => {
     await harness.run('onResponseIntercept', ctx)
 
     // keyed by raw value, not by hash
-    expect(await storage.get('5:/tmp/whatever.jpg')).toBe('fid')
+    expect(await storage.get('["sendPhoto","5","/tmp/whatever.jpg"]')).toBe('fid')
   })
 
   it('hash strategy for Url sources fetches the body once for hashing', async () => {
@@ -195,7 +195,7 @@ describe('mediaCacher — keyStrategy: hash', () => {
       ctx.json = { ok: true, result: { photo: [{ file_id: 'url_fid' }] } }
       await harness.run('onResponseIntercept', ctx)
 
-      expect(await storage.get(`2:${expectedHash}`)).toBe('url_fid')
+      expect(await storage.get(JSON.stringify(['sendPhoto', '2', expectedHash]))).toBe('url_fid')
       expect(fetchSpy).toHaveBeenCalledOnce()
     } finally {
       globalThis.fetch = originalFetch
@@ -222,6 +222,13 @@ describe('mediaCacher — keyStrategy: hash', () => {
     await harness.run('onBeforeRequest', second)
 
     expect(second.params!.document).toMatchObject({ type: 'file_id', value: 'bytes_fid' })
+
+    const photo = MediaSource.bytes(new Uint8Array([1, 2, 3]))
+    const otherMethod: RequestContext = { method: 'sendPhoto', params: { chat_id: 3, photo } }
+
+    await harness.run('onBeforeRequest', otherMethod)
+
+    expect(otherMethod.params!.photo).toBe(photo)
 
     const bytesSource = MediaSource.bytes(new Uint8Array([1, 2, 3]))
     const untouched: RequestContext = { method: 'sendDocument', params: { chat_id: 3, document: bytesSource } }
@@ -261,7 +268,9 @@ describe('mediaCacher — keyStrategy: hash', () => {
       ctx.json = { ok: true, result: { photo: [{ file_id: 'sdk_fid' }] } }
       await harness.run('onResponseIntercept', ctx)
 
-      expect(await storage.get(`4:${createHash('sha256').update('hi!').digest('hex')}`)).toBe('sdk_fid')
+      const hash = createHash('sha256').update('hi!').digest('hex')
+
+      expect(await storage.get(JSON.stringify(['sendPhoto', '4', hash]))).toBe('sdk_fid')
       expect(fetchOption).toHaveBeenCalledWith('https://example/y.jpg')
     } finally {
       vi.unstubAllGlobals()

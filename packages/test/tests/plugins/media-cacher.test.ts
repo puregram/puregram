@@ -37,8 +37,7 @@ describe('@puregram/test/media-cacher', () => {
     const entries = env.mediaCache!.entries()
 
     expect(entries.size).toBe(1)
-    expect(entries.has('42:https://x/a.jpg')).toBe(true)
-    expect(typeof entries.get('42:https://x/a.jpg')).toBe('string')
+    expect(typeof entries.get('["sendPhoto","42","https://x/a.jpg"]')).toBe('string')
   })
 
   it('second sendPhoto with the same source hits the cache (no extra entry)', async () => {
@@ -63,17 +62,19 @@ describe('@puregram/test/media-cacher', () => {
 
     cleanup = () => env.shutdown()
 
-    env.mediaCache!.seed('42:https://x/seeded.jpg', 'pre_fid')
+    const key = '["sendPhoto","42","https://x/seeded.jpg"]'
+
+    env.mediaCache!.seed(key, 'pre_fid')
 
     const entries = env.mediaCache!.entries()
 
-    expect(entries.get('42:https://x/seeded.jpg')).toBe('pre_fid')
+    expect(entries.get(key)).toBe('pre_fid')
 
     await tg.api.sendPhoto({ chat_id: 42, photo: MediaSource.url('https://x/seeded.jpg') })
 
     expect(env.mediaCache!.hits).toBe(1)
     expect(env.mediaCache!.misses).toBe(0)
-    expect(env.mediaCache!.entries().get('42:https://x/seeded.jpg')).toBe('pre_fid')
+    expect(env.mediaCache!.entries().get(key)).toBe('pre_fid')
   })
 
   it('clear() empties the cache', () => {

@@ -51,10 +51,8 @@ export interface MediaCacherOptions {
 
 /** handle attached as `tg.mediaCacher` for manual cache inspection and eviction */
 export interface MediaCacherExtension {
-  /** look up the cached `file_id` for `(storageKey, sourceValue)`, or undefined if absent */
-  get: (storageKey: string, sourceValue: string) => Promise<string | undefined>
-  /** drop the cache entry for `(storageKey, sourceValue)` */
-  invalidate: (storageKey: string, sourceValue: string) => Promise<void>
+  get: (method: AllowedMediaMethod, storageKey: string, sourceValue: string) => Promise<string | undefined>
+  invalidate: (method: AllowedMediaMethod, storageKey: string, sourceValue: string) => Promise<void>
   /** the configured `KVStorage<string>` instance */
   storage: KVStorage<string>
 }
@@ -133,6 +131,10 @@ function filenameOptsFor (media: MediaInput) {
   return media.filename !== undefined ? { filename: media.filename } : {}
 }
 
+function encodeCacheKey (method: AllowedMediaMethod, storageKey: string, sourceValue: string) {
+  return JSON.stringify([method, storageKey, sourceValue])
+}
+
 /** transparent file_id caching plugin. on cache hit, swaps cacheable media for `MediaSource.fileId` */
 export function mediaCacher (options: MediaCacherOptions = {}) {
   const storage = options.storage ?? new MemoryStorage<string>()
@@ -169,7 +171,8 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
           return
         }
 
-        const mediaKey = MEDIA_METHOD_TO_KEY_MAP[ctx.method as AllowedMediaMethod]
+        const method = ctx.method as AllowedMediaMethod
+        const mediaKey = MEDIA_METHOD_TO_KEY_MAP[method]
         const params = ctx.params
 
         if (params === undefined) {
@@ -206,7 +209,7 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
           return
         }
 
-        const cacheKey = `${storageKey}:${secondHalf}`
+        const cacheKey = encodeCacheKey(method, storageKey, secondHalf)
         const cached = await storage.get(cacheKey)
 
         if (cached !== undefined) {
@@ -353,8 +356,9 @@ export function mediaCacher (options: MediaCacherOptions = {}) {
       })
 
       const ext: MediaCacherExtension = {
-        get: (storageKey, sourceValue) => storage.get(`${storageKey}:${sourceValue}`),
-        invalidate: (storageKey, sourceValue) => storage.delete(`${storageKey}:${sourceValue}`),
+        get: (method, storageKey, sourceValue) => storage.get(encodeCacheKey(method, storageKey, sourceValue)),
+        invalidate: (method, storageKey, sourceValue) =>
+          storage.delete(encodeCacheKey(method, storageKey, sourceValue)),
         storage
       }
 

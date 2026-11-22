@@ -66,11 +66,11 @@ describe('mediaCacher plugin', () => {
     ctx.json = { ok: true, result: { photo: [{ file_id: 'small' }, { file_id: 'large' }] } }
     await env.run('onResponseIntercept', ctx)
 
-    expect(await env.storage.get('42:/tmp/a.jpg')).toBe('large')
+    expect(await env.storage.get('["sendPhoto","42","/tmp/a.jpg"]')).toBe('large')
   })
 
   it('cache hit on second send replaces media with MediaSource.fileId', async () => {
-    await env.storage.set('42:/tmp/a.jpg', 'cached_id')
+    await env.storage.set('["sendPhoto","42","/tmp/a.jpg"]', 'cached_id')
 
     const ctx: RequestContext = {
       method: 'sendPhoto',
@@ -96,7 +96,7 @@ describe('mediaCacher plugin', () => {
     ctx.json = { ok: true, result: { document: { file_id: 'anim_id' } } }
     await env.run('onResponseIntercept', ctx)
 
-    expect(await env.storage.get('7:https://x/a.gif')).toBe('anim_id')
+    expect(await env.storage.get('["sendAnimation","7","https://x/a.gif"]')).toBe('anim_id')
   })
 
   it('skips caching for non-Path/Url media (e.g. fileId, buffer)', async () => {
@@ -109,7 +109,7 @@ describe('mediaCacher plugin', () => {
     ctx.json = { ok: true, result: { photo: [{ file_id: 'response_id' }] } }
     await env.run('onResponseIntercept', ctx)
 
-    expect(await env.storage.has('1:already_cached')).toBe(false)
+    expect(await env.ext.get('sendPhoto', '1', 'already_cached')).toBeUndefined()
   })
 
   it('does nothing when method is not in the upload map', async () => {
@@ -121,7 +121,7 @@ describe('mediaCacher plugin', () => {
     await env.run('onBeforeRequest', ctx)
     await env.run('onResponseIntercept', ctx)
 
-    expect(await env.storage.has('1:hi')).toBe(false)
+    expect(await env.ext.get('sendPhoto', '1', 'hi')).toBeUndefined()
   })
 
   it('throws when a method-mapped media slot has a non-MediaInput value', async () => {
@@ -143,11 +143,11 @@ describe('mediaCacher plugin', () => {
     ctx.json = { ok: false, error_code: 400, description: 'bad request' }
     await env.run('onResponseIntercept', ctx)
 
-    expect(await env.storage.has('1:/tmp/x.jpg')).toBe(false)
+    expect(await env.ext.get('sendPhoto', '1', '/tmp/x.jpg')).toBeUndefined()
   })
 
   it.each([undefined, 42])('skips callback-only replies with ignored chat id %s', async (chatId) => {
-    await env.storage.set('42:/tmp/a.jpg', 'cached_id')
+    await env.storage.set('["sendPhoto","42","/tmp/a.jpg"]', 'cached_id')
 
     const ctx: RequestContext = {
       method: 'sendPhoto',
@@ -163,12 +163,12 @@ describe('mediaCacher plugin', () => {
 
     ctx.json = { ok: true, result: { photo: [{ file_id: 'new_id' }] } }
     await env.run('onResponseIntercept', ctx)
-    expect(await env.storage.get('42:/tmp/a.jpg')).toBe('cached_id')
-    expect(await env.storage.get('undefined:/tmp/a.jpg')).toBeUndefined()
+    expect(await env.storage.get('["sendPhoto","42","/tmp/a.jpg"]')).toBe('cached_id')
+    expect(await env.storage.get('["sendPhoto","undefined","/tmp/a.jpg"]')).toBeUndefined()
   })
 
   it('still caches receiver-targeted ephemeral media by chat', async () => {
-    await env.storage.set('42:/tmp/a.jpg', 'cached_id')
+    await env.storage.set('["sendPhoto","42","/tmp/a.jpg"]', 'cached_id')
 
     const ctx: RequestContext = {
       method: 'sendPhoto',
@@ -188,13 +188,15 @@ describe('mediaCacher extension', () => {
   it('exposes get / invalidate / storage on the install return', async () => {
     const env = setup()
 
-    await env.storage.set('chat:src', 'fid_1')
+    await env.storage.set('["sendPhoto","chat","src"]', 'photo_id')
+    await env.storage.set('["sendDocument","chat","src"]', 'document_id')
 
-    expect(await env.ext.get('chat', 'src')).toBe('fid_1')
+    expect(await env.ext.get('sendPhoto', 'chat', 'src')).toBe('photo_id')
 
-    await env.ext.invalidate('chat', 'src')
+    await env.ext.invalidate('sendPhoto', 'chat', 'src')
 
-    expect(await env.ext.get('chat', 'src')).toBeUndefined()
+    expect(await env.ext.get('sendPhoto', 'chat', 'src')).toBeUndefined()
+    expect(await env.ext.get('sendDocument', 'chat', 'src')).toBe('document_id')
     expect(env.ext.storage).toBe(env.storage)
   })
 })

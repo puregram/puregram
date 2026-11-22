@@ -18,7 +18,7 @@ telegram.onMessage(async (message) => {
 // and retries the upload once — transparent to your handler. you can also evict by
 // hand through the `tg.mediaCacher` handle
 telegram.command('flush', async (message) => {
-  await telegram.mediaCacher.invalidate(String(message.chatId), PHOTO)
+  await telegram.mediaCacher.invalidate('sendPhoto', String(message.chatId), PHOTO)
 
   await message.send('cache entry dropped — next send re-uploads')
 })

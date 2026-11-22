@@ -20,7 +20,7 @@ _cache sent media `file_id`s with ease for `puregram` package_
 
 if you send a lot of similar `MediaSource.path` or `MediaSource.url` files you've probably noticed how slow that gets. heavy files take real seconds to upload, every single time, and it's not like you actually *want* to wait those extra times. that's why you probably need `@puregram/media-cacher`
 
-it sits as an `onBeforeRequest` hook on every cacheable upload method (`sendPhoto`, `sendVideo`, `sendAnimation`, `sendVideoNote`, `sendAudio`, `sendDocument`, `sendSticker`). first call uploads as normal and stores the resulting `file_id` keyed by `(chatId, sourceValue)`. every later call swaps the path/url for the cached `MediaSource.fileId(...)` before the request leaves your bot — telegram never sees the file twice
+the first upload stores the resulting `file_id` under `(method, chatId, sourceValue)`. later sends with the same key swap the source for `MediaSource.fileId(...)` before the request leaves your bot.
 
 ### example
 
@@ -121,21 +121,22 @@ requests without a usable chat scope bypass caching. this includes bot api 10.4 
 the plugin attaches a small handle for direct cache reads / evictions:
 
 ```ts
-// look up the cached file_id for (storageKey, sourceValue)
-const fileId = await telegram.mediaCacher.get('100', './cat.png')
+const fileId = await telegram.mediaCacher.get('sendPhoto', '100', './cat.png')
 
 if (fileId !== undefined) {
   console.log('already cached:', fileId)
 }
 
 // drop a single entry — next send will re-upload
-await telegram.mediaCacher.invalidate('100', './cat.png')
+await telegram.mediaCacher.invalidate('sendPhoto', '100', './cat.png')
 
 // the raw KVStorage<string>, in case you need it
-await telegram.mediaCacher.storage.set('whatever:key', 'AgADAQA…')
+await telegram.mediaCacher.storage.set(JSON.stringify(['sendPhoto', '100', './cat.png']), 'AgADAQA…')
 ```
 
 `storageKey` is what `getStorageKey(ctx)` returned (default: `String(ctx.params.chat_id)`). `sourceValue` is the raw string the `MediaSource` carried — `'./cat.png'` for path, `'https://…'` for url
+
+storage keys are JSON arrays `[method, storageKey, sourceValue]` serialized as strings. older two-part keys are ignored because they do not identify a media type. existing caches repopulate on demand.
 
 ---
 
@@ -158,11 +159,8 @@ await telegram.mediaCacher.storage.set('whatever:key', 'AgADAQA…')
 
 ```ts
 interface MediaCacherExtension {
-  /** look up the cached file_id for (storageKey, sourceValue), or undefined */
-  get: (storageKey: string, sourceValue: string) => Promise<string | undefined>
-
-  /** drop the entry for (storageKey, sourceValue) */
-  invalidate: (storageKey: string, sourceValue: string) => Promise<void>
+  get: (method: AllowedMediaMethod, storageKey: string, sourceValue: string) => Promise<string | undefined>
+  invalidate: (method: AllowedMediaMethod, storageKey: string, sourceValue: string) => Promise<void>
 
   /** the configured KVStorage<string> instance — direct access if you need it */
   storage: KVStorage<string>
@@ -210,9 +208,9 @@ mediaCacher({
 
 ## content-hash key strategy
 
-by default the cache is keyed by `(chatId, sourceValue)` — the literal path or url string. two distinct paths pointing at the exact same bytes get two distinct cache entries
+by default the cache is keyed by `(method, chatId, sourceValue)`, where `sourceValue` is the literal path or url string.
 
-flip to `keyStrategy: 'hash'` to key by `(chatId, sha256(bytes))` instead. distinct sources that resolve to identical content share one cached `file_id`
+`keyStrategy: 'hash'` uses the content hash in place of the path or url. identical content shares a cached `file_id` only within the same upload method and storage scope.
 
 ```ts
 telegram.extend(mediaCacher({ keyStrategy: 'hash' }))
@@ -234,7 +232,7 @@ manual inspection still works the same — pass the hash as `sourceValue`:
 
 ```ts
 const hash = await hashMediaInput(MediaSource.path('./cat.png'))
-const fileId = await telegram.mediaCacher.get(String(chatId), hash)
+const fileId = await telegram.mediaCacher.get('sendPhoto', String(chatId), hash)
 ```
 
 `hashBytes` and `hashMediaInput` are exported for direct use
