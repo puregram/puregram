@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
 /// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-22T09:57:50.115Z
+/// generated at: 2026-11-24T12:00:36.826Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { Filter } from "../filter-runtime";

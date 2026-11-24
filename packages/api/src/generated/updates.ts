@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
 /// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-22T09:57:50.115Z
+/// generated at: 2026-11-24T12:00:36.826Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { Readable } from "node:stream";
@@ -2867,7 +2867,7 @@ class MessageShared {
         return this.raw.new_chat_title;
     }
     /**
-     * Optional. A chat photo was change to this value
+     * Optional. A chat photo was changed to this value
      */
     get newChatPhoto(): Photo | undefined {
         return this.raw.new_chat_photo ? (this._newChatPhoto ??= new Photo(this.raw.new_chat_photo)) : undefined;
@@ -2879,13 +2879,13 @@ class MessageShared {
         return this.raw.group_chat_created;
     }
     /**
-     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
+     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to the very first message in a directly created supergroup.
      */
     get supergroupChatCreated(): true | undefined {
         return this.raw.supergroup_chat_created;
     }
     /**
-     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
+     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to the very first message in a channel.
      */
     get channelChatCreated(): true | undefined {
         return this.raw.channel_chat_created;
@@ -2897,13 +2897,13 @@ class MessageShared {
         return this.raw.message_auto_delete_timer_changed;
     }
     /**
-     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get migrateToChatId(): number | undefined {
         return this.raw.migrate_to_chat_id;
     }
     /**
-     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get migrateFromChatId(): number | undefined {
         return this.raw.migrate_from_chat_id;
@@ -6878,7 +6878,7 @@ export class BusinessConnectionUpdate {
         return this._user ??= new User(this.raw.user);
     }
     /**
-     * Identifier of a private chat with the user who created the business connection. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Identifier of a private chat with the user who created the business connection. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get userChatId(): number {
         return this.raw.user_chat_id;
@@ -7454,7 +7454,7 @@ export class GuestMessageUpdate {
         return this.raw.new_chat_title;
     }
     /**
-     * Optional. A chat photo was change to this value
+     * Optional. A chat photo was changed to this value
      */
     get newChatPhoto(): Photo | undefined {
         return this.raw.new_chat_photo ? (this._newChatPhoto ??= new Photo(this.raw.new_chat_photo)) : undefined;
@@ -7472,13 +7472,13 @@ export class GuestMessageUpdate {
         return this.raw.group_chat_created;
     }
     /**
-     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
+     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to the very first message in a directly created supergroup.
      */
     get supergroupChatCreated(): true | undefined {
         return this.raw.supergroup_chat_created;
     }
     /**
-     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
+     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to the very first message in a channel.
      */
     get channelChatCreated(): true | undefined {
         return this.raw.channel_chat_created;
@@ -7490,13 +7490,13 @@ export class GuestMessageUpdate {
         return this.raw.message_auto_delete_timer_changed;
     }
     /**
-     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get migrateToChatId(): number | undefined {
         return this.raw.migrate_to_chat_id;
     }
     /**
-     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get migrateFromChatId(): number | undefined {
         return this.raw.migrate_from_chat_id;
@@ -9089,7 +9089,7 @@ export class InlineQueryUpdate {
         return this.raw.offset;
     }
     /**
-     * Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
+     * Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should always be known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
      */
     get chatType(): ("sender" | "private" | "group" | "supergroup" | "channel") | undefined {
         return this.raw.chat_type;
@@ -9181,7 +9181,7 @@ export class ChosenInlineResultUpdate {
         return this.raw.location ? (this._location ??= new Location(this.raw.location)) : undefined;
     }
     /**
-     * Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message.
+     * Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will also be received in callback queries and can be used to edit the message.
      */
     get inlineMessageId(): string | undefined {
         return this.raw.inline_message_id;
@@ -9270,7 +9270,7 @@ export class CallbackQueryUpdate {
         return this.raw.chat_instance;
     }
     /**
-     * Optional. Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data.
+     * Optional. Data associated with the callback button. Be aware that the message that originated the query can contain no callback buttons with this data.
      */
     get data(): string | undefined {
         return this.raw.data;
@@ -11048,7 +11048,7 @@ export class ShippingQueryUpdate {
         return this.raw.invoice_payload;
     }
     /**
-     * User specified shipping address
+     * User-specified shipping address
      */
     get shippingAddress(): ShippingAddress {
         return this._shippingAddress ??= new ShippingAddress(this.raw.shipping_address);
@@ -11116,7 +11116,7 @@ export class PreCheckoutQueryUpdate {
         return this.raw.currency;
     }
     /**
-     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     get totalAmount(): number {
         return this.raw.total_amount;
@@ -11299,13 +11299,13 @@ export class PollUpdate {
         return this.raw.allows_multiple_answers;
     }
     /**
-     * True, if the poll allows to change the chosen answer options
+     * True, if the poll allows changing the chosen answer options
      */
     get allowsRevoting(): boolean {
         return this.raw.allows_revoting;
     }
     /**
-     * True if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours
+     * True, if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours
      */
     get membersOnly(): boolean {
         return this.raw.members_only;
@@ -13622,7 +13622,7 @@ export class ChatJoinRequestUpdate {
         return this._from ??= new User(this.raw.from);
     }
     /**
-     * Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
+     * Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
      */
     get userChatId(): number {
         return this.raw.user_chat_id;
@@ -15576,7 +15576,7 @@ export class ManagedBotUpdate {
         return this._user ??= new User(this.raw.user);
     }
     /**
-     * Information about the bot. Token of the bot can be fetched using the method getManagedBotToken.
+     * Information about the bot. The token of the bot can be fetched using the method getManagedBotToken.
      */
     get bot(): User {
         return this._bot ??= new User(this.raw.bot);

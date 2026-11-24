@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
 /// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-22T09:57:50.115Z
+/// generated at: 2026-11-24T12:00:36.826Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { Formattable } from "../formattable";
@@ -94,7 +94,7 @@ export interface TelegramAnimation {
      */
     mime_type?: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
 }
@@ -162,7 +162,7 @@ export interface TelegramAudio {
      */
     mime_type?: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
     /**
@@ -475,7 +475,7 @@ export interface TelegramBotDescription {
  */
 export interface TelegramBotFullInfo {
     /**
-     * Unique identifier for this bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier for this bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     id: number;
     /**
@@ -661,7 +661,7 @@ export interface TelegramBusinessConnection {
      */
     user: TelegramUser;
     /**
-     * Identifier of a private chat with the user who created the business connection. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Identifier of a private chat with the user who created the business connection. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     user_chat_id: number;
     /**
@@ -787,7 +787,7 @@ export interface TelegramCallbackQuery {
      */
     chat_instance: string;
     /**
-     * Optional. Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data.
+     * Optional. Data associated with the callback button. Be aware that the message that originated the query can contain no callback buttons with this data.
      */
     data?: string;
     /**
@@ -801,7 +801,7 @@ export interface TelegramCallbackQuery {
  */
 export interface TelegramChat {
     /**
-     * Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     id: number;
     /**
@@ -990,7 +990,7 @@ export interface TelegramChatBoostSourceGiftCode {
      */
     source: "gift_code";
     /**
-     * User for which the gift code was created
+     * User for whom the gift code was created
      */
     user: TelegramUser;
 }
@@ -1054,7 +1054,7 @@ export interface TelegramChatBoostUpdated {
  */
 export interface TelegramChatFullInfo {
     /**
-     * Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     id: number;
     /**
@@ -1154,7 +1154,7 @@ export interface TelegramChatFullInfo {
      */
     bio?: string;
     /**
-     * Optional. True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user
+     * Optional. True, if the privacy settings of the other party in the private chat allow using tg://user?id=<user_id> links only in chats with the user
      */
     has_private_forwards?: true;
     /**
@@ -1234,7 +1234,7 @@ export interface TelegramChatFullInfo {
      */
     custom_emoji_sticker_set_name?: string;
     /**
-     * Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     linked_chat_id?: number;
     /**
@@ -1304,7 +1304,7 @@ export interface TelegramChatInviteLink {
      */
     name?: string;
     /**
-     * Optional. Point in time (Unix timestamp) when the link will expire or has been expired
+     * Optional. Point in time (Unix timestamp) when the link will expire or has expired
      */
     expire_date?: number;
     /**
@@ -1338,7 +1338,7 @@ export interface TelegramChatJoinRequest {
      */
     from: TelegramUser;
     /**
-     * Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
+     * Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
      */
     user_chat_id: number;
     /**
@@ -1797,7 +1797,7 @@ export interface TelegramChatShared {
      */
     request_id: number;
     /**
-     * Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
+     * Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
      */
     chat_id: number;
     /**
@@ -1984,7 +1984,7 @@ export interface TelegramChosenInlineResult {
      */
     location?: TelegramLocation;
     /**
-     * Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message.
+     * Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will also be received in callback queries and can be used to edit the message.
      */
     inline_message_id?: string;
     /**
@@ -1998,7 +1998,7 @@ export interface TelegramChosenInlineResult {
  */
 export interface TelegramCommunity {
     /**
-     * Unique identifier for this community. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier for this community. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     id: number;
     /**
@@ -2050,7 +2050,7 @@ export interface TelegramContact {
      */
     last_name?: string;
     /**
-     * Optional. Contact's user identifier in Telegram. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. Contact's user identifier in Telegram. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     user_id?: number;
     /**
@@ -2102,7 +2102,7 @@ export interface TelegramDirectMessagePriceChanged {
  */
 export interface TelegramDirectMessagesTopic {
     /**
-     * Unique identifier of the topic. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier of the topic. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     topic_id: number;
     /**
@@ -2142,7 +2142,7 @@ export interface TelegramDocument {
      */
     mime_type?: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
 }
@@ -2244,6 +2244,9 @@ export interface TelegramEncryptedPassportElement {
     hash: string;
 }
 
+/**
+ * Describes the parameters of an ephemeral message to be sent.
+ */
 export interface TelegramEphemeralMessageParameters {
     /**
      * Optional. Identifier of the user who will receive the message; required unless the message is sent as an ephemeral reply to a callback query. If omitted, then the parameter chat_id of the method is ignored. If specified together with callback_query_id, then it must be the identifier of the user who pressed the button. Must be omitted for messages sent in chats where the bot isn't a member, unless the message is a reply to an ephemeral message. It is not guaranteed that the user will receive the message, especially if they are offline. See here for more details.
@@ -2386,7 +2389,7 @@ export interface TelegramFile {
      */
     file_unique_id: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
     /**
@@ -2396,7 +2399,7 @@ export interface TelegramFile {
 }
 
 /**
- * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a user account.
+ * Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a business account.
  */
 export interface TelegramForceReply {
     /**
@@ -2488,7 +2491,7 @@ export interface TelegramForumTopicReopened {
 }
 
 /**
- * This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
+ * This object represents a game. Use BotFather to create and edit games; their short names will act as unique identifiers.
  */
 export interface TelegramGame {
     /**
@@ -2536,13 +2539,13 @@ export interface TelegramGameHighScore {
 }
 
 /**
- * This object represents a service message about General forum topic hidden in the chat. Currently holds no information.
+ * This object represents a service message about the General forum topic hidden in the chat. Currently holds no information.
  */
 export interface TelegramGeneralForumTopicHidden {
 }
 
 /**
- * This object represents a service message about General forum topic unhidden in the chat. Currently holds no information.
+ * This object represents a service message about the General forum topic unhidden in the chat. Currently holds no information.
  */
 export interface TelegramGeneralForumTopicUnhidden {
 }
@@ -2670,7 +2673,7 @@ export interface TelegramGiftInfo {
 }
 
 /**
- * This object represent a list of gifts.
+ * This object represents a list of gifts.
  */
 export interface TelegramGifts {
     /**
@@ -2692,7 +2695,7 @@ export interface TelegramGiveaway {
      */
     winners_selection_date: number;
     /**
-     * The number of users which are supposed to be selected as winners of the giveaway
+     * The number of users who are supposed to be selected as winners of the giveaway
      */
     winner_count: number;
     /**
@@ -2704,7 +2707,7 @@ export interface TelegramGiveaway {
      */
     has_public_winners?: true;
     /**
-     * Optional. Description of additional giveaway prize
+     * Optional. Description of an additional giveaway prize
      */
     prize_description?: string;
     /**
@@ -2802,7 +2805,7 @@ export interface TelegramGiveawayWinners {
      */
     was_refunded?: true;
     /**
-     * Optional. Description of additional giveaway prize
+     * Optional. Description of an additional giveaway prize
      */
     prize_description?: string;
 }
@@ -2878,7 +2881,7 @@ export interface TelegramInlineKeyboardButton {
      */
     callback_game?: TelegramCallbackGame;
     /**
-     * Optional. Specify True, to send a Pay button. Substrings “” and “XTR” in the buttons's text will be replaced with a Telegram Star icon.NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
+     * Optional. Specify True to send a Pay button. Substrings “” and “XTR” in the button's text will be replaced with a Telegram Star icon.NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
      */
     pay?: boolean;
     /**
@@ -2922,7 +2925,7 @@ export interface TelegramInlineQuery {
      */
     offset: string;
     /**
-     * Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
+     * Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should always be known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
      */
     chat_type?: "sender" | "private" | "group" | "supergroup" | "channel";
     /**
@@ -3118,7 +3121,7 @@ export interface TelegramInlineQueryResultCachedDocument {
 }
 
 /**
- * Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with specified content instead of the animation.
+ * Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
  */
 export interface TelegramInlineQueryResultCachedGif {
     /**
@@ -3512,7 +3515,7 @@ export interface TelegramInlineQueryResultGame {
 }
 
 /**
- * Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
+ * Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
  */
 export interface TelegramInlineQueryResultGif {
     /**
@@ -3640,7 +3643,7 @@ export interface TelegramInlineQueryResultLocation {
 }
 
 /**
- * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
+ * Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
  */
 export interface TelegramInlineQueryResultMpeg4Gif {
     /**
@@ -3706,7 +3709,7 @@ export interface TelegramInlineQueryResultMpeg4Gif {
 }
 
 /**
- * Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
+ * Represents a link to a photo. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
  */
 export interface TelegramInlineQueryResultPhoto {
     /**
@@ -3916,13 +3919,13 @@ export interface TelegramInlineQueryResultVideo {
      */
     reply_markup?: TelegramInlineKeyboardMarkup;
     /**
-     * Optional. Content of the message to be sent instead of the video. This field is required if InlineQueryResultVideo is used to send an HTML-page as a result (e.g., a YouTube video).
+     * Optional. Content of the message to be sent instead of the video. This field is required if InlineQueryResultVideo is used to send an HTML page as a result (e.g., a YouTube video).
      */
     input_message_content?: TelegramInputMessageContent;
 }
 
 /**
- * Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
+ * Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
  */
 export interface TelegramInlineQueryResultVoice {
     /**
@@ -4060,7 +4063,7 @@ export interface TelegramInputInvoiceMessageContent {
      */
     description: string;
     /**
-     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
+     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user; use it for your internal processes.
      */
     payload: string;
     /**
@@ -4076,11 +4079,11 @@ export interface TelegramInputInvoiceMessageContent {
      */
     prices: TelegramLabeledPrice[];
     /**
-     * Optional. The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
+     * Optional. The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
      */
     max_tip_amount?: number;
     /**
-     * Optional. A JSON-serialized Array of suggested amounts of tip in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
+     * Optional. A JSON-serialized Array of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increasing order and must not exceed max_tip_amount.
      */
     suggested_tip_amounts?: number[];
     /**
@@ -4181,7 +4184,7 @@ export interface TelegramInputMediaAnimation {
      */
     media: string;
     /**
-     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: string;
     /**
@@ -4231,7 +4234,7 @@ export interface TelegramInputMediaAudio {
      */
     media: string;
     /**
-     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: string;
     /**
@@ -4273,7 +4276,7 @@ export interface TelegramInputMediaDocument {
      */
     media: string;
     /**
-     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: string;
     /**
@@ -4475,7 +4478,7 @@ export interface TelegramInputMediaVideo {
      */
     media: string;
     /**
-     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: string;
     /**
@@ -4533,7 +4536,7 @@ export interface TelegramInputMediaVoiceNote {
      */
     type: "voice_note";
     /**
-     * File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass "attach://<file_attach_name>" to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+     * File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
      */
     media: string;
     /**
@@ -4609,7 +4612,7 @@ export interface TelegramInputPaidMediaVideo {
      */
     media: string;
     /**
-     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: string;
     /**
@@ -4867,7 +4870,7 @@ export interface TelegramInputRichBlockDocument {
 }
 
 /**
- * A block quotation, corresponding to the HTML tag <blockquote> with custom attribute "expandable".
+ * A block quotation, corresponding to the HTML tag <blockquote> with the custom attribute "expandable".
  */
 export interface TelegramInputRichBlockExpandableBlockQuotation {
     /**
@@ -5117,7 +5120,7 @@ export interface TelegramInputRichBlockTable {
 }
 
 /**
- * A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft, therefore it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
+ * A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft; therefore, it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
  */
 export interface TelegramInputRichBlockThinking {
     /**
@@ -5175,11 +5178,11 @@ export interface TelegramInputRichMessage {
      */
     blocks?: TelegramInputRichBlock[];
     /**
-     * Optional. Content of the rich message to send described using HTML formatting. See rich message formatting options for more details. Use media field to specify the media used in the message.
+     * Optional. Content of the rich message to send described using HTML formatting. See rich message formatting options for more details. Use the media field to specify the media used in the message.
      */
     html?: string;
     /**
-     * Optional. Content of the rich message to send described using Markdown formatting. See rich message formatting options for more details. Use media field to specify the media used in the message.
+     * Optional. Content of the rich message to send described using Markdown formatting. See rich message formatting options for more details. Use the media field to specify the media used in the message.
      */
     markdown?: string;
     /**
@@ -5271,7 +5274,7 @@ export interface TelegramInputSticker {
      */
     mask_position?: TelegramMaskPosition;
     /**
-     * Optional. List of 0-20 search keywords for the sticker with total length of up to 64 characters. For “regular” and “custom_emoji” stickers only.
+     * Optional. List of 0-20 search keywords for the sticker with a total length of up to 64 characters. For “regular” and “custom_emoji” stickers only.
      */
     keywords?: string[];
 }
@@ -5452,7 +5455,7 @@ export interface TelegramInvoice {
      */
     currency: string;
     /**
-     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     total_amount: number;
 }
@@ -5504,7 +5507,7 @@ export interface TelegramKeyboardButton {
 }
 
 /**
- * This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
+ * This object represents the type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
  */
 export interface TelegramKeyboardButtonPollType {
     /**
@@ -5514,7 +5517,7 @@ export interface TelegramKeyboardButtonPollType {
 }
 
 /**
- * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the chat if appropriate. More about requesting chats ».
+ * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted the requested rights in the chat if appropriate. More about requesting chats ».
  */
 export interface TelegramKeyboardButtonRequestChat {
     /**
@@ -5624,7 +5627,7 @@ export interface TelegramLabeledPrice {
      */
     label: string;
     /**
-     * Price of the product in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Price of the product in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     amount: number;
 }
@@ -5674,11 +5677,11 @@ export interface TelegramLivePhoto {
      */
     photo?: TelegramPhotoSize[];
     /**
-     * Identifier for the video file which can be used to download or reuse the file
+     * Identifier for the video file, which can be used to download or reuse the file
      */
     file_id: string;
     /**
-     * Unique identifier for the video file which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+     * Unique identifier for the video file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
      */
     file_unique_id: string;
     /**
@@ -5698,7 +5701,7 @@ export interface TelegramLivePhoto {
      */
     mime_type?: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
 }
@@ -5724,7 +5727,7 @@ export interface TelegramLocation {
      */
     live_period?: number;
     /**
-     * Optional. The direction in which user is moving, in degrees; 1-360. For active live locations only.
+     * Optional. The direction in which the user is moving, in degrees; 1-360. For active live locations only.
      */
     heading?: number;
     /**
@@ -5796,7 +5799,7 @@ export interface TelegramManagedBotUpdated {
      */
     user: TelegramUser;
     /**
-     * Information about the bot. Token of the bot can be fetched using the method getManagedBotToken.
+     * Information about the bot. The token of the bot can be fetched using the method getManagedBotToken.
      */
     bot: TelegramUser;
 }
@@ -5810,7 +5813,7 @@ export interface TelegramMaskPosition {
      */
     point: "forehead" | "eyes" | "mouth" | "chin";
     /**
-     * Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place mask just to the left of the default mask position.
+     * Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place the mask just to the left of the default mask position.
      */
     x_shift: number;
     /**
@@ -6145,7 +6148,7 @@ export interface TelegramMessage {
      */
     new_chat_title?: string;
     /**
-     * Optional. A chat photo was change to this value
+     * Optional. A chat photo was changed to this value
      */
     new_chat_photo?: TelegramPhotoSize[];
     /**
@@ -6157,11 +6160,11 @@ export interface TelegramMessage {
      */
     group_chat_created?: true;
     /**
-     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
+     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to the very first message in a directly created supergroup.
      */
     supergroup_chat_created?: true;
     /**
-     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
+     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to the very first message in a channel.
      */
     channel_chat_created?: true;
     /**
@@ -6169,11 +6172,11 @@ export interface TelegramMessage {
      */
     message_auto_delete_timer_changed?: TelegramMessageAutoDeleteTimerChanged;
     /**
-     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     migrate_to_chat_id?: number;
     /**
-     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     migrate_from_chat_id?: number;
     /**
@@ -6397,7 +6400,7 @@ export interface TelegramMessageEntity {
      */
     length: number;
     /**
-     * Optional. For “text_link” only, URL that will be opened after user taps on the text
+     * Optional. For “text_link” only, URL that will be opened after the user taps on the text
      */
     url?: string;
     /**
@@ -6445,7 +6448,7 @@ export interface TelegramMessageGenerationStopped {
  */
 export interface TelegramMessageId {
     /**
-     * Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
+     * Unique message identifier. In specific instances (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
      */
     message_id: number;
 }
@@ -6866,7 +6869,7 @@ export interface TelegramPaidMessagesWaived {
  */
 export interface TelegramPassportData {
     /**
-     * Array with information about documents and other Telegram Passport elements that was shared with the bot
+     * Array with information shared with the bot about documents and other Telegram Passport elements
      */
     data: TelegramEncryptedPassportElement[];
     /**
@@ -6973,7 +6976,7 @@ export interface TelegramPassportElementErrorFrontSide {
 }
 
 /**
- * Represents an issue with the reverse side of a document. The error is considered resolved when the file with reverse side of the document changes.
+ * Represents an issue with the reverse side of a document. The error is considered resolved when the file with the reverse side of the document changes.
  */
 export interface TelegramPassportElementErrorReverseSide {
     /**
@@ -7039,7 +7042,7 @@ export interface TelegramPassportElementErrorTranslationFile {
 }
 
 /**
- * Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation change.
+ * Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation changes.
  */
 export interface TelegramPassportElementErrorTranslationFiles {
     /**
@@ -7171,11 +7174,11 @@ export interface TelegramPoll {
      */
     allows_multiple_answers: boolean;
     /**
-     * True, if the poll allows to change the chosen answer options
+     * True, if the poll allows changing the chosen answer options
      */
     allows_revoting: boolean;
     /**
-     * True if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours
+     * True, if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours
      */
     members_only: boolean;
     /**
@@ -7391,7 +7394,7 @@ export interface TelegramPreCheckoutQuery {
      */
     currency: string;
     /**
-     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     total_amount: number;
     /**
@@ -7516,7 +7519,7 @@ export interface TelegramRefundedPayment {
      */
     currency: string;
     /**
-     * Total refunded price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total refunded price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     total_amount: number;
     /**
@@ -7558,7 +7561,7 @@ export interface TelegramReplyKeyboardMarkup {
      */
     input_field_placeholder?: string;
     /**
-     * Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
+     * Optional. Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.Example: A user requests to change the bot's language, and the bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
      */
     selective?: boolean;
     /**
@@ -7572,11 +7575,11 @@ export interface TelegramReplyKeyboardMarkup {
  */
 export interface TelegramReplyKeyboardRemove {
     /**
-     * Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
+     * Requests clients to remove the custom keyboard (the user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
      */
     remove_keyboard: true;
     /**
-     * Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
+     * Optional. Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.Example: A user votes in a poll, and the bot returns a confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
      */
     selective?: boolean;
 }
@@ -7614,7 +7617,7 @@ export interface TelegramReplyParameters {
      */
     quote_entities?: TelegramMessageEntity[];
     /**
-     * Optional. A JSON-serialized list of quoted parts of the rich message to be replied to. Must contain one element for each quoted text of the message in the order of their appearance. Each of the following is a separate quoted text: the text of a paragraph, a heading, a preformatted block, a footer, or a mathematical expression; the text and the credit of a block quotation or a pull quotation; the summary of a details block; the caption and each cell of a table; the text and the credit of a caption of a media block, a collage, a slideshow, or a map. Texts of blocks nested in lists, block quotations, details, collages, and slideshows are separate quoted texts too. The first and the last elements can contain only a part of the corresponding text; all other elements must contain the whole text. Formatting of the quoted parts must be kept, and rich texts must be nested in the same way as in the message received from the server. Mathematical expressions must be quoted entirely. Buttons in RichBlockButtons, anchors and dividers can't be quoted. Up to 32 quoted texts with total length up to 1024 characters can be specified. Only plain text, RichTextBold, RichTextItalic, RichTextUnderline, RichTextStrikethrough, RichTextSpoiler, RichTextSubscript, RichTextSuperscript, RichTextDateTime, RichTextCustomEmoji, RichTextMathematicalExpression, and arrays of them are kept in the quote; other rich text types are replaced with their text. If non-empty, then quote, quote_parse_mode and quote_entities are ignored.
+     * Optional. A JSON-serialized list of quoted parts of the rich message to be replied to. Must contain one element for each quoted text of the message in the order of their appearance. Each of the following is a separate quoted text: the text of a paragraph, a heading, a preformatted block, a footer, or a mathematical expression; the text and the credit of a block quotation or a pull quotation; the summary of a details block; the caption and each cell of a table; the text and the credit of a caption of a media block, a collage, a slideshow, or a map. Texts of blocks nested in lists, block quotations, details, collages, and slideshows are separate quoted texts too. The first and the last elements can contain only a part of the corresponding text; all other elements must contain the whole text. Formatting of the quoted parts must be kept, and rich texts must be nested in the same way as in the message received from the server. Mathematical expressions must be quoted entirely. Buttons in RichBlockButtons, anchors and dividers can't be quoted. Up to 32 quoted texts with a total length of up to 1024 characters can be specified. Only plain text, RichTextBold, RichTextItalic, RichTextUnderline, RichTextStrikethrough, RichTextSpoiler, RichTextSubscript, RichTextSuperscript, RichTextDateTime, RichTextCustomEmoji, RichTextMathematicalExpression, and arrays of them are kept in the quote; other rich text types are replaced with their text. If non-empty, then quote, quote_parse_mode and quote_entities are ignored.
      */
     quote_rich_texts?: TelegramRichText[];
     /**
@@ -7636,7 +7639,7 @@ export interface TelegramReplyParameters {
  */
 export interface TelegramResponseParameters {
     /**
-     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     migrate_to_chat_id?: number;
     /**
@@ -7866,7 +7869,7 @@ export interface TelegramRichBlockDocument {
 }
 
 /**
- * A block quotation, corresponding to the HTML tag <blockquote> with custom attribute "expandable".
+ * A block quotation, corresponding to the HTML tag <blockquote> with the custom attribute "expandable".
  */
 export interface TelegramRichBlockExpandableBlockQuotation {
     /**
@@ -8154,7 +8157,7 @@ export interface TelegramRichBlockTableCell {
 }
 
 /**
- * A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft, therefore it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
+ * A block with a “Thinking…” placeholder, corresponding to the custom HTML tag <tg-thinking>. The block may be used only in sendRichMessageDraft; therefore, it can't be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.
  */
 export interface TelegramRichBlockThinking {
     /**
@@ -8303,7 +8306,7 @@ export interface TelegramRichTextAnchorLink {
      */
     text: TelegramRichText;
     /**
-     * The name of the anchor. If the name is empty, then the link brings back to the top of the message.
+     * The name of the anchor. If the name is empty, then the link brings the user back to the top of the message.
      */
     anchor_name: string;
 }
@@ -8855,7 +8858,7 @@ export interface TelegramShippingQuery {
      */
     invoice_payload: string;
     /**
-     * User specified shipping address
+     * User-specified shipping address
      */
     shipping_address: TelegramShippingAddress;
 }
@@ -9092,7 +9095,7 @@ export interface TelegramStoryAreaTypeSuggestedReaction {
      */
     is_dark?: boolean;
     /**
-     * Optional. Pass True if reaction area corner is flipped
+     * Optional. Pass True if the reaction area corner is flipped
      */
     is_flipped?: boolean;
 }
@@ -9120,7 +9123,7 @@ export interface TelegramStoryAreaTypeWeather {
      */
     type: "weather";
     /**
-     * Temperature, in degree Celsius
+     * Temperature, in degrees Celsius
      */
     temperature: number;
     /**
@@ -9142,7 +9145,7 @@ export interface TelegramSuccessfulPayment {
      */
     currency: string;
     /**
-     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     total_amount: number;
     /**
@@ -9274,7 +9277,7 @@ export interface TelegramSuggestedPostParameters {
      */
     price?: TelegramSuggestedPostPrice;
     /**
-     * Optional. Proposed send date of the post. If specified, then the date must be between 300 second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it.
+     * Optional. Proposed send date of the post. If specified, then the date must be between 300 seconds and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it.
      */
     send_date?: number;
 }
@@ -9633,7 +9636,7 @@ export interface TelegramUniqueGift {
      */
     backdrop: TelegramUniqueGiftBackdrop;
     /**
-     * Optional. True, if the original regular gift was exclusively purchaseable by Telegram Premium subscribers
+     * Optional. True, if the original regular gift was exclusively purchasable by Telegram Premium subscribers
      */
     is_premium?: true;
     /**
@@ -9805,7 +9808,7 @@ export interface TelegramUniqueGiftSymbol {
      */
     sticker: TelegramSticker;
     /**
-     * The number of unique gifts that receive this model for every 1000 gifts upgraded
+     * The number of unique gifts that receive this symbol for every 1000 gifts upgraded
      */
     rarity_per_mille: number;
 }
@@ -9815,7 +9818,7 @@ export interface TelegramUniqueGiftSymbol {
  */
 export interface TelegramUpdate {
     /**
-     * The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This identifier becomes especially handy if you're using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+     * The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This identifier becomes especially handy if you're using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then the identifier of the next update will be chosen randomly instead of sequentially.
      */
     update_id: number;
     /**
@@ -9859,7 +9862,7 @@ export interface TelegramUpdate {
      */
     message_reaction?: TelegramMessageReactionUpdated;
     /**
-     * Optional. Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify "message_reaction_count" in the list of allowed_updates to receive these updates. The updates are grouped and can be sent with delay up to a few minutes.
+     * Optional. Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify "message_reaction_count" in the list of allowed_updates to receive these updates. The updates are grouped and can be sent with a delay of up to a few minutes.
      */
     message_reaction_count?: TelegramMessageReactionCountUpdated;
     /**
@@ -9895,7 +9898,7 @@ export interface TelegramUpdate {
      */
     purchased_paid_media?: TelegramPaidMediaPurchased;
     /**
-     * Optional. New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot.
+     * Optional. New poll state. Bots receive only updates about manually stopped polls and polls which are sent by the bot.
      */
     poll?: TelegramPoll;
     /**
@@ -9923,7 +9926,7 @@ export interface TelegramUpdate {
      */
     removed_chat_boost?: TelegramChatBoostRemoved;
     /**
-     * Optional. A new bot was created to be managed by the bot, or token or owner of a managed bot was changed
+     * Optional. A new bot was created to be managed by the bot, or the token or owner of a managed bot was changed
      */
     managed_bot?: TelegramManagedBotUpdated;
     /**
@@ -9941,7 +9944,7 @@ export interface TelegramUpdate {
  */
 export interface TelegramUser {
     /**
-     * Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     id: number;
     /**
@@ -9999,7 +10002,7 @@ export interface TelegramUserProfileAudios {
 }
 
 /**
- * This object represent a user's profile pictures.
+ * This object represents a user's profile pictures.
  */
 export interface TelegramUserProfilePhotos {
     /**
@@ -10013,11 +10016,11 @@ export interface TelegramUserProfilePhotos {
 }
 
 /**
- * This object describes the rating of a user based on their Telegram Star spendings.
+ * This object describes the rating of a user based on their Telegram Star spending.
  */
 export interface TelegramUserRating {
     /**
-     * Current level of the user, indicating their reliability when purchasing digital goods and services. A higher level suggests a more trustworthy customer; a negative level is likely reason for concern.
+     * Current level of the user, indicating their reliability when purchasing digital goods and services. A higher level suggests a more trustworthy customer; a negative level is likely a reason for concern.
      */
     level: number;
     /**
@@ -10131,7 +10134,7 @@ export interface TelegramVideo {
      */
     mime_type?: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
 }
@@ -10227,7 +10230,7 @@ export interface TelegramVideoQuality {
      */
     codec: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
 }
@@ -10253,7 +10256,7 @@ export interface TelegramVoice {
      */
     mime_type?: string;
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     file_size?: number;
 }

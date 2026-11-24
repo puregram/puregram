@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
 /// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-22T09:57:50.115Z
+/// generated at: 2026-11-24T12:00:36.826Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { TelegramInputFile, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPollOption, TelegramMessageId, TelegramReactionType } from "./types";
@@ -19,28 +19,28 @@ export interface TelegramShortcuts {
      */
     sendPhoto(chat: number | string, photo: TelegramInputFile | string, params?: Omit<SendPhotoParams, "chat_id" | "photo">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendAudio`. Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+     * Shortcut for `tg.api.sendAudio`. Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size; this limit may be changed in the future.
      * For sending voice messages, use the sendVoice method instead.
      */
     sendAudio(chat: number | string, audio: TelegramInputFile | string, params?: Omit<SendAudioParams, "chat_id" | "audio">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendDocument`. Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+     * Shortcut for `tg.api.sendDocument`. Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size; this limit may be changed in the future.
      */
     sendDocument(chat: number | string, document: TelegramInputFile | string, params?: Omit<SendDocumentParams, "chat_id" | "document">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendVideo`. Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+     * Shortcut for `tg.api.sendVideo`. Use this method to send video files; Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size; this limit may be changed in the future.
      */
     sendVideo(chat: number | string, video: TelegramInputFile | string, params?: Omit<SendVideoParams, "chat_id" | "video">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendAnimation`. Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+     * Shortcut for `tg.api.sendAnimation`. Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size; this limit may be changed in the future.
      */
     sendAnimation(chat: number | string, animation: TelegramInputFile | string, params?: Omit<SendAnimationParams, "chat_id" | "animation">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendVoice`. Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+     * Shortcut for `tg.api.sendVoice`. Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size; this limit may be changed in the future.
      */
     sendVoice(chat: number | string, voice: TelegramInputFile | string, params?: Omit<SendVoiceParams, "chat_id" | "voice">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendVideoNote`. Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success, the sent Message is returned.
+     * Shortcut for `tg.api.sendVideoNote`. Use this method to send a rounded square MPEG4 video up to 1 minute long. On success, the sent Message is returned.
      */
     sendVideoNote(chat: number | string, videoNote: TelegramInputFile | string, params?: Omit<SendVideoNoteParams, "chat_id" | "video_note">): Promise<MessageUpdate>;
     /**
@@ -56,11 +56,11 @@ export interface TelegramShortcuts {
      */
     sendWidget<W extends WidgetInput>(chat: number | string, widget: W, params?: WidgetSendOptions<W>): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendSharedWidget`. Use this method to send again a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+     * Shortcut for `tg.api.sendSharedWidget`. Use this method to resend a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
      */
     sendSharedWidget(chat: number | string, widgetId: string, params?: Omit<SendSharedWidgetParams, "chat_id" | "widget_id">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendLocation`. Use this method to send point on the map. On success, the sent Message is returned.
+     * Shortcut for `tg.api.sendLocation`. Use this method to send a point on the map. On success, the sent Message is returned.
      */
     sendLocation(chat: number | string, latitude: number, longitude: number, params?: Omit<SendLocationParams, "chat_id" | "latitude" | "longitude">): Promise<MessageUpdate>;
     /**
@@ -85,7 +85,7 @@ export interface TelegramShortcuts {
      */
     sendPoll(chat: number | string, question: string | Formattable, options: TelegramInputPollOption[], params?: Omit<SendPollParams, "chat_id" | "question" | "options">): Promise<MessageUpdate>;
     /**
-     * Shortcut for `tg.api.sendMediaGroup`. Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
+     * Shortcut for `tg.api.sendMediaGroup`. Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can only be grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
      */
     sendMediaGroup(chat: number | string, media: (TelegramInputMediaAudio | TelegramInputMediaDocument | TelegramInputMediaLivePhoto | TelegramInputMediaPhoto | TelegramInputMediaVideo)[], params?: Omit<SendMediaGroupParams, "chat_id" | "media">): Promise<MessageUpdate[]>;
     /**
@@ -105,7 +105,7 @@ export interface TelegramShortcuts {
      */
     copyMany(from: number | string, to: number | string, messageIds: number[], params?: Omit<CopyMessagesParams, "from_chat_id" | "chat_id" | "message_ids">): Promise<TelegramMessageId[]>;
     /**
-     * Shortcut for `tg.api.deleteMessage`. Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
+     * Shortcut for `tg.api.deleteMessage`. Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has the can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has the can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
      */
     delete(chat: number | string, messageId: number, params?: Omit<DeleteMessageParams, "chat_id" | "message_id">): Promise<true>;
     /**
