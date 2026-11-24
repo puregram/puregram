@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
 /// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-22T09:57:50.115Z
+/// generated at: 2026-11-24T12:00:36.826Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { TelegramAnimation, TelegramAreaPosition, TelegramAudio, TelegramCallbackGame, TelegramChat, TelegramChatBackground, TelegramChatBoost, TelegramChatBoostAdded, TelegramChatBoostRemoved, TelegramChatBoostSource, TelegramChatBoostUpdated, TelegramChatInviteLink, TelegramChatJoinRequest, TelegramChatLocation, TelegramChatMember, TelegramChatMemberUpdated, TelegramChatOwnerChanged, TelegramChatOwnerLeft, TelegramChatPermissions, TelegramChatPhoto, TelegramChatShareThemeBackdrop, TelegramChatShareThemeBackdrops, TelegramChatShared, TelegramChecklist, TelegramChecklistTasksAdded, TelegramChecklistTasksDone, TelegramChosenInlineResult, TelegramCommunityChatAdded, TelegramCommunityChatJoined, TelegramCommunityChatRemoved, TelegramContact, TelegramCopyTextButton, TelegramDice, TelegramDirectMessagePriceChanged, TelegramDirectMessagesTopic, TelegramDisabledButton, TelegramDocument, TelegramEncryptedCredentials, TelegramEncryptedPassportElement, TelegramExternalReplyInfo, TelegramFile, TelegramForumTopicClosed, TelegramForumTopicCreated, TelegramForumTopicEdited, TelegramForumTopicReopened, TelegramGame, TelegramGeneralForumTopicHidden, TelegramGeneralForumTopicUnhidden, TelegramGiftInfo, TelegramGiveaway, TelegramGiveawayCompleted, TelegramGiveawayCreated, TelegramGiveawayWinners, TelegramInlineKeyboardButton, TelegramInlineKeyboardMarkup, TelegramInlineQuery, TelegramInvoice, TelegramLink, TelegramLinkPreviewOptions, TelegramLivePhoto, TelegramLocation, TelegramLoginUrl, TelegramManagedBotCreated, TelegramMaskPosition, TelegramMaybeInaccessibleMessage, TelegramMessage, TelegramMessageAutoDeleteTimerChanged, TelegramMessageEntity, TelegramMessageId, TelegramMessageOrigin, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramOrderInfo, TelegramPaidMediaInfo, TelegramPaidMessagePriceChanged, TelegramPaidMessagesWaived, TelegramPassportData, TelegramPhotoSize, TelegramPoll, TelegramPollAnswer, TelegramPollMedia, TelegramPollOption, TelegramPollOptionAdded, TelegramPollOptionDeleted, TelegramPreCheckoutQuery, TelegramProximityAlertTriggered, TelegramReactionCount, TelegramReactionType, TelegramRefundedPayment, TelegramRichMessage, TelegramRichText, TelegramSharedUser, TelegramShippingAddress, TelegramShippingQuery, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramSuccessfulPayment, TelegramSuggestedPostApprovalFailed, TelegramSuggestedPostApproved, TelegramSuggestedPostDeclined, TelegramSuggestedPostInfo, TelegramSuggestedPostPaid, TelegramSuggestedPostRefunded, TelegramSwitchInlineQueryChosenChat, TelegramTextQuote, TelegramTonNft, TelegramTonNftAttribute, TelegramTonWalletCard, TelegramTonWalletCardSticker, TelegramTonWalletTransfer, TelegramUniqueGift, TelegramUniqueGiftBackdropColors, TelegramUniqueGiftInfo, TelegramUser, TelegramUserProfilePhotos, TelegramUsersShared, TelegramVenue, TelegramVideo, TelegramVideoChatEnded, TelegramVideoChatParticipantsInvited, TelegramVideoChatScheduled, TelegramVideoChatStarted, TelegramVideoNote, TelegramVideoQuality, TelegramVoice, TelegramWebAppData, TelegramWebAppInfo, TelegramWidget, TelegramWidgetQueryWallet, TelegramWriteAccessAllowed } from "./types";
@@ -70,7 +70,7 @@ export class Animation {
         return this.raw.mime_type;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;
@@ -214,7 +214,7 @@ export class Audio {
         return this.raw.mime_type;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;
@@ -290,7 +290,7 @@ export class Chat {
         return new Chat(raw);
     }
     /**
-     * Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get id(): number {
         return this.raw.id;
@@ -538,7 +538,7 @@ export class ChatInviteLink {
         return this.raw.name;
     }
     /**
-     * Optional. Point in time (Unix timestamp) when the link will expire or has been expired
+     * Optional. Point in time (Unix timestamp) when the link will expire or has expired
      */
     get expireDate(): number | undefined {
         return this.raw.expire_date;
@@ -644,7 +644,7 @@ export class ChatJoinRequest {
         return this._from ??= new User(this.raw.from);
     }
     /**
-     * Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
+     * Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
      */
     get userChatId(): number {
         return this.raw.user_chat_id;
@@ -1145,7 +1145,7 @@ export class ChatShared {
         return this.raw.request_id;
     }
     /**
-     * Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
+     * Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
      */
     get chatId(): number {
         return this.raw.chat_id;
@@ -1283,7 +1283,7 @@ export class ChosenInlineResult {
         return this._location;
     }
     /**
-     * Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will be also received in callback queries and can be used to edit the message.
+     * Optional. Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message. Will also be received in callback queries and can be used to edit the message.
      */
     get inlineMessageId(): string | undefined {
         return this.raw.inline_message_id;
@@ -1343,7 +1343,7 @@ export class Contact {
         return this.raw.last_name;
     }
     /**
-     * Optional. Contact's user identifier in Telegram. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. Contact's user identifier in Telegram. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get userId(): number | undefined {
         return this.raw.user_id;
@@ -1458,7 +1458,7 @@ export class Document {
         return this.raw.mime_type;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;
@@ -1984,7 +1984,7 @@ export class File {
         return this.raw.file_unique_id;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;
@@ -2109,7 +2109,7 @@ export class ForumTopicEdited {
 }
 
 /**
- * This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
+ * This object represents a game. Use BotFather to create and edit games; their short names will act as unique identifiers.
  */
 export class Game {
     private _photo?: Photo;
@@ -2212,7 +2212,7 @@ export class Giveaway {
         return this.raw.winners_selection_date;
     }
     /**
-     * The number of users which are supposed to be selected as winners of the giveaway
+     * The number of users who are supposed to be selected as winners of the giveaway
      */
     get winnerCount(): number {
         return this.raw.winner_count;
@@ -2230,7 +2230,7 @@ export class Giveaway {
         return this.raw.has_public_winners;
     }
     /**
-     * Optional. Description of additional giveaway prize
+     * Optional. Description of an additional giveaway prize
      */
     get prizeDescription(): string | undefined {
         return this.raw.prize_description;
@@ -2432,7 +2432,7 @@ export class GiveawayWinners {
         return this.raw.was_refunded;
     }
     /**
-     * Optional. Description of additional giveaway prize
+     * Optional. Description of an additional giveaway prize
      */
     get prizeDescription(): string | undefined {
         return this.raw.prize_description;
@@ -2583,7 +2583,7 @@ export class InlineKeyboardButton {
         return this.raw.callback_game;
     }
     /**
-     * Optional. Specify True, to send a Pay button. Substrings “” and “XTR” in the buttons's text will be replaced with a Telegram Star icon.NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
+     * Optional. Specify True to send a Pay button. Substrings “” and “XTR” in the button's text will be replaced with a Telegram Star icon.NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
      */
     get pay(): boolean | undefined {
         return this.raw.pay;
@@ -2783,7 +2783,7 @@ export class InlineQuery {
         return this.raw.offset;
     }
     /**
-     * Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
+     * Optional. Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should always be known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat.
      */
     get chatType(): ("sender" | "private" | "group" | "supergroup" | "channel") | undefined {
         return this.raw.chat_type;
@@ -2871,7 +2871,7 @@ export class Invoice {
         return this.raw.currency;
     }
     /**
-     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     get totalAmount(): number {
         return this.raw.total_amount;
@@ -2976,13 +2976,13 @@ export class LivePhoto {
         return this._photo;
     }
     /**
-     * Identifier for the video file which can be used to download or reuse the file
+     * Identifier for the video file, which can be used to download or reuse the file
      */
     get fileId(): string {
         return this.raw.file_id;
     }
     /**
-     * Unique identifier for the video file which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+     * Unique identifier for the video file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
      */
     get fileUniqueId(): string {
         return this.raw.file_unique_id;
@@ -3012,7 +3012,7 @@ export class LivePhoto {
         return this.raw.mime_type;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;
@@ -3080,7 +3080,7 @@ export class Location {
         return this.raw.live_period;
     }
     /**
-     * Optional. The direction in which user is moving, in degrees; 1-360. For active live locations only.
+     * Optional. The direction in which the user is moving, in degrees; 1-360. For active live locations only.
      */
     get heading(): number | undefined {
         return this.raw.heading;
@@ -3149,7 +3149,7 @@ export class MaskPosition {
         return this.raw.point;
     }
     /**
-     * Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place mask just to the left of the default mask position.
+     * Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place the mask just to the left of the default mask position.
      */
     get xShift(): number {
         return this.raw.x_shift;
@@ -3748,7 +3748,7 @@ export class Message {
         return this.raw.new_chat_title;
     }
     /**
-     * Optional. A chat photo was change to this value
+     * Optional. A chat photo was changed to this value
      */
     get newChatPhoto(): Photo | undefined {
         if (this._newChatPhoto === undefined) {
@@ -3769,13 +3769,13 @@ export class Message {
         return this.raw.group_chat_created;
     }
     /**
-     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to a very first message in a directly created supergroup.
+     * Optional. Service message: the supergroup has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a supergroup when it is created. It can only be found in reply_to_message if someone replies to the very first message in a directly created supergroup.
      */
     get supergroupChatCreated(): true | undefined {
         return this.raw.supergroup_chat_created;
     }
     /**
-     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to a very first message in a channel.
+     * Optional. Service message: the channel has been created. This field can't be received in a message coming through updates, because a bot can't be a member of a channel when it is created. It can only be found in reply_to_message if someone replies to the very first message in a channel.
      */
     get channelChatCreated(): true | undefined {
         return this.raw.channel_chat_created;
@@ -3787,13 +3787,13 @@ export class Message {
         return this.raw.message_auto_delete_timer_changed;
     }
     /**
-     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get migrateToChatId(): number | undefined {
         return this.raw.migrate_to_chat_id;
     }
     /**
-     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Optional. The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get migrateFromChatId(): number | undefined {
         return this.raw.migrate_from_chat_id;
@@ -5088,7 +5088,7 @@ export class MessageEntity {
         return this.raw.length;
     }
     /**
-     * Optional. For “text_link” only, URL that will be opened after user taps on the text
+     * Optional. For “text_link” only, URL that will be opened after the user taps on the text
      */
     get url(): string | undefined {
         return this.raw.url;
@@ -5276,7 +5276,7 @@ export class MessageId {
         return new MessageId(raw);
     }
     /**
-     * Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
+     * Unique message identifier. In specific instances (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.
      */
     get id(): number {
         return this.raw.message_id;
@@ -5502,7 +5502,7 @@ export class PassportData {
         return new PassportData(raw);
     }
     /**
-     * Array with information about documents and other Telegram Passport elements that was shared with the bot
+     * Array with information shared with the bot about documents and other Telegram Passport elements
      */
     get data(): TelegramEncryptedPassportElement[] {
         return this.raw.data;
@@ -5642,13 +5642,13 @@ export class Poll {
         return this.raw.allows_multiple_answers;
     }
     /**
-     * True, if the poll allows to change the chosen answer options
+     * True, if the poll allows changing the chosen answer options
      */
     get allowsRevoting(): boolean {
         return this.raw.allows_revoting;
     }
     /**
-     * True if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours
+     * True, if voting is limited to users who have been members of the chat where the poll was originally sent for more than 24 hours
      */
     get membersOnly(): boolean {
         return this.raw.members_only;
@@ -6228,7 +6228,7 @@ export class PreCheckoutQuery {
         return this.raw.currency;
     }
     /**
-     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     get totalAmount(): number {
         return this.raw.total_amount;
@@ -6411,7 +6411,7 @@ export class ShippingQuery {
         return this.raw.invoice_payload;
     }
     /**
-     * User specified shipping address
+     * User-specified shipping address
      */
     get shippingAddress(): ShippingAddress {
         return this._shippingAddress ??= new ShippingAddress(this.raw.shipping_address);
@@ -6724,7 +6724,7 @@ export class SuccessfulPayment {
         return this.raw.currency;
     }
     /**
-     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+     * Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
      */
     get totalAmount(): number {
         return this.raw.total_amount;
@@ -7104,7 +7104,7 @@ export class User {
         return new User(raw);
     }
     /**
-     * Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+     * Unique identifier for this user or bot. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type is safe for storing this identifier.
      */
     get id(): number {
         return this.raw.id;
@@ -7215,7 +7215,7 @@ export class User {
 }
 
 /**
- * This object represent a user's profile pictures.
+ * This object represents a user's profile pictures.
  */
 export class UserProfilePhotos {
     private _photos?: Photo[];
@@ -7442,7 +7442,7 @@ export class Video {
         return this.raw.mime_type;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;
@@ -7675,7 +7675,7 @@ export class VideoQuality {
         return this.raw.codec;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;
@@ -7727,7 +7727,7 @@ export class Voice {
         return this.raw.mime_type;
     }
     /**
-     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
+     * Optional. File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type is safe for storing this value.
      */
     get fileSize(): number | undefined {
         return this.raw.file_size;

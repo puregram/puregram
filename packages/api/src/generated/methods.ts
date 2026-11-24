@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
 /// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-22T09:57:50.115Z
+/// generated at: 2026-11-24T12:00:36.826Z
 /// see scripts/emit.ts in @puregram/api
 
 import type { TelegramAcceptedGiftTypes, TelegramBotAccessSettings, TelegramBotCommand, TelegramBotCommandScope, TelegramBotDescription, TelegramBotFullInfo, TelegramBotName, TelegramBotShortDescription, TelegramBusinessConnection, TelegramChatAdministratorRights, TelegramChatFullInfo, TelegramChatInviteLink, TelegramChatMember, TelegramChatMemberAdministrator, TelegramChatMemberOwner, TelegramChatPermissions, TelegramChatShareThemeBackdrops, TelegramEphemeralMessageParameters, TelegramFile, TelegramForceReply, TelegramForumTopic, TelegramGameHighScore, TelegramGifts, TelegramInlineKeyboardMarkup, TelegramInlineQueryResult, TelegramInlineQueryResultsButton, TelegramInputChecklist, TelegramInputFile, TelegramInputMedia, TelegramInputMediaAudio, TelegramInputMediaDocument, TelegramInputMediaLivePhoto, TelegramInputMediaPhoto, TelegramInputMediaVideo, TelegramInputPaidMedia, TelegramInputPollMedia, TelegramInputPollOption, TelegramInputProfilePhoto, TelegramInputRichMessage, TelegramInputSticker, TelegramInputStoryContent, TelegramKeyboardButton, TelegramLabeledPrice, TelegramLinkPreviewOptions, TelegramMaskPosition, TelegramMenuButton, TelegramMessage, TelegramMessageEntity, TelegramMessageId, TelegramOwnedGifts, TelegramPassportElementError, TelegramPoll, TelegramPreparedInlineMessage, TelegramPreparedKeyboardButton, TelegramReactionType, TelegramReplyKeyboardMarkup, TelegramReplyKeyboardRemove, TelegramReplyParameters, TelegramSentGuestMessage, TelegramSentWebAppMessage, TelegramShippingOption, TelegramStarAmount, TelegramStarTransactions, TelegramSticker, TelegramStickerSet, TelegramStory, TelegramStoryArea, TelegramSuggestedPostParameters, TelegramUniqueGift, TelegramUpdate, TelegramUserChatBoosts, TelegramUserProfileAudios, TelegramUserProfilePhotos, TelegramWebhookInfo } from "./types";
@@ -147,7 +147,7 @@ export interface AnswerPreCheckoutQueryParams {
      */
     ok: boolean;
     /**
-     * Required if ok is False. Error message in human readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user.
+     * Required if ok is False. Error message in human-readable form that explains the reason for failure to proceed with the checkout (e.g. "Sorry, somebody just bought the last of our amazing black T-shirts while you were busy filling out your payment details. Please choose a different color or garment!"). Telegram will display this message to the user.
      */
     error_message?: string;
 }
@@ -174,7 +174,7 @@ export interface AnswerShippingQueryParams {
      */
     shipping_options?: TelegramShippingOption[];
     /**
-     * Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”). Telegram will display this message to the user.
+     * Required if ok is False. Error message in human-readable form that explains why it is impossible to complete the order (e.g. “Sorry, delivery to your desired address is unavailable”). Telegram will display this message to the user.
      */
     error_message?: string;
 }
@@ -254,7 +254,7 @@ export interface ApproveSuggestedPostParams {
      */
     message_id: number;
     /**
-     * Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future.
+     * Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must not be more than 2678400 seconds (30 days) in the future.
      */
     send_date?: number;
 }
@@ -277,7 +277,7 @@ export interface BanChatMemberParams {
      */
     user_id: number;
     /**
-     * Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.
+     * Date when the user will be unbanned; Unix time. If the user is banned for more than 366 days or less than 30 seconds from the current time, they are considered to be banned forever. Applied for supergroups and channels only.
      */
     until_date?: number;
     /**
@@ -316,7 +316,7 @@ export type banChatSenderChat = (params: BanChatSenderChatParams) => Promise<tru
 export type close = () => Promise<true>;
 
 /**
- * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
  */
 export interface CloseForumTopicParams {
     /**
@@ -330,12 +330,12 @@ export interface CloseForumTopicParams {
 }
 
 /**
- * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
  */
 export type closeForumTopic = (params: CloseForumTopicParams) => Promise<true>;
 
 /**
- * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+ * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
  */
 export interface CloseGeneralForumTopicParams {
     /**
@@ -345,7 +345,7 @@ export interface CloseGeneralForumTopicParams {
 }
 
 /**
- * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+ * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
  */
 export type closeGeneralForumTopic = (params: CloseGeneralForumTopicParams) => Promise<true>;
 
@@ -493,7 +493,7 @@ export interface CopyMessagesParams {
 export type copyMessages = (params: CopyMessagesParams) => Promise<TelegramMessageId[]>;
 
 /**
- * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
+ * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
  */
 export interface CreateChatInviteLinkParams {
     /**
@@ -519,12 +519,12 @@ export interface CreateChatInviteLinkParams {
 }
 
 /**
- * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
+ * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
  */
 export type createChatInviteLink = (params: CreateChatInviteLinkParams) => Promise<TelegramChatInviteLink>;
 
 /**
- * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
+ * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator right. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
  */
 export interface CreateChatSubscriptionInviteLinkParams {
     /**
@@ -546,7 +546,7 @@ export interface CreateChatSubscriptionInviteLinkParams {
 }
 
 /**
- * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
+ * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator right. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
  */
 export type createChatSubscriptionInviteLink = (params: CreateChatSubscriptionInviteLinkParams) => Promise<TelegramChatInviteLink>;
 
@@ -594,7 +594,7 @@ export interface CreateInvoiceLinkParams {
      */
     description: string;
     /**
-     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
+     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user; use it for your internal processes.
      */
     payload: string;
     /**
@@ -610,19 +610,19 @@ export interface CreateInvoiceLinkParams {
      */
     prices: TelegramLabeledPrice[];
     /**
-     * The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 10000 Telegram Stars.
+     * The number of seconds the subscription will be active for before the next payment. The currency must be set to “XTR” (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must not exceed 10000 Telegram Stars.
      */
     subscription_period?: number;
     /**
-     * The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
+     * The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
      */
     max_tip_amount?: number;
     /**
-     * A JSON-serialized Array of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
+     * A JSON-serialized Array of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increasing order and must not exceed max_tip_amount.
      */
     suggested_tip_amounts?: number[];
     /**
-     * JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of required fields should be provided by the payment provider.
+     * JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of the required fields should be provided by the payment provider.
      */
     provider_data?: string;
     /**
@@ -796,7 +796,7 @@ export interface DeleteBusinessAccountGiftParams {
 export type deleteBusinessAccountGift = (params: DeleteBusinessAccountGiftParams) => Promise<true>;
 
 /**
- * Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
+ * Deletes messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
  */
 export interface DeleteBusinessMessagesParams {
     /**
@@ -810,7 +810,7 @@ export interface DeleteBusinessMessagesParams {
 }
 
 /**
- * Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
+ * Deletes messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
  */
 export type deleteBusinessMessages = (params: DeleteBusinessMessagesParams) => Promise<true>;
 
@@ -868,7 +868,7 @@ export interface DeleteEphemeralMessageParams {
 export type deleteEphemeralMessage = (params: DeleteEphemeralMessageParams) => Promise<true>;
 
 /**
- * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
+ * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator right. Returns True on success.
  */
 export interface DeleteForumTopicParams {
     /**
@@ -882,12 +882,12 @@ export interface DeleteForumTopicParams {
 }
 
 /**
- * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
+ * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator right. Returns True on success.
  */
 export type deleteForumTopic = (params: DeleteForumTopicParams) => Promise<true>;
 
 /**
- * Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
+ * Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has the can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has the can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
  */
 export interface DeleteMessageParams {
     /**
@@ -901,7 +901,7 @@ export interface DeleteMessageParams {
 }
 
 /**
- * Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
+ * Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has the can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has the can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
  */
 export type deleteMessage = (params: DeleteMessageParams) => Promise<true>;
 
@@ -1070,7 +1070,7 @@ export interface EditChatInviteLinkParams {
 export type editChatInviteLink = (params: EditChatInviteLinkParams) => Promise<TelegramChatInviteLink>;
 
 /**
- * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object.
+ * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator right. Returns the edited invite link as a ChatInviteLink object.
  */
 export interface EditChatSubscriptionInviteLinkParams {
     /**
@@ -1088,7 +1088,7 @@ export interface EditChatSubscriptionInviteLinkParams {
 }
 
 /**
- * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object.
+ * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator right. Returns the edited invite link as a ChatInviteLink object.
  */
 export type editChatSubscriptionInviteLink = (params: EditChatSubscriptionInviteLinkParams) => Promise<TelegramChatInviteLink>;
 
@@ -1121,7 +1121,7 @@ export interface EditEphemeralMessageCaptionParams {
      */
     caption_entities?: TelegramMessageEntity[];
     /**
-     * Pass True if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+     * Pass True if the caption must be shown above the message media. Supported only for animation, live photo, photo and video messages.
      */
     show_caption_above_media?: boolean;
     /**
@@ -1249,7 +1249,7 @@ export interface EditEphemeralMessageTextParams {
 export type editEphemeralMessageText = (params: EditEphemeralMessageTextParams) => Promise<true>;
 
 /**
- * Use this method to edit name and icon of a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to edit the name and icon of a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
  */
 export interface EditForumTopicParams {
     /**
@@ -1271,12 +1271,12 @@ export interface EditForumTopicParams {
 }
 
 /**
- * Use this method to edit name and icon of a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to edit the name and icon of a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
  */
 export type editForumTopic = (params: EditForumTopicParams) => Promise<true>;
 
 /**
- * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+ * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
  */
 export interface EditGeneralForumTopicParams {
     /**
@@ -1290,12 +1290,12 @@ export interface EditGeneralForumTopicParams {
 }
 
 /**
- * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+ * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
  */
 export type editGeneralForumTopic = (params: EditGeneralForumTopicParams) => Promise<true>;
 
 /**
- * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export interface EditMessageCaptionParams {
     /**
@@ -1327,7 +1327,7 @@ export interface EditMessageCaptionParams {
      */
     caption_entities?: TelegramMessageEntity[];
     /**
-     * Pass True if the caption must be shown above the message media. Supported only for animation, photo and video messages.
+     * Pass True if the caption must be shown above the message media. Supported only for animation, live photo, paid media, photo, video and widget messages.
      */
     show_caption_above_media?: boolean;
     /**
@@ -1339,7 +1339,7 @@ export interface EditMessageCaptionParams {
 }
 
 /**
- * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export type editMessageCaption = (params: EditMessageCaptionParams) => Promise<TelegramMessage>;
 
@@ -1348,7 +1348,7 @@ export type editMessageCaption = (params: EditMessageCaptionParams) => Promise<T
  */
 export interface EditMessageChecklistParams {
     /**
-     * Unique identifier of the business connection on behalf of which the message will be sent
+     * Unique identifier of the business connection on behalf of which the message to be edited was sent
      */
     business_connection_id: string;
     /**
@@ -1377,7 +1377,7 @@ export interface EditMessageChecklistParams {
 export type editMessageChecklist = (params: EditMessageChecklistParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned.
  */
 export interface EditMessageLiveLocationParams {
     /**
@@ -1429,12 +1429,12 @@ export interface EditMessageLiveLocationParams {
 }
 
 /**
- * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+ * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned.
  */
 export type editMessageLiveLocation = (params: EditMessageLiveLocationParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with a media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export interface EditMessageMediaParams {
     /**
@@ -1466,12 +1466,12 @@ export interface EditMessageMediaParams {
 }
 
 /**
- * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with a media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export type editMessageMedia = (params: EditMessageMediaParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export interface EditMessageReplyMarkupParams {
     /**
@@ -1499,12 +1499,12 @@ export interface EditMessageReplyMarkupParams {
 }
 
 /**
- * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export type editMessageReplyMarkup = (params: EditMessageReplyMarkupParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export interface EditMessageTextParams {
     /**
@@ -1540,7 +1540,7 @@ export interface EditMessageTextParams {
      */
     link_preview_options?: TelegramLinkPreviewOptions;
     /**
-     * New rich content of the message; required if text isn't specified. Direct upload of new files and explicit upload of files by a URL isn't supported when an inline message is edited.
+     * New rich content of the message; required if text isn't specified. Direct upload of new files and explicit upload of files by a URL aren't supported when an inline message is edited.
      */
     rich_message?: TelegramInputRichMessage | RichLike;
     /**
@@ -1552,7 +1552,7 @@ export interface EditMessageTextParams {
 }
 
 /**
- * Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+ * Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
  */
 export type editMessageText = (params: EditMessageTextParams) => Promise<TelegramMessage>;
 
@@ -1823,7 +1823,7 @@ export interface GetBusinessAccountGiftsParams {
      */
     sort_by_price?: boolean;
     /**
-     * Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results
+     * Offset of the first entry to return as received from the previous request; use an empty string to get the first chunk of results
      */
     offset?: string;
     /**
@@ -2103,7 +2103,7 @@ export interface GetManagedBotTokenParams {
 export type getManagedBotToken = (params: GetManagedBotTokenParams) => Promise<string>;
 
 /**
- * A simple method for testing your bot's authentication token. Requires no parameters. Returns information about the bot in form of a BotFullInfo object.
+ * A simple method for testing your bot's authentication token. Requires no parameters. Returns information about the bot in the form of a BotFullInfo object.
  */
 export type getMe = () => Promise<TelegramBotFullInfo>;
 
@@ -2131,7 +2131,7 @@ export type getMyCommands = (params: GetMyCommandsParams) => Promise<TelegramBot
  */
 export interface GetMyDefaultAdministratorRightsParams {
     /**
-     * Pass True to get default administrator rights of the bot in channels. Otherwise, default administrator rights of the bot for groups and supergroups will be returned.
+     * Pass True to get the default administrator rights of the bot in channels. Otherwise, the default administrator rights of the bot for groups and supergroups will be returned.
      */
     for_channels?: boolean;
 }
@@ -2253,7 +2253,7 @@ export interface GetUpdatesParams {
      */
     limit?: number;
     /**
-     * Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling should be used for testing purposes only.
+     * Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive; short polling should be used for testing purposes only.
      */
     timeout?: number;
     /**
@@ -2399,7 +2399,7 @@ export interface GetUserProfilePhotosParams {
 export type getUserProfilePhotos = (params: GetUserProfilePhotosParams) => Promise<TelegramUserProfilePhotos>;
 
 /**
- * Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty.
+ * Use this method to get the current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, it will return an object with the url field empty.
  */
 export type getWebhookInfo = () => Promise<TelegramWebhookInfo>;
 
@@ -2439,7 +2439,7 @@ export interface GiftPremiumSubscriptionParams {
 export type giftPremiumSubscription = (params: GiftPremiumSubscriptionParams) => Promise<true>;
 
 /**
- * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.
+ * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. The topic will be automatically closed if it was open. Returns True on success.
  */
 export interface HideGeneralForumTopicParams {
     /**
@@ -2449,7 +2449,7 @@ export interface HideGeneralForumTopicParams {
 }
 
 /**
- * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.
+ * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. The topic will be automatically closed if it was open. Returns True on success.
  */
 export type hideGeneralForumTopic = (params: HideGeneralForumTopicParams) => Promise<true>;
 
@@ -2469,7 +2469,7 @@ export interface LeaveChatParams {
 export type leaveChat = (params: LeaveChatParams) => Promise<true>;
 
 /**
- * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
+ * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally; otherwise, there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log back in to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
  */
 export type logOut = () => Promise<true>;
 
@@ -2584,7 +2584,7 @@ export interface PromoteChatMemberParams {
      */
     can_promote_members?: boolean;
     /**
-     * Pass True if the administrator can change chat title, photo and other settings
+     * Pass True if the administrator can change the chat title, photo and other settings
      */
     can_change_info?: boolean;
     /**
@@ -2639,7 +2639,7 @@ export interface PromoteChatMemberParams {
 export type promoteChatMember = (params: PromoteChatMemberParams) => Promise<true>;
 
 /**
- * Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
+ * Marks an incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
  */
 export interface ReadBusinessMessageParams {
     /**
@@ -2657,7 +2657,7 @@ export interface ReadBusinessMessageParams {
 }
 
 /**
- * Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
+ * Marks an incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
  */
 export type readBusinessMessage = (params: ReadBusinessMessageParams) => Promise<true>;
 
@@ -2704,7 +2704,7 @@ export type removeBusinessAccountProfilePhoto = (params: RemoveBusinessAccountPr
  */
 export interface RemoveChatVerificationParams {
     /**
-     * Unique identifier for the target chat or username of the target bot or channel in the format @username
+     * Unique identifier for the target chat or username of the target bot, supergroup, or channel in the format @username
      */
     chat_id: number | string;
 }
@@ -2735,7 +2735,7 @@ export interface RemoveUserVerificationParams {
 export type removeUserVerification = (params: RemoveUserVerificationParams) => Promise<true>;
 
 /**
- * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
  */
 export interface ReopenForumTopicParams {
     /**
@@ -2749,12 +2749,12 @@ export interface ReopenForumTopicParams {
 }
 
 /**
- * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+ * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
  */
 export type reopenForumTopic = (params: ReopenForumTopicParams) => Promise<true>;
 
 /**
- * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
+ * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. The topic will be automatically unhidden if it was hidden. Returns True on success.
  */
 export interface ReopenGeneralForumTopicParams {
     /**
@@ -2764,7 +2764,7 @@ export interface ReopenGeneralForumTopicParams {
 }
 
 /**
- * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
+ * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. The topic will be automatically unhidden if it was hidden. Returns True on success.
  */
 export type reopenGeneralForumTopic = (params: ReopenGeneralForumTopicParams) => Promise<true>;
 
@@ -2866,7 +2866,7 @@ export interface RestrictChatMemberParams {
      */
     use_independent_chat_permissions?: boolean;
     /**
-     * Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever.
+     * Date when restrictions will be lifted for the user; Unix time. If the user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever.
      */
     until_date?: number;
 }
@@ -2877,7 +2877,7 @@ export interface RestrictChatMemberParams {
 export type restrictChatMember = (params: RestrictChatMemberParams) => Promise<true>;
 
 /**
- * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
+ * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as a ChatInviteLink object.
  */
 export interface RevokeChatInviteLinkParams {
     /**
@@ -2891,7 +2891,7 @@ export interface RevokeChatInviteLinkParams {
 }
 
 /**
- * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
+ * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as a ChatInviteLink object.
  */
 export type revokeChatInviteLink = (params: RevokeChatInviteLinkParams) => Promise<TelegramChatInviteLink>;
 
@@ -2950,7 +2950,7 @@ export interface SavePreparedKeyboardButtonParams {
 export type savePreparedKeyboardButton = (params: SavePreparedKeyboardButtonParams) => Promise<TelegramPreparedKeyboardButton>;
 
 /**
- * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size; this limit may be changed in the future.
  */
 export interface SendAnimationParams {
     /**
@@ -2990,11 +2990,11 @@ export interface SendAnimationParams {
      */
     height?: number;
     /**
-     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: TelegramInputFile | string;
     /**
-     * Animation caption (may also be used when resending animation by file_id), 0-1024 characters after entities parsing
+     * Animation caption (may also be used when resending animations by file_id), 0-1024 characters after entities parsing
      */
     caption?: string | Formattable;
     /**
@@ -3046,12 +3046,12 @@ export interface SendAnimationParams {
 }
 
 /**
- * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size; this limit may be changed in the future.
  */
 export type sendAnimation = (params: SendAnimationParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size; this limit may be changed in the future.
  * For sending voice messages, use the sendVoice method instead.
  */
 export interface SendAudioParams {
@@ -3104,7 +3104,7 @@ export interface SendAudioParams {
      */
     title?: string;
     /**
-     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: TelegramInputFile | string;
     /**
@@ -3140,7 +3140,7 @@ export interface SendAudioParams {
 }
 
 /**
- * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size; this limit may be changed in the future.
  * For sending voice messages, use the sendVoice method instead.
  */
 export type sendAudio = (params: SendAudioParams) => Promise<TelegramMessage>;
@@ -3377,7 +3377,7 @@ export interface SendDiceParams {
 export type sendDice = (params: SendDiceParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size; this limit may be changed in the future.
  */
 export interface SendDocumentParams {
     /**
@@ -3405,7 +3405,7 @@ export interface SendDocumentParams {
      */
     document: TelegramInputFile | string;
     /**
-     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: TelegramInputFile | string;
     /**
@@ -3457,7 +3457,7 @@ export interface SendDocumentParams {
 }
 
 /**
- * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size; this limit may be changed in the future.
  */
 export type sendDocument = (params: SendDocumentParams) => Promise<TelegramMessage>;
 
@@ -3578,7 +3578,7 @@ export interface SendInvoiceParams {
      */
     description: string;
     /**
-     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
+     * Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user; use it for your internal processes.
      */
     payload: string;
     /**
@@ -3594,11 +3594,11 @@ export interface SendInvoiceParams {
      */
     prices: TelegramLabeledPrice[];
     /**
-     * The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
+     * The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json; it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.
      */
     max_tip_amount?: number;
     /**
-     * A JSON-serialized Array of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.
+     * A JSON-serialized Array of suggested amounts of tips in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increasing order and must not exceed max_tip_amount.
      */
     suggested_tip_amounts?: number[];
     /**
@@ -3606,7 +3606,7 @@ export interface SendInvoiceParams {
      */
     start_parameter?: string;
     /**
-     * JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of required fields should be provided by the payment provider.
+     * JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of the required fields should be provided by the payment provider.
      */
     provider_data?: string;
     /**
@@ -3719,15 +3719,15 @@ export interface SendLivePhotoParams {
      */
     live_photo: TelegramInputFile | string;
     /**
-     * The static photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files ». Sending live photos by a URL is currently unsupported.
+     * The static photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended) or upload a new photo using multipart/form-data. More information on Sending Files ». Sending live photos by a URL is currently unsupported.
      */
     photo: TelegramInputFile | string;
     /**
-     * Video caption (may also be used when resending videos by file_id), 0-1024 characters after entities parsing
+     * Live photo caption (may also be used when resending live photos by file_id), 0-1024 characters after entities parsing
      */
     caption?: string | Formattable;
     /**
-     * Mode for parsing entities in the video caption. See formatting options for more details.
+     * Mode for parsing entities in the live photo caption. See formatting options for more details.
      */
     parse_mode?: "HTML" | "Markdown" | "MarkdownV2" | (string & {});
     /**
@@ -3739,7 +3739,7 @@ export interface SendLivePhotoParams {
      */
     show_caption_above_media?: boolean;
     /**
-     * Pass True if the video needs to be covered with a spoiler animation
+     * Pass True if the live photo needs to be covered with a spoiler animation
      */
     has_spoiler?: boolean;
     /**
@@ -3780,7 +3780,7 @@ export interface SendLivePhotoParams {
 export type sendLivePhoto = (params: SendLivePhotoParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to send point on the map. On success, the sent Message is returned.
+ * Use this method to send a point on the map. On success, the sent Message is returned.
  */
 export interface SendLocationParams {
     /**
@@ -3860,12 +3860,12 @@ export interface SendLocationParams {
 }
 
 /**
- * Use this method to send point on the map. On success, the sent Message is returned.
+ * Use this method to send a point on the map. On success, the sent Message is returned.
  */
 export type sendLocation = (params: SendLocationParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
+ * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can only be grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
  */
 export interface SendMediaGroupParams {
     /**
@@ -3911,7 +3911,7 @@ export interface SendMediaGroupParams {
 }
 
 /**
- * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
+ * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can only be grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
  */
 export type sendMediaGroup = (params: SendMediaGroupParams) => Promise<TelegramMessage[]>;
 
@@ -4064,7 +4064,7 @@ export interface SendPaidMediaParams {
      */
     media: TelegramInputPaidMedia[];
     /**
-     * Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.
+     * Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user; use it for your internal processes.
      */
     payload?: string;
     /**
@@ -4246,7 +4246,7 @@ export interface SendPollParams {
      */
     allows_multiple_answers?: boolean;
     /**
-     * Pass True if the poll allows to change chosen answer options, defaults to False for quizzes and to True for regular polls
+     * Pass True if the poll allows changing the chosen answer options, defaults to False for quizzes and to True for regular polls
      */
     allows_revoting?: boolean;
     /**
@@ -4355,7 +4355,7 @@ export type sendPoll = (params: SendPollParams) => Promise<TelegramMessage>;
  */
 export interface SendRichMessageParams {
     /**
-     * Unique identifier of the business connection on behalf of which the message will be sent. Bot can send rich messages on behalf of a business account only if the corresponding user can send rich messages.
+     * Unique identifier of the business connection on behalf of which the message will be sent. The bot can send rich messages on behalf of a business account only if the corresponding user can send rich messages.
      */
     business_connection_id?: string;
     /**
@@ -4432,7 +4432,7 @@ export interface SendRichMessageDraftParams {
      */
     draft_id: number;
     /**
-     * The partial message to be streamed. Direct upload of new files and explicit upload of files by a URL isn't supported.
+     * The partial message to be streamed. Direct upload of new files and explicit upload of files by a URL aren't supported.
      */
     rich_message: TelegramInputRichMessage | RichLike;
     /**
@@ -4451,7 +4451,7 @@ export interface SendRichMessageDraftParams {
 export type sendRichMessageDraft = (params: SendRichMessageDraftParams) => Promise<true>;
 
 /**
- * Use this method to send again a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+ * Use this method to resend a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
  */
 export interface SendSharedWidgetParams {
     /**
@@ -4515,7 +4515,7 @@ export interface SendSharedWidgetParams {
 }
 
 /**
- * Use this method to send again a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+ * Use this method to resend a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
  */
 export type sendSharedWidget = (params: SendSharedWidgetParams) => Promise<TelegramMessage>;
 
@@ -4682,7 +4682,7 @@ export interface SendVenueParams {
 export type sendVenue = (params: SendVenueParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send video files; Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size; this limit may be changed in the future.
  */
 export interface SendVideoParams {
     /**
@@ -4722,7 +4722,7 @@ export interface SendVideoParams {
      */
     height?: number;
     /**
-     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: TelegramInputFile | string;
     /**
@@ -4790,12 +4790,12 @@ export interface SendVideoParams {
 }
 
 /**
- * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send video files; Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size; this limit may be changed in the future.
  */
 export type sendVideo = (params: SendVideoParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success, the sent Message is returned.
+ * Use this method to send a rounded square MPEG4 video up to 1 minute long. On success, the sent Message is returned.
  */
 export interface SendVideoNoteParams {
     /**
@@ -4831,7 +4831,7 @@ export interface SendVideoNoteParams {
      */
     length?: number;
     /**
-     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+     * Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
      */
     thumbnail?: TelegramInputFile | string;
     /**
@@ -4867,12 +4867,12 @@ export interface SendVideoNoteParams {
 }
 
 /**
- * Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success, the sent Message is returned.
+ * Use this method to send a rounded square MPEG4 video up to 1 minute long. On success, the sent Message is returned.
  */
 export type sendVideoNote = (params: SendVideoNoteParams) => Promise<TelegramMessage>;
 
 /**
- * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size; this limit may be changed in the future.
  */
 export interface SendVoiceParams {
     /**
@@ -4948,7 +4948,7 @@ export interface SendVoiceParams {
 }
 
 /**
- * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+ * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size; this limit may be changed in the future.
  */
 export type sendVoice = (params: SendVoiceParams) => Promise<TelegramMessage>;
 
@@ -5042,7 +5042,7 @@ export interface SendWidgetParams {
 export type sendWidget = (params: SendWidgetParams) => Promise<TelegramMessage>;
 
 /**
- * Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.
+ * Changes the bio of a managed business account. Requires the can_edit_bio business bot right. Returns True on success.
  */
 export interface SetBusinessAccountBioParams {
     /**
@@ -5056,7 +5056,7 @@ export interface SetBusinessAccountBioParams {
 }
 
 /**
- * Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.
+ * Changes the bio of a managed business account. Requires the can_edit_bio business bot right. Returns True on success.
  */
 export type setBusinessAccountBio = (params: SetBusinessAccountBioParams) => Promise<true>;
 
@@ -5084,7 +5084,7 @@ export interface SetBusinessAccountGiftSettingsParams {
 export type setBusinessAccountGiftSettings = (params: SetBusinessAccountGiftSettingsParams) => Promise<true>;
 
 /**
- * Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.
+ * Changes the first and last name of a managed business account. Requires the can_edit_name business bot right. Returns True on success.
  */
 export interface SetBusinessAccountNameParams {
     /**
@@ -5102,7 +5102,7 @@ export interface SetBusinessAccountNameParams {
 }
 
 /**
- * Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.
+ * Changes the first and last name of a managed business account. Requires the can_edit_name business bot right. Returns True on success.
  */
 export type setBusinessAccountName = (params: SetBusinessAccountNameParams) => Promise<true>;
 
@@ -5130,7 +5130,7 @@ export interface SetBusinessAccountProfilePhotoParams {
 export type setBusinessAccountProfilePhoto = (params: SetBusinessAccountProfilePhotoParams) => Promise<true>;
 
 /**
- * Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.
+ * Changes the username of a managed business account. Requires the can_edit_username business bot right. Returns True on success.
  */
 export interface SetBusinessAccountUsernameParams {
     /**
@@ -5144,7 +5144,7 @@ export interface SetBusinessAccountUsernameParams {
 }
 
 /**
- * Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.
+ * Changes the username of a managed business account. Requires the can_edit_username business bot right. Returns True on success.
  */
 export type setBusinessAccountUsername = (params: SetBusinessAccountUsernameParams) => Promise<true>;
 
@@ -5233,7 +5233,7 @@ export interface SetChatMenuButtonParams {
 export type setChatMenuButton = (params: SetChatMenuButtonParams) => Promise<true>;
 
 /**
- * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success.
+ * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator right. Returns True on success.
  */
 export interface SetChatPermissionsParams {
     /**
@@ -5251,7 +5251,7 @@ export interface SetChatPermissionsParams {
 }
 
 /**
- * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success.
+ * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator right. Returns True on success.
  */
 export type setChatPermissions = (params: SetChatPermissionsParams) => Promise<true>;
 
@@ -5332,7 +5332,7 @@ export interface SetCustomEmojiStickerSetThumbnailParams {
 export type setCustomEmojiStickerSetThumbnail = (params: SetCustomEmojiStickerSetThumbnailParams) => Promise<true>;
 
 /**
- * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+ * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned; otherwise, True is returned. Returns an error if the new score is not greater than the user's current score in the chat and force is False.
  */
 export interface SetGameScoreParams {
     /**
@@ -5366,7 +5366,7 @@ export interface SetGameScoreParams {
 }
 
 /**
- * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+ * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned; otherwise, True is returned. Returns an error if the new score is not greater than the user's current score in the chat and force is False.
  */
 export type setGameScore = (params: SetGameScoreParams) => Promise<TelegramMessage>;
 
@@ -5516,7 +5516,7 @@ export interface SetMyProfilePhotoParams {
 export type setMyProfilePhoto = (params: SetMyProfilePhotoParams) => Promise<true>;
 
 /**
- * Use this method to change settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
+ * Use this method to change the settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
  */
 export interface SetMySettingsParams {
     /**
@@ -5582,7 +5582,7 @@ export interface SetMySettingsParams {
 }
 
 /**
- * Use this method to change settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
+ * Use this method to change the settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
  */
 export type setMySettings = (params: SetMySettingsParams) => Promise<true>;
 
@@ -5606,7 +5606,7 @@ export interface SetMyShortDescriptionParams {
 export type setMyShortDescription = (params: SetMyShortDescriptionParams) => Promise<true>;
 
 /**
- * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
+ * Informs a user that some of the Telegram Passport elements they provided contain errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
  * Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
  */
 export interface SetPassportDataErrorsParams {
@@ -5621,7 +5621,7 @@ export interface SetPassportDataErrorsParams {
 }
 
 /**
- * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
+ * Informs a user that some of the Telegram Passport elements they provided contain errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
  * Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
  */
 export type setPassportDataErrors = (params: SetPassportDataErrorsParams) => Promise<true>;
@@ -5654,7 +5654,7 @@ export interface SetStickerKeywordsParams {
      */
     sticker: string;
     /**
-     * A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters
+     * A JSON-serialized list of 0-20 search keywords for the sticker with a total length of up to 64 characters
      */
     keywords?: string[];
 }
@@ -5772,7 +5772,7 @@ export interface SetUserEmojiStatusParams {
 export type setUserEmojiStatus = (params: SetUserEmojiStatusParams) => Promise<true>;
 
 /**
- * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.
+ * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable number of attempts. Returns True on success.
  * If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
  */
 export interface SetWebhookParams {
@@ -5793,7 +5793,7 @@ export interface SetWebhookParams {
      */
     max_connections?: number;
     /**
-     * A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.
+     * A JSON-serialized list of the update types you want your bot to receive. For example, specify ["message", "edited_channel_post", "callback_query"] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.Please note that this parameter doesn't affect updates created before the call to setWebhook, so unwanted updates may be received for a short period of time.
      */
     allowed_updates?: string[];
     /**
@@ -5807,13 +5807,13 @@ export interface SetWebhookParams {
 }
 
 /**
- * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.
+ * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable number of attempts. Returns True on success.
  * If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
  */
 export type setWebhook = (params: SetWebhookParams) => Promise<true>;
 
 /**
- * Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+ * Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned; otherwise, True is returned.
  */
 export interface StopMessageLiveLocationParams {
     /**
@@ -5841,7 +5841,7 @@ export interface StopMessageLiveLocationParams {
 }
 
 /**
- * Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+ * Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned; otherwise, True is returned.
  */
 export type stopMessageLiveLocation = (params: StopMessageLiveLocationParams) => Promise<TelegramMessage>;
 
@@ -5894,7 +5894,7 @@ export interface TransferBusinessAccountStarsParams {
 export type transferBusinessAccountStars = (params: TransferBusinessAccountStarsParams) => Promise<true>;
 
 /**
- * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.
+ * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires the can_transfer_stars business bot right if the transfer is paid. Returns True on success.
  */
 export interface TransferGiftParams {
     /**
@@ -5902,11 +5902,11 @@ export interface TransferGiftParams {
      */
     business_connection_id: string;
     /**
-     * Unique identifier of the regular gift that should be transferred
+     * Unique identifier of the unique gift that should be transferred
      */
     owned_gift_id: string;
     /**
-     * Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours.
+     * Unique identifier of the chat which will own the gift. The chat must have been active in the last 24 hours.
      */
     new_owner_chat_id: number;
     /**
@@ -5916,7 +5916,7 @@ export interface TransferGiftParams {
 }
 
 /**
- * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.
+ * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires the can_transfer_stars business bot right if the transfer is paid. Returns True on success.
  */
 export type transferGift = (params: TransferGiftParams) => Promise<true>;
 
@@ -5963,7 +5963,7 @@ export interface UnbanChatSenderChatParams {
 export type unbanChatSenderChat = (params: UnbanChatSenderChatParams) => Promise<true>;
 
 /**
- * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+ * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
  */
 export interface UnhideGeneralForumTopicParams {
     /**
@@ -5973,7 +5973,7 @@ export interface UnhideGeneralForumTopicParams {
 }
 
 /**
- * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+ * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
  */
 export type unhideGeneralForumTopic = (params: UnhideGeneralForumTopicParams) => Promise<true>;
 
@@ -6066,7 +6066,7 @@ export interface UpgradeGiftParams {
      */
     keep_original_details?: boolean;
     /**
-     * The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed.
+     * The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count > 0, then pass 0; otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed.
      */
     star_count?: number;
 }

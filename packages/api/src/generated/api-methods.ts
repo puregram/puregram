@@ -1,7 +1,7 @@
 /// AUTO-GENERATED FILE — do not edit by hand
 /// Bot API 10.5
 /// source: https://core.telegram.org/bots/api
-/// generated at: 2026-11-22T09:57:50.115Z
+/// generated at: 2026-11-24T12:00:36.826Z
 /// see scripts/emit.ts in @puregram/api
 
 import * as api from "./methods";
@@ -91,13 +91,13 @@ export interface ApiMethods {
      */
     close: api.close;
     /**
-     * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+     * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#closeforumtopic)
      */
     closeForumTopic: api.closeForumTopic;
     /**
-     * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+     * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#closegeneralforumtopic)
      */
@@ -121,13 +121,13 @@ export interface ApiMethods {
      */
     copyMessages: api.copyMessages;
     /**
-     * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
+     * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
      *
      * [bot api docs](https://core.telegram.org/bots/api#createchatinvitelink)
      */
     createChatInviteLink: api.createChatInviteLink;
     /**
-     * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
+     * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator right. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
      *
      * [bot api docs](https://core.telegram.org/bots/api#createchatsubscriptioninvitelink)
      */
@@ -175,7 +175,7 @@ export interface ApiMethods {
      */
     deleteBusinessAccountGift: api.deleteBusinessAccountGift;
     /**
-     * Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
+     * Deletes messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#deletebusinessmessages)
      */
@@ -199,13 +199,13 @@ export interface ApiMethods {
      */
     deleteEphemeralMessage: api.deleteEphemeralMessage;
     /**
-     * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
+     * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#deleteforumtopic)
      */
     deleteForumTopic: api.deleteForumTopic;
     /**
-     * Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
+     * Use this method to delete a message, including service messages, with the following limitations:- A message can only be deleted if it was sent less than 48 hours ago.- Service messages about a supergroup, channel, or forum topic creation can't be deleted.- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.- Bots can delete outgoing messages in private chats, groups, and supergroups.- Bots can delete incoming messages in private chats.- Bots granted can_post_messages permissions can delete outgoing messages in channels.- If the bot is an administrator of a group, it can delete any message there.- If the bot has the can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.- If the bot has the can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#deletemessage)
      */
@@ -259,7 +259,7 @@ export interface ApiMethods {
      */
     editChatInviteLink: api.editChatInviteLink;
     /**
-     * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object.
+     * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator right. Returns the edited invite link as a ChatInviteLink object.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editchatsubscriptioninvitelink)
      */
@@ -289,19 +289,19 @@ export interface ApiMethods {
      */
     editEphemeralMessageText: api.editEphemeralMessageText;
     /**
-     * Use this method to edit name and icon of a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+     * Use this method to edit the name and icon of a topic in a forum supergroup chat or a private chat with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editforumtopic)
      */
     editForumTopic: api.editForumTopic;
     /**
-     * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+     * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editgeneralforumtopic)
      */
     editGeneralForumTopic: api.editGeneralForumTopic;
     /**
-     * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+     * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editmessagecaption)
      */
@@ -313,25 +313,25 @@ export interface ApiMethods {
      */
     editMessageChecklist: api.editMessageChecklist;
     /**
-     * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+     * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editmessagelivelocation)
      */
     editMessageLiveLocation: api.editMessageLiveLocation;
     /**
-     * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with a media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+     * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to replace a text or a rich message with media. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editmessagemedia)
      */
     editMessageMedia: api.editMessageMedia;
     /**
-     * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+     * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editmessagereplymarkup)
      */
     editMessageReplyMarkup: api.editMessageReplyMarkup;
     /**
-     * Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
+     * Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message, the edited Message is returned; otherwise, True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
      *
      * [bot api docs](https://core.telegram.org/bots/api#editmessagetext)
      */
@@ -481,7 +481,7 @@ export interface ApiMethods {
      */
     getManagedBotToken: api.getManagedBotToken;
     /**
-     * A simple method for testing your bot's authentication token. Requires no parameters. Returns information about the bot in form of a BotFullInfo object.
+     * A simple method for testing your bot's authentication token. Requires no parameters. Returns information about the bot in the form of a BotFullInfo object.
      *
      * [bot api docs](https://core.telegram.org/bots/api#getme)
      */
@@ -577,7 +577,7 @@ export interface ApiMethods {
      */
     getUserProfilePhotos: api.getUserProfilePhotos;
     /**
-     * Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty.
+     * Use this method to get the current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, it will return an object with the url field empty.
      *
      * [bot api docs](https://core.telegram.org/bots/api#getwebhookinfo)
      */
@@ -589,7 +589,7 @@ export interface ApiMethods {
      */
     giftPremiumSubscription: api.giftPremiumSubscription;
     /**
-     * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.
+     * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. The topic will be automatically closed if it was open. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#hidegeneralforumtopic)
      */
@@ -601,7 +601,7 @@ export interface ApiMethods {
      */
     leaveChat: api.leaveChat;
     /**
-     * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally, otherwise there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log in back to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
+     * Use this method to log out from the cloud Bot API server before launching the bot locally. You must log out the bot before running it locally; otherwise, there is no guarantee that the bot will receive updates. After a successful call, you can immediately log in on a local server, but will not be able to log back in to the cloud Bot API server for 10 minutes. Returns True on success. Requires no parameters.
      *
      * [bot api docs](https://core.telegram.org/bots/api#logout)
      */
@@ -625,7 +625,7 @@ export interface ApiMethods {
      */
     promoteChatMember: api.promoteChatMember;
     /**
-     * Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
+     * Marks an incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#readbusinessmessage)
      */
@@ -661,13 +661,13 @@ export interface ApiMethods {
      */
     removeUserVerification: api.removeUserVerification;
     /**
-     * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+     * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right, unless it is the creator of the topic. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#reopenforumtopic)
      */
     reopenForumTopic: api.reopenForumTopic;
     /**
-     * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
+     * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. The topic will be automatically unhidden if it was hidden. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#reopengeneralforumtopic)
      */
@@ -697,7 +697,7 @@ export interface ApiMethods {
      */
     restrictChatMember: api.restrictChatMember;
     /**
-     * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
+     * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as a ChatInviteLink object.
      *
      * [bot api docs](https://core.telegram.org/bots/api#revokechatinvitelink)
      */
@@ -715,13 +715,13 @@ export interface ApiMethods {
      */
     savePreparedKeyboardButton: api.savePreparedKeyboardButton;
     /**
-     * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+     * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size; this limit may be changed in the future.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendanimation)
      */
     sendAnimation: api.sendAnimation;
     /**
-     * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+     * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size; this limit may be changed in the future.
      * For sending voice messages, use the sendVoice method instead.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendaudio)
@@ -759,7 +759,7 @@ export interface ApiMethods {
      */
     sendDice: api.sendDice;
     /**
-     * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+     * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size; this limit may be changed in the future.
      *
      * [bot api docs](https://core.telegram.org/bots/api#senddocument)
      */
@@ -789,13 +789,13 @@ export interface ApiMethods {
      */
     sendLivePhoto: api.sendLivePhoto;
     /**
-     * Use this method to send point on the map. On success, the sent Message is returned.
+     * Use this method to send a point on the map. On success, the sent Message is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendlocation)
      */
     sendLocation: api.sendLocation;
     /**
-     * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
+     * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and audio files can only be grouped in an album with messages of the same type. On success, an Array of Message objects that were sent is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendmediagroup)
      */
@@ -843,7 +843,7 @@ export interface ApiMethods {
      */
     sendRichMessageDraft: api.sendRichMessageDraft;
     /**
-     * Use this method to send again a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
+     * Use this method to resend a shared widget created by the bot. Currently, in the production environment, widgets can be sent only to private chats, and sent widgets automatically have protected content and therefore can't be forwarded. On success, the sent Message is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendsharedwidget)
      */
@@ -861,19 +861,19 @@ export interface ApiMethods {
      */
     sendVenue: api.sendVenue;
     /**
-     * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+     * Use this method to send video files; Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size; this limit may be changed in the future.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendvideo)
      */
     sendVideo: api.sendVideo;
     /**
-     * Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success, the sent Message is returned.
+     * Use this method to send a rounded square MPEG4 video up to 1 minute long. On success, the sent Message is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendvideonote)
      */
     sendVideoNote: api.sendVideoNote;
     /**
-     * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+     * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size; this limit may be changed in the future.
      *
      * [bot api docs](https://core.telegram.org/bots/api#sendvoice)
      */
@@ -885,7 +885,7 @@ export interface ApiMethods {
      */
     sendWidget: api.sendWidget;
     /**
-     * Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.
+     * Changes the bio of a managed business account. Requires the can_edit_bio business bot right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setbusinessaccountbio)
      */
@@ -897,7 +897,7 @@ export interface ApiMethods {
      */
     setBusinessAccountGiftSettings: api.setBusinessAccountGiftSettings;
     /**
-     * Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.
+     * Changes the first and last name of a managed business account. Requires the can_edit_name business bot right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setbusinessaccountname)
      */
@@ -909,7 +909,7 @@ export interface ApiMethods {
      */
     setBusinessAccountProfilePhoto: api.setBusinessAccountProfilePhoto;
     /**
-     * Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.
+     * Changes the username of a managed business account. Requires the can_edit_username business bot right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setbusinessaccountusername)
      */
@@ -939,7 +939,7 @@ export interface ApiMethods {
      */
     setChatMenuButton: api.setChatMenuButton;
     /**
-     * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator rights. Returns True on success.
+     * Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members administrator right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setchatpermissions)
      */
@@ -969,7 +969,7 @@ export interface ApiMethods {
      */
     setCustomEmojiStickerSetThumbnail: api.setCustomEmojiStickerSetThumbnail;
     /**
-     * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+     * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the Message is returned; otherwise, True is returned. Returns an error if the new score is not greater than the user's current score in the chat and force is False.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setgamescore)
      */
@@ -1017,7 +1017,7 @@ export interface ApiMethods {
      */
     setMyProfilePhoto: api.setMyProfilePhoto;
     /**
-     * Use this method to change settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
+     * Use this method to change the settings of the bot. Settings that aren't specified remain unchanged. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setmysettings)
      */
@@ -1029,7 +1029,7 @@ export interface ApiMethods {
      */
     setMyShortDescription: api.setMyShortDescription;
     /**
-     * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
+     * Informs a user that some of the Telegram Passport elements they provided contain errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
      * Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setpassportdataerrors)
@@ -1078,14 +1078,14 @@ export interface ApiMethods {
      */
     setUserEmojiStatus: api.setUserEmojiStatus;
     /**
-     * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.
+     * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable number of attempts. Returns True on success.
      * If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter secret_token. If specified, the request will contain a header “X-Telegram-Bot-Api-Secret-Token” with the secret token as content.
      *
      * [bot api docs](https://core.telegram.org/bots/api#setwebhook)
      */
     setWebhook: api.setWebhook;
     /**
-     * Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+     * Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned; otherwise, True is returned.
      *
      * [bot api docs](https://core.telegram.org/bots/api#stopmessagelivelocation)
      */
@@ -1103,7 +1103,7 @@ export interface ApiMethods {
      */
     transferBusinessAccountStars: api.transferBusinessAccountStars;
     /**
-     * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.
+     * Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires the can_transfer_stars business bot right if the transfer is paid. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#transfergift)
      */
@@ -1121,7 +1121,7 @@ export interface ApiMethods {
      */
     unbanChatSenderChat: api.unbanChatSenderChat;
     /**
-     * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+     * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator right. Returns True on success.
      *
      * [bot api docs](https://core.telegram.org/bots/api#unhidegeneralforumtopic)
      */
