@@ -13,6 +13,41 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: npm
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: enable corepack
+        run: corepack enable
+
+      # trusted publishing needs npm >= 11.5.1, which node 22 doesn't bundle
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: yarn
+
+      - name: install
+        run: yarn install --immutable
+
+      - name: build
+        run: yarn build
+
+      - name: test
+        run: yarn test
+
+      - name: publish unpublished versions
+        run: node scripts/auto-publish.mjs
+
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 10
